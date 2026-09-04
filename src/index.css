@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+/* -----------------------------------------------------------------------------
+   CapitalKnob — Tailwind CSS v4 theme tokens
+   All design tokens (colors, fonts, radii, shadows) are declared as CSS
+   custom properties inside @theme so Tailwind v4 generates utilities like
+   `bg-navy`, `text-gold`, `rounded-card`, `shadow-soft`, etc.
+   ----------------------------------------------------------------------------- */
+@theme {
+  /* ---------- Brand colors ---------- */
+  --color-navy: #0b1d3a;            /* primary dark — header, hero, footer */
+  --color-navy-deep: #081530;       /* deepest navy — footer base */
+  --color-navy-soft: #11264a;       /* navy tinted surfaces */
+
+  --color-gold: #c9a961;            /* signature gold — CTAs, accents */
+  --color-gold-hover: #b8964f;      /* gold hover state */
+  --color-gold-soft: #f4ead2;       /* gold tinted background */
+
+  --color-brand-blue: #1d4ed8;      /* "Capital" wordmark, links */
+  --color-brand-blue-soft: #eaf3fb; /* Why Choose section background */
+
+  /* ---------- Neutral palette ---------- */
+  --color-ink: #0f172a;             /* headings, primary text */
+  --color-ink-soft: #1e293b;        /* secondary headings */
+  --color-muted: #64748b;           /* subcopy, captions */
+  --color-line: #e2e8f0;            /* card borders, dividers */
+  --color-line-soft: #f1f5f9;       /* subtle dividers */
+  --color-surface: #ffffff;         /* card / content surface */
+  --color-page: #ffffff;            /* page background */
+
+  /* ---------- Typography ---------- */
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system,
+    BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Playfair Display", "Georgia", "Times New Roman", serif;
+
+  /* ---------- Radii ---------- */
+  --radius-card: 0.75rem;   /* 12px — service cards */
+  --radius-pill: 9999px;    /* chips, badges */
+  --radius-button: 0.5rem;  /* 8px — CTA buttons */
+
+  /* ---------- Shadows ---------- */
+  --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.04),
+                 0 4px 12px rgba(15, 23, 42, 0.06);
+  --shadow-card: 0 2px 4px rgba(15, 23, 42, 0.05),
+                 0 8px 24px rgba(15, 23, 42, 0.08);
+  --shadow-gold: 0 4px 16px rgba(201, 169, 97, 0.35);
+}
