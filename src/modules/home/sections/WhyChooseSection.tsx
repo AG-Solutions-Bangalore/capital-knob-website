@@ -24,7 +24,7 @@ export function WhyChooseSection() {
                 return (
                   <div
                     key={feat.title}
-                    className="flex flex-col items-center text-center"
+                    className="flex flex-col items-center text-center lg:border-r lg:border-navy/25 lg:pr-6 lg:last:border-r-0"
                   >
                     <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-navy/15 bg-white text-navy">
                       <Icon size={22} />

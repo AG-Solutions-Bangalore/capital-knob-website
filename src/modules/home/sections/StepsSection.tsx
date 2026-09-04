@@ -19,7 +19,7 @@ function Chevron() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="mx-2 hidden text-muted/40 lg:block"
+      className="mx-2 mt-4.25 hidden text-muted/40 lg:block"
       aria-hidden="true"
     >
       <path d="m9 6 6 6-6 6" />
@@ -62,7 +62,7 @@ export function StepsSection() {
                       {step.subtitle}
                     </span>
                   </div>
-                  {idx < steps.length - 1 && <Chevron  />}
+                  {idx < steps.length - 1 && <Chevron />}
                 </li>
               )
             })}
