@@ -1,10 +1,10 @@
-import { useState } from 'react'
-import { NavLink, Link } from 'react-router-dom'
 import { ROUTES, type RoutePath } from '@/app/routes'
+import { cn } from '@/shared/lib/cn'
+import { useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
+import { Button } from './Button'
 import { Container } from './Container'
 import { Logo } from './Logo'
-import { Button } from './Button'
-import { cn } from '@/shared/lib/cn'
 
 interface NavItem {
   label: string
@@ -45,15 +45,10 @@ export function Header() {
                       )
                     }
                   >
-                    {({ isActive }) => (
+                    {() => (
                       <>
                         {item.label}
-                        <span
-                          className={cn(
-                            'absolute -bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-pill bg-gold transition-opacity',
-                            isActive ? 'opacity-100' : 'opacity-0',
-                          )}
-                        />
+
                       </>
                     )}
                   </NavLink>
