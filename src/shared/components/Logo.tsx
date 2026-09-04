@@ -13,8 +13,8 @@ export function Logo({ variant = 'light', className }: LogoProps) {
   return (
     <Link to={ROUTES.home} className={cn('inline-flex flex-col leading-none', className)}>
       <span className="flex items-baseline gap-0.5">
-        <span className="font-display text-2xl font-bold text-brand-blue">Capital</span>
-        <span className="font-display text-2xl font-bold text-gold">Knob</span>
+        <span className="font-display text-2xl font-extrabold text-brand-blue">Capital</span>
+        <span className="font-display text-2xl font-extrabold text-gold">Knob</span>
       </span>
       <span className={cn('mt-1 text-[10px] font-medium uppercase tracking-wider', taglineColor)}>
         Unlock Your Capital Potential

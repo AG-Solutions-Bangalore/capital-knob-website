@@ -20,7 +20,7 @@ export function PageHero({ eyebrow, title, subtitle, align = 'left' }: PageHeroP
           {eyebrow && (
             <p className="text-xs font-semibold uppercase tracking-widest text-gold">{eyebrow}</p>
           )}
-          <h1 className="mt-3 font-display text-4xl font-bold leading-tight md:text-5xl">
+          <h1 className="mt-3 font-display text-4xl font-extrabold leading-tight md:text-5xl">
             {title}
           </h1>
           {subtitle && (

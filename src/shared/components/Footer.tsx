@@ -27,53 +27,45 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-navy-deep text-white">
-      <Container>
-        <div className="grid gap-10 py-12 md:grid-cols-3">
-          <div>
-            <Logo variant="light" />
-            <p className="mt-4 max-w-xs text-sm text-white/70">
-              Unlock the right capital for every milestone — from your first home to scaling your business.
-            </p>
-          </div>
+    <footer className="border-t border-line bg-white text-ink">
+      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+        {/* Top row: Logo, Horizontal Nav Links, Social Icons */}
+        <div className="flex flex-col items-center justify-between gap-6 py-8 md:flex-row">
+          <Logo variant="dark" />
 
-          <div>
-            <h3 className="font-display text-base font-semibold text-gold">Explore</h3>
-            <ul className="mt-4 space-y-2 text-sm">
-              {footerLinks.map((l) => (
-                <li key={l.to}>
-                  <Link to={l.to} className="text-white/80 hover:text-gold">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Centered nav links */}
+          <ul className="flex flex-wrap items-center justify-center gap-6 text-xs font-medium text-muted md:text-sm">
+            {footerLinks.map((l) => (
+              <li key={l.to}>
+                <Link to={l.to} className="transition-colors hover:text-gold">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-          <div>
-            <h3 className="font-display text-base font-semibold text-gold">Connect</h3>
-            <ul className="mt-4 flex gap-3">
-              {socialLinks.map((s) => (
-                <li key={s.label}>
-                  <a
-                    href={s.href}
-                    aria-label={s.label}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-pill border border-white/20 text-white/80 transition-colors hover:border-gold hover:text-gold"
-                  >
-                    {s.icon}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-6 text-xs text-white/60">
-              © {new Date().getFullYear()} CapitalKnob. All rights reserved.
-            </p>
+          {/* Social icons */}
+          <div className="flex items-center gap-4 text-muted">
+            {socialLinks.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                aria-label={s.label}
+                className="transition-colors hover:text-navy"
+              >
+                {s.icon}
+              </a>
+            ))}
           </div>
         </div>
 
-        <div className="border-t border-white/10 py-5 text-xs text-white/50">
-          Disclaimer: CapitalKnob does not guarantee loan approval. Final approval, pricing, tenure, security
-          requirements and other terms are determined by the respective lender or financial institution.
+        {/* Bottom row: Copyright & Disclaimer */}
+        <div className="flex flex-col items-center justify-between gap-4 border-t border-line/60 py-6 text-xs text-muted md:flex-row">
+          <p>© {new Date().getFullYear()} CapitalKnob. All rights reserved.</p>
+          <p className="max-w-2xl text-center md:text-right">
+            Disclaimer: CapitalKnob does not guarantee loan approval. Final approval, pricing, tenure, security
+            requirements and other terms are determined by the respective lender or financial institution.
+          </p>
         </div>
       </Container>
     </footer>
