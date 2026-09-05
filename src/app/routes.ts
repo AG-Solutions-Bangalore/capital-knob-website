@@ -4,6 +4,7 @@
  */
 export const ROUTES = {
   home: '/',
+  solutions: '/solutions',
   homeFinance: '/home-finance',
   businessFinance: '/business-finance',
   realEstateFinance: '/real-estate-finance',

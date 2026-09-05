@@ -13,7 +13,7 @@ export const env = {
    */
   apiBaseUrl:
     (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
-    'https://agsdemo.in/cp/api',
+    'https://agsdemo.in/ck/api',
 
   /** When true, devtools and verbose axios logging are enabled. */
   isDev: import.meta.env.DEV,

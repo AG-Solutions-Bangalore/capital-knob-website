@@ -2,6 +2,7 @@ import { createBrowserRouter, type RouteObject } from 'react-router-dom'
 import { ROUTES } from './routes'
 import { MainLayout } from '@/shared/layouts/MainLayout'
 import { HomePage } from '@/modules/home/pages/HomePage'
+import { SolutionsPage } from '@/modules/solutions/pages/SolutionsPage'
 import { HomeFinancePage } from '@/modules/home-finance/pages/HomeFinancePage'
 import { BusinessFinancePage } from '@/modules/business-finance/pages/BusinessFinancePage'
 import { RealEstateFinancePage } from '@/modules/real-estate-finance/pages/RealEstateFinancePage'
@@ -15,6 +16,7 @@ const routes: RouteObject[] = [
     element: <MainLayout />,
     children: [
       { path: ROUTES.home, element: <HomePage /> },
+      { path: ROUTES.solutions, element: <SolutionsPage /> },
       { path: ROUTES.homeFinance, element: <HomeFinancePage /> },
       { path: ROUTES.businessFinance, element: <BusinessFinancePage /> },
       { path: ROUTES.realEstateFinance, element: <RealEstateFinancePage /> },

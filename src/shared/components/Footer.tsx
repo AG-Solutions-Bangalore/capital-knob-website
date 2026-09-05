@@ -10,6 +10,7 @@ interface FooterNavItem {
 
 const footerLinks: FooterNavItem[] = [
   { label: 'Home', to: ROUTES.home },
+  { label: 'Solutions', to: ROUTES.solutions },
   { label: 'Home Finance', to: ROUTES.homeFinance },
   { label: 'Business Finance', to: ROUTES.businessFinance },
   { label: 'Real Estate Finance', to: ROUTES.realEstateFinance },

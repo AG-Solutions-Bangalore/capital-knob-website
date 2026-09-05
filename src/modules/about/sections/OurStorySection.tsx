@@ -6,7 +6,7 @@
  */
 
 import { Container } from '@/shared/components/Container'
-import { iconRegistry } from '@/modules/home/components/icons'
+import { iconRegistry } from '@/modules/solutions/components/icons'
 import { ourStory } from '../constants'
 
 export function OurStorySection() {

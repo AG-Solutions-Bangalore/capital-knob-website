@@ -3,7 +3,7 @@
  * so the sections stay presentational.
  */
 
-import type { IconKey } from '@/modules/home/constants'
+import type { IconKey } from '@/modules/solutions/constants'
 
 /* -----------------------------------------------------------------------------
    HERO
