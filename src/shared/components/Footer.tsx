@@ -1,29 +1,20 @@
 import { Link } from 'react-router-dom'
-import { ROUTES, type RoutePath } from '@/app/routes'
+import { ROUTES } from '@/app/routes'
 import { Container } from './Container'
 import { Logo } from './Logo'
 
-interface FooterNavItem {
-  label: string
-  to: RoutePath
-}
-
-const footerLinks: FooterNavItem[] = [
-  { label: 'Home', to: ROUTES.home },
-  { label: 'Solutions', to: ROUTES.solutions },
-  { label: 'Home Finance', to: ROUTES.homeFinance },
-  { label: 'Business Finance', to: ROUTES.businessFinance },
-  { label: 'Real Estate Finance', to: ROUTES.realEstateFinance },
-  { label: 'Private Credit', to: ROUTES.privateCredit },
-  { label: 'About Us', to: ROUTES.about },
-  { label: 'Contact', to: ROUTES.contact },
+const footerLinks: { label: string; href: string }[] = [
+  { label: 'Home', href: ROUTES.home },
+  { label: 'About Us', href: ROUTES.about },
+  { label: 'Careers', href: '#' },
+  { label: 'Insights', href: '#' },
+  { label: 'Contact', href: ROUTES.contact },
 ]
 
 const socialLinks = [
   { label: 'LinkedIn', href: '#', icon: <LinkedInIcon /> },
   { label: 'Instagram', href: '#', icon: <InstagramIcon /> },
   { label: 'YouTube', href: '#', icon: <YouTubeIcon /> },
-  { label: 'X', href: '#', icon: <XIcon /> },
 ]
 
 import { useLocation } from 'react-router-dom'
@@ -45,8 +36,8 @@ export function Footer({ variant }: FooterProps) {
       }
     >
       <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
-        {/* Top row: Logo, Horizontal Nav Links, Social Icons */}
-        <div className="flex flex-col items-center justify-between gap-6 py-8 md:flex-row">
+        {/* Top row: Logo, Horizontal Nav Links, Social Icons, and CTA Button */}
+        <div className="flex flex-col items-center justify-between gap-6 py-6 md:flex-row">
           <Logo variant={isDark ? 'light' : 'dark'} />
 
           {/* Centered nav links */}
@@ -56,11 +47,11 @@ export function Footer({ variant }: FooterProps) {
             }`}
           >
             {footerLinks.map((l) => (
-              <li key={l.to}>
+              <li key={l.label}>
                 <Link
-                  to={l.to}
+                  to={l.href}
                   className={`transition-colors ${
-                    isDark ? 'hover:text-gold' : 'hover:text-gold'
+                    isDark ? 'hover:text-gold' : 'hover:text-navy'
                   }`}
                 >
                   {l.label}
@@ -69,24 +60,47 @@ export function Footer({ variant }: FooterProps) {
             ))}
           </ul>
 
-          {/* Social icons */}
-          <div
-            className={`flex items-center gap-4 ${
-              isDark ? 'text-white/80' : 'text-muted'
-            }`}
-          >
-            {socialLinks.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                aria-label={s.label}
-                className={`transition-colors ${
-                  isDark ? 'hover:text-gold' : 'hover:text-navy'
-                }`}
+          {/* Right side: Social icons & Consultation Button */}
+          <div className="flex flex-wrap items-center gap-4">
+            <div
+              className={`flex items-center gap-3 ${
+                isDark ? 'text-white/80' : 'text-muted'
+              }`}
+            >
+              {socialLinks.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  aria-label={s.label}
+                  className={`transition-colors ${
+                    isDark ? 'hover:text-gold' : 'hover:text-navy'
+                  }`}
+                >
+                  {s.icon}
+                </a>
+              ))}
+            </div>
+
+            <Link
+              to={ROUTES.contact}
+              className="inline-flex items-center gap-2 rounded-lg bg-navy px-4 py-2 text-xs font-bold text-white shadow-xs transition-colors hover:bg-navy-soft"
+            >
+              <span>Book a Free Consultation</span>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
               >
-                {s.icon}
-              </a>
-            ))}
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </Link>
           </div>
         </div>
 
@@ -98,7 +112,7 @@ export function Footer({ variant }: FooterProps) {
               : 'border-line/60 text-muted'
           }`}
         >
-          <p>© {new Date().getFullYear()} CapitalKnob. All rights reserved.</p>
+          <p>© 2024 CapitalKnob. All rights reserved.</p>
           <p className="max-w-2xl text-center md:text-right">
             Disclaimer: CapitalKnob does not guarantee loan approval. Final approval, pricing, tenure, security
             requirements and other terms are determined by the respective lender or financial institution.
@@ -131,14 +145,6 @@ function YouTubeIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
       <path d="M23.5 6.2a3 3 0 0 0-2.1-2.12C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.58A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.12C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.58a3 3 0 0 0 2.1-2.12A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.75 15.5v-7l6.5 3.5-6.5 3.5z" />
-    </svg>
-  )
-}
-
-function XIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.451-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
     </svg>
   )
 }

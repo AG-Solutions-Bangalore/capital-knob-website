@@ -34,6 +34,7 @@
   --font-display: "Space Grotesk", "Inter", "Segoe UI", system-ui,
     -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
   --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-script: "Caveat", cursive, sans-serif;
 
   /* ---------- Radii ---------- */
   --radius-card: 0.75rem;   /* 12px — service cards */
