@@ -25,19 +25,43 @@ const socialLinks = [
   { label: 'X', href: '#', icon: <XIcon /> },
 ]
 
-export function Footer() {
+import { useLocation } from 'react-router-dom'
+
+interface FooterProps {
+  variant?: 'light' | 'dark'
+}
+
+export function Footer({ variant }: FooterProps) {
+  const location = useLocation()
+  const isDark = variant ? variant === 'dark' : location.pathname === ROUTES.contact
+
   return (
-    <footer className="border-t border-line bg-white text-ink">
+    <footer
+      className={
+        isDark
+          ? 'border-t border-white/10 bg-navy-deep text-white'
+          : 'border-t border-line bg-white text-ink'
+      }
+    >
       <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
         {/* Top row: Logo, Horizontal Nav Links, Social Icons */}
         <div className="flex flex-col items-center justify-between gap-6 py-8 md:flex-row">
-          <Logo variant="dark" />
+          <Logo variant={isDark ? 'light' : 'dark'} />
 
           {/* Centered nav links */}
-          <ul className="flex flex-wrap items-center justify-center gap-6 text-xs font-medium text-muted md:text-sm">
+          <ul
+            className={`flex flex-wrap items-center justify-center gap-6 text-xs font-medium md:text-sm ${
+              isDark ? 'text-white/80' : 'text-muted'
+            }`}
+          >
             {footerLinks.map((l) => (
               <li key={l.to}>
-                <Link to={l.to} className="transition-colors hover:text-gold">
+                <Link
+                  to={l.to}
+                  className={`transition-colors ${
+                    isDark ? 'hover:text-gold' : 'hover:text-gold'
+                  }`}
+                >
                   {l.label}
                 </Link>
               </li>
@@ -45,13 +69,19 @@ export function Footer() {
           </ul>
 
           {/* Social icons */}
-          <div className="flex items-center gap-4 text-muted">
+          <div
+            className={`flex items-center gap-4 ${
+              isDark ? 'text-white/80' : 'text-muted'
+            }`}
+          >
             {socialLinks.map((s) => (
               <a
                 key={s.label}
                 href={s.href}
                 aria-label={s.label}
-                className="transition-colors hover:text-navy"
+                className={`transition-colors ${
+                  isDark ? 'hover:text-gold' : 'hover:text-navy'
+                }`}
               >
                 {s.icon}
               </a>
@@ -60,7 +90,13 @@ export function Footer() {
         </div>
 
         {/* Bottom row: Copyright & Disclaimer */}
-        <div className="flex flex-col items-center justify-between gap-4 border-t border-line/60 py-6 text-xs text-muted md:flex-row">
+        <div
+          className={`flex flex-col items-center justify-between gap-4 border-t py-6 text-xs md:flex-row ${
+            isDark
+              ? 'border-white/10 text-white/60'
+              : 'border-line/60 text-muted'
+          }`}
+        >
           <p>© {new Date().getFullYear()} CapitalKnob. All rights reserved.</p>
           <p className="max-w-2xl text-center md:text-right">
             Disclaimer: CapitalKnob does not guarantee loan approval. Final approval, pricing, tenure, security

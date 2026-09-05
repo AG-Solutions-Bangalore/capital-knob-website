@@ -1,20 +1,20 @@
-import { PageHero } from '@/shared/components/PageHero'
-import { Container } from '@/shared/components/Container'
-import { contactCopy } from '../constants'
+/**
+ * ContactPage — combines ContactHeroSection, ContactFormSection,
+ * LocationSection, and FaqSection.
+ */
+
+import { ContactHeroSection } from '../sections/ContactHeroSection'
+import { ContactFormSection } from '../sections/ContactFormSection'
+import { LocationSection } from '../sections/LocationSection'
+import { FaqSection } from '../sections/FaqSection'
 
 export function ContactPage() {
   return (
     <>
-      <PageHero
-        eyebrow={contactCopy.hero.eyebrow}
-        title={contactCopy.hero.title}
-        subtitle={contactCopy.hero.description}
-      />
-      <section className="py-16">
-        <Container size="lg">
-          <p className="text-center text-muted">Contact form coming up.</p>
-        </Container>
-      </section>
+      <ContactHeroSection />
+      <ContactFormSection />
+      <LocationSection />
+      <FaqSection />
     </>
   )
 }
