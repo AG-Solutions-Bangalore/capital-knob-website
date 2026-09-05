@@ -1,7 +1,7 @@
 import { forwardRef, type ButtonHTMLAttributes } from 'react'
 import { cn } from '@/shared/lib/cn'
 
-type Variant = 'gold' | 'outline' | 'ghost'
+type Variant = 'gold' | 'outline' | 'ghost' | 'navy'
 type Size = 'sm' | 'md' | 'lg'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -11,6 +11,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   gold: 'bg-gold text-white hover:bg-gold-hover shadow-gold',
+  navy: 'bg-navy text-white hover:bg-navy-soft shadow-card',
   outline: 'border border-line text-ink hover:border-gold hover:text-gold',
   ghost: 'text-ink hover:text-gold',
 }

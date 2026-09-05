@@ -297,6 +297,14 @@ export const SupportIcon = makeIcon(
   </>,
 )
 
+export const PercentIcon = makeIcon(
+  <>
+    <circle cx="7" cy="7" r="2.5" />
+    <circle cx="17" cy="17" r="2.5" />
+    <line x1="5" y1="19" x2="19" y2="5" />
+  </>,
+)
+
 /* -------------------- registry (for IconKey → component) -------------------- */
 
 export const iconRegistry: Record<IconKey, (props: IconProps) => ReactNode> = {
@@ -331,6 +339,7 @@ export const iconRegistry: Record<IconKey, (props: IconProps) => ReactNode> = {
   guidance: GuidanceIcon,
   transparent: TransparentIcon,
   support: SupportIcon,
+  percent: PercentIcon,
 }
 
 export function Icon({ name, ...rest }: IconProps & { name: IconKey }) {

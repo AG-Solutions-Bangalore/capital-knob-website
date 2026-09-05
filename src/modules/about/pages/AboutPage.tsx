@@ -1,20 +1,27 @@
-import { PageHero } from '@/shared/components/PageHero'
-import { Container } from '@/shared/components/Container'
-import { aboutCopy } from '../constants'
+/**
+ * AboutPage — composes every about-page section in display order.
+ * Each section lives in its own file under `../sections/*` so copy,
+ * layout, and imagery stay easy to evolve.
+ */
+
+import { AboutHero } from '../sections/AboutHero'
+import { StatsSection } from '../sections/StatsSection'
+import { OurStorySection } from '../sections/OurStorySection'
+import { VisionMissionSection } from '../sections/VisionMissionSection'
+import { FounderSection } from '../sections/FounderSection'
+import { CommitmentSection } from '../sections/CommitmentSection'
+import { AboutCta } from '../sections/AboutCta'
 
 export function AboutPage() {
   return (
     <>
-      <PageHero
-        eyebrow={aboutCopy.hero.eyebrow}
-        title={aboutCopy.hero.title}
-        subtitle={aboutCopy.hero.description}
-      />
-      <section className="py-16">
-        <Container size="lg">
-          <p className="text-center text-muted">About content coming up.</p>
-        </Container>
-      </section>
+      <AboutHero />
+      <StatsSection />
+      <OurStorySection />
+      <VisionMissionSection />
+      <FounderSection />
+      <CommitmentSection />
+      <AboutCta />
     </>
   )
 }

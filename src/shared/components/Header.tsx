@@ -40,17 +40,14 @@ export function Header() {
                     end={item.to === ROUTES.home}
                     className={({ isActive }) =>
                       cn(
-                        'relative py-2 transition-colors hover:text-gold',
-                        isActive ? 'text-gold' : 'text-ink-soft',
+                        'relative py-2 transition-colors hover:text-navy',
+                        isActive
+                          ? 'font-semibold text-navy after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-navy'
+                          : 'text-ink-soft',
                       )
                     }
                   >
-                    {() => (
-                      <>
-                        {item.label}
-
-                      </>
-                    )}
+                    {item.label}
                   </NavLink>
                 </li>
               ))}
@@ -61,12 +58,12 @@ export function Header() {
           <div className="hidden items-center gap-6 lg:flex">
             <a
               href="tel:+919876543210"
-              className="flex items-center gap-2 text-sm font-medium text-ink-soft hover:text-gold"
+              className="flex items-center gap-2 text-sm font-medium text-ink-soft hover:text-navy"
             >
               <PhoneIcon />
               +91 98765 43210
             </a>
-            <Button variant="gold" size="md" className="px-5">
+            <Button variant="navy" size="md" className="px-5">
               Get a Callback
               <ArrowRightIcon />
             </Button>
