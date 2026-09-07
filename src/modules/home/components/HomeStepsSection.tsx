@@ -89,7 +89,7 @@ export function HomeStepsSection() {
 
                   {/* Chevron divider between steps */}
                   {idx < processSteps.length - 1 && (
-                    <div className="hidden px-2 text-slate-500 lg:block">
+                    <div className="hidden mb-11 ml-8 px-2 text-slate-500 lg:block">
                       <svg
                         width="16"
                         height="16"

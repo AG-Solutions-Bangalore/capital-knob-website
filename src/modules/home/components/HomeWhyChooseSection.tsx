@@ -1,4 +1,5 @@
 import { Container } from '@/shared/components/Container'
+import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { whyChooseBenefits } from '../constants'
 
 function BenefitIcon({ icon }: { icon: string }) {
@@ -89,6 +90,7 @@ export function HomeWhyChooseSection() {
             <div className="mt-6">
               <a
                 href="/about"
+                title={linkTitleFor('/about')}
                 className="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-2xs transition-colors hover:border-navy hover:text-navy"
               >
                 <span>Know More</span>

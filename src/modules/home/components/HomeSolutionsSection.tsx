@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Container } from '@/shared/components/Container'
+import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { homeSolutionsTabs, individualSolutions } from '../constants'
 
 // SVG icons for each service
@@ -100,8 +102,9 @@ export function HomeSolutionsSection() {
             </div>
 
             {/* Explore All CTA */}
-            <a
-              href="/solutions"
+            <Link
+              to="/solutions"
+              title={linkTitleFor('/solutions')}
               className="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-2 text-sm font-semibold text-ink shadow-2xs transition-colors hover:border-navy hover:text-navy"
             >
               <span>Explore All Solutions</span>
@@ -119,16 +122,17 @@ export function HomeSolutionsSection() {
                 <line x1="5" y1="12" x2="19" y2="12" />
                 <polyline points="12 5 19 12 12 19" />
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
 
         {/* 6 Cards Grid strictly conforming to reference design */}
         <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
           {individualSolutions.map((card) => (
-            <a
+            <Link
               key={card.id}
-              href={card.href}
+              to={card.href}
+              title={linkTitleFor(card.href)}
               className="group flex flex-col overflow-hidden rounded-xl border border-line bg-white transition-all duration-200 hover:-translate-y-1 hover:border-gold/50 hover:shadow-lg"
             >
               {/* Card Image Banner */}
@@ -136,6 +140,7 @@ export function HomeSolutionsSection() {
                 <img
                   src={card.imageSrc}
                   alt={card.title}
+                  title={card.imageTitle}
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
                 />
@@ -178,7 +183,7 @@ export function HomeSolutionsSection() {
                   </span>
                 </div>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </Container>

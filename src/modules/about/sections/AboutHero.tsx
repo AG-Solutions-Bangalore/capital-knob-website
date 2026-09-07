@@ -6,6 +6,7 @@
  */
 
 import { Container } from '@/shared/components/Container'
+import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { aboutHero } from '../constants'
 
 export function AboutHero() {
@@ -15,6 +16,7 @@ export function AboutHero() {
       <img
         src={aboutHero.image}
         alt="Modern executive office terrace and city skyline"
+        title="CapitalKnob Executive Office and City Skyline"
         className="absolute inset-0 h-full w-full object-cover object-right"
       />
 
@@ -37,6 +39,7 @@ export function AboutHero() {
             </p>
             <a
               href={aboutHero.ctaHref}
+              title={linkTitleFor(aboutHero.ctaHref)}
               className="mt-8 inline-flex items-center gap-2 rounded-button bg-navy px-6 py-3 text-sm font-semibold text-white shadow-card transition-colors hover:bg-navy-soft"
             >
               {aboutHero.ctaLabel}

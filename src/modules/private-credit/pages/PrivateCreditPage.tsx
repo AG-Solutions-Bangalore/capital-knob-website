@@ -1,8 +1,11 @@
 import { PageHero } from '@/shared/components/PageHero'
 import { Container } from '@/shared/components/Container'
+import { usePageSeo } from '@/shared/seo/usePageSeo'
 import { privateCreditCopy } from '../constants'
 
 export function PrivateCreditPage() {
+  usePageSeo('privateCredit')
+
   return (
     <>
       <PageHero

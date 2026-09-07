@@ -1,5 +1,6 @@
 import { ROUTES, type RoutePath } from '@/app/routes'
 import { cn } from '@/shared/lib/cn'
+import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { Button } from './Button'
@@ -9,15 +10,32 @@ import { Logo } from './Logo'
 interface NavItem {
   label: string
   to: RoutePath
+  title: string
 }
 
 const navItems: NavItem[] = [
-  { label: 'Home', to: ROUTES.home },
-  { label: 'Home Finance', to: ROUTES.homeFinance },
-  { label: 'Business Finance', to: ROUTES.businessFinance },
-  { label: 'Real Estate Finance', to: ROUTES.realEstateFinance },
-  { label: 'Private Credit', to: ROUTES.privateCredit },
-  { label: 'About Us', to: ROUTES.about },
+  { label: 'Home', to: ROUTES.home, title: 'CapitalKnob Home' },
+  {
+    label: 'Home Finance',
+    to: ROUTES.homeFinance,
+    title: 'Home Finance Solutions',
+  },
+  {
+    label: 'Business Finance',
+    to: ROUTES.businessFinance,
+    title: 'Business Finance Solutions',
+  },
+  {
+    label: 'Real Estate Finance',
+    to: ROUTES.realEstateFinance,
+    title: 'Real Estate Finance Solutions',
+  },
+  {
+    label: 'Private Credit',
+    to: ROUTES.privateCredit,
+    title: 'Private Credit Solutions',
+  },
+  { label: 'About Us', to: ROUTES.about, title: 'About Us – CapitalKnob' },
 ]
 
 export function Header() {
@@ -32,11 +50,12 @@ export function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex">
-            <ul className="flex items-center gap-8 text-sm font-medium text-ink-soft">
+            <ul className="flex items-center gap-6 xl:gap-8 text-sm font-medium text-ink-soft">
               {navItems.map((item) => (
                 <li key={item.to} className="relative">
                   <NavLink
                     to={item.to}
+                    title={item.title}
                     end={item.to === ROUTES.home}
                     className={({ isActive }) =>
                       cn(
@@ -55,18 +74,21 @@ export function Header() {
           </nav>
 
           {/* Right cluster */}
-          <div className="hidden items-center gap-6 lg:flex">
+          <div className="hidden items-center gap-5 xl:gap-6 lg:flex">
             <a
               href="tel:+919876543210"
+              title={linkTitleFor('tel:+919876543210')}
               className="flex items-center gap-2 text-sm font-medium text-ink-soft hover:text-navy"
             >
               <PhoneIcon />
               +91 98765 43210
             </a>
-            <Button variant="navy" size="md" className="px-5">
-              Get a Callback
-              <ArrowRightIcon />
-            </Button>
+            <Link to={ROUTES.contact} title={linkTitleFor(ROUTES.contact)}>
+              <Button variant="navy" size="md" className="px-5">
+                Get a Callback
+                <ArrowRightIcon />
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile toggle */}
@@ -89,6 +111,7 @@ export function Header() {
                 <li key={item.to}>
                   <NavLink
                     to={item.to}
+                    title={item.title}
                     end={item.to === ROUTES.home}
                     onClick={() => setOpen(false)}
                     className={({ isActive }) =>
@@ -104,10 +127,18 @@ export function Header() {
               ))}
             </ul>
             <div className="mt-4 flex flex-col gap-3">
-              <a href="tel:+919876543210" className="flex items-center gap-2 px-3 text-sm text-ink-soft">
+              <a
+                href="tel:+919876543210"
+                title={linkTitleFor('tel:+919876543210')}
+                className="flex items-center gap-2 px-3 text-sm text-ink-soft"
+              >
                 <PhoneIcon /> +91 98765 43210
               </a>
-              <Link to={ROUTES.contact} onClick={() => setOpen(false)}>
+              <Link
+                to={ROUTES.contact}
+                title={linkTitleFor(ROUTES.contact)}
+                onClick={() => setOpen(false)}
+              >
                 <Button variant="gold" className="w-full">
                   Get a Callback
                   <ArrowRightIcon />

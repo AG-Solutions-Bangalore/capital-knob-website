@@ -4,6 +4,7 @@
  * layout, and imagery stay easy to evolve.
  */
 
+import { usePageSeo } from '@/shared/seo/usePageSeo'
 import { AboutHero } from '../sections/AboutHero'
 import { StatsSection } from '../sections/StatsSection'
 import { OurStorySection } from '../sections/OurStorySection'
@@ -13,6 +14,8 @@ import { CommitmentSection } from '../sections/CommitmentSection'
 import { AboutCta } from '../sections/AboutCta'
 
 export function AboutPage() {
+  usePageSeo('about')
+
   return (
     <>
       <AboutHero />

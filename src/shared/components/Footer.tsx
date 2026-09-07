@@ -1,14 +1,35 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { ROUTES } from '@/app/routes'
+import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { Container } from './Container'
 import { Logo } from './Logo'
 
-const footerLinks: { label: string; href: string }[] = [
+const solutionLinks = [
+  { label: 'Solutions Hub', href: ROUTES.solutions },
+  { label: 'Home Finance & Loans', href: ROUTES.homeFinance },
+  { label: 'Business & Working Capital', href: ROUTES.businessFinance },
+  { label: 'Real Estate & Project Finance', href: ROUTES.realEstateFinance },
+  { label: 'Private Credit & Structured Debt', href: ROUTES.privateCredit },
+  { label: 'Home Loan Balance Transfer', href: '/home-finance#balance-transfer' },
+  { label: 'Loan Against Property (LAP)', href: '/home-finance#loan-against-property' },
+]
+
+const companyLinks = [
   { label: 'Home', href: ROUTES.home },
-  { label: 'About Us', href: ROUTES.about },
-  { label: 'Careers', href: '#' },
-  { label: 'Insights', href: '#' },
-  { label: 'Contact', href: ROUTES.contact },
+  { label: 'Explore All Solutions', href: ROUTES.solutions },
+  { label: 'About CapitalKnob', href: ROUTES.about },
+  { label: 'Lending Partners', href: '/#partners' },
+  { label: 'Why Choose Us', href: '/#why-choose' },
+  { label: '5-Step Process', href: '/#steps' },
+  { label: 'Contact Us', href: ROUTES.contact },
+]
+
+const advisoryLinks = [
+  { label: 'Free EMI Calculator', href: '/#calculator' },
+  { label: 'Check Loan Eligibility', href: ROUTES.contact },
+  { label: 'Request Callback', href: ROUTES.contact },
+  { label: 'Talk to an Advisor', href: 'tel:+919876543210' },
+  { label: 'Partnership Inquiry', href: ROUTES.contact },
 ]
 
 const socialLinks = [
@@ -16,8 +37,6 @@ const socialLinks = [
   { label: 'Instagram', href: '#', icon: <InstagramIcon /> },
   { label: 'YouTube', href: '#', icon: <YouTubeIcon /> },
 ]
-
-import { useLocation } from 'react-router-dom'
 
 interface FooterProps {
   variant?: 'light' | 'dark'
@@ -35,84 +54,202 @@ export function Footer({ variant }: FooterProps) {
           : 'border-t border-line bg-white text-ink'
       }
     >
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
-        {/* Top row: Logo, Horizontal Nav Links, Social Icons, and CTA Button */}
-        <div className="flex flex-col items-center justify-between gap-6 py-6 md:flex-row">
-          <Logo variant={isDark ? 'light' : 'dark'} />
-
-          {/* Centered nav links */}
-          <ul
-            className={`flex flex-wrap items-center justify-center gap-6 text-xs font-medium md:text-sm ${
-              isDark ? 'text-white/80' : 'text-muted'
-            }`}
-          >
-            {footerLinks.map((l) => (
-              <li key={l.label}>
-                <Link
-                  to={l.href}
-                  className={`transition-colors ${
-                    isDark ? 'hover:text-gold' : 'hover:text-navy'
-                  }`}
-                >
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          {/* Right side: Social icons & Consultation Button */}
-          <div className="flex flex-wrap items-center gap-4">
-            <div
-              className={`flex items-center gap-3 ${
-                isDark ? 'text-white/80' : 'text-muted'
+      <Container size="4xl" className="w-full max-w-[1720px] px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+        {/* Main 4-column Grid */}
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-12">
+          {/* Col 1: Brand Info & Consultation (Span 4) */}
+          <div className="lg:col-span-4">
+            <Logo variant={isDark ? 'light' : 'dark'} />
+            <p
+              className={`mt-4 max-w-sm text-sm leading-relaxed ${
+                isDark ? 'text-white/75' : 'text-muted'
               }`}
             >
+              Empowering individuals, enterprises, and real estate developers with
+              transparent financial advisory, access to 50+ leading lenders, and structured
+              financing solutions.
+            </p>
+
+            {/* Quick Contact info */}
+            <div className="mt-5 space-y-2 text-xs">
+              <p className="flex items-center gap-2">
+                <span className="font-semibold text-gold">Phone:</span>
+                <a
+                  href="tel:+919876543210"
+                  title={linkTitleFor('tel:+919876543210')}
+                  className={`transition-colors ${
+                    isDark ? 'text-white/90 hover:text-gold' : 'text-ink hover:text-brand-blue'
+                  }`}
+                >
+                  +91 98765 43210
+                </a>
+              </p>
+              <p className="flex items-center gap-2">
+                <span className="font-semibold text-gold">Email:</span>
+                <a
+                  href="mailto:info@capitalknob.com"
+                  title={linkTitleFor('mailto:info@capitalknob.com')}
+                  className={`transition-colors ${
+                    isDark ? 'text-white/90 hover:text-gold' : 'text-ink hover:text-brand-blue'
+                  }`}
+                >
+                  info@capitalknob.com
+                </a>
+              </p>
+            </div>
+
+            {/* Social Icons */}
+            <div className="mt-6 flex items-center gap-3">
               {socialLinks.map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
+                  title={linkTitleFor(s.href)}
                   aria-label={s.label}
-                  className={`transition-colors ${
-                    isDark ? 'hover:text-gold' : 'hover:text-navy'
+                  className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border transition-all ${
+                    isDark
+                      ? 'border-white/15 bg-white/5 text-white/80 hover:border-gold hover:text-gold'
+                      : 'border-line bg-line-soft text-muted hover:border-navy hover:text-navy'
                   }`}
                 >
                   {s.icon}
                 </a>
               ))}
             </div>
+          </div>
 
-            <Link
-              to={ROUTES.contact}
-              className="inline-flex items-center gap-2 rounded-lg bg-navy px-4 py-2 text-xs font-bold text-white shadow-xs transition-colors hover:bg-navy-soft"
+          {/* Col 2: Solutions & Offerings (Span 3) */}
+          <div className="lg:col-span-3">
+            <h3
+              className={`font-display text-sm font-bold uppercase tracking-wider ${
+                isDark ? 'text-white' : 'text-ink'
+              }`}
             >
-              <span>Book a Free Consultation</span>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
+              Financial Solutions
+            </h3>
+            <ul className="mt-4 space-y-2.5 text-xs sm:text-sm">
+              {solutionLinks.map((l) => (
+                <li key={l.label}>
+                  <Link
+                    to={l.href}
+                    title={linkTitleFor(l.href)}
+                    className={`transition-colors ${
+                      isDark
+                        ? 'text-white/70 hover:text-gold'
+                        : 'text-muted hover:text-navy'
+                    }`}
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Col 3: Company & Exploration (Span 2) */}
+          <div className="lg:col-span-2">
+            <h3
+              className={`font-display text-sm font-bold uppercase tracking-wider ${
+                isDark ? 'text-white' : 'text-ink'
+              }`}
+            >
+              Navigation
+            </h3>
+            <ul className="mt-4 space-y-2.5 text-xs sm:text-sm">
+              {companyLinks.map((l) => (
+                <li key={l.label}>
+                  <Link
+                    to={l.href}
+                    title={linkTitleFor(l.href)}
+                    className={`transition-colors ${
+                      isDark
+                        ? 'text-white/70 hover:text-gold'
+                        : 'text-muted hover:text-navy'
+                    }`}
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Col 4: Advisory, Tools & Consultation CTA (Span 3) */}
+          <div className="lg:col-span-3">
+            <h3
+              className={`font-display text-sm font-bold uppercase tracking-wider ${
+                isDark ? 'text-white' : 'text-ink'
+              }`}
+            >
+              Advisory & Tools
+            </h3>
+            <ul className="mt-4 space-y-2.5 text-xs sm:text-sm">
+              {advisoryLinks.map((l) => (
+                <li key={l.label}>
+                  {l.href.startsWith('tel:') ? (
+                    <a
+                      href={l.href}
+                      title={linkTitleFor(l.href)}
+                      className={`transition-colors ${
+                        isDark
+                          ? 'text-white/70 hover:text-gold'
+                          : 'text-muted hover:text-navy'
+                      }`}
+                    >
+                      {l.label}
+                    </a>
+                  ) : (
+                    <Link
+                      to={l.href}
+                      title={linkTitleFor(l.href)}
+                      className={`transition-colors ${
+                        isDark
+                          ? 'text-white/70 hover:text-gold'
+                          : 'text-muted hover:text-navy'
+                      }`}
+                    >
+                      {l.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-6">
+              <Link
+                to={ROUTES.contact}
+                title={linkTitleFor(ROUTES.contact)}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gold px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-gold-hover"
               >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </Link>
+                <span>Book Free Consultation</span>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </Link>
+            </div>
           </div>
         </div>
 
         {/* Bottom row: Copyright & Disclaimer */}
         <div
-          className={`flex flex-col items-center justify-between gap-4 border-t py-6 text-xs md:flex-row ${
+          className={`mt-12 flex flex-col items-center justify-between gap-4 border-t pt-6 text-xs md:flex-row ${
             isDark
               ? 'border-white/10 text-white/60'
-              : 'border-line/60 text-muted'
+              : 'border-line/80 text-muted'
           }`}
         >
-          <p>© 2024 CapitalKnob. All rights reserved.</p>
+          <p>© 2026 CapitalKnob. All rights reserved.</p>
           <p className="max-w-2xl text-center md:text-right">
             Disclaimer: CapitalKnob does not guarantee loan approval. Final approval, pricing, tenure, security
             requirements and other terms are determined by the respective lender or financial institution.

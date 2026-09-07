@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Container } from '@/shared/components/Container'
+import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { useEnquiryMutation } from '../hooks/useEnquiryMutation'
 import {
   contactCopy,
@@ -427,6 +428,7 @@ export function ContactFormSection() {
                   <p className="text-xs font-medium text-muted">{touch.phone.label}</p>
                   <a
                     href={touch.phone.href}
+                    title={linkTitleFor(touch.phone.href)}
                     className="mt-1 block font-display text-lg font-bold text-navy transition-colors hover:text-gold"
                   >
                     {touch.phone.number}
@@ -456,6 +458,7 @@ export function ContactFormSection() {
                   <p className="text-xs font-medium text-muted">{touch.email.label}</p>
                   <a
                     href={touch.email.href}
+                    title={linkTitleFor(touch.email.href)}
                     className="mt-1 block font-display text-lg font-bold text-navy transition-colors hover:text-gold"
                   >
                     {touch.email.address}

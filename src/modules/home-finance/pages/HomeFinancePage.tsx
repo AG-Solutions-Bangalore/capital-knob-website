@@ -1,8 +1,11 @@
 import { PageHero } from '@/shared/components/PageHero'
 import { Container } from '@/shared/components/Container'
+import { usePageSeo } from '@/shared/seo/usePageSeo'
 import { homeFinanceCopy } from '../constants'
 
 export function HomeFinancePage() {
+  usePageSeo('homeFinance')
+
   return (
     <>
       <PageHero

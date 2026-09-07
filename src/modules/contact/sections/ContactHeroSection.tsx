@@ -29,6 +29,7 @@ export function ContactHeroSection() {
         <img
           src={hero.receptionImage}
           alt="CapitalKnob Corporate Reception Lobby"
+          title="CapitalKnob Corporate Reception Lobby"
           className="block h-auto w-full"
         />
         <div
@@ -56,6 +57,7 @@ export function ContactHeroSection() {
         <img
           src={hero.receptionImage}
           alt="CapitalKnob Corporate Reception Lobby"
+          title="CapitalKnob Corporate Reception Lobby"
           className="block h-auto w-full"
         />
       </div>

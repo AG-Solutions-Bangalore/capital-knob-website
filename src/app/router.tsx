@@ -1,4 +1,4 @@
-import { createBrowserRouter, type RouteObject } from 'react-router-dom'
+import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom'
 import { ROUTES } from './routes'
 import { MainLayout } from '@/shared/layouts/MainLayout'
 import { HomePage } from '@/modules/home/pages/HomePage'
@@ -17,11 +17,13 @@ const routes: RouteObject[] = [
     children: [
       { path: ROUTES.home, element: <HomePage /> },
       { path: ROUTES.solutions, element: <SolutionsPage /> },
+      { path: '/solution', element: <Navigate to={ROUTES.solutions} replace /> },
       { path: ROUTES.homeFinance, element: <HomeFinancePage /> },
       { path: ROUTES.businessFinance, element: <BusinessFinancePage /> },
       { path: ROUTES.realEstateFinance, element: <RealEstateFinancePage /> },
       { path: ROUTES.privateCredit, element: <PrivateCreditPage /> },
       { path: ROUTES.about, element: <AboutPage /> },
+      { path: '/about', element: <Navigate to={ROUTES.about} replace /> },
       { path: ROUTES.contact, element: <ContactPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],

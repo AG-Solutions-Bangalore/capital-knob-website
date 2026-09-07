@@ -1,4 +1,5 @@
 import { Container } from '@/shared/components/Container'
+import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { homeStats, homeTestimonial } from '../constants'
 
 export function HomeCtaSection() {
@@ -9,6 +10,7 @@ export function HomeCtaSection() {
         <img
           src="/images/home/cta_skyline.jpg"
           alt="Modern metropolitan skyscraper skyline at dusk"
+          title="Modern Metropolitan Skyline – CapitalKnob"
           className="h-full w-full object-cover object-center"
         />
         {/* Navy gradient dark overlay */}
@@ -32,7 +34,8 @@ export function HomeCtaSection() {
             <div className="mt-6">
               <a
                 href="/contact"
-                className="inline-flex items-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-navy shadow-gold transition-all duration-200 hover:bg-gold-hover"
+                title={linkTitleFor('/contact')}
+                className="inline-flex items-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-white shadow-gold transition-all duration-200 hover:bg-gold-hover"
               >
                 <span>Get Started Today</span>
                 <svg
@@ -81,6 +84,7 @@ export function HomeCtaSection() {
                   <img
                     src={homeTestimonial.avatar}
                     alt={homeTestimonial.name}
+                    title={homeTestimonial.avatarTitle}
                     className="h-full w-full object-cover"
                   />
                 </div>

@@ -20,6 +20,7 @@ export function OurStorySection() {
               <img
                 src={ourStory.image}
                 alt="CapitalKnob corporate office reception lobby"
+                title="CapitalKnob Corporate Office Reception"
                 loading="lazy"
                 className="aspect-[4/3] w-full object-cover lg:h-[460px]"
               />

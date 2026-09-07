@@ -3,6 +3,7 @@ export interface HomeCard {
   title: string
   description: string
   imageSrc: string
+  imageTitle: string
   icon: 'home' | 'refresh' | 'stack' | 'crane' | 'tools' | 'document'
   href: string
 }
@@ -30,6 +31,114 @@ export interface HomeStat {
   value: string
   label: string
 }
+
+export interface HeroSlide {
+  id: string
+  eyebrow: string
+  handwrittenScript: string
+  titleLine1: string
+  titleLine2: string
+  tagline: string
+  description: string
+  imageSrc: string
+  imageAlt: string
+  imageTitle: string
+  primaryCta: {
+    label: string
+    href: string
+  }
+  secondaryCta: {
+    label: string
+    href: string
+  }
+}
+
+export const heroSlides: HeroSlide[] = [
+  {
+    id: 'home-loans',
+    eyebrow: 'HOMES BUILD BIGGER TOMORROWS',
+    handwrittenScript: 'A Home A Brighter You',
+    titleLine1: 'Home Loans',
+    titleLine2: 'Made Simple',
+    tagline: 'Compare. Plan. Save. Own.',
+    description:
+      'Explore the right home finance solution with expert guidance and access to multiple lenders — all in one place.',
+    imageSrc: '/images/home/hero_villa.jpg',
+    imageAlt: 'Luxury modern villa at dusk',
+    imageTitle: 'Luxury Modern Villa – CapitalKnob',
+    primaryCta: {
+      label: 'Check Your Eligibility',
+      href: '/contact',
+    },
+    secondaryCta: {
+      label: 'Talk to an Expert',
+      href: 'tel:+919876543210',
+    },
+  },
+  {
+    id: 'business-finance',
+    eyebrow: 'EMPOWERING ENTERPRISE GROWTH',
+    handwrittenScript: 'Capital That Powers Vision',
+    titleLine1: 'Business Loans &',
+    titleLine2: 'Working Capital',
+    tagline: 'Fast. Flexible. Custom-Built.',
+    description:
+      'Unlock working capital, machinery financing, and customized credit lines tailored to accelerate your business growth.',
+    imageSrc: '/images/solutions/hero_skyline.jpg',
+    imageAlt: 'Modern city financial towers and business hub',
+    imageTitle: 'Modern City Financial Hub – CapitalKnob',
+    primaryCta: {
+      label: 'Explore Business Loans',
+      href: '/business-finance',
+    },
+    secondaryCta: {
+      label: 'Speak with an Advisor',
+      href: 'tel:+919876543210',
+    },
+  },
+  {
+    id: 'loan-against-property',
+    eyebrow: 'MAXIMIZE ASSET VALUE',
+    handwrittenScript: 'Unlock Hidden Equity',
+    titleLine1: 'Loan Against Property',
+    titleLine2: 'At Best Rates',
+    tagline: 'Higher Value. Lower EMI.',
+    description:
+      'Leverage your residential or commercial property to unlock high-value liquidity with competitive interest rates and extended tenures.',
+    imageSrc: '/images/home/card_loan_property.jpg',
+    imageAlt: 'Premium architectural real estate building',
+    imageTitle: 'Premium Real Estate Loan Property – CapitalKnob',
+    primaryCta: {
+      label: 'Calculate Your LAP',
+      href: '/contact',
+    },
+    secondaryCta: {
+      label: 'Get Free Assessment',
+      href: 'tel:+919876543210',
+    },
+  },
+  {
+    id: 'real-estate-finance',
+    eyebrow: 'DEVELOPMENT & PROJECT FUNDING',
+    handwrittenScript: 'Build Tomorrow, Today',
+    titleLine1: 'Real Estate Finance',
+    titleLine2: 'From Land to Completion',
+    tagline: 'Structured. Scalable. Certain.',
+    description:
+      'End-to-end capital solutions for land acquisition, builder construction finance, and commercial property development.',
+    imageSrc: '/images/home/cta_skyline.jpg',
+    imageAlt: 'Metropolitan skyline at twilight with modern architecture',
+    imageTitle: 'Metropolitan Skyline – CapitalKnob',
+    primaryCta: {
+      label: 'Explore Project Finance',
+      href: '/real-estate-finance',
+    },
+    secondaryCta: {
+      label: 'Consult Our Team',
+      href: 'tel:+919876543210',
+    },
+  },
+]
 
 export const homeHeroData = {
   eyebrow: 'HOMES BUILD BIGGER TOMORROWS',
@@ -77,6 +186,7 @@ export const individualSolutions: HomeCard[] = [
     title: 'Home Loans',
     description: 'Turn your dream home into reality.',
     imageSrc: '/images/home/card_home_loans.jpg',
+    imageTitle: 'Home Loans – CapitalKnob',
     icon: 'home',
     href: '/home-finance#home-loans',
   },
@@ -85,6 +195,7 @@ export const individualSolutions: HomeCard[] = [
     title: 'Home Loan Balance Transfer',
     description: 'Lower your interest rate. Save more.',
     imageSrc: '/images/home/card_balance_transfer.jpg',
+    imageTitle: 'Home Loan Balance Transfer – CapitalKnob',
     icon: 'refresh',
     href: '/home-finance#balance-transfer',
   },
@@ -93,6 +204,7 @@ export const individualSolutions: HomeCard[] = [
     title: 'Home Loan Top-Up',
     description: 'Extra funds for bigger horizons.',
     imageSrc: '/images/home/card_home_top_up.jpg',
+    imageTitle: 'Home Loan Top-Up – CapitalKnob',
     icon: 'stack',
     href: '/home-finance#top-up',
   },
@@ -101,6 +213,7 @@ export const individualSolutions: HomeCard[] = [
     title: 'Construction Finance',
     description: 'Build your vision, with the right support.',
     imageSrc: '/images/home/card_construction.jpg',
+    imageTitle: 'Construction Finance – CapitalKnob',
     icon: 'crane',
     href: '/real-estate-finance#construction',
   },
@@ -109,6 +222,7 @@ export const individualSolutions: HomeCard[] = [
     title: 'Home Renovation Finance',
     description: 'Upgrade to a better tomorrow.',
     imageSrc: '/images/home/card_renovation.jpg',
+    imageTitle: 'Home Renovation Finance – CapitalKnob',
     icon: 'tools',
     href: '/home-finance#renovation',
   },
@@ -117,6 +231,7 @@ export const individualSolutions: HomeCard[] = [
     title: 'Loan Against Property',
     description: 'Unlock the value in your property.',
     imageSrc: '/images/home/card_loan_property.jpg',
+    imageTitle: 'Loan Against Property – CapitalKnob',
     icon: 'document',
     href: '/business-finance#loan-against-property',
   },
@@ -211,4 +326,5 @@ export const homeTestimonial = {
   name: 'Rohan & Priya Mehta',
   role: 'Home Loan Customer',
   avatar: '/images/home/testimonial_couple.jpg',
+  avatarTitle: 'Rohan and Priya Mehta – CapitalKnob Testimonial',
 }

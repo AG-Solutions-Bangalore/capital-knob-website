@@ -6,7 +6,9 @@
  */
 
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import type { ServiceCard as ServiceCardData } from '../constants'
+import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { iconRegistry } from './icons'
 import { Illustration } from './illustrations'
 import { cn } from '@/shared/lib/cn'
@@ -35,7 +37,10 @@ function CardMedia({
         alt={alt}
         loading="lazy"
         onError={() => setImgError(true)}
-        className={cn('h-full w-full object-cover transition-transform duration-300 group-hover:scale-105', className)}
+        className={cn(
+          'h-full w-full object-cover transition-transform duration-500 group-hover:scale-105',
+          className,
+        )}
       />
     )
   }
@@ -48,8 +53,9 @@ export function ServiceCard(props: ServiceCardProps) {
   const Icon = iconRegistry[iconKey]
 
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
+      title={linkTitleFor(href)}
       className={cn(
         'group flex flex-col overflow-hidden rounded-card border border-line bg-surface transition-all duration-200',
         'hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-card',
@@ -107,7 +113,7 @@ export function ServiceCard(props: ServiceCardProps) {
           </span>
         </div>
       </div>
-    </a>
+    </Link>
   )
 }
 
@@ -120,8 +126,9 @@ export function WideServiceCard(props: ServiceCardProps) {
   const Icon = iconRegistry[iconKey]
 
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
+      title={linkTitleFor(href)}
       className={cn(
         'group flex overflow-hidden rounded-card border border-line bg-surface transition-all duration-200',
         'hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-card',
@@ -178,6 +185,6 @@ export function WideServiceCard(props: ServiceCardProps) {
           </span>
         </div>
       </div>
-    </a>
+    </Link>
   )
 }

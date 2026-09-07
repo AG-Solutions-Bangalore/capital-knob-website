@@ -57,7 +57,7 @@ export const individualsCards: ServiceCard[] = [
     iconKey: 'home',
     art: 'homeLoans',
     imageSrc: '/images/solutions/card_home_loans.jpg',
-    href: '#home-loans',
+    href: '/home-finance#home-loans',
   },
   {
     title: 'Home Loan Balance Transfer',
@@ -65,7 +65,7 @@ export const individualsCards: ServiceCard[] = [
     iconKey: 'refresh',
     art: 'balanceTransfer',
     imageSrc: '/images/solutions/card_balance_transfer.jpg',
-    href: '#balance-transfer',
+    href: '/home-finance#balance-transfer',
   },
   {
     title: 'Home Loan Top-Up',
@@ -73,7 +73,7 @@ export const individualsCards: ServiceCard[] = [
     iconKey: 'stack',
     art: 'topUp',
     imageSrc: '/images/solutions/card_top_up.jpg',
-    href: '#top-up',
+    href: '/home-finance#top-up',
   },
   {
     title: 'Construction Finance',
@@ -81,7 +81,7 @@ export const individualsCards: ServiceCard[] = [
     iconKey: 'crane',
     art: 'construction',
     imageSrc: '/images/solutions/card_construction.jpg',
-    href: '#construction',
+    href: '/real-estate-finance#construction',
   },
   {
     title: 'Loan Against Property',
@@ -89,7 +89,7 @@ export const individualsCards: ServiceCard[] = [
     iconKey: 'document',
     art: 'loanAgainst',
     imageSrc: '/images/solutions/card_loan_against.jpg',
-    href: '#loan-against-property',
+    href: '/home-finance#loan-against-property',
   },
 ]
 
@@ -103,7 +103,7 @@ export const businessesCards: ServiceCard[] = [
     iconKey: 'chart',
     art: 'workingCapital',
     imageSrc: '/images/solutions/card_working_capital.jpg',
-    href: '#working-capital',
+    href: '/business-finance#working-capital',
   },
   {
     title: 'Business Loans',
@@ -111,7 +111,7 @@ export const businessesCards: ServiceCard[] = [
     iconKey: 'briefcase',
     art: 'businessLoans',
     imageSrc: '/images/solutions/card_business_loans.jpg',
-    href: '#business-loans',
+    href: '/business-finance#business-loans',
   },
   {
     title: 'Secured Business Loans',
@@ -119,7 +119,7 @@ export const businessesCards: ServiceCard[] = [
     iconKey: 'shield',
     art: 'secured',
     imageSrc: '/images/solutions/card_secured_loans.jpg',
-    href: '#secured-business-loans',
+    href: '/business-finance#secured-business-loans',
   },
   {
     title: 'Business Expansion Funding',
@@ -127,7 +127,7 @@ export const businessesCards: ServiceCard[] = [
     iconKey: 'trendUp',
     art: 'expansion',
     imageSrc: '/images/solutions/card_expansion.jpg',
-    href: '#expansion',
+    href: '/business-finance#expansion',
   },
 ]
 
@@ -141,7 +141,7 @@ export const otherCapitalCards: ServiceCard[] = [
     iconKey: 'building',
     art: 'realEstate',
     imageSrc: '/images/solutions/card_real_estate.jpg',
-    href: '#real-estate',
+    href: '/real-estate-finance',
   },
   {
     title: 'Private Credit',
@@ -149,7 +149,7 @@ export const otherCapitalCards: ServiceCard[] = [
     iconKey: 'handshake',
     art: 'privateCredit',
     imageSrc: '/images/solutions/card_private_credit.jpg',
-    href: '#private-credit',
+    href: '/private-credit',
   },
   {
     title: 'Growth Capital',
@@ -157,7 +157,7 @@ export const otherCapitalCards: ServiceCard[] = [
     iconKey: 'plant',
     art: 'growthCapital',
     imageSrc: '/images/solutions/card_growth_capital.jpg',
-    href: '#growth-capital',
+    href: '/business-finance',
   },
   {
     title: 'Capital Connect',
@@ -165,7 +165,7 @@ export const otherCapitalCards: ServiceCard[] = [
     iconKey: 'network',
     art: 'capitalConnect',
     imageSrc: '/images/solutions/card_capital_connect.jpg',
-    href: '#capital-connect',
+    href: '/contact',
   },
 ]
 

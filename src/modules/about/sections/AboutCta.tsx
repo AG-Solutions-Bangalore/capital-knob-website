@@ -5,6 +5,7 @@
 
 import { Link } from 'react-router-dom'
 import { Container } from '@/shared/components/Container'
+import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { aboutCta } from '../constants'
 
 export function AboutCta() {
@@ -23,6 +24,7 @@ export function AboutCta() {
 
           <Link
             to={aboutCta.ctaHref}
+            title={linkTitleFor(aboutCta.ctaHref)}
             className="inline-flex shrink-0 items-center gap-2 rounded-button bg-gold px-7 py-3.5 text-sm font-bold text-navy shadow-gold transition-colors hover:bg-gold-hover"
           >
             {aboutCta.ctaLabel}

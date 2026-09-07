@@ -3,6 +3,7 @@
  * and design specifications with Nanao Banna / Nano Banana custom visual assets.
  */
 
+import { usePageSeo } from '@/shared/seo/usePageSeo'
 import { HomeHero } from '../components/HomeHero'
 import { LendingPartnersBanner } from '../components/LendingPartnersBanner'
 import { HomeSolutionsSection } from '../components/HomeSolutionsSection'
@@ -11,6 +12,8 @@ import { HomeStepsSection } from '../components/HomeStepsSection'
 import { HomeCtaSection } from '../components/HomeCtaSection'
 
 export function HomePage() {
+  usePageSeo('home')
+
   return (
     <div className="flex flex-col bg-page">
       {/* 1. Hero with modern luxury villa visual & live EMI Calculator */}

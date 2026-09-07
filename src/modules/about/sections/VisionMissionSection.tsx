@@ -137,6 +137,7 @@ export function VisionMissionSection() {
               <img
                 src={visionMissionValues.highlight.image}
                 alt="Person standing on a mountain peak looking at sunrise"
+                title="CapitalKnob Vision – Reaching New Heights"
                 loading="lazy"
                 className="absolute inset-0 h-full w-full object-cover object-center"
               />
