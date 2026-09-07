@@ -32,11 +32,13 @@ function CardMedia({
   imageSrc,
   art,
   alt,
+  imageTitle,
   className,
 }: {
   imageSrc?: string
   art: ServiceCardData['art']
   alt: string
+  imageTitle?: string
   className?: string
 }) {
   const [imgError, setImgError] = useState(false)
@@ -46,6 +48,7 @@ function CardMedia({
       <img
         src={imageSrc}
         alt={alt}
+        title={imageTitle ?? `${alt} – CapitalKnob`}
         loading="lazy"
         onError={() => setImgError(true)}
         className={cn(
@@ -139,6 +142,7 @@ export function ServiceCard({
   iconKey,
   art,
   imageSrc,
+  imageTitle,
   className,
   highlighted,
   onEnquire,
@@ -163,7 +167,7 @@ export function ServiceCard({
       <div className="flex flex-1 flex-col">
         {/* Visual media banner */}
         <div className="relative aspect-[3/2] w-full overflow-hidden bg-line-soft">
-          <CardMedia imageSrc={imageSrc} art={art} alt={title} />
+          <CardMedia imageSrc={imageSrc} art={art} alt={title} imageTitle={imageTitle} />
         </div>
 
         {/* Body */}
@@ -197,6 +201,7 @@ export function WideServiceCard({
   iconKey,
   art,
   imageSrc,
+  imageTitle,
   className,
   highlighted,
   onEnquire,
@@ -223,7 +228,7 @@ export function WideServiceCard({
         className="flex flex-1 flex-col sm:flex-row"
       >
         <div className="relative aspect-[16/9] sm:aspect-[8/5] w-full sm:w-2/5 shrink-0 overflow-hidden bg-line-soft">
-          <CardMedia imageSrc={imageSrc} art={art} alt={title} />
+          <CardMedia imageSrc={imageSrc} art={art} alt={title} imageTitle={imageTitle} />
         </div>
         <div className="flex flex-1 flex-col p-5 pb-16 sm:pb-20">
           <div className="flex items-center gap-3">

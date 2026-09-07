@@ -32,6 +32,7 @@ export function SolutionsHeroSection() {
       <img
         src="/images/solutions/hero-top-banner.webp"
         alt="CapitalKnob Skyline"
+        title="CapitalKnob Skyline – Home Loans"
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
 

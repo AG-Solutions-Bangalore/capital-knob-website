@@ -32,6 +32,7 @@ export function Logo({ variant = 'light', layout = 'horizontal', className }: Lo
       <img
         src={LOGO_SRC[layout]}
         alt="CapitalKnob – Loan and Investment"
+        title="CapitalKnob – Loan and Investment"
         decoding="async"
         className={cn(
           'w-auto',
