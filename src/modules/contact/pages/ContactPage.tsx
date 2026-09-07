@@ -4,6 +4,7 @@
  */
 
 import { usePageSeo } from '@/shared/seo/usePageSeo'
+import { SectionReveal } from '@/shared/components/SectionReveal'
 import { ContactHeroSection } from '../sections/ContactHeroSection'
 import { ContactFormSection } from '../sections/ContactFormSection'
 import { LocationSection } from '../sections/LocationSection'
@@ -15,9 +16,15 @@ export function ContactPage() {
   return (
     <>
       <ContactHeroSection />
-      <ContactFormSection />
-      <LocationSection />
-      <FaqSection />
+      <SectionReveal as="section">
+        <ContactFormSection />
+      </SectionReveal>
+      <SectionReveal as="section">
+        <LocationSection />
+      </SectionReveal>
+      <SectionReveal as="section">
+        <FaqSection />
+      </SectionReveal>
     </>
   )
 }

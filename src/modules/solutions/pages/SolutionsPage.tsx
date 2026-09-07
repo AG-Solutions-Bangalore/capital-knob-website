@@ -3,6 +3,7 @@
  * Each section lives in its own file under `../sections/*`.
  */
 
+import { SectionReveal } from '@/shared/components/SectionReveal'
 import { SolutionsHeroSection } from '../sections/SolutionsHeroSection'
 import { IndividualsSection } from '../sections/IndividualsSection'
 import { BusinessesSection } from '../sections/BusinessesSection'
@@ -14,11 +15,21 @@ export function SolutionsPage() {
   return (
     <>
       <SolutionsHeroSection />
-      <IndividualsSection />
-      <BusinessesSection />
-      <OtherCapitalSection />
-      <WhyChooseSection />
-      <StepsSection />
+      <SectionReveal as="section">
+        <IndividualsSection />
+      </SectionReveal>
+      <SectionReveal as="section">
+        <BusinessesSection />
+      </SectionReveal>
+      <SectionReveal as="section">
+        <OtherCapitalSection />
+      </SectionReveal>
+      <SectionReveal as="section">
+        <WhyChooseSection />
+      </SectionReveal>
+      <SectionReveal as="section">
+        <StepsSection />
+      </SectionReveal>
     </>
   )
 }

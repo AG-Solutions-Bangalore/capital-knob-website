@@ -4,6 +4,7 @@
  */
 
 import { usePageSeo } from '@/shared/seo/usePageSeo'
+import { SectionReveal } from '@/shared/components/SectionReveal'
 import { HomeHero } from '../components/HomeHero'
 import { LendingPartnersBanner } from '../components/LendingPartnersBanner'
 import { HomeSolutionsSection } from '../components/HomeSolutionsSection'
@@ -20,19 +21,29 @@ export function HomePage() {
       <HomeHero />
 
       {/* 2. Lending Partners Bar */}
-      <LendingPartnersBanner />
+      <SectionReveal as="section">
+        <LendingPartnersBanner />
+      </SectionReveal>
 
       {/* 3. Solutions for Every Capital Need with Nanao Banna imagery */}
-      <HomeSolutionsSection />
+      <SectionReveal as="section">
+        <HomeSolutionsSection />
+      </SectionReveal>
 
       {/* 4. Why Choose CapitalKnob? Benefit Grid */}
-      <HomeWhyChooseSection />
+      <SectionReveal as="section">
+        <HomeWhyChooseSection />
+      </SectionReveal>
 
       {/* 5. Our Simple 5-Step Approach */}
-      <HomeStepsSection />
+      <SectionReveal as="section">
+        <HomeStepsSection />
+      </SectionReveal>
 
       {/* 6. High-Rise Dusk Banner, Testimonial & Social Proof Metrics */}
-      <HomeCtaSection />
+      <SectionReveal as="section">
+        <HomeCtaSection />
+      </SectionReveal>
     </div>
   )
 }
