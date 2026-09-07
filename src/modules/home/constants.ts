@@ -320,11 +320,66 @@ export const homeStats: HomeStat[] = [
   { value: '4.8/5', label: 'Customer Satisfaction' },
 ]
 
-export const homeTestimonial = {
-  quote:
-    'CapitalKnob made our home loan journey so smooth. Great guidance, transparent process and genuine support throughout!',
-  name: 'Rohan & Priya Mehta',
-  role: 'Home Loan Customer',
-  avatar: '/images/home/testimonial_couple.jpg',
-  avatarTitle: 'Rohan and Priya Mehta – CapitalKnob Testimonial',
+export interface HomeTestimonial {
+  quote: string
+  name: string
+  role: string
+  /**
+   * Optional photo. When omitted, the carousel renders an initials avatar so
+   * the loop looks varied without needing a unique portrait per testimonial.
+   */
+  avatar?: string
+  avatarTitle?: string
+  /**
+   * Visual tone used for the initials avatar background — keeps the carousel
+   * varied without requiring a portrait per entry.
+   */
+  tone?: 'navy' | 'gold' | 'brandBlue' | 'slate'
 }
+
+export const homeTestimonials: HomeTestimonial[] = [
+  {
+    quote:
+      'CapitalKnob made our home loan journey so smooth. Great guidance, transparent process and genuine support throughout!',
+    name: 'Rohan & Priya Mehta',
+    role: 'Home Loan Customer',
+    avatar: '/images/home/testimonial_couple.jpg',
+    avatarTitle: 'Rohan and Priya Mehta – CapitalKnob Testimonial',
+    tone: 'navy',
+  },
+  {
+    quote:
+      'Our business needed working capital fast. CapitalKnob compared multiple lenders and got us the best terms within days.',
+    name: 'Anita Deshpande',
+    role: 'Founder, BrightCart Retail',
+    tone: 'brandBlue',
+  },
+  {
+    quote:
+      'The team guided me through every step of my balance transfer. My EMI dropped noticeably and the process was completely hassle-free.',
+    name: 'Vikram Shah',
+    role: 'IT Professional, Pune',
+    tone: 'gold',
+  },
+  {
+    quote:
+      'Construction finance felt overwhelming until CapitalKnob stepped in. Their lender network and on-ground coordination were outstanding.',
+    name: 'Sandeep Iyer',
+    role: 'Real Estate Developer, Bengaluru',
+    tone: 'navy',
+  },
+  {
+    quote:
+      'I appreciated how transparent they were — no hidden charges, no pushy upsells. Just honest advice for my home loan top-up.',
+    name: 'Meera Krishnan',
+    role: 'Doctor, Chennai',
+    tone: 'slate',
+  },
+  {
+    quote:
+      'From eligibility check to disbursement, the experience felt premium. CapitalKnob truly partners with you for the long run.',
+    name: 'Arjun Kapoor',
+    role: 'Entrepreneur, Mumbai',
+    tone: 'brandBlue',
+  },
+]

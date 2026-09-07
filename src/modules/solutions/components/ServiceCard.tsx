@@ -3,6 +3,11 @@
  * sections. Renders an illustration on top, an outlined icon, the title,
  * description, and a "Know More" link with the gold circular CTA chip on
  * the right.
+ *
+ * When `highlighted` is true (driven by a matching URL hash on the
+ * Solutions page), the card gets a gold ring + a one-shot pulse animation
+ * so the user can see at a glance which solution they selected from the
+ * footer.
  */
 
 import { useState } from 'react'
@@ -15,6 +20,8 @@ import { cn } from '@/shared/lib/cn'
 
 interface ServiceCardProps extends ServiceCardData {
   className?: string
+  /** True when this card matches the active URL hash (highlight + pulse). */
+  highlighted?: boolean
 }
 
 function CardMedia({
@@ -48,17 +55,28 @@ function CardMedia({
   return <Illustration art={art} className="h-full w-full" />
 }
 
-export function ServiceCard(props: ServiceCardProps) {
-  const { title, description, iconKey, art, imageSrc, href, className } = props
+/** Shared classes applied to every card root. */
+const baseCardClasses =
+  'group relative flex flex-col overflow-hidden rounded-card border bg-surface transition-all duration-200 scroll-mt-28'
+
+/** Extra classes when a card is the active/highlighted one. */
+const highlightClasses =
+  'border-gold ring-2 ring-gold/40 shadow-card animate-[solutionPulse_1.6s_ease-out_1]'
+
+export function ServiceCard({ id, title, description, iconKey, art, imageSrc, href, className, highlighted }: ServiceCardProps) {
   const Icon = iconRegistry[iconKey]
 
   return (
     <Link
       to={href}
+      id={id}
       title={linkTitleFor(href)}
+      aria-current={highlighted ? 'true' : undefined}
       className={cn(
-        'group flex flex-col overflow-hidden rounded-card border border-line bg-surface transition-all duration-200',
-        'hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-card',
+        baseCardClasses,
+        highlighted
+          ? highlightClasses
+          : 'border-line hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-card',
         className,
       )}
     >
@@ -69,11 +87,13 @@ export function ServiceCard(props: ServiceCardProps) {
 
       {/* Body */}
       <div className="flex flex-1 flex-col p-5">
-        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-navy/15 text-navy transition-colors group-hover:border-gold group-hover:text-gold">
-          <Icon size={18} />
-        </span>
-        <h3 className="mt-4 font-display text-lg font-extrabold text-ink">{title}</h3>
-        <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{description}</p>
+        <div className="flex items-center gap-3">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-navy/15 text-navy transition-colors group-hover:border-gold group-hover:text-gold">
+            <Icon size={18} />
+          </span>
+          <h3 className="font-display text-lg font-extrabold leading-tight text-ink">{title}</h3>
+        </div>
+        <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">{description}</p>
 
         {/* Footer link row */}
         <div className="mt-5 flex items-center justify-between">
@@ -121,17 +141,21 @@ export function ServiceCard(props: ServiceCardProps) {
  * WideCard — horizontal variant used in the "Other Capital Solutions"
  * section. Image on the left, copy on the right.
  */
-export function WideServiceCard(props: ServiceCardProps) {
-  const { title, description, iconKey, art, imageSrc, href, className } = props
+export function WideServiceCard({ id, title, description, iconKey, art, imageSrc, href, className, highlighted }: ServiceCardProps) {
   const Icon = iconRegistry[iconKey]
 
   return (
     <Link
       to={href}
+      id={id}
       title={linkTitleFor(href)}
+      aria-current={highlighted ? 'true' : undefined}
       className={cn(
-        'group flex flex-col sm:flex-row overflow-hidden rounded-card border border-line bg-surface transition-all duration-200',
-        'hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-card',
+        baseCardClasses,
+        'sm:flex-row',
+        highlighted
+          ? highlightClasses
+          : 'border-line hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-card',
         className,
       )}
     >

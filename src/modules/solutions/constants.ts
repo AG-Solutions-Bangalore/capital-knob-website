@@ -42,6 +42,8 @@ export const audienceTabs: { id: AudienceTab; label: string }[] = [
    INDIVIDUALS — Financing Solutions
    ----------------------------------------------------------------------------- */
 export interface ServiceCard {
+  /** Unique DOM id used for in-page anchoring and highlight detection. */
+  id: string
   title: string
   description: string
   iconKey: IconKey
@@ -52,6 +54,7 @@ export interface ServiceCard {
 
 export const individualsCards: ServiceCard[] = [
   {
+    id: 'home-loans',
     title: 'Home Loans',
     description: 'Turn your dream home into reality with flexible financing options.',
     iconKey: 'home',
@@ -60,6 +63,7 @@ export const individualsCards: ServiceCard[] = [
     href: '/home-finance#home-loans',
   },
   {
+    id: 'balance-transfer',
     title: 'Home Loan Balance Transfer',
     description: 'Lower your interest rate. Save more on your existing home loan.',
     iconKey: 'refresh',
@@ -68,6 +72,7 @@ export const individualsCards: ServiceCard[] = [
     href: '/home-finance#balance-transfer',
   },
   {
+    id: 'top-up',
     title: 'Home Loan Top-Up',
     description: 'Extra funds for bigger horizons — education, renovation or personal needs.',
     iconKey: 'stack',
@@ -76,6 +81,7 @@ export const individualsCards: ServiceCard[] = [
     href: '/home-finance#top-up',
   },
   {
+    id: 'construction',
     title: 'Construction Finance',
     description: 'Build your vision, with the right support at every stage.',
     iconKey: 'crane',
@@ -84,6 +90,7 @@ export const individualsCards: ServiceCard[] = [
     href: '/real-estate-finance#construction',
   },
   {
+    id: 'loan-against-property',
     title: 'Loan Against Property',
     description: 'Unlock the value in your property for business or personal needs.',
     iconKey: 'document',
@@ -98,6 +105,7 @@ export const individualsCards: ServiceCard[] = [
    ----------------------------------------------------------------------------- */
 export const businessesCards: ServiceCard[] = [
   {
+    id: 'working-capital',
     title: 'Working Capital Finance',
     description: 'Support your day-to-day operations and business growth.',
     iconKey: 'chart',
@@ -106,6 +114,7 @@ export const businessesCards: ServiceCard[] = [
     href: '/business-finance#working-capital',
   },
   {
+    id: 'business-loans',
     title: 'Business Loans',
     description: 'Flexible funding based on your business profile and goals.',
     iconKey: 'briefcase',
@@ -114,6 +123,7 @@ export const businessesCards: ServiceCard[] = [
     href: '/business-finance#business-loans',
   },
   {
+    id: 'secured-business-loans',
     title: 'Secured Business Loans',
     description: 'Access larger funding with eligible collateral.',
     iconKey: 'shield',
@@ -122,6 +132,7 @@ export const businessesCards: ServiceCard[] = [
     href: '/business-finance#secured-business-loans',
   },
   {
+    id: 'expansion',
     title: 'Business Expansion Funding',
     description: 'Fuel your next phase of growth.',
     iconKey: 'trendUp',
@@ -136,6 +147,7 @@ export const businessesCards: ServiceCard[] = [
    ----------------------------------------------------------------------------- */
 export const otherCapitalCards: ServiceCard[] = [
   {
+    id: 'real-estate',
     title: 'Real Estate Finance',
     description: 'Land acquisition, project finance, construction and development funding.',
     iconKey: 'building',
@@ -144,6 +156,7 @@ export const otherCapitalCards: ServiceCard[] = [
     href: '/real-estate-finance',
   },
   {
+    id: 'private-credit',
     title: 'Private Credit',
     description: 'Flexible, structured capital for tailored requirements.',
     iconKey: 'handshake',
@@ -152,6 +165,7 @@ export const otherCapitalCards: ServiceCard[] = [
     href: '/private-credit',
   },
   {
+    id: 'growth-capital',
     title: 'Growth Capital',
     description: 'Capital for scaling businesses and new opportunities.',
     iconKey: 'plant',
@@ -160,6 +174,7 @@ export const otherCapitalCards: ServiceCard[] = [
     href: '/business-finance',
   },
   {
+    id: 'capital-connect',
     title: 'Capital Connect',
     description: 'Connect with the right lenders, investors and financial institutions.',
     iconKey: 'network',

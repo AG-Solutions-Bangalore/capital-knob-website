@@ -1,14 +1,21 @@
 /**
  * BusinessesSection — "Financing Solutions for Businesses & MSMEs"
  * Seven-card grid covering working capital, expansion, machinery, etc.
+ *
+ * A card that matches the active URL hash receives `highlighted` so the
+ * user can see at a glance which business solution they came here for.
  */
 
+import { useLocation } from 'react-router-dom'
 import { Container } from '@/shared/components/Container'
 import { SectionHeading } from '../components/SectionHeading'
 import { ServiceCard } from '../components/ServiceCard'
 import { businessesCards } from '../constants'
 
 export function BusinessesSection() {
+  const { hash } = useLocation()
+  const activeId = hash ? hash.slice(1) : ''
+
   return (
     <section id="businesses" className="bg-line-soft/40 py-16 md:py-20">
       <Container size="4xl">
@@ -25,7 +32,11 @@ export function BusinessesSection() {
 
         <div className="grid w-full gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {businessesCards.map((card) => (
-            <ServiceCard key={card.title} {...card} />
+            <ServiceCard
+              key={card.id}
+              {...card}
+              highlighted={activeId === card.id}
+            />
           ))}
         </div>
       </Container>

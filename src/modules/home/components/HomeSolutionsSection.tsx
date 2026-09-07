@@ -148,18 +148,16 @@ export function HomeSolutionsSection() {
 
               {/* Card Content */}
               <div className="flex flex-1 flex-col p-4">
-                {/* Icon */}
-                <div className="text-navy transition-colors group-hover:text-gold">
+                {/* Icon + Title — inline row */}
+                <div className="flex items-center gap-2.5 text-navy transition-colors group-hover:text-gold">
                   <ServiceIcon name={card.icon} />
+                  <h3 className="font-display text-sm font-bold leading-tight text-ink transition-colors group-hover:text-gold sm:text-[15px]">
+                    {card.title}
+                  </h3>
                 </div>
 
-                {/* Title */}
-                <h3 className="mt-3 font-display text-sm font-bold text-ink sm:text-[15px]">
-                  {card.title}
-                </h3>
-
                 {/* Description */}
-                <p className="mt-1.5 flex-1 text-xs leading-relaxed text-muted">
+                <p className="mt-3 flex-1 text-xs leading-relaxed text-muted">
                   {card.description}
                 </p>
 

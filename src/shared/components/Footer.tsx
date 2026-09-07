@@ -4,14 +4,20 @@ import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { Container } from './Container'
 import { Logo } from './Logo'
 
+/**
+ * Financial-solution links — every entry routes to the Solutions page
+ * with a hash that targets a specific card. The Solutions page uses that
+ * hash to scroll the matching card into view and highlight it so the
+ * user can see at a glance which solution they selected.
+ */
 const solutionLinks = [
   { label: 'Solutions Hub', href: ROUTES.solutions },
-  { label: 'Home Finance & Loans', href: ROUTES.homeFinance },
-  { label: 'Business & Working Capital', href: ROUTES.businessFinance },
-  { label: 'Real Estate & Project Finance', href: ROUTES.realEstateFinance },
-  { label: 'Private Credit & Structured Debt', href: ROUTES.privateCredit },
-  { label: 'Home Loan Balance Transfer', href: '/home-finance#balance-transfer' },
-  { label: 'Loan Against Property (LAP)', href: '/home-finance#loan-against-property' },
+  { label: 'Home Finance & Loans', href: `${ROUTES.solutions}#home-loans` },
+  { label: 'Business & Working Capital', href: `${ROUTES.solutions}#working-capital` },
+  { label: 'Real Estate & Project Finance', href: `${ROUTES.solutions}#real-estate` },
+  { label: 'Private Credit & Structured Debt', href: `${ROUTES.solutions}#private-credit` },
+  { label: 'Home Loan Balance Transfer', href: `${ROUTES.solutions}#balance-transfer` },
+  { label: 'Loan Against Property (LAP)', href: `${ROUTES.solutions}#loan-against-property` },
 ]
 
 const companyLinks = [

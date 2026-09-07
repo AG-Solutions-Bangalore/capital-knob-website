@@ -1,6 +1,7 @@
 import { Container } from '@/shared/components/Container'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
-import { homeStats, homeTestimonial } from '../constants'
+import { homeStats, homeTestimonials } from '../constants'
+import { TestimonialCarousel } from './TestimonialCarousel'
 
 export function HomeCtaSection() {
   return (
@@ -18,9 +19,9 @@ export function HomeCtaSection() {
       </div>
 
       <Container size="4xl" className="relative z-10">
-        <div className="grid items-center gap-8 md:gap-10 lg:grid-cols-12 lg:gap-8">
+        <div className="grid items-center gap-8 md:gap-10 lg:grid-cols-12 lg:gap-6">
           {/* Left Column — CTA Narrative */}
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-3">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-300">
               MORE THAN LOANS <br />
               A STRONGER TOMORROW
@@ -56,44 +57,14 @@ export function HomeCtaSection() {
             </div>
           </div>
 
-          {/* Center Column — Testimonial Card */}
-          <div className="min-w-0 lg:col-span-5">
-            <div className="relative rounded-2xl bg-white p-5 sm:p-6 text-ink shadow-2xl">
-              {/* Gold Quote Mark */}
-              <span className="font-serif text-4xl font-bold leading-none text-gold">
-                &ldquo;
-              </span>
-
-              {/* Quote text */}
-              <p className="mt-2 text-xs leading-relaxed text-slate-700 sm:text-sm">
-                {homeTestimonial.quote}
-              </p>
-
-              {/* Author info with avatar */}
-              <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
-                <div>
-                  <h4 className="font-display text-sm font-bold text-ink">
-                    {homeTestimonial.name}
-                  </h4>
-                  <p className="text-xs font-medium text-muted">
-                    {homeTestimonial.role}
-                  </p>
-                </div>
-
-                <div className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 overflow-hidden rounded-full ring-2 ring-gold/30">
-                  <img
-                    src={homeTestimonial.avatar}
-                    alt={homeTestimonial.name}
-                    title={homeTestimonial.avatarTitle}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              </div>
-            </div>
+          {/* Center Column — Auto-scrolling Infinite-loop Testimonial Carousel */}
+          <div className="min-w-0 lg:col-span-7">
+            <TestimonialCarousel testimonials={homeTestimonials} />
           </div>
 
-          {/* Right Column — Stats Metrics */}
-          <div className="grid grid-cols-3 gap-2 text-center divide-x divide-white/15 border-t border-white/15 pt-6 lg:grid-cols-1 lg:text-left lg:divide-x-0 lg:divide-y lg:border-t-0 lg:pt-0 lg:space-y-5 lg:col-span-3">
+          {/* Right Column — Stats Metrics (narrower, left-aligned so the
+              carousel can claim more horizontal space) */}
+          <div className="grid grid-cols-3 gap-2 text-center divide-x divide-white/15 border-t border-white/15 pt-6 sm:grid-cols-4 lg:grid-cols-1 lg:text-left lg:divide-x-0 lg:divide-y lg:border-t-0 lg:pt-0 lg:space-y-5 lg:col-span-2">
             {homeStats.map((stat) => (
               <div
                 key={stat.label}

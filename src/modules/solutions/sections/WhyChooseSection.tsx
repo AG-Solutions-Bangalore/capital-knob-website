@@ -29,7 +29,7 @@ export function WhyChooseSection() {
                     <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-navy/15 bg-white text-navy">
                       <Icon size={22} />
                     </span>
-                    <span className="mt-4 text-sm font-medium leading-snug text-ink">
+                    <span className="mt-4 flex min-h-[3lh] items-start text-sm font-medium leading-snug text-ink">
                       {feat.title}
                     </span>
                   </div>

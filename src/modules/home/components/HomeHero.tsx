@@ -274,11 +274,7 @@ export function HomeHero() {
                           : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white'
                       }`}
                     >
-                      <span
-                        className={`inline-block h-1.5 w-1.5 rounded-full ${
-                          isActive ? 'bg-gold animate-pulse' : 'bg-slate-400'
-                        }`}
-                      />
+                     
                       <span>{slide.titleLine1.split('&')[0].trim()}</span>
 
                       
