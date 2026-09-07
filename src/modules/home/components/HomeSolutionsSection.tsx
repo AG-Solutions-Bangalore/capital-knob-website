@@ -67,7 +67,7 @@ export function HomeSolutionsSection() {
 
   return (
     <section className="bg-white py-16 md:py-20">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl">
         {/* Section Header */}
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div>
@@ -84,13 +84,13 @@ export function HomeSolutionsSection() {
           {/* Right Tabs & Explore Button */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center lg:gap-6">
             {/* Tabs */}
-            <div className="flex items-center gap-6 border-b border-slate-200 pb-2 sm:border-none sm:pb-0">
+            <div className="flex items-center gap-6 overflow-x-auto no-scrollbar border-b border-slate-200 pb-2 sm:border-none sm:pb-0">
               {homeSolutionsTabs.map((tab) => (
                 <button
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`relative pb-2 text-sm font-medium transition-colors ${
+                  className={`relative shrink-0 pb-2 text-sm font-medium transition-colors ${
                     activeTab === tab.id
                       ? 'font-bold text-ink after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-navy'
                       : 'text-muted hover:text-ink'
@@ -105,7 +105,7 @@ export function HomeSolutionsSection() {
             <Link
               to="/solutions"
               title={linkTitleFor('/solutions')}
-              className="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-2 text-sm font-semibold text-ink shadow-2xs transition-colors hover:border-navy hover:text-navy"
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink shadow-2xs transition-colors hover:border-navy hover:text-navy active:bg-line-soft"
             >
               <span>Explore All Solutions</span>
               <svg
@@ -126,9 +126,9 @@ export function HomeSolutionsSection() {
           </div>
         </div>
 
-        {/* 6 Cards Grid strictly conforming to reference design */}
-        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-          {individualSolutions.map((card) => (
+        {/* 5 Cards Grid — shows the first 5 individual solutions */}
+        <div className="mt-8 sm:mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+          {individualSolutions.slice(0, 5).map((card) => (
             <Link
               key={card.id}
               to={card.href}
@@ -165,7 +165,7 @@ export function HomeSolutionsSection() {
 
                 {/* Circular Arrow Button at bottom right */}
                 <div className="mt-4 flex justify-end">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-gold/40 text-gold transition-colors group-hover:bg-gold group-hover:text-white">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-gold/40 text-gold transition-all duration-300 group-hover:rotate-[-45deg] group-hover:border-gold group-hover:bg-gold group-hover:text-white">
                     <svg
                       width="12"
                       height="12"

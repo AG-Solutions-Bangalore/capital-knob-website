@@ -3,7 +3,7 @@ import { Container } from '@/shared/components/Container'
 export function LendingPartnersBanner() {
   return (
     <section className="border-b border-line bg-white py-5 shadow-xs">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl">
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-8">
           {/* Label */}
           <div className="shrink-0">
@@ -13,7 +13,7 @@ export function LendingPartnersBanner() {
           </div>
 
           {/* Bank Logos Strip */}
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 md:justify-between lg:flex-1">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3.5 sm:gap-8 md:justify-between lg:flex-1">
             {/* HDFC Bank */}
             <div className="flex items-center gap-1.5 transition-opacity hover:opacity-85" title="HDFC Bank">
               <div className="flex h-6 items-center bg-[#004c8f] px-2 py-0.5 text-[11px] font-black tracking-tighter text-white">

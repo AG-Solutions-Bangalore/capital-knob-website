@@ -130,12 +130,12 @@ export function WideServiceCard(props: ServiceCardProps) {
       to={href}
       title={linkTitleFor(href)}
       className={cn(
-        'group flex overflow-hidden rounded-card border border-line bg-surface transition-all duration-200',
+        'group flex flex-col sm:flex-row overflow-hidden rounded-card border border-line bg-surface transition-all duration-200',
         'hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-card',
         className,
       )}
     >
-      <div className="relative aspect-[8/5] w-1/2 shrink-0 overflow-hidden bg-line-soft sm:w-2/5">
+      <div className="relative aspect-[16/9] sm:aspect-[8/5] w-full sm:w-2/5 shrink-0 overflow-hidden bg-line-soft">
         <CardMedia imageSrc={imageSrc} art={art} alt={title} />
       </div>
       <div className="flex flex-1 flex-col p-5">

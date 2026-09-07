@@ -15,12 +15,12 @@ interface PageHeroProps {
 export function PageHero({ eyebrow, title, subtitle, align = 'left' }: PageHeroProps) {
   return (
     <section className="bg-navy py-16 text-white md:py-20">
-      <Container size="lg">
+      <Container size="4xl">
         <div className={align === 'center' ? 'text-center' : ''}>
           {eyebrow && (
             <p className="text-xs font-semibold uppercase tracking-widest text-gold">{eyebrow}</p>
           )}
-          <h1 className="mt-3 font-display text-4xl font-extrabold leading-tight md:text-5xl">
+          <h1 className="mt-3 font-display text-3xl sm:text-4xl font-extrabold leading-tight md:text-5xl">
             {title}
           </h1>
           {subtitle && (

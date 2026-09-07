@@ -11,7 +11,7 @@ import { businessesCards } from '../constants'
 export function BusinessesSection() {
   return (
     <section id="businesses" className="bg-line-soft/40 py-16 md:py-20">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl">
         <SectionHeading
           title={
             <>

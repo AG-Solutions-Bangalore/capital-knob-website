@@ -13,7 +13,7 @@ import { individualsCards } from '../constants'
 export function IndividualsSection() {
   return (
     <section id="individuals" className="bg-surface py-16 md:py-20">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl">
         <SolutionsTabs defaultTab="individuals" />
 
         <div className="pt-10">

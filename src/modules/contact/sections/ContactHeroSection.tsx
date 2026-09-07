@@ -9,7 +9,7 @@ export function ContactHeroSection() {
       <p className="text-xs font-bold uppercase tracking-[0.25em] text-navy">
         {hero.eyebrow}
       </p>
-      <h1 className="mt-3 font-display text-4xl font-extrabold leading-tight text-navy md:text-5xl lg:text-6xl">
+      <h1 className="mt-3 font-display text-3xl font-extrabold leading-tight text-navy sm:text-4xl md:text-5xl lg:text-6xl">
         {hero.titleLead}
         <br />
         {hero.titleAccent}
@@ -37,10 +37,7 @@ export function ContactHeroSection() {
           aria-hidden="true"
         />
         <div className="absolute inset-0 flex items-center">
-          <Container
-            size="4xl"
-            className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8"
-          >
+          <Container size="4xl">
             {copy}
           </Container>
         </div>
@@ -48,11 +45,8 @@ export function ContactHeroSection() {
 
       {/* Mobile: white panel + full-width image strip below */}
       <div className="lg:hidden">
-        <Container
-          size="4xl"
-          className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8"
-        >
-          <div className="py-12 sm:py-14">{copy}</div>
+        <Container size="4xl">
+          <div className="py-10 sm:py-14">{copy}</div>
         </Container>
         <img
           src={hero.receptionImage}

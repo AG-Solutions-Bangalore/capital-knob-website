@@ -73,16 +73,16 @@ function BenefitIcon({ icon }: { icon: string }) {
 
 export function HomeWhyChooseSection() {
   return (
-    <section className="bg-[#eaf3fb] py-16 md:py-20">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+    <section className="bg-[#eaf3fb] py-12 sm:py-14 md:py-16 lg:py-20">
+      <Container size="4xl">
+        <div className="grid items-center gap-8 md:gap-10 lg:grid-cols-12 lg:gap-12">
           {/* Left Column */}
           <div className="lg:col-span-4">
-            <h2 className="font-display text-3xl font-extrabold text-ink sm:text-4xl">
-              Why Choose <br />
+            <h2 className="font-display text-2xl font-extrabold text-ink sm:text-3xl md:text-4xl">
+              Why Choose <br className="hidden sm:inline" />
               CapitalKnob?
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
+            <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
               We help you make informed financing decisions with expert guidance,
               transparent processes and lender connect.
             </p>
@@ -91,7 +91,7 @@ export function HomeWhyChooseSection() {
               <a
                 href="/about"
                 title={linkTitleFor('/about')}
-                className="inline-flex items-center gap-2 rounded-lg border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-2xs transition-colors hover:border-navy hover:text-navy"
+                className="inline-flex min-h-[44px] items-center gap-2 rounded-lg border border-line bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-2xs transition-colors hover:border-navy hover:text-navy active:bg-line-soft"
               >
                 <span>Know More</span>
                 <svg
@@ -113,17 +113,17 @@ export function HomeWhyChooseSection() {
           </div>
 
           {/* Right Column: 2x4 Grid of 8 White Cards */}
-          <div className="lg:col-span-8">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="min-w-0 lg:col-span-8">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
               {whyChooseBenefits.map((benefit) => (
                 <div
                   key={benefit.id}
-                  className="flex items-center gap-3.5 rounded-xl border border-white/80 bg-white p-4 shadow-xs transition-transform hover:-translate-y-0.5"
+                  className="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-3.5 rounded-xl border border-white/80 bg-white p-3 sm:p-4 shadow-xs transition-transform hover:-translate-y-0.5"
                 >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600">
+                  <span className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600">
                     <BenefitIcon icon={benefit.icon} />
                   </span>
-                  <span className="text-xs font-semibold leading-snug text-ink">
+                  <span className="text-[11px] sm:text-xs font-semibold leading-snug text-ink">
                     {benefit.title}
                   </span>
                 </div>

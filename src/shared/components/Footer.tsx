@@ -54,7 +54,7 @@ export function Footer({ variant }: FooterProps) {
           : 'border-t border-line bg-white text-ink'
       }
     >
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+      <Container size="4xl" className="py-12 md:py-16">
         {/* Main 4-column Grid */}
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-12">
           {/* Col 1: Brand Info & Consultation (Span 4) */}
@@ -118,60 +118,63 @@ export function Footer({ variant }: FooterProps) {
             </div>
           </div>
 
-          {/* Col 2: Solutions & Offerings (Span 3) */}
-          <div className="lg:col-span-3">
-            <h3
-              className={`font-display text-sm font-bold uppercase tracking-wider ${
-                isDark ? 'text-white' : 'text-ink'
-              }`}
-            >
-              Financial Solutions
-            </h3>
-            <ul className="mt-4 space-y-2.5 text-xs sm:text-sm">
-              {solutionLinks.map((l) => (
-                <li key={l.label}>
-                  <Link
-                    to={l.href}
-                    title={linkTitleFor(l.href)}
-                    className={`transition-colors ${
-                      isDark
-                        ? 'text-white/70 hover:text-gold'
-                        : 'text-muted hover:text-navy'
-                    }`}
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Mobile links group: Solutions + Navigation in 2 columns on mobile */}
+          <div className="grid grid-cols-2 gap-6 sm:contents">
+            {/* Col 2: Solutions & Offerings (Span 3) */}
+            <div className="lg:col-span-3">
+              <h3
+                className={`font-display text-sm font-bold uppercase tracking-wider ${
+                  isDark ? 'text-white' : 'text-ink'
+                }`}
+              >
+                Financial Solutions
+              </h3>
+              <ul className="mt-4 space-y-2.5 text-xs sm:text-sm">
+                {solutionLinks.map((l) => (
+                  <li key={l.label}>
+                    <Link
+                      to={l.href}
+                      title={linkTitleFor(l.href)}
+                      className={`transition-colors ${
+                        isDark
+                          ? 'text-white/70 hover:text-gold'
+                          : 'text-muted hover:text-navy'
+                      }`}
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Col 3: Company & Exploration (Span 2) */}
-          <div className="lg:col-span-2">
-            <h3
-              className={`font-display text-sm font-bold uppercase tracking-wider ${
-                isDark ? 'text-white' : 'text-ink'
-              }`}
-            >
-              Navigation
-            </h3>
-            <ul className="mt-4 space-y-2.5 text-xs sm:text-sm">
-              {companyLinks.map((l) => (
-                <li key={l.label}>
-                  <Link
-                    to={l.href}
-                    title={linkTitleFor(l.href)}
-                    className={`transition-colors ${
-                      isDark
-                        ? 'text-white/70 hover:text-gold'
-                        : 'text-muted hover:text-navy'
-                    }`}
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {/* Col 3: Company & Exploration (Span 2) */}
+            <div className="lg:col-span-2">
+              <h3
+                className={`font-display text-sm font-bold uppercase tracking-wider ${
+                  isDark ? 'text-white' : 'text-ink'
+                }`}
+              >
+                Navigation
+              </h3>
+              <ul className="mt-4 space-y-2.5 text-xs sm:text-sm">
+                {companyLinks.map((l) => (
+                  <li key={l.label}>
+                    <Link
+                      to={l.href}
+                      title={linkTitleFor(l.href)}
+                      className={`transition-colors ${
+                        isDark
+                          ? 'text-white/70 hover:text-gold'
+                          : 'text-muted hover:text-navy'
+                      }`}
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           {/* Col 4: Advisory, Tools & Consultation CTA (Span 3) */}
@@ -219,7 +222,7 @@ export function Footer({ variant }: FooterProps) {
               <Link
                 to={ROUTES.contact}
                 title={linkTitleFor(ROUTES.contact)}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gold px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-gold-hover"
+                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-gold px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-gold-hover active:scale-[0.98]"
               >
                 <span>Book Free Consultation</span>
                 <svg

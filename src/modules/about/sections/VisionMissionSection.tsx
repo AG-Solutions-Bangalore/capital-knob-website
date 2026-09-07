@@ -11,7 +11,7 @@ import { visionMissionValues } from '../constants'
 export function VisionMissionSection() {
   return (
     <section className="bg-[#f8fafc] py-16 md:py-20">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl">
         <div>
           <h2 className="font-serif text-3xl font-extrabold leading-tight text-navy md:text-4xl">
             {visionMissionValues.title}
@@ -142,7 +142,7 @@ export function VisionMissionSection() {
                 className="absolute inset-0 h-full w-full object-cover object-center"
               />
               {/* Soft dark vignette on top for text contrast */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-navy/80 via-navy/30 to-navy/70" />
+              <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-navy/80 via-navy/30 to-navy/70" />
 
               <div className="relative flex h-full flex-col justify-start p-7 md:p-8">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/90">

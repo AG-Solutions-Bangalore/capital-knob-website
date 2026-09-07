@@ -48,11 +48,11 @@ function StepIcon({ icon }: { icon: string }) {
 
 export function HomeStepsSection() {
   return (
-    <section className="bg-navy-deep py-14 text-white md:py-16">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-8">
+    <section className="bg-navy-deep py-12 text-white sm:py-14 md:py-16">
+      <Container size="4xl">
+        <div className="grid items-center gap-8 md:gap-10 lg:grid-cols-12 lg:gap-8">
           {/* Left Column */}
-          <div className="lg:col-span-4">
+          <div className="text-center sm:text-left lg:col-span-4">
             <h2 className="font-display text-2xl font-extrabold leading-tight text-white sm:text-3xl">
               Our Simple <br />
               5-Step Approach
@@ -62,19 +62,27 @@ export function HomeStepsSection() {
             </p>
           </div>
 
-          {/* Right Column: 5 Steps Horizontal Flow */}
-          <div className="lg:col-span-8">
-            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:flex lg:items-center lg:justify-between lg:gap-2">
+          {/* Right Column: 5 Steps flow.
+              Mobile: 1 column stacked list. Small: 2 columns. Tablet: 3 columns.
+              Desktop: single row with chevron dividers. */}
+          <div className="min-w-0 lg:col-span-8">
+            <ol
+              className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 sm:gap-x-4 sm:gap-y-7 lg:flex lg:items-start lg:justify-between lg:gap-2"
+              aria-label="CapitalKnob 5-step process"
+            >
               {processSteps.map((step, idx) => (
-                <div key={step.stepNumber} className="flex items-center">
-                  <div className="flex flex-col items-center text-center">
+                <li
+                  key={step.stepNumber}
+                  className="relative flex items-center last:col-span-2 sm:last:col-span-1"
+                >
+                  <div className="flex w-full min-w-0 flex-col items-center text-center">
                     {/* Circle icon with clean ring */}
-                    <span className="flex h-12 w-12 items-center justify-center rounded-full border border-white/25 bg-white/5 text-white backdrop-blur-sm transition-colors hover:border-gold hover:text-gold">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/25 bg-white/5 text-white backdrop-blur-sm transition-colors hover:border-gold hover:text-gold">
                       <StepIcon icon={step.icon} />
                     </span>
 
                     {/* Step number and text */}
-                    <div className="mt-3 flex items-center gap-1 text-xs">
+                    <div className="mt-3 flex flex-wrap items-center justify-center gap-1 text-xs">
                       <span className="font-bold text-slate-300">
                         {step.stepNumber}
                       </span>
@@ -82,14 +90,17 @@ export function HomeStepsSection() {
                         {step.action}
                       </span>
                     </div>
-                    <span className="text-[11px] font-medium text-slate-300">
+                    <span className="mt-0.5 text-[11px] font-medium text-slate-300">
                       {step.target}
                     </span>
                   </div>
 
-                  {/* Chevron divider between steps */}
+                  {/* Chevron divider between steps (desktop only) */}
                   {idx < processSteps.length - 1 && (
-                    <div className="hidden mb-11 ml-8 px-2 text-slate-500 lg:block">
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute -right-3 top-6 hidden text-slate-500 lg:block"
+                    >
                       <svg
                         width="16"
                         height="16"
@@ -99,15 +110,14 @@ export function HomeStepsSection() {
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        aria-hidden="true"
                       >
                         <path d="m9 18 6-6-6-6" />
                       </svg>
-                    </div>
+                    </span>
                   )}
-                </div>
+                </li>
               ))}
-            </div>
+            </ol>
           </div>
         </div>
       </Container>

@@ -12,7 +12,7 @@ import { founder } from '../constants'
 export function FounderSection() {
   return (
     <section className="bg-white py-16 md:py-20">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl">
         <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
           {/* Founder portrait */}
           <div className="lg:col-span-4">

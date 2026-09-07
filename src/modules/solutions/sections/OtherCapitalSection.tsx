@@ -12,7 +12,7 @@ import { otherCapitalCards } from '../constants'
 export function OtherCapitalSection() {
   return (
     <section id="other-solutions" className="bg-surface py-16 md:py-20">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl">
         <SectionHeading
           title="Other Capital Solutions"
           description="Specialised financing for investors, developers and large capital requirements."

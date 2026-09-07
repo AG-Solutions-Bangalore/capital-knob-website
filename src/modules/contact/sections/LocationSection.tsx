@@ -7,7 +7,7 @@ export function LocationSection() {
 
   return (
     <section className="bg-white py-12 lg:py-16">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl">
         <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
           {/* Left Column: Heading and Directions CTA */}
           <div className="lg:col-span-5">

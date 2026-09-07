@@ -86,15 +86,14 @@ export function HomeHero() {
                 src={slide.imageSrc}
                 alt={slide.imageAlt}
                 title={slide.imageTitle}
-                className="h-full w-full object-cover object-[center_right] lg:object-right transition-transform duration-[6000ms] ease-linear"
+                className="h-full w-full object-cover object-center lg:object-right transition-transform duration-[6000ms] ease-linear"
                 style={{
                   transform: isActive ? 'scale(1.04)' : 'scale(1)',
                 }}
                 loading={index === 0 ? 'eager' : 'lazy'}
               />
               {/* Navy gradient masks — seamlessly blend with page & guarantee contrast */}
-              <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/92 to-navy/40 lg:via-navy/88 lg:to-transparent" />
-              {/* <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-navy/60" /> */}
+              <div className="absolute inset-0 bg-linear-to-r from-navy via-navy/95 to-navy/80 lg:from-navy lg:via-navy/88 lg:to-transparent" />
             </div>
           )
         })}
@@ -102,13 +101,13 @@ export function HomeHero() {
 
       <Container
         size="4xl"
-        className="relative z-10 w-full max-w-[1720px] px-4 py-12 sm:px-6 md:py-16 lg:px-8 lg:py-20"
+        className="relative z-10 py-12 md:py-16 lg:py-20"
       >
-        <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+        <div className="grid items-center gap-8 md:gap-10 lg:grid-cols-12 lg:gap-12">
           {/* Left Column — Value proposition & CTAs */}
-          <div className="lg:col-span-7 xl:col-span-7">
+          <div className="min-w-0 lg:col-span-7 xl:col-span-7">
             {/* Sliding text content area */}
-            <div className="relative min-h-[380px] sm:min-h-[410px] md:min-h-[430px]">
+            <div className="relative min-h-[440px] xs:min-h-[400px] sm:min-h-[380px] md:min-h-[420px] lg:min-h-[450px]">
               {heroSlides.map((slide, index) => {
                 const isActive = index === currentSlide
                 const isNext = direction === 'next'
@@ -170,8 +169,8 @@ export function HomeHero() {
                           : 'opacity-0 translate-y-3'
                       }`}
                     >
-                      <h1 className="mt-4 font-display text-4xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-5xl lg:text-6xl">
-                        {slide.titleLine1} <br />
+                      <h1 className="mt-4 font-display text-3xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+                        {slide.titleLine1} <br className="hidden sm:inline" />
                         <span className="text-white">{slide.titleLine2}</span>
                       </h1>
                     </div>
@@ -184,7 +183,7 @@ export function HomeHero() {
                           : 'opacity-0 translate-y-2'
                       }`}
                     >
-                      <p className="mt-4 text-lg font-bold text-gold sm:text-xl">
+                      <p className="mt-4 text-base font-bold text-gold sm:text-lg lg:text-xl">
                         {slide.tagline}
                       </p>
                     </div>
@@ -197,14 +196,14 @@ export function HomeHero() {
                           : 'opacity-0 translate-y-2'
                       }`}
                     >
-                      <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-300 sm:text-base">
+                      <p className="mt-3 max-w-xl text-xs sm:text-sm leading-relaxed text-slate-300 md:text-base">
                         {slide.description}
                       </p>
                     </div>
 
                     {/* CTA row */}
                     <div
-                      className={`mt-8 flex flex-wrap items-center gap-4 transition-all duration-500 delay-350 ${
+                      className={`mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 transition-all duration-500 delay-350 ${
                         isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-2'
@@ -215,7 +214,7 @@ export function HomeHero() {
                       <a
                         href={slide.primaryCta.href}
                         title={linkTitleFor(slide.primaryCta.href)}
-                        className="inline-flex items-center gap-2 rounded-lg bg-gold px-6 py-3.5 text-sm font-bold text-white shadow-gold transition-all duration-200 hover:bg-gold-hover hover:scale-[1.02] active:scale-[0.98]"
+                        className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-white shadow-gold transition-all duration-200 hover:bg-gold-hover hover:scale-[1.02] active:scale-[0.98]"
                       >
                         <span>{slide.primaryCta.label}</span>
                         <svg
@@ -237,7 +236,7 @@ export function HomeHero() {
                       <a
                         href={slide.secondaryCta.href}
                         title={linkTitleFor(slide.secondaryCta.href)}
-                        className="inline-flex items-center gap-2 rounded-lg border border-white/25 bg-navy/60 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/50 hover:bg-navy/80 hover:scale-[1.02] active:scale-[0.98]"
+                        className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg border border-white/25 bg-navy/60 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/50 hover:bg-navy/80 hover:scale-[1.02] active:scale-[0.98]"
                       >
                         <span>{slide.secondaryCta.label}</span>
                       </a>
@@ -249,13 +248,13 @@ export function HomeHero() {
 
             {/* Slider Navigation: Interactive Slide Tabs + Prev/Next Controls */}
             <div
-              className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-4"
+              className="mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-t border-white/10 pt-4"
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
             >
               {/* Slide Tabs */}
               <div
-                className="flex flex-wrap items-center gap-2"
+                className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 pb-2 sm:pb-1"
                 role="tablist"
                 aria-label="Financing categories"
               >
@@ -269,7 +268,7 @@ export function HomeHero() {
                       aria-selected={isActive}
                       aria-label={`Switch to ${slide.titleLine1}`}
                       onClick={() => goToSlide(idx)}
-                      className={`group overflow-hidden relative flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold ${
+                      className={`group overflow-hidden relative shrink-0 flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold ${
                         isActive
                           ? 'bg-white/15 text-gold border border-gold/40 shadow-sm'
                           : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white'
@@ -282,63 +281,57 @@ export function HomeHero() {
                       />
                       <span>{slide.titleLine1.split('&')[0].trim()}</span>
 
-                      {/* Active Progress Bar */}
-                      {isActive && !isPaused && (
-                        <span
-                          className="absolute bottom-0 left-0 h-[2px] rounded-full bg-gold transition-all"
-                          style={{
-                            animation: `progressBar ${SLIDE_DURATION}ms linear infinite`,
-                          }}
-                        />
-                      )}
+                      
                     </button>
                   )
                 })}
               </div>
 
               {/* Prev / Next Chevrons & Slide Number */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between sm:justify-end gap-2 pt-1 sm:pt-0">
                 <span className="mr-1 font-mono text-xs font-semibold tracking-wider text-slate-300">
                   <span className="text-gold">0{currentSlide + 1}</span> / 0{totalSlides}
                 </span>
-                <button
-                  type="button"
-                  onClick={prevSlide}
-                  aria-label="Previous slide"
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full cursor-pointer border border-white/20 bg-navy/70 text-white backdrop-blur-sm transition-all hover:border-gold hover:bg-gold hover:text-navy active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={prevSlide}
+                    aria-label="Previous slide"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full cursor-pointer border border-white/20 bg-navy/70 text-white backdrop-blur-sm transition-all hover:border-gold hover:bg-gold hover:text-navy active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                   >
-                    <polyline points="15 18 9 12 15 6" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={nextSlide}
-                  aria-label="Next slide"
-                  className="inline-flex h-8 w-8 items-center justify-center rounded-full cursor-pointer border border-white/20 bg-navy/70 text-white backdrop-blur-sm transition-all hover:border-gold hover:bg-gold hover:text-navy active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={nextSlide}
+                    aria-label="Next slide"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full cursor-pointer border border-white/20 bg-navy/70 text-white backdrop-blur-sm transition-all hover:border-gold hover:bg-gold hover:text-navy active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                   >
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
-                </button>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -400,7 +393,7 @@ export function HomeHero() {
           </div>
 
           {/* Right Column — EMI Calculator */}
-          <div className="flex justify-center lg:col-span-5 xl:col-span-5 lg:justify-end">
+          <div className="flex justify-center md:justify-end lg:col-span-5 xl:col-span-5">
             <EmiCalculator />
           </div>
         </div>

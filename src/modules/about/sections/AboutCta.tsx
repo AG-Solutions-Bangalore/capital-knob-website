@@ -11,7 +11,7 @@ import { aboutCta } from '../constants'
 export function AboutCta() {
   return (
     <section className="bg-navy-deep text-white">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl">
         <div className="flex flex-col items-start justify-between gap-6 py-10 md:flex-row md:items-center md:py-12">
           <div>
             <h2 className="font-serif text-2xl font-extrabold leading-tight text-white md:text-3xl lg:text-[30px]">

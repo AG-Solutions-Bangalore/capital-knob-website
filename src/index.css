@@ -1,3 +1,4 @@
+@import "lenis/dist/lenis.css";
 @import "tailwindcss";
 
 /* -----------------------------------------------------------------------------
@@ -49,6 +50,91 @@
   --shadow-gold: 0 4px 16px rgba(201, 169, 97, 0.35);
 }
 
+/* -----------------------------------------------------------------------------
+   Mobile-first global guards
+   - Kill any horizontal scroll on the document so a single overflow element
+     can't push the page sideways on small viewports (the cause of the
+     "narrow right column" symptom on phones).
+   - Force long words and URLs to wrap inside narrow containers.
+   - Honour user font-zoom (never disable text size adjustments).
+   ----------------------------------------------------------------------------- */
+html,
+body {
+  overflow-x: clip; /* stronger than overflow-x:hidden — no scroll-container created */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  max-width: 100%;
+}
+
+/* Long URLs / unbroken strings must wrap inside narrow viewports */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+a,
+button,
+input,
+textarea,
+select,
+label {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Always-full-width interactive controls on mobile, opt-in on larger screens. */
+input,
+textarea,
+select {
+  font-size: 1rem; /* prevents iOS zoom-on-focus */
+}
+
+/* Better tap target default — the user can still style individual buttons. */
+button,
+[role='button'] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* -----------------------------------------------------------------------------
+   Safe-area utilities for notched devices.
+   Activated when the iOS/Android browser reserves space for the notch/home
+   indicator; the @supports guards make this a no-op on unsupported browsers.
+   ----------------------------------------------------------------------------- */
+@supports (padding: max(0px)) {
+  .safe-area-pt  { padding-top:    max(env(safe-area-inset-top),    0px); }
+  .safe-area-pb  { padding-bottom: max(env(safe-area-inset-bottom), 0px); }
+  .safe-area-pl  { padding-left:   max(env(safe-area-inset-left),   0px); }
+  .safe-area-pr  { padding-right:  max(env(safe-area-inset-right),  0px); }
+  .safe-area-px  {
+    padding-left:  max(env(safe-area-inset-left),  0px);
+    padding-right: max(env(safe-area-inset-right), 0px);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Hero progress bar — used by the home carousel's autoplay indicator.
+   ----------------------------------------------------------------------------- */
 @keyframes progressBar {
   from {
     width: 0%;
@@ -57,3 +143,30 @@
     width: 100%;
   }
 }
+
+/* -----------------------------------------------------------------------------
+   Respect reduced-motion preference: strip transitions/animations everywhere
+   the user has opted out at the OS level.
+   ----------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Hide scrollbar for horizontal swipeable tabs on mobile
+   ----------------------------------------------------------------------------- */
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+

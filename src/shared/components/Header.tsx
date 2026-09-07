@@ -39,9 +39,6 @@ const navItems: NavItem[] = [
   { label: 'About Us', to: ROUTES.about, title: 'About Us – CapitalKnob' },
 ]
 
-/** Width of the slide-in mobile sidebar in pixels. */
-const SIDEBAR_WIDTH = 320
-
 export function Header() {
   const [open, setOpen] = useState(false)
   const location = useLocation()
@@ -81,7 +78,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-white text-ink shadow-soft">
-      <Container>
+      <Container size="4xl">
         <div className="flex h-20 items-center justify-between gap-6">
           {/* Logo */}
           <Logo variant="dark" />
@@ -121,10 +118,14 @@ export function Header() {
               <PhoneIcon />
               +91 98765 43210
             </a>
-            <Link to={ROUTES.contact} title={linkTitleFor(ROUTES.contact)}>
+            <Link
+              to={ROUTES.contact}
+              title={linkTitleFor(ROUTES.contact)}
+              className="group"
+            >
               <Button variant="navy" size="md" className="px-5">
                 Get a Callback
-                <ArrowRightIcon />
+                <ArrowRightIcon className="transition-transform duration-300 group-hover:-rotate-45" />
               </Button>
             </Link>
           </div>
@@ -136,7 +137,7 @@ export function Header() {
             aria-expanded={open}
             aria-controls="mobile-sidebar"
             onClick={() => setOpen((v) => !v)}
-            className="rounded-button p-2 text-ink transition-colors hover:bg-line-soft lg:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-button text-ink transition-colors hover:bg-line-soft active:bg-line lg:hidden"
           >
             <AnimatePresence mode="wait" initial={false}>
               <motion.span
@@ -185,14 +186,14 @@ export function Header() {
               aria-label="CapitalKnob navigation"
               initial={
                 prefersReducedMotion
-                  ? { x: -SIDEBAR_WIDTH, opacity: 0.6 }
-                  : { x: -SIDEBAR_WIDTH, opacity: 0, filter: 'blur(6px)' }
+                  ? { x: '-100%', opacity: 0.6 }
+                  : { x: '-100%', opacity: 0, filter: 'blur(6px)' }
               }
-              animate={{ x: 0, opacity: 1, filter: 'blur(0px)' }}
+              animate={{ x: '0%', opacity: 1, filter: 'blur(0px)' }}
               exit={
                 prefersReducedMotion
-                  ? { x: -SIDEBAR_WIDTH, opacity: 0 }
-                  : { x: -SIDEBAR_WIDTH, opacity: 0, filter: 'blur(6px)' }
+                  ? { x: '-100%', opacity: 0 }
+                  : { x: '-100%', opacity: 0, filter: 'blur(6px)' }
               }
               transition={{
                 type: 'spring',
@@ -200,27 +201,18 @@ export function Header() {
                 damping: 32,
                 mass: 0.8,
               }}
-              style={{ width: SIDEBAR_WIDTH, maxWidth: '85vw' }}
-              className="fixed left-0 top-0 z-50 flex h-dvh flex-col overflow-y-auto border-r border-line bg-white text-ink shadow-2xl lg:hidden"
+              className="fixed left-0 top-0 z-50 flex h-dvh w-[85vw] max-w-sm sm:w-80 flex-col overflow-y-auto border-r border-line bg-white text-ink shadow-2xl lg:hidden"
             >
               {/* Sidebar header */}
               <div className="flex h-20 items-center justify-between border-b border-line px-5">
-                <Link
-                  to={ROUTES.home}
-                  title={linkTitleFor(ROUTES.home)}
-                  onClick={() => setOpen(false)}
-                  className="inline-flex"
-                >
-                  <span className="flex items-baseline gap-0.5">
-                    <span className="font-display text-2xl font-extrabold text-brand-blue">Capital</span>
-                    <span className="font-display text-2xl font-extrabold text-gold">Knob</span>
-                  </span>
-                </Link>
+                <div onClick={() => setOpen(false)}>
+                  <Logo variant="dark" />
+                </div>
                 <button
                   type="button"
                   aria-label="Close menu"
                   onClick={() => setOpen(false)}
-                  className="rounded-button p-2 text-ink transition-colors hover:bg-line-soft"
+                  className="flex h-11 w-11 items-center justify-center rounded-button text-ink transition-colors hover:bg-line-soft active:bg-line"
                 >
                   <CloseIcon />
                 </button>

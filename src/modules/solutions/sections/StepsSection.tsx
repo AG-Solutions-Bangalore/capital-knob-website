@@ -30,7 +30,7 @@ function Chevron() {
 export function StepsSection() {
   return (
     <section id="our-process" className="bg-white py-16 md:py-20">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl">
         <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
           <div className="lg:col-span-4">
             <h2 className="font-display text-3xl font-extrabold text-ink md:text-4xl">

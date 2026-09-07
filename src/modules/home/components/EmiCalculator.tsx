@@ -1,4 +1,7 @@
 import { useState, useId } from 'react'
+import { Link } from 'react-router-dom'
+import { ROUTES } from '@/app/routes'
+import { linkTitleFor } from '@/shared/seo/linkTitles'
 
 type LoanType = 'home' | 'topup' | 'transfer'
 
@@ -42,18 +45,18 @@ export function EmiCalculator() {
         : 'Apply for Balance Transfer'
 
   return (
-    <div className="w-full max-w-[430px] rounded-2xl bg-white p-5 shadow-2xl ring-1 ring-slate-900/5">
+    <div className="box-border w-full max-w-[430px] mx-auto rounded-2xl bg-white p-4 shadow-2xl ring-1 ring-slate-900/5 sm:p-5">
       {/* Title */}
       <h2 className="font-display text-lg font-bold text-ink sm:text-xl">
         EMI Calculator
       </h2>
 
       {/* Tabs */}
-      <div className="mt-4 flex rounded-lg bg-slate-100 p-1 text-xs font-semibold text-muted">
+      <div className="mt-4 flex rounded-lg bg-slate-100 p-1 text-[11px] sm:text-xs font-semibold text-muted">
         <button
           type="button"
           onClick={() => setLoanType('home')}
-          className={`flex-1 rounded-md py-1.5 text-center transition-all ${
+          className={`flex-1 rounded-md px-1.5 py-1.5 text-center transition-all ${
             loanType === 'home'
               ? 'bg-navy font-bold text-white shadow-sm'
               : 'text-muted hover:text-ink'
@@ -64,7 +67,7 @@ export function EmiCalculator() {
         <button
           type="button"
           onClick={() => setLoanType('topup')}
-          className={`flex-1 rounded-md py-1.5 text-center transition-all ${
+          className={`flex-1 rounded-md px-1.5 py-1.5 text-center transition-all ${
             loanType === 'topup'
               ? 'bg-navy font-bold text-white shadow-sm'
               : 'text-muted hover:text-ink'
@@ -75,7 +78,7 @@ export function EmiCalculator() {
         <button
           type="button"
           onClick={() => setLoanType('transfer')}
-          className={`flex-1 rounded-md py-1.5 text-center transition-all ${
+          className={`flex-1 rounded-md px-1.5 py-1.5 text-center transition-all ${
             loanType === 'transfer'
               ? 'bg-navy font-bold text-white shadow-sm'
               : 'text-muted hover:text-ink'
@@ -193,9 +196,10 @@ export function EmiCalculator() {
       </div>
 
       {/* Action Button */}
-      <a
-        href="#contact"
-        className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-navy py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-navy-soft"
+      <Link
+        to={ROUTES.contact}
+        title={linkTitleFor(ROUTES.contact)}
+        className="mt-4 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-lg bg-navy py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-navy-soft active:scale-[0.98]"
       >
         <span>{ctaText}</span>
         <svg
@@ -212,7 +216,7 @@ export function EmiCalculator() {
           <line x1="5" y1="12" x2="19" y2="12" />
           <polyline points="12 5 19 12 12 19" />
         </svg>
-      </a>
+      </Link>
 
       {/* Footnote */}
       <p className="mt-2.5 text-center text-[10.5px] leading-tight text-muted/80">

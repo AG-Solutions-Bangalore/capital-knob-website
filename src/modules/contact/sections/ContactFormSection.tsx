@@ -110,10 +110,10 @@ export function ContactFormSection() {
 
   return (
     <section className="bg-white py-8 lg:py-12">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl">
         <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
           {/* Left Column: Form Card */}
-          <div className="rounded-2xl border border-line bg-white p-6 shadow-soft sm:p-8 md:p-10 lg:col-span-7">
+          <div className="rounded-2xl border border-line bg-white p-5 sm:p-8 md:p-10 lg:col-span-7 shadow-soft">
             <h2 className="font-display text-2xl font-bold text-navy md:text-3xl">
               {form.title}
             </h2>
@@ -349,7 +349,7 @@ export function ContactFormSection() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex items-center gap-2 rounded-button bg-gold px-7 py-3 text-sm font-semibold text-white shadow-gold transition-all duration-200 hover:bg-gold-hover hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70"
+                  className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-button bg-gold px-7 py-3 text-sm font-semibold text-white shadow-gold transition-all duration-200 hover:bg-gold-hover hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70 active:scale-[0.98]"
                 >
                   {isSubmitting ? (
                     <>

@@ -21,15 +21,15 @@ export function AboutHero() {
       />
 
       {/* Light gradient overlay: solid light on the left, softly revealing the office terrace on the right */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-white via-white lg:via-white/45" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-r from-white via-white lg:via-white/45" />
       
-      <Container size="4xl" className="relative w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl" className="relative">
         <div className="grid items-center gap-10 py-16 md:py-20 lg:grid-cols-12 lg:py-24">
           <div className="lg:col-span-7 xl:col-span-6">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-navy">
               {aboutHero.eyebrow}
             </p>
-            <h1 className="mt-4 font-serif text-4xl font-extrabold leading-[1.12] text-navy md:text-5xl lg:text-[54px]">
+            <h1 className="mt-4 font-serif text-3xl sm:text-4xl font-extrabold leading-[1.15] text-navy md:text-5xl lg:text-[54px]">
               {aboutHero.titleLead}
               <br />
               {aboutHero.titleAccent}
@@ -40,7 +40,7 @@ export function AboutHero() {
             <a
               href={aboutHero.ctaHref}
               title={linkTitleFor(aboutHero.ctaHref)}
-              className="mt-8 inline-flex items-center gap-2 rounded-button bg-navy px-6 py-3 text-sm font-semibold text-white shadow-card transition-colors hover:bg-navy-soft"
+              className="mt-8 inline-flex min-h-[48px] items-center justify-center gap-2 rounded-button bg-navy px-6 py-3 text-sm font-semibold text-white shadow-card transition-colors hover:bg-navy-soft active:scale-[0.98]"
             >
               {aboutHero.ctaLabel}
               <svg

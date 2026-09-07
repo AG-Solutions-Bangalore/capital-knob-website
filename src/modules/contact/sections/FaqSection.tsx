@@ -12,7 +12,7 @@ export function FaqSection() {
 
   return (
     <section className="bg-brand-blue-soft/30 py-16 lg:py-20">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.25em] text-navy">
             {faq.eyebrow}

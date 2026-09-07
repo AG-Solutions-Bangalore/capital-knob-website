@@ -36,7 +36,7 @@ export function SolutionsHeroSection() {
       />
 
       {/* Elegant navy gradient overlays for text readability and premium depth */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/70 to-navy/20" />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-r from-navy/95 via-navy/70 to-navy/20" />
 
       <Container size="3xl" className="relative">
         <div className="grid gap-12 py-16 md:py-20 lg:grid-cols-12 lg:gap-8 lg:py-24">
@@ -45,7 +45,7 @@ export function SolutionsHeroSection() {
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-gold">
               {solutionsCopy.hero.eyebrow}
             </p>
-            <h1 className="mt-4 font-display text-4xl font-extrabold leading-tight md:text-5xl lg:text-6xl">
+            <h1 className="mt-4 font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight">
               {solutionsCopy.hero.titleLead}
               <br />
               <span className="text-gold">{solutionsCopy.hero.titleAccent}</span>

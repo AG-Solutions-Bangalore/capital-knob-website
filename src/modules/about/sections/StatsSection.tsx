@@ -13,7 +13,7 @@ import { aboutQuote, aboutStats } from '../constants'
 export function StatsSection() {
   return (
     <section className="border-b border-line bg-[#f1f6fc] py-8 md:py-10">
-      <Container size="4xl" className="w-full max-w-[1720px] px-4 sm:px-6 lg:px-8">
+      <Container size="4xl">
         <div className="grid items-center gap-8 lg:grid-cols-12">
           {/* Stats grid */}
           <ul className="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4 lg:col-span-9">
@@ -22,7 +22,7 @@ export function StatsSection() {
               return (
                 <li
                   key={stat.label}
-                  className="flex items-center gap-3.5 border-r border-line/70 pr-4 last:border-r-0"
+                  className="flex items-center gap-3.5 border-r border-line/70 pr-4 even:border-r-0 sm:even:border-r sm:last:border-r-0"
                 >
                   <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-blue-soft text-brand-blue">
                     <Icon size={20} />

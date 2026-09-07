@@ -15,7 +15,7 @@ export function HomeFinancePage() {
         subtitle={homeFinanceCopy.hero.description}
       />
       <SectionReveal as="section" className="py-16">
-        <Container size="lg">
+        <Container size="4xl">
           <p className="text-center text-muted">Home Finance content coming up.</p>
         </Container>
       </SectionReveal>
