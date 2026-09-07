@@ -6,7 +6,6 @@
  */
 
 import { Container } from '@/shared/components/Container'
-import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { aboutHero } from '../constants'
 
 export function AboutHero() {

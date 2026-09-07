@@ -25,7 +25,7 @@ export function LocationSection() {
                 href={location.directionsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                title={linkTitleFor(location.directionsUrl)}
+                title={linkTitleFor(location.directionsUrl) ?? 'View CapitalKnob Office Location on Google Maps'}
                 className="inline-flex items-center gap-2 rounded-button bg-navy px-6 py-3 text-sm font-semibold text-white shadow-soft transition-all duration-200 hover:bg-navy-soft hover:shadow-md"
               >
                 {location.buttonText}

@@ -48,15 +48,15 @@ const TITLE_BY_HREF: Record<string, string> = {
   'mailto:info@capitalknob.com': 'Email CapitalKnob',
   'mailto:hello@capitalknob.com': 'Email CapitalKnob',
   'tel:+919876543210': 'Call CapitalKnob',
+  'https://maps.google.com/?q=Prestige+Tech+Park,+Marathahalli,+Bengaluru':
+    'View CapitalKnob Office Location on Google Maps',
 }
 
 /**
  * Google Maps / directions link used on the Contact page. The audit
- * records the visible label "Google Maps – Prestige Tech Park" and
- * recommends the explicit office title. Any directions URL we ship
- * resolves to the same destination.
+ * recommends the explicit title: View CapitalKnob Office Location on Google Maps.
  */
-const OFFICE_LOCATION_TITLE = 'CapitalKnob Office Location – Prestige Tech Park'
+const OFFICE_LOCATION_TITLE = 'View CapitalKnob Office Location on Google Maps'
 
 /** Exact-match title lookup. */
 export function linkTitleFor(href: string | undefined | null): string | undefined {
