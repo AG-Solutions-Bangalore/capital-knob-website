@@ -43,6 +43,15 @@ const TITLE_BY_HREF: Record<string, string> = {
   '/real-estate-finance': 'Real Estate Finance Solutions',
   '/real-estate-finance#construction': 'Construction Finance',
   '/solutions': 'Financial Solutions – CapitalKnob',
+  '/solutions#home-loans': 'Home Loan Solutions – CapitalKnob',
+  '/solutions#balance-transfer': 'Home Loan Balance Transfer – CapitalKnob',
+  '/solutions#top-up': 'Home Loan Top-Up – CapitalKnob',
+  '/solutions#construction': 'Construction Finance – CapitalKnob',
+  '/solutions#loan-against-property': 'Loan Against Property – CapitalKnob',
+  '/solutions#individuals': 'Financing Solutions for Individuals – CapitalKnob',
+  '/solutions#working-capital': 'Working Capital Finance – CapitalKnob',
+  '/solutions#real-estate': 'Real Estate Finance – CapitalKnob',
+  '/solutions#private-credit': 'Private Credit – CapitalKnob',
 
   // ── Contact / communication ─────────────────────────────────────
   'mailto:info@capitalknob.com': 'Email CapitalKnob',

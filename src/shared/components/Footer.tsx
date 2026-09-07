@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { ROUTES } from '@/app/routes'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { Container } from './Container'
@@ -48,9 +48,10 @@ interface FooterProps {
   variant?: 'light' | 'dark'
 }
 
-export function Footer({ variant }: FooterProps) {
-  const location = useLocation()
-  const isDark = variant ? variant === 'dark' : location.pathname === ROUTES.contact
+export function Footer({ variant = 'light' }: FooterProps) {
+  // Default light white everywhere. Dark only when explicitly passed
+  // as <Footer variant="dark" /> — ready for next-themes later.
+  const isDark = variant === 'dark'
 
   return (
     <footer
@@ -65,7 +66,7 @@ export function Footer({ variant }: FooterProps) {
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-12">
           {/* Col 1: Brand Info & Consultation (Span 4) */}
           <div className="lg:col-span-4">
-            <Logo variant={isDark ? 'light' : 'dark'} />
+            <Logo variant={isDark ? 'light' : 'dark'} layout="horizontal" />
             <p
               className={`mt-4 max-w-sm text-sm leading-relaxed ${
                 isDark ? 'text-white/75' : 'text-muted'

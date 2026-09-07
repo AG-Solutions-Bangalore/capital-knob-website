@@ -170,7 +170,7 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
-          className="fixed inset-0 z-[100] flex items-end justify-center bg-navy-deep/70 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+            className="fixed inset-0 z-[100] flex items-end justify-center overflow-hidden bg-navy-deep/70 p-2 backdrop-blur-sm sm:items-center sm:p-4"
           onClick={onClose}
           role="presentation"
         >
@@ -184,17 +184,17 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
             aria-modal="true"
             aria-labelledby="enquiry-modal-title"
             onClick={(e) => e.stopPropagation()}
-            className="relative flex max-h-[92dvh] w-full max-w-xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-card sm:rounded-2xl"
+            className="relative flex max-h-[calc(100dvh-1rem)] w-full max-w-xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-card sm:max-h-[calc(100dvh-2rem)] sm:rounded-2xl"
           >
-            {/* Header */}
-            <div className="flex items-start justify-between gap-4 border-b border-line bg-surface px-5 py-4 sm:px-6">
+            {/* Header — compact so the whole dialog fits the viewport */}
+            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-line bg-surface px-5 py-3 sm:px-6 sm:py-3.5">
               <div>
-                <p className="font-display text-xs font-semibold uppercase tracking-wider text-gold">
+                <p className="font-display text-[11px] font-semibold uppercase tracking-wider text-gold">
                   Enquire Now
                 </p>
                 <h2
                   id="enquiry-modal-title"
-                  className="mt-1 font-display text-lg font-bold text-navy sm:text-xl"
+                  className="mt-0.5 font-display text-base font-bold text-navy sm:text-lg"
                 >
                   {subject}
                 </h2>
@@ -203,7 +203,7 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                 type="button"
                 onClick={onClose}
                 aria-label="Close enquiry form"
-                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-line-soft hover:text-ink"
+                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-line-soft hover:text-ink"
               >
                 <svg
                   width="18"
@@ -222,8 +222,8 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
               </button>
             </div>
 
-            {/* Body — scrollable on small screens */}
-            <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-6 sm:py-6">
+            {/* Body — fits the viewport, no internal scroller */}
+            <div className="flex-1 overflow-hidden px-5 py-3.5 sm:px-6 sm:py-4">
               {status === 'success' ? (
                 <div
                   role="status"
@@ -260,8 +260,8 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} noValidate className="space-y-5">
-                  <p className="text-sm text-muted">
+                <form onSubmit={handleSubmit} noValidate className="space-y-3 sm:space-y-3.5">
+                  <p className="text-[13px] leading-snug text-muted">
                     Tell us a bit about you and we&apos;ll connect you with the right advisor for{' '}
                     <span className="font-semibold text-ink">{subject}</span>.
                   </p>
@@ -275,7 +275,7 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                     </div>
                   )}
 
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-3 sm:grid-cols-2">
                     {/* Full Name */}
                     <div>
                       <label
@@ -293,14 +293,14 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                           setValues({ ...values, fullName: e.target.value })
                           if (errors.fullName) setErrors({ ...errors, fullName: undefined })
                         }}
-                        className={`mt-1.5 h-11 w-full rounded-lg border bg-white px-3.5 text-sm text-ink placeholder:text-muted/60 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${
+                        className={`mt-1 h-9 w-full rounded-lg border bg-white px-3 text-sm text-ink placeholder:text-muted/60 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${
                           errors.fullName
                             ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-200'
                             : 'border-line'
                         }`}
                       />
                       {errors.fullName && (
-                        <p className="mt-1 text-xs text-rose-500">{errors.fullName}</p>
+                        <p className="mt-0.5 text-xs text-rose-500">{errors.fullName}</p>
                       )}
                     </div>
 
@@ -313,7 +313,7 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                         Mobile Number <span className="text-rose-500">*</span>
                       </label>
                       <div
-                        className={`mt-1.5 flex h-11 w-full items-center rounded-lg border bg-white transition-colors focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/20 ${
+                        className={`mt-1 flex h-9 w-full items-center rounded-lg border bg-white transition-colors focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/20 ${
                           errors.phone
                             ? 'border-rose-400 focus-within:border-rose-500 focus-within:ring-rose-200'
                             : 'border-line'
@@ -338,7 +338,7 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                         />
                       </div>
                       {errors.phone && (
-                        <p className="mt-1 text-xs text-rose-500">{errors.phone}</p>
+                        <p className="mt-0.5 text-xs text-rose-500">{errors.phone}</p>
                       )}
                     </div>
                   </div>
@@ -360,14 +360,14 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                         setValues({ ...values, email: e.target.value })
                         if (errors.email) setErrors({ ...errors, email: undefined })
                       }}
-                      className={`mt-1.5 h-11 w-full rounded-lg border bg-white px-3.5 text-sm text-ink placeholder:text-muted/60 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${
+                      className={`mt-1 h-9 w-full rounded-lg border bg-white px-3 text-sm text-ink placeholder:text-muted/60 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${
                         errors.email
                           ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-200'
                           : 'border-line'
                       }`}
                     />
                     {errors.email && (
-                      <p className="mt-1 text-xs text-rose-500">{errors.email}</p>
+                      <p className="mt-0.5 text-xs text-rose-500">{errors.email}</p>
                     )}
                   </div>
 
@@ -384,9 +384,9 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                       type="text"
                       value={values.subject}
                       readOnly
-                      className="mt-1.5 h-11 w-full cursor-default rounded-lg border border-line bg-line-soft/60 px-3.5 text-sm font-semibold text-ink focus:outline-none"
+                      className="mt-1 h-9 w-full cursor-default rounded-lg border border-line bg-line-soft/60 px-3 text-sm font-semibold text-ink focus:outline-none"
                     />
-                    <p className="mt-1 text-xs text-muted">
+                    <p className="mt-0.5 text-[11px] leading-snug text-muted">
                       Pre-filled based on the solution you selected.
                     </p>
                   </div>
@@ -401,28 +401,28 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                     </label>
                     <textarea
                       id="enquiry-message"
-                      rows={4}
+                      rows={2}
                       placeholder="Tell us a bit about what you need..."
                       value={values.message}
                       onChange={(e) => {
                         setValues({ ...values, message: e.target.value })
                         if (errors.message) setErrors({ ...errors, message: undefined })
                       }}
-                      className={`mt-1.5 w-full rounded-lg border bg-white p-3.5 text-sm text-ink placeholder:text-muted/60 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${
+                      className={`mt-1 max-h-[72px] min-h-[60px] w-full resize-none rounded-lg border bg-white px-3 py-2.5 text-sm text-ink placeholder:text-muted/60 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${
                         errors.message
                           ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-200'
                           : 'border-line'
                       }`}
                     />
                     {errors.message && (
-                      <p className="mt-1 text-xs text-rose-500">{errors.message}</p>
+                      <p className="mt-0.5 text-xs text-rose-500">{errors.message}</p>
                     )}
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-button bg-gold px-5 py-2.5 text-sm font-semibold text-white shadow-gold transition-all hover:bg-gold-hover disabled:cursor-not-allowed disabled:opacity-70 active:scale-[0.98]"
+                    className="inline-flex min-h-[40px] w-full items-center justify-center gap-2 rounded-button bg-gold px-5 py-2 text-sm font-semibold text-white shadow-gold transition-all hover:bg-gold-hover disabled:cursor-not-allowed disabled:opacity-70 active:scale-[0.98]"
                   >
                     {isSubmitting ? (
                       <>

@@ -16,7 +16,13 @@ export interface LendingPartner {
 
 export interface BenefitItem {
   id: string
-  title: string
+  /**
+   * Exactly 3 pre-split lines — rendered with <br /> so every card shows
+   * precisely 3 lines at every viewport width. Natural word-wrap can never
+   * guarantee this (narrow screens wrap to 4+, wide screens collapse to 2).
+   * Keep each line ≤ 13 chars so nothing re-wraps in the narrowest column.
+   */
+  lines: [string, string, string]
   icon: 'assessment' | 'rate' | 'eligibility' | 'comparison' | 'financial' | 'connect' | 'coordination' | 'closure'
 }
 
@@ -188,7 +194,8 @@ export const individualSolutions: HomeCard[] = [
     imageSrc: '/images/home/card_home_loans.webp',
     imageTitle: 'Home Loans – CapitalKnob',
     icon: 'home',
-    href: '/home-finance#home-loans',
+    // "Know More" lands on the Solutions page and highlights this card.
+    href: '/solutions#home-loans',
   },
   {
     id: 'balance-transfer',
@@ -197,7 +204,7 @@ export const individualSolutions: HomeCard[] = [
     imageSrc: '/images/home/card_balance_transfer.webp',
     imageTitle: 'Home Loan Balance Transfer – CapitalKnob',
     icon: 'refresh',
-    href: '/home-finance#balance-transfer',
+    href: '/solutions#balance-transfer',
   },
   {
     id: 'top-up',
@@ -206,7 +213,7 @@ export const individualSolutions: HomeCard[] = [
     imageSrc: '/images/home/card_home_top_up.webp',
     imageTitle: 'Home Loan Top-Up – CapitalKnob',
     icon: 'stack',
-    href: '/home-finance#top-up',
+    href: '/solutions#top-up',
   },
   {
     id: 'construction',
@@ -215,7 +222,7 @@ export const individualSolutions: HomeCard[] = [
     imageSrc: '/images/home/card_construction.webp',
     imageTitle: 'Construction Finance – CapitalKnob',
     icon: 'crane',
-    href: '/real-estate-finance#construction',
+    href: '/solutions#construction',
   },
   {
     id: 'renovation',
@@ -224,7 +231,9 @@ export const individualSolutions: HomeCard[] = [
     imageSrc: '/images/home/card_renovation.webp',
     imageTitle: 'Home Renovation Finance – CapitalKnob',
     icon: 'tools',
-    href: '/home-finance#renovation',
+    // No dedicated renovation card on the Solutions page — scroll to the
+    // individuals grid instead of highlighting the wrong card.
+    href: '/solutions#individuals',
   },
   {
     id: 'loan-against-property',
@@ -233,49 +242,49 @@ export const individualSolutions: HomeCard[] = [
     imageSrc: '/images/home/card_loan_property.webp',
     imageTitle: 'Loan Against Property – CapitalKnob',
     icon: 'document',
-    href: '/business-finance#loan-against-property',
+    href: '/solutions#loan-against-property',
   },
 ]
 
 export const whyChooseBenefits: BenefitItem[] = [
   {
     id: 'b1',
-    title: 'Requirement-based financing assessment',
+    lines: ['Based on', 'your needs', 'assessment'],
     icon: 'assessment',
   },
   {
     id: 'b2',
-    title: 'Best competitive rate of interest',
+    lines: ['Best', 'competitive', 'interest rate'],
     icon: 'rate',
   },
   {
     id: 'b3',
-    title: 'Financial & eligibility evaluation',
+    lines: ['Financial &', 'eligibility', 'evaluation'],
     icon: 'eligibility',
   },
   {
     id: 'b4',
-    title: 'Comparison of potential financing pathways',
+    lines: ['Compare', 'financing', 'options'],
     icon: 'comparison',
   },
   {
     id: 'b5',
-    title: 'Support in preparing financial information',
+    lines: ['Help with', 'financial', 'documents'],
     icon: 'financial',
   },
   {
     id: 'b6',
-    title: 'Lender and financing-source connect',
+    lines: ['Connect', 'with right', 'lenders'],
     icon: 'connect',
   },
   {
     id: 'b7',
-    title: 'Transaction coordination support',
+    lines: ['Transaction', 'coordination', 'support'],
     icon: 'coordination',
   },
   {
     id: 'b8',
-    title: 'End-to-end guidance till closure',
+    lines: ['End-to-end', 'guidance till', 'closure'],
     icon: 'closure',
   },
 ]

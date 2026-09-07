@@ -4,9 +4,9 @@
  * and the description.
  *
  * Interaction model:
- *   - Clicking the card body / image navigates to the card's `href`.
- *   - Clicking the gold arrow button opens the enquiry modal with the
- *     card title pre-filled in the Subject field.
+ *   - Clicking anywhere on the card (body, image, or gold arrow button)
+ *     opens the enquiry modal with the card title pre-filled in the
+ *     Subject field.
  *
  * When `highlighted` is true (driven by a matching URL hash on the
  * Solutions page), the card gets a gold ring + a one-shot pulse animation
@@ -14,10 +14,8 @@
  * footer.
  */
 
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, type KeyboardEvent } from 'react'
 import type { ServiceCard as ServiceCardData } from '../constants'
-import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { iconRegistry } from './icons'
 import { Illustration } from './illustrations'
 import { cn } from '@/shared/lib/cn'
@@ -105,7 +103,30 @@ function EnquireArrowButton({
 
 /** Shared classes applied to every card root. */
 const baseCardClasses =
-  'group relative flex flex-col overflow-hidden rounded-card border bg-surface transition-all duration-200 scroll-mt-28'
+  'group relative flex flex-col overflow-hidden rounded-card border bg-surface transition-all duration-200 scroll-mt-28 cursor-pointer'
+
+/**
+ * Keyboard + click-to-enquire wiring shared by both card variants. The
+ * whole card behaves as one large button that opens the enquiry popup.
+ */
+function useEnquireCard(title: string, onEnquire?: (title: string) => void) {
+  const open = () => onEnquire?.(title)
+
+  function onKeyDown(e: KeyboardEvent) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      open()
+    }
+  }
+
+  return {
+    role: 'button' as const,
+    tabIndex: 0,
+    'aria-label': `Enquire about ${title}`,
+    onClick: open,
+    onKeyDown,
+  }
+}
 
 /** Extra classes when a card is the active/highlighted one. */
 const highlightClasses =
@@ -118,30 +139,28 @@ export function ServiceCard({
   iconKey,
   art,
   imageSrc,
-  href,
   className,
   highlighted,
   onEnquire,
 }: ServiceCardProps) {
   const Icon = iconRegistry[iconKey]
+  const enquireProps = useEnquireCard(title, onEnquire)
 
   return (
     <div
       id={id}
       aria-current={highlighted ? 'true' : undefined}
+      {...enquireProps}
       className={cn(
         baseCardClasses,
         highlighted
           ? highlightClasses
           : 'border-line hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-card',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
         className,
       )}
     >
-      <Link
-        to={href}
-        title={linkTitleFor(href)}
-        className="flex flex-1 flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
-      >
+      <div className="flex flex-1 flex-col">
         {/* Visual media banner */}
         <div className="relative aspect-[3/2] w-full overflow-hidden bg-line-soft">
           <CardMedia imageSrc={imageSrc} art={art} alt={title} />
@@ -157,7 +176,7 @@ export function ServiceCard({
           </div>
           <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">{description}</p>
         </div>
-      </Link>
+      </div>
 
       <EnquireArrowButton
         title={title}
@@ -178,30 +197,30 @@ export function WideServiceCard({
   iconKey,
   art,
   imageSrc,
-  href,
   className,
   highlighted,
   onEnquire,
 }: ServiceCardProps) {
   const Icon = iconRegistry[iconKey]
+  const enquireProps = useEnquireCard(title, onEnquire)
 
   return (
     <div
       id={id}
       aria-current={highlighted ? 'true' : undefined}
+      {...enquireProps}
       className={cn(
         baseCardClasses,
         'sm:flex-row',
         highlighted
           ? highlightClasses
           : 'border-line hover:-translate-y-0.5 hover:border-gold/40 hover:shadow-card',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
         className,
       )}
     >
-      <Link
-        to={href}
-        title={linkTitleFor(href)}
-        className="flex flex-1 flex-col sm:flex-row focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+      <div
+        className="flex flex-1 flex-col sm:flex-row"
       >
         <div className="relative aspect-[16/9] sm:aspect-[8/5] w-full sm:w-2/5 shrink-0 overflow-hidden bg-line-soft">
           <CardMedia imageSrc={imageSrc} art={art} alt={title} />
@@ -217,7 +236,7 @@ export function WideServiceCard({
             {description}
           </p>
         </div>
-      </Link>
+      </div>
 
       <EnquireArrowButton
         title={title}

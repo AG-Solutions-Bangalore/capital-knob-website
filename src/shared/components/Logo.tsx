@@ -4,26 +4,40 @@ import { cn } from '@/shared/lib/cn'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 
 interface LogoProps {
-  variant?: 'light' | 'dark' // light = on navy bg, dark = on light bg
+  /**
+   * Kept for API compatibility (header/footer pass it). Both logo assets
+   * ship on a light background, so they render on light surfaces; a
+   * separate dark-surface asset will be needed if a navy footer returns.
+   */
+  variant?: 'light' | 'dark'
+  /** `horizontal` for the header, `stacked` for roomier slots like the footer. */
+  layout?: 'horizontal' | 'stacked'
   className?: string
 }
 
-export function Logo({ variant = 'light', className }: LogoProps) {
-  const taglineColor = variant === 'light' ? 'text-white/70' : 'text-muted'
+const LOGO_SRC = {
+  horizontal: '/logo-horizontal.webp',
+  stacked: '/logo-stacked.webp',
+} as const
+
+export function Logo({ variant = 'light', layout = 'horizontal', className }: LogoProps) {
+  void variant
 
   return (
     <Link
       to={ROUTES.home}
       title={linkTitleFor(ROUTES.home)}
-      className={cn('inline-flex flex-col leading-none', className)}
+      className={cn('inline-flex leading-none', className)}
     >
-      <span className="flex items-baseline gap-0.5">
-        <span className="font-display text-2xl font-extrabold text-brand-blue">Capital</span>
-        <span className="font-display text-2xl font-extrabold text-gold">Knob</span>
-      </span>
-      <span className={cn('mt-1 text-[10px] font-medium uppercase tracking-wider', taglineColor)}>
-        Unlock Your Capital Potential
-      </span>
+      <img
+        src={LOGO_SRC[layout]}
+        alt="CapitalKnob – Loan and Investment"
+        decoding="async"
+        className={cn(
+          'w-auto',
+          layout === 'horizontal' ? 'h-10 sm:h-11' : 'h-24',
+        )}
+      />
     </Link>
   )
 }

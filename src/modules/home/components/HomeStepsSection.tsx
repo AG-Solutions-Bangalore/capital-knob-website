@@ -48,16 +48,16 @@ function StepIcon({ icon }: { icon: string }) {
 
 export function HomeStepsSection() {
   return (
-    <section className="bg-navy-deep py-12 text-white sm:py-14 md:py-16">
+    <section className="bg-white py-12 text-ink dark:bg-navy-deep dark:text-white sm:py-14 md:py-16">
       <Container size="4xl">
         <div className="grid items-center gap-8 md:gap-10 lg:grid-cols-12 lg:gap-8">
           {/* Left Column */}
           <div className="text-center sm:text-left lg:col-span-4">
-            <h2 className="font-display text-2xl font-extrabold leading-tight text-white sm:text-3xl">
+            <h2 className="font-display text-2xl font-extrabold leading-tight text-ink dark:text-white sm:text-3xl">
               Our Simple <br />
               5-Step Approach
             </h2>
-            <p className="mt-2 text-xs leading-relaxed text-slate-300 sm:text-sm">
+            <p className="mt-2 text-xs leading-relaxed text-muted dark:text-slate-300 sm:text-sm">
               From requirement to reality — we stay with you at every step.
             </p>
           </div>
@@ -67,39 +67,41 @@ export function HomeStepsSection() {
               Desktop: single row with chevron dividers. */}
           <div className="min-w-0 lg:col-span-8">
             <ol
-              className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 sm:gap-x-4 sm:gap-y-7 lg:flex lg:items-start lg:justify-between lg:gap-2"
+              className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 sm:gap-x-4 sm:gap-y-7 lg:flex lg:items-start lg:gap-2"
               aria-label="CapitalKnob 5-step process"
             >
               {processSteps.map((step, idx) => (
                 <li
                   key={step.stepNumber}
-                  className="relative flex items-center last:col-span-2 sm:last:col-span-1"
+                  className="relative flex flex-1 items-start justify-center last:col-span-2 sm:last:col-span-1"
                 >
                   <div className="flex w-full min-w-0 flex-col items-center text-center">
                     {/* Circle icon with clean ring */}
-                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/25 bg-white/5 text-white backdrop-blur-sm transition-colors hover:border-gold hover:text-gold">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-line bg-line-soft text-navy backdrop-blur-sm transition-colors hover:border-gold hover:text-gold dark:border-white/25 dark:bg-white/5 dark:text-white dark:hover:border-gold dark:hover:text-gold">
                       <StepIcon icon={step.icon} />
                     </span>
 
                     {/* Step number and text */}
                     <div className="mt-3 flex flex-wrap items-center justify-center gap-1 text-xs">
-                      <span className="font-bold text-slate-300">
+                      <span className="font-bold text-muted dark:text-slate-300">
                         {step.stepNumber}
                       </span>
-                      <span className="font-bold text-white">
+                      <span className="font-bold text-ink dark:text-white">
                         {step.action}
                       </span>
                     </div>
-                    <span className="mt-0.5 text-[11px] font-medium text-slate-300">
+                    <span className="mt-0.5 text-[11px] font-medium text-muted dark:text-slate-300">
                       {step.target}
                     </span>
                   </div>
 
-                  {/* Chevron divider between steps (desktop only) */}
+                  {/* Chevron divider between steps (desktop only) — vertically
+                      centered on the 48px icon: (48 - 16) / 2 = 16px (top-4),
+                      parked in the inter-column gap */}
                   {idx < processSteps.length - 1 && (
                     <span
                       aria-hidden="true"
-                      className="pointer-events-none absolute -right-3 top-6 hidden text-slate-500 lg:block"
+                      className="pointer-events-none absolute -right-2 top-4 hidden text-muted/50 dark:text-slate-500 lg:block"
                     >
                       <svg
                         width="16"

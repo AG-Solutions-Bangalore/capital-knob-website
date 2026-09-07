@@ -33,13 +33,29 @@ function ScrollToTopOnRouteChange() {
   const location = useLocation()
 
   useEffect(() => {
-    if (!lenis) return
+    const hash = window.location.hash?.slice(1)
+
+    if (!lenis) {
+      // Reduced-motion / no-Lenis path: hash links (e.g. Solutions card
+      // anchors) must still work — native jump, no smooth animation.
+      // Cards carry `scroll-mt-28` so the sticky header doesn't cover them.
+      if (hash) {
+        const id = window.requestAnimationFrame(() => {
+          document
+            .getElementById(hash)
+            ?.scrollIntoView({ block: 'start', behavior: 'auto' })
+        })
+        return () => window.cancelAnimationFrame(id)
+      }
+      window.scrollTo(0, 0)
+      return
+    }
+
     // Snap to top on every route change so users land at the top of the
     // new page. Hash targets (e.g. /about#team) are handled by a
     // separate branch below that waits for the element to mount.
     lenis.scrollTo(0, { immediate: true })
 
-    const hash = window.location.hash?.slice(1)
     if (hash) {
       // Wait one frame so the new page has rendered, then smooth-scroll
       // to the requested anchor.
