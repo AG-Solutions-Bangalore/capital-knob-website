@@ -161,8 +161,25 @@ export function HomeSolutionsSection() {
                   {card.description}
                 </p>
 
-                {/* Circular Arrow Button at bottom right */}
-                <div className="mt-4 flex justify-end">
+                {/* Know More link + Circular Arrow Button at bottom */}
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink transition-colors group-hover:text-gold">
+                    Know More
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m13 6 6 6-6 6" />
+                    </svg>
+                  </span>
                   <span className="flex h-7 w-7 items-center justify-center rounded-full border border-gold/40 text-gold transition-all duration-300 group-hover:rotate-[-45deg] group-hover:border-gold group-hover:bg-gold group-hover:text-white">
                     <svg
                       width="12"

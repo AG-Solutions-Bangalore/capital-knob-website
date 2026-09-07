@@ -5,7 +5,8 @@
  *
  * When the user lands here via a footer link that targets a specific
  * solution, the matching card receives `highlighted` so the URL hash
- * drives a gold ring + pulse animation on that card.
+ * drives a gold ring + pulse animation on that card. The arrow button on
+ * each card triggers the Solutions-page enquiry modal via `onEnquire`.
  */
 
 import { useLocation } from 'react-router-dom'
@@ -15,7 +16,11 @@ import { ServiceCard } from '../components/ServiceCard'
 import { SolutionsTabs } from '../components/SolutionsTabs'
 import { individualsCards } from '../constants'
 
-export function IndividualsSection() {
+interface IndividualsSectionProps {
+  onEnquire?: (title: string) => void
+}
+
+export function IndividualsSection({ onEnquire }: IndividualsSectionProps) {
   const { hash } = useLocation()
   const activeId = hash ? hash.slice(1) : ''
 
@@ -37,6 +42,7 @@ export function IndividualsSection() {
                 key={card.id}
                 {...card}
                 highlighted={activeId === card.id}
+                onEnquire={onEnquire}
               />
             ))}
           </div>

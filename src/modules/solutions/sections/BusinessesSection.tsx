@@ -4,6 +4,7 @@
  *
  * A card that matches the active URL hash receives `highlighted` so the
  * user can see at a glance which business solution they came here for.
+ * The arrow button on each card opens the enquiry modal via `onEnquire`.
  */
 
 import { useLocation } from 'react-router-dom'
@@ -12,7 +13,11 @@ import { SectionHeading } from '../components/SectionHeading'
 import { ServiceCard } from '../components/ServiceCard'
 import { businessesCards } from '../constants'
 
-export function BusinessesSection() {
+interface BusinessesSectionProps {
+  onEnquire?: (title: string) => void
+}
+
+export function BusinessesSection({ onEnquire }: BusinessesSectionProps) {
   const { hash } = useLocation()
   const activeId = hash ? hash.slice(1) : ''
 
@@ -36,6 +41,7 @@ export function BusinessesSection() {
               key={card.id}
               {...card}
               highlighted={activeId === card.id}
+              onEnquire={onEnquire}
             />
           ))}
         </div>

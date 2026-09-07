@@ -5,6 +5,7 @@
  *
  * A card that matches the active URL hash receives `highlighted` so the
  * user can see at a glance which capital solution they came here for.
+ * The arrow button on each card opens the enquiry modal via `onEnquire`.
  */
 
 import { useLocation } from 'react-router-dom'
@@ -13,7 +14,11 @@ import { SectionHeading } from '../components/SectionHeading'
 import { WideServiceCard } from '../components/ServiceCard'
 import { otherCapitalCards } from '../constants'
 
-export function OtherCapitalSection() {
+interface OtherCapitalSectionProps {
+  onEnquire?: (title: string) => void
+}
+
+export function OtherCapitalSection({ onEnquire }: OtherCapitalSectionProps) {
   const { hash } = useLocation()
   const activeId = hash ? hash.slice(1) : ''
 
@@ -31,6 +36,7 @@ export function OtherCapitalSection() {
               key={card.id}
               {...card}
               highlighted={activeId === card.id}
+              onEnquire={onEnquire}
             />
           ))}
         </div>
