@@ -9,7 +9,7 @@ export function HomeCtaSection() {
       {/* Background Skyline Image with moody twilight overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/images/home/cta_skyline.jpg"
+          src="/images/home/cta_skyline.webp"
           alt="Modern metropolitan skyscraper skyline at dusk"
           title="Modern Metropolitan Skyline – CapitalKnob"
           className="h-full w-full object-cover object-center"

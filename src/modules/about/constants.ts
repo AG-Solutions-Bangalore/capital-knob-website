@@ -17,7 +17,7 @@ export const aboutHero = {
   ctaLabel: 'Our Story',
   ctaHref: '#our-story',
   /* Local high-fidelity visual asset — terrace & skyline overlooking city */
-  image: '/images/about/hero-about-skyline.png',
+  image: '/images/about/hero-about-skyline.webp',
 } as const
 
 /* -----------------------------------------------------------------------------
@@ -47,7 +47,7 @@ export const ourStory = {
     "So, we built CapitalKnob — a unified platform that brings together multiple financing solutions, lender access, expert guidance and end-to-end support, all in one place.",
   ],
   /* Local high-fidelity visual asset — modern reception lobby with 3D logo */
-  image: '/images/about/story-reception.png',
+  image: '/images/about/story-reception.webp',
   pillars: [
     {
       title: 'Customer First',
@@ -102,7 +102,7 @@ export const visionMissionValues = {
     eyebrow: 'THE RIGHT CAPITAL TODAY',
     title: 'A BRIGHTER TOMORROW',
     /* Local high-fidelity visual asset — person standing on mountain peak at sunrise */
-    image: '/images/about/vision-mountain.png',
+    image: '/images/about/vision-mountain.webp',
   },
 } as const
 
@@ -113,7 +113,7 @@ export const founder = {
   name: 'Rohan Mehta',
   role: 'Founder & CEO, CapitalKnob',
   /* Local high-fidelity visual asset — executive portrait of Rohan Mehta */
-  image: '/images/about/founder-rohan.png',
+  image: '/images/about/founder-rohan.webp',
   message: [
     'I started CapitalKnob with a clear purpose — to make capital accessible, simple and aligned with people’s real goals.',
     'Whether it’s a family buying their first home, a business planning its next phase of growth, or a developer creating better communities — the right capital can change lives.',

@@ -27,7 +27,7 @@ export const contactCopy = {
     titleAccent: 'to Help',
     description:
       'Have a question or need guidance? Our team is ready to assist you with the right financing solutions.',
-    receptionImage: '/images/contact/hero-reception.png',
+    receptionImage: '/images/contact/hero-reception.webp',
   },
   form: {
     title: 'Send Us a Message',
