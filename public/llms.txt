@@ -1,0 +1,19 @@
+# CapitalKnob
+
+> CapitalKnob helps businesses and individuals unlock their capital potential with smart financial solutions, funding support, and strategic capital guidance.
+
+## Overview
+CapitalKnob is an Indian financial advisory firm providing tailored capital solutions across Business Finance, Home Loans, Real Estate Finance, and Private Credit.
+
+- Website: https://ck.agsdemo.in/
+- Office: Prestige Tech Park, 5th Floor, Outer Ring Road, Marathahalli, Bengaluru, Karnataka 560037
+- Phone: +91 98765 43210
+- Email: hello@capitalknob.com
+
+## Financial Services
+- [Home Finance](https://ck.agsdemo.in/home-finance): Home loans, balance transfer, renovation loans, loan against property, top-up loans.
+- [Business Finance](https://ck.agsdemo.in/business-finance): Secured business loans, working capital finance, machinery funding, business expansion capital.
+- [Real Estate Finance](https://ck.agsdemo.in/real-estate-finance): Construction finance, property acquisition, land development capital.
+- [Private Credit](https://ck.agsdemo.in/private-credit): Bespoke institutional credit, mezzanine finance, flexible debt solutions.
+- [About Us](https://ck.agsdemo.in/about): Company leadership, vision, and operational values.
+- [Contact](https://ck.agsdemo.in/contact): Advisory booking, direct inquiry form, and office location.

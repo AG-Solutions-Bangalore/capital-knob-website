@@ -91,6 +91,8 @@ export function HomeHero() {
                   transform: isActive ? 'scale(1.04)' : 'scale(1)',
                 }}
                 loading={index === 0 ? 'eager' : 'lazy'}
+                fetchPriority={index === 0 ? 'high' : 'low'}
+                decoding={index === 0 ? 'sync' : 'async'}
               />
               {/* Navy gradient masks — seamlessly blend with page & guarantee contrast */}
               <div className="absolute inset-0 bg-linear-to-r from-navy via-navy/95 to-navy/80 lg:from-navy lg:via-navy/88 lg:to-transparent" />
@@ -274,11 +276,7 @@ export function HomeHero() {
                           : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white'
                       }`}
                     >
-                      <span
-                        className={`inline-block h-1.5 w-1.5 rounded-full ${
-                          isActive ? 'bg-gold animate-pulse' : 'bg-slate-400'
-                        }`}
-                      />
+                     
                       <span>{slide.titleLine1.split('&')[0].trim()}</span>
 
                       

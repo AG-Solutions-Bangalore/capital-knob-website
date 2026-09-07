@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Container } from '@/shared/components/Container'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
+import { EnquiryModal } from '@/modules/solutions/components/EnquiryModal'
 import { homeSolutionsTabs, individualSolutions } from '../constants'
 
 // SVG icons for each service
@@ -64,6 +65,9 @@ function ServiceIcon({ name }: { name: string }) {
 
 export function HomeSolutionsSection() {
   const [activeTab, setActiveTab] = useState('individuals')
+  // Enquiry popup state — the gold arrow opens the modal with this card's
+  // title pre-filled in the Subject field (same modal as Solutions page).
+  const [enquirySubject, setEnquirySubject] = useState<string | null>(null)
 
   return (
     <section className="bg-white py-16 md:py-20">
@@ -126,67 +130,103 @@ export function HomeSolutionsSection() {
           </div>
         </div>
 
-        {/* 5 Cards Grid — shows the first 5 individual solutions */}
+        {/* 5 Cards Grid — shows the first 5 individual solutions.
+            "Know More" navigates to the Solutions page and highlights the
+            card; the circular arrow button opens the enquiry popup with
+            the Subject pre-filled. The button sits as a sibling of the
+            <Link> (never nested inside it) for valid HTML. */}
         <div className="mt-8 sm:mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {individualSolutions.slice(0, 5).map((card) => (
-            <Link
+            <div
               key={card.id}
-              to={card.href}
-              title={linkTitleFor(card.href)}
-              className="group flex flex-col overflow-hidden rounded-xl border border-line bg-white transition-all duration-200 hover:-translate-y-1 hover:border-gold/50 hover:shadow-lg"
+              className="group relative flex flex-col overflow-hidden rounded-xl border border-line bg-white transition-all duration-200 hover:-translate-y-1 hover:border-gold/50 hover:shadow-lg"
             >
-              {/* Card Image Banner */}
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
-                <img
-                  src={card.imageSrc}
-                  alt={card.title}
-                  title={card.imageTitle}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-              </div>
-
-              {/* Card Content */}
-              <div className="flex flex-1 flex-col p-4">
-                {/* Icon */}
-                <div className="text-navy transition-colors group-hover:text-gold">
-                  <ServiceIcon name={card.icon} />
+              <Link
+                to={card.href}
+                title={linkTitleFor(card.href)}
+                className="flex flex-1 flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold/60"
+              >
+                {/* Card Image Banner */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                  <img
+                    src={card.imageSrc}
+                    alt={card.title}
+                    title={card.imageTitle}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
                 </div>
 
-                {/* Title */}
-                <h3 className="mt-3 font-display text-sm font-bold text-ink sm:text-[15px]">
-                  {card.title}
-                </h3>
+                {/* Card Content */}
+                <div className="flex flex-1 flex-col p-4">
+                  {/* Icon + Title — inline row */}
+                  <div className="flex items-center gap-2.5 text-navy transition-colors group-hover:text-gold">
+                    <ServiceIcon name={card.icon} />
+                    <h3 className="font-display text-sm font-bold leading-tight text-ink transition-colors group-hover:text-gold sm:text-[15px]">
+                      {card.title}
+                    </h3>
+                  </div>
 
-                {/* Description */}
-                <p className="mt-1.5 flex-1 text-xs leading-relaxed text-muted">
-                  {card.description}
-                </p>
+                  {/* Description */}
+                  <p className="mt-3 flex-1 text-xs leading-relaxed text-muted">
+                    {card.description}
+                  </p>
 
-                {/* Circular Arrow Button at bottom right */}
-                <div className="mt-4 flex justify-end">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-gold/40 text-gold transition-all duration-300 group-hover:rotate-[-45deg] group-hover:border-gold group-hover:bg-gold group-hover:text-white">
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                    >
-                      <line x1="5" y1="12" x2="19" y2="12" />
-                      <polyline points="12 5 19 12 12 19" />
-                    </svg>
-                  </span>
+                  {/* Know More link */}
+                  <div className="mt-4 flex items-center">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink transition-colors group-hover:text-gold">
+                      Know More
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14" />
+                        <path d="m13 6 6 6-6 6" />
+                      </svg>
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+
+              {/* Enquiry arrow button */}
+              <button
+                type="button"
+                onClick={() => setEnquirySubject(card.title)}
+                aria-label={`Enquire about ${card.title}`}
+                title={`Enquire about ${card.title}`}
+                className="absolute bottom-4 right-4 z-10 flex h-7 w-7 items-center justify-center rounded-full border border-gold/40 text-gold transition-all duration-300 hover:border-gold hover:bg-gold hover:text-white group-hover:rotate-[-45deg] group-hover:border-gold group-hover:bg-gold group-hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2"
+              >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </button>
+            </div>
           ))}
         </div>
       </Container>
+
+      <EnquiryModal
+        subject={enquirySubject}
+        onClose={() => setEnquirySubject(null)}
+      />
     </section>
   )
 }

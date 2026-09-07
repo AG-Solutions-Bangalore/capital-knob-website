@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { Container } from '@/shared/components/Container'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { whyChooseBenefits } from '../constants'
@@ -118,13 +119,21 @@ export function HomeWhyChooseSection() {
               {whyChooseBenefits.map((benefit) => (
                 <div
                   key={benefit.id}
-                  className="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-3.5 rounded-xl border border-white/80 bg-white p-3 sm:p-4 shadow-xs transition-transform hover:-translate-y-0.5"
+                  className="flex flex-col sm:flex-row items-center sm:items-center text-center sm:text-left gap-2 sm:gap-3.5 lg:gap-2.5 rounded-xl border border-white/80 bg-white p-3 sm:p-4 lg:p-3 shadow-xs transition-transform hover:-translate-y-0.5"
                 >
-                  <span className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-600">
                     <BenefitIcon icon={benefit.icon} />
                   </span>
-                  <span className="text-[11px] sm:text-xs font-semibold leading-snug text-ink">
-                    {benefit.title}
+                  {/* Exactly 3 lines via explicit breaks (see BenefitItem.lines).
+                      Compact spacing + 11px at lg keeps the longest line inside
+                      the narrowest 4-col column so nothing re-wraps. */}
+                  <span className="flex min-h-[3lh] items-center justify-center text-center text-[11px] sm:justify-start sm:text-left sm:text-xs lg:text-[11px] font-semibold leading-snug text-ink">
+                    {benefit.lines.map((line, i) => (
+                      <Fragment key={line}>
+                        {i > 0 && <br />}
+                        {line}
+                      </Fragment>
+                    ))}
                   </span>
                 </div>
               ))}

@@ -1,17 +1,23 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { ROUTES } from '@/app/routes'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { Container } from './Container'
 import { Logo } from './Logo'
 
+/**
+ * Financial-solution links — every entry routes to the Solutions page
+ * with a hash that targets a specific card. The Solutions page uses that
+ * hash to scroll the matching card into view and highlight it so the
+ * user can see at a glance which solution they selected.
+ */
 const solutionLinks = [
   { label: 'Solutions Hub', href: ROUTES.solutions },
-  { label: 'Home Finance & Loans', href: ROUTES.homeFinance },
-  { label: 'Business & Working Capital', href: ROUTES.businessFinance },
-  { label: 'Real Estate & Project Finance', href: ROUTES.realEstateFinance },
-  { label: 'Private Credit & Structured Debt', href: ROUTES.privateCredit },
-  { label: 'Home Loan Balance Transfer', href: '/home-finance#balance-transfer' },
-  { label: 'Loan Against Property (LAP)', href: '/home-finance#loan-against-property' },
+  { label: 'Home Finance & Loans', href: `${ROUTES.solutions}#home-loans` },
+  { label: 'Business & Working Capital', href: `${ROUTES.solutions}#working-capital` },
+  { label: 'Real Estate & Project Finance', href: `${ROUTES.solutions}#real-estate` },
+  { label: 'Private Credit & Structured Debt', href: `${ROUTES.solutions}#private-credit` },
+  { label: 'Home Loan Balance Transfer', href: `${ROUTES.solutions}#balance-transfer` },
+  { label: 'Loan Against Property (LAP)', href: `${ROUTES.solutions}#loan-against-property` },
 ]
 
 const companyLinks = [
@@ -42,9 +48,10 @@ interface FooterProps {
   variant?: 'light' | 'dark'
 }
 
-export function Footer({ variant }: FooterProps) {
-  const location = useLocation()
-  const isDark = variant ? variant === 'dark' : location.pathname === ROUTES.contact
+export function Footer({ variant = 'light' }: FooterProps) {
+  // Default light white everywhere. Dark only when explicitly passed
+  // as <Footer variant="dark" /> — ready for next-themes later.
+  const isDark = variant === 'dark'
 
   return (
     <footer
@@ -59,7 +66,7 @@ export function Footer({ variant }: FooterProps) {
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-12">
           {/* Col 1: Brand Info & Consultation (Span 4) */}
           <div className="lg:col-span-4">
-            <Logo variant={isDark ? 'light' : 'dark'} />
+            <Logo variant={isDark ? 'light' : 'dark'} layout="horizontal" />
             <p
               className={`mt-4 max-w-sm text-sm leading-relaxed ${
                 isDark ? 'text-white/75' : 'text-muted'

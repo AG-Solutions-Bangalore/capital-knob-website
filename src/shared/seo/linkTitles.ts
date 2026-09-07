@@ -43,20 +43,29 @@ const TITLE_BY_HREF: Record<string, string> = {
   '/real-estate-finance': 'Real Estate Finance Solutions',
   '/real-estate-finance#construction': 'Construction Finance',
   '/solutions': 'Financial Solutions – CapitalKnob',
+  '/solutions#home-loans': 'Home Loan Solutions – CapitalKnob',
+  '/solutions#balance-transfer': 'Home Loan Balance Transfer – CapitalKnob',
+  '/solutions#top-up': 'Home Loan Top-Up – CapitalKnob',
+  '/solutions#construction': 'Construction Finance – CapitalKnob',
+  '/solutions#loan-against-property': 'Loan Against Property – CapitalKnob',
+  '/solutions#individuals': 'Financing Solutions for Individuals – CapitalKnob',
+  '/solutions#working-capital': 'Working Capital Finance – CapitalKnob',
+  '/solutions#real-estate': 'Real Estate Finance – CapitalKnob',
+  '/solutions#private-credit': 'Private Credit – CapitalKnob',
 
   // ── Contact / communication ─────────────────────────────────────
   'mailto:info@capitalknob.com': 'Email CapitalKnob',
   'mailto:hello@capitalknob.com': 'Email CapitalKnob',
   'tel:+919876543210': 'Call CapitalKnob',
+  'https://maps.google.com/?q=Prestige+Tech+Park,+Marathahalli,+Bengaluru':
+    'View CapitalKnob Office Location on Google Maps',
 }
 
 /**
  * Google Maps / directions link used on the Contact page. The audit
- * records the visible label "Google Maps – Prestige Tech Park" and
- * recommends the explicit office title. Any directions URL we ship
- * resolves to the same destination.
+ * recommends the explicit title: View CapitalKnob Office Location on Google Maps.
  */
-const OFFICE_LOCATION_TITLE = 'CapitalKnob Office Location – Prestige Tech Park'
+const OFFICE_LOCATION_TITLE = 'View CapitalKnob Office Location on Google Maps'
 
 /** Exact-match title lookup. */
 export function linkTitleFor(href: string | undefined | null): string | undefined {

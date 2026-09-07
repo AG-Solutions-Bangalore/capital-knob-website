@@ -2,51 +2,113 @@ import { ROUTES, type RoutePath } from '@/app/routes'
 import { cn } from '@/shared/lib/cn'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Button } from './Button'
 import { Container } from './Container'
 import { Logo } from './Logo'
 
-interface NavItem {
+/* -----------------------------------------------------------------------------
+   Navigation model
+   - A "link" is a plain top-level entry.
+   - A "group" is a top-level entry with a dropdown of child links. Children
+     currently all funnel into the Solutions page (per product spec) but each
+     keeps a unique `title` so screen readers / link titles still differentiate.
+   ----------------------------------------------------------------------------- */
+
+interface NavLinkEntry {
+  kind: 'link'
   label: string
   to: RoutePath
   title: string
 }
 
-const navItems: NavItem[] = [
-  { label: 'Home', to: ROUTES.home, title: 'CapitalKnob Home' },
+interface NavChildLink {
+  kind: 'link'
+  label: string
+  /** Full destination including the Solutions-page anchor, e.g. `/solutions#home-loans`. */
+  to: string
+  title: string
+}
+
+interface NavGroupEntry {
+  kind: 'group'
+  label: string
+  /** Top-level path used to mark the parent as "active". */
+  to: RoutePath
+  title: string
+  children: NavChildLink[]
+}
+
+type NavEntry = NavLinkEntry | NavGroupEntry
+
+const SOLUTIONS_GROUP_ID = 'solutions-group'
+
+const navEntries: NavEntry[] = [
+  { kind: 'link', label: 'Home', to: ROUTES.home, title: 'CapitalKnob Home' },
   {
-    label: 'Home Finance',
-    to: ROUTES.homeFinance,
-    title: 'Home Finance Solutions',
+    kind: 'link',
+    label: 'About Us',
+    to: ROUTES.about,
+    title: 'About Us – CapitalKnob',
   },
   {
-    label: 'Business Finance',
-    to: ROUTES.businessFinance,
-    title: 'Business Finance Solutions',
+    kind: 'group',
+    label: 'Solutions',
+    to: ROUTES.solutions,
+    title: 'Explore CapitalKnob Solutions',
+    children: [
+      {
+        kind: 'link',
+        label: 'Home Finance',
+        to: `${ROUTES.solutions}#home-loans`,
+        title: 'Home Finance Solutions – CapitalKnob',
+      },
+      {
+        kind: 'link',
+        label: 'Business Finance',
+        to: `${ROUTES.solutions}#working-capital`,
+        title: 'Business Finance Solutions – CapitalKnob',
+      },
+      {
+        kind: 'link',
+        label: 'Real Estate Finance',
+        to: `${ROUTES.solutions}#real-estate`,
+        title: 'Real Estate Finance Solutions – CapitalKnob',
+      },
+      {
+        kind: 'link',
+        label: 'Private Credit',
+        to: `${ROUTES.solutions}#private-credit`,
+        title: 'Private Credit Solutions – CapitalKnob',
+      },
+    ],
   },
   {
-    label: 'Real Estate Finance',
-    to: ROUTES.realEstateFinance,
-    title: 'Real Estate Finance Solutions',
+    kind: 'link',
+    label: 'Contact Us',
+    to: ROUTES.contact,
+    title: 'Contact CapitalKnob',
   },
-  {
-    label: 'Private Credit',
-    to: ROUTES.privateCredit,
-    title: 'Private Credit Solutions',
-  },
-  { label: 'About Us', to: ROUTES.about, title: 'About Us – CapitalKnob' },
 ]
 
 export function Header() {
   const [open, setOpen] = useState(false)
+  const [openGroup, setOpenGroup] = useState<string | null>(null)
+  const [mobileExpandedGroup, setMobileExpandedGroup] = useState<string | null>(
+    null,
+  )
   const location = useLocation()
   const prefersReducedMotion = useReducedMotion()
+  // Close-delay timer keeps the panel open while the user moves the cursor
+  // from the trigger to the dropdown body.
+  const closeTimerRef = useRef<number | null>(null)
 
   // Close the sidebar on every route change.
   useEffect(() => {
     setOpen(false)
+    setOpenGroup(null)
+    setMobileExpandedGroup(null)
   }, [location.pathname])
 
   // Lock body scroll while the sidebar is open and restore on close/unmount.
@@ -54,7 +116,6 @@ export function Header() {
     if (!open) return
     const previousOverflow = document.body.style.overflow
     const previousPaddingRight = document.body.style.paddingRight
-    // Compensate for the disappearing scrollbar so the page doesn't jump.
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
     document.body.style.overflow = 'hidden'
     if (scrollbarWidth > 0) {
@@ -66,65 +127,76 @@ export function Header() {
     }
   }, [open])
 
-  // Close on Escape.
+  // Close on Escape — desktop dropdown OR mobile sidebar.
   useEffect(() => {
-    if (!open) return
     function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') setOpen(false)
+      if (e.key !== 'Escape') return
+      if (open) setOpen(false)
+      if (openGroup) setOpenGroup(null)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open])
+  }, [open, openGroup])
+
+  // Cleanup any pending close-timer on unmount.
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) {
+        window.clearTimeout(closeTimerRef.current)
+      }
+    }
+  }, [])
+
+  const scheduleClose = () => {
+    if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
+    closeTimerRef.current = window.setTimeout(() => setOpenGroup(null), 120)
+  }
+  const cancelClose = () => {
+    if (closeTimerRef.current) {
+      window.clearTimeout(closeTimerRef.current)
+      closeTimerRef.current = null
+    }
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-white text-ink shadow-soft">
       <Container size="4xl">
-        <div className="flex h-20 items-center justify-between gap-6">
+        <div className="flex h-20 items-center justify-between gap-4 lg:gap-6">
           {/* Logo */}
           <Logo variant="dark" />
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex">
-            <ul className="flex items-center gap-6 xl:gap-8 text-sm font-medium text-ink-soft">
-              {navItems.map((item) => (
-                <li key={item.to} className="relative">
-                  <NavLink
-                    to={item.to}
-                    title={item.title}
-                    end={item.to === ROUTES.home}
-                    className={({ isActive }) =>
-                      cn(
-                        'relative py-2 transition-colors hover:text-navy',
-                        isActive
-                          ? 'font-semibold text-navy after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-navy'
-                          : 'text-ink-soft',
-                      )
-                    }
-                  >
-                    {item.label}
-                  </NavLink>
-                </li>
-              ))}
+            <ul className="flex items-center gap-4 xl:gap-8 text-[13px] xl:text-sm font-medium text-ink-soft">
+              {navEntries.map((entry) =>
+                entry.kind === 'link' ? (
+                  <DesktopTopLink
+                    key={`link-${entry.label}`}
+                    entry={entry}
+                  />
+                ) : (
+                  <DesktopDropdown
+                    key={`group-${entry.label}`}
+                    entry={entry}
+                    openGroup={openGroup}
+                    setOpenGroup={setOpenGroup}
+                    scheduleClose={scheduleClose}
+                    cancelClose={cancelClose}
+                  />
+                ),
+              )}
             </ul>
           </nav>
 
           {/* Right cluster */}
-          <div className="hidden items-center gap-5 xl:gap-6 lg:flex">
-            <a
-              href="tel:+919876543210"
-              title={linkTitleFor('tel:+919876543210')}
-              className="flex items-center gap-2 text-sm font-medium text-ink-soft hover:text-navy"
-            >
-              <PhoneIcon />
-              +91 98765 43210
-            </a>
+          <div className="hidden items-center gap-4 lg:flex xl:gap-6">
             <Link
               to={ROUTES.contact}
               title={linkTitleFor(ROUTES.contact)}
               className="group"
             >
               <Button variant="navy" size="md" className="px-5">
-                Get a Callback
+                <span className="whitespace-nowrap">Get a Callback</span>
                 <ArrowRightIcon className="transition-transform duration-300 group-hover:-rotate-45" />
               </Button>
             </Link>
@@ -224,9 +296,9 @@ export function Header() {
                   Explore
                 </p>
                 <ul className="mt-3 flex flex-col gap-1 text-sm font-medium">
-                  {navItems.map((item, idx) => (
+                  {navEntries.map((entry, idx) => (
                     <motion.li
-                      key={item.to}
+                      key={entry.kind === 'group' ? `m-group-${entry.label}` : `m-link-${entry.label}`}
                       initial={
                         prefersReducedMotion
                           ? { opacity: 0 }
@@ -239,46 +311,48 @@ export function Header() {
                         ease: [0.16, 1, 0.3, 1],
                       }}
                     >
-                      <NavLink
-                        to={item.to}
-                        title={item.title}
-                        end={item.to === ROUTES.home}
-                        onClick={() => setOpen(false)}
-                        className={({ isActive }) =>
-                          cn(
-                            'flex items-center justify-between rounded-button px-3 py-3 transition-colors',
-                            isActive
-                              ? 'bg-navy text-white shadow-soft'
-                              : 'text-ink hover:bg-line-soft',
-                          )
-                        }
-                      >
-                        <span>{item.label}</span>
-                        <ArrowRightIcon
-                          className={cn(
-                            'h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5',
-                          )}
+                      {entry.kind === 'link' ? (
+                        <NavLink
+                          to={entry.to}
+                          title={entry.title}
+                          end={entry.to === ROUTES.home}
+                          onClick={() => setOpen(false)}
+                          className={({ isActive }) =>
+                            cn(
+                              'flex items-center justify-between rounded-button px-3 py-3 transition-colors',
+                              isActive
+                                ? 'bg-navy text-white shadow-soft'
+                                : 'text-ink hover:bg-line-soft',
+                            )
+                          }
+                        >
+                          <span>{entry.label}</span>
+                          <ArrowRightIcon className="h-3.5 w-3.5" />
+                        </NavLink>
+                      ) : (
+                        <MobileGroup
+                          entry={entry}
+                          expanded={mobileExpandedGroup === entry.label}
+                          onToggle={() =>
+                            setMobileExpandedGroup((prev) =>
+                              prev === entry.label ? null : entry.label,
+                            )
+                          }
+                          onPick={() => setOpen(false)}
                         />
-                      </NavLink>
+                      )}
                     </motion.li>
                   ))}
                 </ul>
               </nav>
 
-              {/* Sidebar footer: phone + contact CTA */}
+              {/* Sidebar footer: contact CTA */}
               <div className="border-t border-line bg-[#f4f7fa] px-5 py-5">
-                <a
-                  href="tel:+919876543210"
-                  title={linkTitleFor('tel:+919876543210')}
-                  className="flex items-center gap-2 text-sm font-semibold text-ink transition-colors hover:text-navy"
-                >
-                  <PhoneIcon /> +91 98765 43210
-                </a>
                 <Link
                   to={ROUTES.contact}
                   title={linkTitleFor(ROUTES.contact)}
                   onClick={() => setOpen(false)}
-                  className="mt-4 block"
+                  className="block"
                 >
                   <Button variant="gold" className="w-full">
                     Get a Callback
@@ -294,15 +368,250 @@ export function Header() {
   )
 }
 
-/* -------------------- inline icons -------------------- */
+/* -------------------- Desktop subcomponents -------------------- */
 
-function PhoneIcon() {
+function DesktopTopLink({ entry }: { entry: NavLinkEntry }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z" />
-    </svg>
+    <li className="relative">
+      <NavLink
+        to={entry.to}
+        title={entry.title}
+        end={entry.to === ROUTES.home}
+        className={({ isActive }) =>
+          cn(
+            'relative whitespace-nowrap py-2 my-3 transition-colors hover:text-navy',
+            isActive
+              ? 'font-semibold text-navy after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-navy'
+              : 'text-ink-soft',
+          )
+        }
+      >
+        {entry.label}
+      </NavLink>
+    </li>
   )
 }
+
+function DesktopDropdown({
+  entry,
+  openGroup,
+  setOpenGroup,
+  scheduleClose,
+  cancelClose,
+}: {
+  entry: NavGroupEntry
+  openGroup: string | null
+  setOpenGroup: (v: string | null) => void
+  scheduleClose: () => void
+  cancelClose: () => void
+}) {
+  const isOpen = openGroup === entry.label
+  const panelId = useId()
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  // Mark this group as active when user is on the Solutions route, regardless
+  // of whether the dropdown is open.
+  const isOnGroupRoute = useOnRoute(entry.to)
+
+  return (
+    <li
+      className="relative"
+      onMouseEnter={() => {
+        cancelClose()
+        setOpenGroup(entry.label)
+      }}
+      onMouseLeave={scheduleClose}
+    >
+      <button
+        ref={buttonRef}
+        type="button"
+        aria-haspopup="true"
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        onClick={() => setOpenGroup(isOpen ? null : entry.label)}
+        onFocus={() => setOpenGroup(entry.label)}
+        className={cn(
+          'relative flex items-center gap-1 whitespace-nowrap py-2 my-4 transition-colors hover:text-navy',
+          isOpen || isOnGroupRoute
+            ? 'font-semibold text-navy'
+            : 'text-ink-soft',
+          // The same bottom-underline indicator used by plain links — only
+          // shows when this group is active and the dropdown is NOT open (so
+          // we don't double up visually).
+          isOnGroupRoute && !isOpen
+            ? 'after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-navy'
+            : '',
+        )}
+      >
+        {entry.label}
+        <ChevronDownIcon
+          className={cn(
+            'h-3 w-3 transition-transform duration-200',
+            isOpen && 'rotate-180',
+          )}
+        />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            id={panelId}
+            role="menu"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
+            // `left-1/2 -translate-x-1/2` centers the panel under the trigger
+            // so the dropdown reads as "belonging to" the Solutions label,
+            // rather than being anchored to its left edge.
+            className="absolute left-1/2 top-full z-50 mt-2 min-w-60 -translate-x-1/2 rounded-button border border-line bg-white p-1.5 shadow-card"
+            onMouseEnter={cancelClose}
+            onMouseLeave={scheduleClose}
+          >
+            <ul className="flex gap-2 flex-col">
+              {entry.children.map((child) => (
+                <SolutionChildItem
+                  key={`${entry.label}-${child.label}`}
+                  child={child}
+                  variant="desktop"
+                  onNavigate={() => setOpenGroup(null)}
+                />
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </li>
+  )
+}
+
+/** Returns true when the current pathname matches `to` (or starts with it
+ *  for non-home paths). Used to keep the dropdown trigger styled as active. */
+function useOnRoute(to: RoutePath): boolean {
+  const { pathname } = useLocation()
+  if (to === ROUTES.home) return pathname === '/'
+  return pathname === to || pathname.startsWith(`${to}/`)
+}
+
+/**
+ * Solutions dropdown item — links to the Solutions page with a hash anchor
+ * (e.g. `/solutions#home-loans`) so the page scrolls to and highlights the
+ * matching card. `NavLink` ignores the hash when matching, which would mark
+ * every item active at once, so active state is compared manually against
+ * `pathname + hash`.
+ */
+function SolutionChildItem({
+  child,
+  variant,
+  onNavigate,
+}: {
+  child: NavChildLink
+  variant: 'desktop' | 'mobile'
+  onNavigate: () => void
+}) {
+  const { pathname, hash } = useLocation()
+  const isActive = `${pathname}${hash}` === child.to
+  const desktop = variant === 'desktop'
+
+  return (
+    <li role={desktop ? 'none' : undefined}>
+      <Link
+        to={child.to}
+        title={child.title}
+        role={desktop ? 'menuitem' : undefined}
+        onClick={onNavigate}
+        aria-current={isActive ? 'true' : undefined}
+        className={cn(
+          desktop
+            ? 'flex items-center group justify-between gap-3 rounded-md px-3 py-2.5 text-[13px] transition-colors'
+            : 'flex items-center justify-between rounded-button px-3 py-2.5 text-[13px] transition-colors',
+          isActive
+            ? 'bg-line-soft font-semibold text-navy'
+            : desktop
+              ? 'text-ink hover:bg-line-soft hover:text-navy'
+              : 'text-ink-soft hover:bg-line-soft hover:text-ink',
+        )}
+      >
+        <span>{child.label}</span>
+        <ArrowRightIcon
+          className={
+            desktop
+              ? 'h-3 w-3 opacity-60 transition-transform duration-300 group-hover:-translate-x-0.5 group-hover:-rotate-45'
+              : 'h-3 w-3 opacity-50'
+          }
+        />
+      </Link>
+    </li>
+  )
+}
+
+/* -------------------- Mobile subcomponents -------------------- */
+
+function MobileGroup({
+  entry,
+  expanded,
+  onToggle,
+  onPick,
+}: {
+  entry: NavGroupEntry
+  expanded: boolean
+  onToggle: () => void
+  onPick: () => void
+}) {
+  const isOnGroupRoute = useOnRoute(entry.to)
+
+  return (
+    <div>
+      <button
+        type="button"
+        aria-expanded={expanded}
+        aria-controls={SOLUTIONS_GROUP_ID}
+        title={entry.title}
+        onClick={onToggle}
+        className={cn(
+          'flex w-full items-center justify-between rounded-button px-3 py-3 text-left transition-colors',
+          isOnGroupRoute
+            ? 'bg-navy/5 font-semibold text-navy'
+            : 'text-ink hover:bg-line-soft',
+        )}
+      >
+        <span>{entry.label}</span>
+        <ChevronDownIcon
+          className={cn(
+            'h-3.5 w-3.5 transition-transform duration-200',
+            expanded && 'rotate-180',
+          )}
+        />
+      </button>
+
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.ul
+            id={SOLUTIONS_GROUP_ID}
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="overflow-hidden pl-2"
+          >
+            <div className="ml-3 mt-1 flex flex-col gap-1 border-l border-line pl-3">
+              {entry.children.map((child) => (
+                <SolutionChildItem
+                  key={`${entry.label}-m-${child.label}`}
+                  child={child}
+                  variant="mobile"
+                  onNavigate={onPick}
+                />
+              ))}
+            </div>
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+/* -------------------- inline icons -------------------- */
 
 function ArrowRightIcon({ className }: { className?: string }) {
   return (
@@ -320,6 +629,25 @@ function ArrowRightIcon({ className }: { className?: string }) {
     >
       <line x1="5" y1="12" x2="19" y2="12" />
       <polyline points="12 5 19 12 12 19" />
+    </svg>
+  )
+}
+
+function ChevronDownIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={className}
+    >
+      <polyline points="6 9 12 15 18 9" />
     </svg>
   )
 }

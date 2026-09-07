@@ -1,24 +1,85 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Fonts Preconnect & Optimized Loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap">
+    </noscript>
+
+    <!-- Core SEO Meta Tags -->
     <title>CapitalKnob – Unlock Your Capital Potential</title>
-    <meta
-      name="description"
-      content="CapitalKnob helps businesses unlock their capital potential with smart financial solutions, funding support, and strategic capital guidance."
-    />
-    <meta name="robots" content="index, follow" />
-    <meta name="author" content="CapitalKnob" />
-    <meta name="publisher" content="CapitalKnob" />
-    <link rel="canonical" href="https://ck.agsdemo.in/" />
+    <meta name="description" content="CapitalKnob helps businesses unlock their capital potential with smart financial solutions, funding support, and strategic capital guidance.">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="CapitalKnob">
+    <meta name="publisher" content="CapitalKnob">
+    <link rel="canonical" href="https://ck.agsdemo.in/">
+
+    <!-- Open Graph & Social Cards -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="CapitalKnob">
+    <meta property="og:title" content="CapitalKnob – Unlock Your Capital Potential">
+    <meta property="og:description" content="CapitalKnob helps businesses unlock their capital potential with smart financial solutions, funding support, and strategic capital guidance.">
+    <meta property="og:url" content="https://ck.agsdemo.in/">
+    <meta property="og:image" content="https://ck.agsdemo.in/favicon.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CapitalKnob – Unlock Your Capital Potential">
+    <meta name="twitter:description" content="CapitalKnob helps businesses unlock their capital potential with smart financial solutions, funding support, and strategic capital guidance.">
+    <meta name="twitter:image" content="https://ck.agsdemo.in/favicon.png">
+
+    <!-- Structured Data (JSON-LD) for Search Engines & Agentic AI Crawlers -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "FinancialService",
+          "@id": "https://ck.agsdemo.in/#organization",
+          "name": "CapitalKnob",
+          "url": "https://ck.agsdemo.in/",
+          "logo": "https://ck.agsdemo.in/favicon.png",
+          "image": "https://ck.agsdemo.in/favicon.png",
+          "description": "CapitalKnob helps businesses and individuals unlock their capital potential with smart financial solutions, funding support, and strategic capital guidance.",
+          "telephone": "+91-9876543210",
+          "email": "hello@capitalknob.com",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Prestige Tech Park, 5th Floor, Outer Ring Road, Marathahalli",
+            "addressLocality": "Bengaluru",
+            "addressRegion": "Karnataka",
+            "postalCode": "560037",
+            "addressCountry": "IN"
+          },
+          "priceRange": "$$",
+          "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            "opens": "09:30",
+            "closes": "18:30"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://ck.agsdemo.in/#website",
+          "url": "https://ck.agsdemo.in/",
+          "name": "CapitalKnob",
+          "description": "Unlock Your Capital Potential",
+          "publisher": {
+            "@id": "https://ck.agsdemo.in/#organization"
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

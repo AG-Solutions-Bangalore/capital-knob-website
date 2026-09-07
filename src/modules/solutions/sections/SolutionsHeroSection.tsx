@@ -30,7 +30,7 @@ export function SolutionsHeroSection() {
     <section className="relative overflow-hidden bg-navy text-white">
       {/* High-fidelity architectural skyline backdrop */}
       <img
-        src="/images/solutions/hero-top-banner.png"
+        src="/images/solutions/hero-top-banner.webp"
         alt="CapitalKnob Skyline"
         className="absolute inset-0 h-full w-full object-cover object-center"
       />

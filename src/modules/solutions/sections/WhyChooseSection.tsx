@@ -6,6 +6,7 @@
 import { Container } from '@/shared/components/Container'
 import { iconRegistry } from '../components/icons'
 import { whyChooseFeatures } from '../constants'
+import { Link } from 'react-router-dom'
 
 export function WhyChooseSection() {
   return (
@@ -29,7 +30,7 @@ export function WhyChooseSection() {
                     <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-navy/15 bg-white text-navy">
                       <Icon size={22} />
                     </span>
-                    <span className="mt-4 text-sm font-medium leading-snug text-ink">
+                    <span className="mt-4 flex min-h-[3lh] items-start text-sm font-medium leading-snug text-ink">
                       {feat.title}
                     </span>
                   </div>
@@ -58,8 +59,8 @@ export function WhyChooseSection() {
                 <p className="mt-3 text-sm text-white/75">
                   Speak with our experts and explore the best financing options for your goals.
                 </p>
-                <a
-                  href="#contact"
+                <Link
+                  to="/contact"
                   className="mt-6 inline-flex items-center gap-2 rounded-button bg-gold px-5 py-3 text-sm font-semibold text-white shadow-gold transition-colors hover:bg-gold-hover"
                 >
                   Get a Free Consultation
@@ -77,7 +78,7 @@ export function WhyChooseSection() {
                     <path d="M5 12h14" />
                     <path d="m13 6 6 6-6 6" />
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
           </div>

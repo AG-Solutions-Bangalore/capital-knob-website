@@ -1,6 +1,8 @@
 @import "lenis/dist/lenis.css";
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* -----------------------------------------------------------------------------
    CapitalKnob — Tailwind CSS v4 theme tokens
    All design tokens (colors, fonts, radii, shadows) are declared as CSS
@@ -141,6 +143,31 @@ button,
   }
   to {
     width: 100%;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   solutionPulse — one-shot gold glow that draws the eye to the solution
+   card the user just clicked in the footer. Keeps a persistent gold ring
+   on the card after the pulse settles.
+   ----------------------------------------------------------------------------- */
+@keyframes solutionPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(201, 169, 97, 0.55),
+                0 2px 4px rgba(15, 23, 42, 0.05),
+                0 8px 24px rgba(15, 23, 42, 0.08);
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    box-shadow: 0 0 0 12px rgba(201, 169, 97, 0.15),
+                0 12px 32px rgba(201, 169, 97, 0.35);
+    transform: translateY(-4px) scale(1.015);
+  }
+  100% {
+    box-shadow: 0 0 0 4px rgba(201, 169, 97, 0.08),
+                0 2px 4px rgba(15, 23, 42, 0.05),
+                0 8px 24px rgba(15, 23, 42, 0.08);
+    transform: translateY(0) scale(1);
   }
 }
 

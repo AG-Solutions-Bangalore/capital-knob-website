@@ -6,7 +6,6 @@
  */
 
 import { Container } from '@/shared/components/Container'
-import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { aboutHero } from '../constants'
 
 export function AboutHero() {
@@ -37,27 +36,7 @@ export function AboutHero() {
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-slate-600 md:text-base">
               {aboutHero.description}
             </p>
-            <a
-              href={aboutHero.ctaHref}
-              title={linkTitleFor(aboutHero.ctaHref)}
-              className="mt-8 inline-flex min-h-[48px] items-center justify-center gap-2 rounded-button bg-navy px-6 py-3 text-sm font-semibold text-white shadow-card transition-colors hover:bg-navy-soft active:scale-[0.98]"
-            >
-              {aboutHero.ctaLabel}
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M5 12h14" />
-                <path d="m13 6 6 6-6 6" />
-              </svg>
-            </a>
+           
           </div>
 
           {/* Right area allows the office terrace and glass partitions to display prominently */}

@@ -42,6 +42,8 @@ export const audienceTabs: { id: AudienceTab; label: string }[] = [
    INDIVIDUALS — Financing Solutions
    ----------------------------------------------------------------------------- */
 export interface ServiceCard {
+  /** Unique DOM id used for in-page anchoring and highlight detection. */
+  id: string
   title: string
   description: string
   iconKey: IconKey
@@ -52,43 +54,48 @@ export interface ServiceCard {
 
 export const individualsCards: ServiceCard[] = [
   {
+    id: 'home-loans',
     title: 'Home Loans',
     description: 'Turn your dream home into reality with flexible financing options.',
     iconKey: 'home',
     art: 'homeLoans',
-    imageSrc: '/images/solutions/card_home_loans.jpg',
+    imageSrc: '/images/solutions/card_home_loans.webp',
     href: '/home-finance#home-loans',
   },
   {
+    id: 'balance-transfer',
     title: 'Home Loan Balance Transfer',
     description: 'Lower your interest rate. Save more on your existing home loan.',
     iconKey: 'refresh',
     art: 'balanceTransfer',
-    imageSrc: '/images/solutions/card_balance_transfer.jpg',
+    imageSrc: '/images/solutions/card_balance_transfer.webp',
     href: '/home-finance#balance-transfer',
   },
   {
+    id: 'top-up',
     title: 'Home Loan Top-Up',
     description: 'Extra funds for bigger horizons — education, renovation or personal needs.',
     iconKey: 'stack',
     art: 'topUp',
-    imageSrc: '/images/solutions/card_top_up.jpg',
+    imageSrc: '/images/solutions/card_top_up.webp',
     href: '/home-finance#top-up',
   },
   {
+    id: 'construction',
     title: 'Construction Finance',
     description: 'Build your vision, with the right support at every stage.',
     iconKey: 'crane',
     art: 'construction',
-    imageSrc: '/images/solutions/card_construction.jpg',
+    imageSrc: '/images/solutions/card_construction.webp',
     href: '/real-estate-finance#construction',
   },
   {
+    id: 'loan-against-property',
     title: 'Loan Against Property',
     description: 'Unlock the value in your property for business or personal needs.',
     iconKey: 'document',
     art: 'loanAgainst',
-    imageSrc: '/images/solutions/card_loan_against.jpg',
+    imageSrc: '/images/solutions/card_loan_against.webp',
     href: '/home-finance#loan-against-property',
   },
 ]
@@ -98,35 +105,39 @@ export const individualsCards: ServiceCard[] = [
    ----------------------------------------------------------------------------- */
 export const businessesCards: ServiceCard[] = [
   {
+    id: 'working-capital',
     title: 'Working Capital Finance',
     description: 'Support your day-to-day operations and business growth.',
     iconKey: 'chart',
     art: 'workingCapital',
-    imageSrc: '/images/solutions/card_working_capital.jpg',
+    imageSrc: '/images/solutions/card_working_capital.webp',
     href: '/business-finance#working-capital',
   },
   {
+    id: 'business-loans',
     title: 'Business Loans',
     description: 'Flexible funding based on your business profile and goals.',
     iconKey: 'briefcase',
     art: 'businessLoans',
-    imageSrc: '/images/solutions/card_business_loans.jpg',
+    imageSrc: '/images/solutions/card_business_loans.webp',
     href: '/business-finance#business-loans',
   },
   {
+    id: 'secured-business-loans',
     title: 'Secured Business Loans',
     description: 'Access larger funding with eligible collateral.',
     iconKey: 'shield',
     art: 'secured',
-    imageSrc: '/images/solutions/card_secured_loans.jpg',
+    imageSrc: '/images/solutions/card_secured_loans.webp',
     href: '/business-finance#secured-business-loans',
   },
   {
+    id: 'expansion',
     title: 'Business Expansion Funding',
     description: 'Fuel your next phase of growth.',
     iconKey: 'trendUp',
     art: 'expansion',
-    imageSrc: '/images/solutions/card_expansion.jpg',
+    imageSrc: '/images/solutions/card_expansion.webp',
     href: '/business-finance#expansion',
   },
 ]
@@ -136,35 +147,39 @@ export const businessesCards: ServiceCard[] = [
    ----------------------------------------------------------------------------- */
 export const otherCapitalCards: ServiceCard[] = [
   {
+    id: 'real-estate',
     title: 'Real Estate Finance',
     description: 'Land acquisition, project finance, construction and development funding.',
     iconKey: 'building',
     art: 'realEstate',
-    imageSrc: '/images/solutions/card_real_estate.jpg',
+    imageSrc: '/images/solutions/card_real_estate.webp',
     href: '/real-estate-finance',
   },
   {
+    id: 'private-credit',
     title: 'Private Credit',
     description: 'Flexible, structured capital for tailored requirements.',
     iconKey: 'handshake',
     art: 'privateCredit',
-    imageSrc: '/images/solutions/card_private_credit.jpg',
+    imageSrc: '/images/solutions/card_private_credit.webp',
     href: '/private-credit',
   },
   {
+    id: 'growth-capital',
     title: 'Growth Capital',
     description: 'Capital for scaling businesses and new opportunities.',
     iconKey: 'plant',
     art: 'growthCapital',
-    imageSrc: '/images/solutions/card_growth_capital.jpg',
+    imageSrc: '/images/solutions/card_growth_capital.webp',
     href: '/business-finance',
   },
   {
+    id: 'capital-connect',
     title: 'Capital Connect',
     description: 'Connect with the right lenders, investors and financial institutions.',
     iconKey: 'network',
     art: 'capitalConnect',
-    imageSrc: '/images/solutions/card_capital_connect.jpg',
+    imageSrc: '/images/solutions/card_capital_connect.webp',
     href: '/contact',
   },
 ]

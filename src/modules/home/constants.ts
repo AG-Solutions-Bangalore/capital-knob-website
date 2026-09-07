@@ -16,7 +16,13 @@ export interface LendingPartner {
 
 export interface BenefitItem {
   id: string
-  title: string
+  /**
+   * Exactly 3 pre-split lines — rendered with <br /> so every card shows
+   * precisely 3 lines at every viewport width. Natural word-wrap can never
+   * guarantee this (narrow screens wrap to 4+, wide screens collapse to 2).
+   * Keep each line ≤ 13 chars so nothing re-wraps in the narrowest column.
+   */
+  lines: [string, string, string]
   icon: 'assessment' | 'rate' | 'eligibility' | 'comparison' | 'financial' | 'connect' | 'coordination' | 'closure'
 }
 
@@ -63,7 +69,7 @@ export const heroSlides: HeroSlide[] = [
     tagline: 'Compare. Plan. Save. Own.',
     description:
       'Explore the right home finance solution with expert guidance and access to multiple lenders — all in one place.',
-    imageSrc: '/images/home/hero_villa.jpg',
+    imageSrc: '/images/home/hero_villa.webp',
     imageAlt: 'Luxury modern villa at dusk',
     imageTitle: 'Luxury Modern Villa – CapitalKnob',
     primaryCta: {
@@ -84,7 +90,7 @@ export const heroSlides: HeroSlide[] = [
     tagline: 'Fast. Flexible. Custom-Built.',
     description:
       'Unlock working capital, machinery financing, and customized credit lines tailored to accelerate your business growth.',
-    imageSrc: '/images/solutions/hero_skyline.jpg',
+    imageSrc: '/images/solutions/hero_skyline.webp',
     imageAlt: 'Modern city financial towers and business hub',
     imageTitle: 'Modern City Financial Hub – CapitalKnob',
     primaryCta: {
@@ -105,7 +111,7 @@ export const heroSlides: HeroSlide[] = [
     tagline: 'Higher Value. Lower EMI.',
     description:
       'Leverage your residential or commercial property to unlock high-value liquidity with competitive interest rates and extended tenures.',
-    imageSrc: '/images/home/card_loan_property.jpg',
+    imageSrc: '/images/home/card_loan_property.webp',
     imageAlt: 'Premium architectural real estate building',
     imageTitle: 'Premium Real Estate Loan Property – CapitalKnob',
     primaryCta: {
@@ -126,7 +132,7 @@ export const heroSlides: HeroSlide[] = [
     tagline: 'Structured. Scalable. Certain.',
     description:
       'End-to-end capital solutions for land acquisition, builder construction finance, and commercial property development.',
-    imageSrc: '/images/home/cta_skyline.jpg',
+    imageSrc: '/images/home/cta_skyline.webp',
     imageAlt: 'Metropolitan skyline at twilight with modern architecture',
     imageTitle: 'Metropolitan Skyline – CapitalKnob',
     primaryCta: {
@@ -185,97 +191,100 @@ export const individualSolutions: HomeCard[] = [
     id: 'home-loans',
     title: 'Home Loans',
     description: 'Turn your dream home into reality.',
-    imageSrc: '/images/home/card_home_loans.jpg',
+    imageSrc: '/images/home/card_home_loans.webp',
     imageTitle: 'Home Loans – CapitalKnob',
     icon: 'home',
-    href: '/home-finance#home-loans',
+    // "Know More" lands on the Solutions page and highlights this card.
+    href: '/solutions#home-loans',
   },
   {
     id: 'balance-transfer',
     title: 'Home Loan Balance Transfer',
     description: 'Lower your interest rate. Save more.',
-    imageSrc: '/images/home/card_balance_transfer.jpg',
+    imageSrc: '/images/home/card_balance_transfer.webp',
     imageTitle: 'Home Loan Balance Transfer – CapitalKnob',
     icon: 'refresh',
-    href: '/home-finance#balance-transfer',
+    href: '/solutions#balance-transfer',
   },
   {
     id: 'top-up',
     title: 'Home Loan Top-Up',
     description: 'Extra funds for bigger horizons.',
-    imageSrc: '/images/home/card_home_top_up.jpg',
+    imageSrc: '/images/home/card_home_top_up.webp',
     imageTitle: 'Home Loan Top-Up – CapitalKnob',
     icon: 'stack',
-    href: '/home-finance#top-up',
+    href: '/solutions#top-up',
   },
   {
     id: 'construction',
     title: 'Construction Finance',
     description: 'Build your vision, with the right support.',
-    imageSrc: '/images/home/card_construction.jpg',
+    imageSrc: '/images/home/card_construction.webp',
     imageTitle: 'Construction Finance – CapitalKnob',
     icon: 'crane',
-    href: '/real-estate-finance#construction',
+    href: '/solutions#construction',
   },
   {
     id: 'renovation',
     title: 'Home Renovation Finance',
     description: 'Upgrade to a better tomorrow.',
-    imageSrc: '/images/home/card_renovation.jpg',
+    imageSrc: '/images/home/card_renovation.webp',
     imageTitle: 'Home Renovation Finance – CapitalKnob',
     icon: 'tools',
-    href: '/home-finance#renovation',
+    // No dedicated renovation card on the Solutions page — scroll to the
+    // individuals grid instead of highlighting the wrong card.
+    href: '/solutions#individuals',
   },
   {
     id: 'loan-against-property',
     title: 'Loan Against Property',
     description: 'Unlock the value in your property.',
-    imageSrc: '/images/home/card_loan_property.jpg',
+    imageSrc: '/images/home/card_loan_property.webp',
     imageTitle: 'Loan Against Property – CapitalKnob',
     icon: 'document',
-    href: '/business-finance#loan-against-property',
+    href: '/solutions#loan-against-property',
   },
 ]
 
 export const whyChooseBenefits: BenefitItem[] = [
   {
     id: 'b1',
-    title: 'Requirement-based financing assessment',
+    lines: ['Based on', 'your needs', 'assessment'],
     icon: 'assessment',
   },
   {
     id: 'b2',
-    title: 'Best competitive rate of interest',
+    lines: ['Best', 'competitive', 'interest rate'],
     icon: 'rate',
   },
   {
     id: 'b3',
-    title: 'Financial & eligibility evaluation',
+    lines: ['Financial &', 'eligibility', 'evaluation'],
     icon: 'eligibility',
   },
   {
     id: 'b4',
-    title: 'Comparison of potential financing pathways',
+    lines: ['Compare', 'financing', 'options'],
     icon: 'comparison',
   },
   {
     id: 'b5',
-    title: 'Support in preparing financial information',
+    lines: ['Help with', 'financial', 'documents'],
     icon: 'financial',
   },
   {
     id: 'b6',
-    title: 'Lender and financing-source connect',
+    lines: ['Connect', 'with right', 'lenders'],
     icon: 'connect',
   },
   {
     id: 'b7',
-    title: 'Transaction coordination support',
+    lines: ['Transaction', 'coordination', 'support'],
     icon: 'coordination',
   },
   {
     id: 'b8',
-    title: 'End-to-end guidance till closure',
+    lines: ['End-to-end', 'guidance till', 'closure'],
     icon: 'closure',
   },
 ]
@@ -320,11 +329,66 @@ export const homeStats: HomeStat[] = [
   { value: '4.8/5', label: 'Customer Satisfaction' },
 ]
 
-export const homeTestimonial = {
-  quote:
-    'CapitalKnob made our home loan journey so smooth. Great guidance, transparent process and genuine support throughout!',
-  name: 'Rohan & Priya Mehta',
-  role: 'Home Loan Customer',
-  avatar: '/images/home/testimonial_couple.jpg',
-  avatarTitle: 'Rohan and Priya Mehta – CapitalKnob Testimonial',
+export interface HomeTestimonial {
+  quote: string
+  name: string
+  role: string
+  /**
+   * Optional photo. When omitted, the carousel renders an initials avatar so
+   * the loop looks varied without needing a unique portrait per testimonial.
+   */
+  avatar?: string
+  avatarTitle?: string
+  /**
+   * Visual tone used for the initials avatar background — keeps the carousel
+   * varied without requiring a portrait per entry.
+   */
+  tone?: 'navy' | 'gold' | 'brandBlue' | 'slate'
 }
+
+export const homeTestimonials: HomeTestimonial[] = [
+  {
+    quote:
+      'CapitalKnob made our home loan journey so smooth. Great guidance, transparent process and genuine support throughout!',
+    name: 'Rohan & Priya Mehta',
+    role: 'Home Loan Customer',
+    avatar: '/images/home/testimonial_couple.webp',
+    avatarTitle: 'Rohan and Priya Mehta – CapitalKnob Testimonial',
+    tone: 'navy',
+  },
+  {
+    quote:
+      'Our business needed working capital fast. CapitalKnob compared multiple lenders and got us the best terms within days.',
+    name: 'Anita Deshpande',
+    role: 'Founder, BrightCart Retail',
+    tone: 'brandBlue',
+  },
+  {
+    quote:
+      'The team guided me through every step of my balance transfer. My EMI dropped noticeably and the process was completely hassle-free.',
+    name: 'Vikram Shah',
+    role: 'IT Professional, Pune',
+    tone: 'gold',
+  },
+  {
+    quote:
+      'Construction finance felt overwhelming until CapitalKnob stepped in. Their lender network and on-ground coordination were outstanding.',
+    name: 'Sandeep Iyer',
+    role: 'Real Estate Developer, Bengaluru',
+    tone: 'navy',
+  },
+  {
+    quote:
+      'I appreciated how transparent they were — no hidden charges, no pushy upsells. Just honest advice for my home loan top-up.',
+    name: 'Meera Krishnan',
+    role: 'Doctor, Chennai',
+    tone: 'slate',
+  },
+  {
+    quote:
+      'From eligibility check to disbursement, the experience felt premium. CapitalKnob truly partners with you for the long run.',
+    name: 'Arjun Kapoor',
+    role: 'Entrepreneur, Mumbai',
+    tone: 'brandBlue',
+  },
+]
