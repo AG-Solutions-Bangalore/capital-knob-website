@@ -172,6 +172,145 @@ button,
 }
 
 /* -----------------------------------------------------------------------------
+   SectionReveal — zero-JS reveal (replaces framer-motion).
+   Children start blurred + nudged, resolve when `.section-reveal-visible`
+   lands on the wrapper via IntersectionObserver. Stagger via inline
+   `--reveal-delay`. GPU-friendly transform/opacity/filter only.
+   ----------------------------------------------------------------------------- */
+.section-reveal-item {
+  opacity: 0;
+  transform: translateY(var(--reveal-y, 16px));
+  filter: blur(var(--reveal-blur, 12px));
+  transition:
+    opacity var(--reveal-duration, 0.7s) cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0s),
+    transform var(--reveal-duration, 0.7s) cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0s),
+    filter var(--reveal-duration, 0.7s) cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0s);
+  will-change: transform, opacity, filter;
+}
+
+.section-reveal-visible .section-reveal-item {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0px);
+}
+
+/* -----------------------------------------------------------------------------
+   hero-enter — mount/fade-up replacement (no framer-motion).
+   Stagger via inline `--enter-delay`. Same easing as the old motion tween.
+   ----------------------------------------------------------------------------- */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+.hero-enter {
+  opacity: 0;
+  animation: reveal-up 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--enter-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-enter {
+    opacity: 1;
+    animation: none;
+  }
+  .section-reveal-item {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Header drawer/dropdown enter animations (replace framer-motion).
+   Enter-only via `animation` (plays on mount, zero JS). Exit is instant
+   once unmounted — layout/positions/colors unchanged.
+   ----------------------------------------------------------------------------- */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes sidebar-in {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotate(-45deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 250ms ease-out both;
+}
+
+.animate-sidebar-in {
+  animation: sidebar-in 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-dropdown-in {
+  animation: dropdown-in 150ms ease-out both;
+}
+
+.animate-pop-in {
+  animation: pop-in 200ms ease-out both;
+}
+
+/* -----------------------------------------------------------------------------
+   Testimonial ticker — CSS marquee (replaces framer-motion x animation).
+   Seamless -50% loop, pauses on hover/focus, static when reduced-motion
+   (handled globally above).
+   ----------------------------------------------------------------------------- */
+@keyframes testimonial-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.testimonial-track {
+  animation: testimonial-scroll 40s linear infinite;
+  will-change: transform;
+}
+
+.testimonial-paused .testimonial-track,
+.testimonial-root:hover .testimonial-track,
+.testimonial-root:focus-within .testimonial-track {
+  animation-play-state: paused;
+}
+
+/* -----------------------------------------------------------------------------
    Respect reduced-motion preference: strip transitions/animations everywhere
    the user has opted out at the OS level.
    ----------------------------------------------------------------------------- */

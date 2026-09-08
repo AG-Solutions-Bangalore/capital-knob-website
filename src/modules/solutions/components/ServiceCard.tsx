@@ -50,6 +50,8 @@ function CardMedia({
         alt={alt}
         title={imageTitle ?? `${alt} – CapitalKnob`}
         loading="lazy"
+        decoding="async"
+        fetchPriority="low"
         onError={() => setImgError(true)}
         className={cn(
           'h-full w-full object-cover transition-transform duration-500 group-hover:scale-105',
@@ -81,7 +83,7 @@ function EnquireArrowButton({
       aria-label={`Enquire about ${title}`}
       title={`Enquire about ${title}`}
       className={cn(
-        'absolute right-4 bottom-4 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-gold text-white shadow-soft transition-all duration-200',
+        'absolute right-4 bottom-4 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-gold text-ink shadow-soft transition-all duration-200',
         'hover:scale-105 hover:bg-gold-hover hover:shadow-gold active:scale-95',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
       )}

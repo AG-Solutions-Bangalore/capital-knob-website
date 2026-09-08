@@ -11,8 +11,7 @@
  * by showing a static snapshot instead of animating.
  */
 
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { motion, useAnimationControls, useReducedMotion } from 'framer-motion'
+import { useMemo, useState } from 'react'
 import { cn } from '@/shared/lib/cn'
 import type { HomeTestimonial } from '../constants'
 
@@ -24,7 +23,7 @@ interface TestimonialCarouselProps {
 
 const TONE_BG: Record<NonNullable<HomeTestimonial['tone']>, string> = {
   navy: 'bg-navy text-white',
-  gold: 'bg-gold text-white',
+  gold: 'bg-gold text-ink',
   brandBlue: 'bg-brand-blue text-white',
   slate: 'bg-slate-700 text-white',
 }
@@ -70,9 +69,9 @@ function TestimonialCard({
       {/* Author row */}
       <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
         <div className="min-w-0">
-          <h4 className="truncate font-display text-sm font-bold text-ink">
+          <h3 className="truncate font-display text-sm font-bold text-ink">
             {testimonial.name}
-          </h4>
+          </h3>
           <p className="truncate text-xs font-medium text-muted">
             {testimonial.role}
           </p>
@@ -86,6 +85,8 @@ function TestimonialCard({
               title={testimonial.avatarTitle ?? testimonial.name}
               className="h-full w-full object-cover"
               loading="lazy"
+              decoding="async"
+              fetchPriority="low"
             />
           </div>
         ) : (
@@ -108,50 +109,16 @@ export function TestimonialCarousel({
   testimonials,
   duration = 40,
 }: TestimonialCarouselProps) {
-  const prefersReducedMotion = useReducedMotion()
-  const controls = useAnimationControls()
-  const trackRef = useRef<HTMLDivElement>(null)
   const [isPaused, setIsPaused] = useState(false)
   // We render the list twice so animating -50% loops seamlessly.
   const loopedTestimonials = useMemo(
     () => [...testimonials, ...testimonials],
     [testimonials],
   )
-  // Track the very first run so we only seed `x: 0` on mount — not every time
-  // the user un-pauses. This is what was causing the "jumps back to the start
-  // on hover-out" bug.
-  const isFirstRunRef = useRef(true)
-
-  useEffect(() => {
-    if (prefersReducedMotion || isPaused) {
-      controls.stop()
-      return
-    }
-
-    if (isFirstRunRef.current) {
-      // Seed the start position once, then never reset again — so resuming
-      // after a hover pause continues smoothly from where it stopped.
-      controls.set({ x: '0%' })
-      isFirstRunRef.current = false
-    }
-
-    controls.start({
-      x: '-50%',
-      transition: {
-        duration,
-        ease: 'linear',
-        repeat: Infinity,
-      },
-    })
-
-    return () => {
-      controls.stop()
-    }
-  }, [controls, duration, isPaused, prefersReducedMotion])
 
   return (
     <div
-      className="relative w-full overflow-hidden"
+      className={`testimonial-root relative w-full overflow-hidden ${isPaused ? 'testimonial-paused' : ''}`}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -159,12 +126,9 @@ export function TestimonialCarousel({
       aria-label="Customer testimonials, auto-scrolling"
       role="region"
     >
-      <motion.div
-        ref={trackRef}
-        animate={controls}
-        className="flex w-max gap-4 sm:gap-5"
-        // `will-change` keeps the GPU compositing path hot during the long animation.
-        style={{ willChange: 'transform' }}
+      <div
+        className="testimonial-track flex w-max gap-4 sm:gap-5"
+        style={{ animationDuration: `${duration}s` }}
       >
         {loopedTestimonials.map((t, idx) => (
           <TestimonialCard
@@ -175,7 +139,7 @@ export function TestimonialCarousel({
             toneBg={TONE_BG[t.tone ?? 'navy']}
           />
         ))}
-      </motion.div>
+      </div>
     </div>
   )
 }

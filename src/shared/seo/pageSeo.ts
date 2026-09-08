@@ -16,6 +16,17 @@ export const SITE_PUBLISHER = 'CapitalKnob'
 /** Origin used when building the canonical URL for the current page. */
 export const SITE_ORIGIN = 'https://ck.agsdemo.in'
 
+/**
+ * Absolutize a `"/"`-rooted path via the site URL for crawlers.
+ * OG/Twitter meta must stay on absolute remote URLs — never emit
+ * `"/images/..."` directly to crawlers.
+ */
+export function absoluteUrl(pathOrUrl: string): string {
+  if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl
+  const clean = pathOrUrl.startsWith('/') ? pathOrUrl : `/${pathOrUrl}`
+  return `${SITE_ORIGIN}${clean}`
+}
+
 export interface PageSeo {
   /** <title> content for the route. */
   title: string

@@ -8,12 +8,15 @@ export function HomeCtaSection() {
   return (
     <section className="relative overflow-hidden bg-navy py-14 text-white sm:py-16 md:py-20">
       {/* Background Skyline Image with moody twilight overlay */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 bg-navy">
         <img
           src={`${IMAGE_BASE_URL}/home/cta_skyline.webp`}
           alt="Modern metropolitan skyscraper skyline at dusk"
           title="Modern Metropolitan Skyline – CapitalKnob"
           className="h-full w-full object-cover object-center"
+          loading="lazy"
+          decoding="async"
+          fetchPriority="low"
         />
         {/* Navy gradient dark overlay */}
         <div className="absolute inset-0 bg-navy/85 backdrop-brightness-75" />
@@ -37,7 +40,7 @@ export function HomeCtaSection() {
               <a
                 href="/contact"
                 title={linkTitleFor('/contact')}
-                className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-white shadow-gold transition-all duration-200 hover:bg-gold-hover active:scale-[0.98]"
+                className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-ink shadow-gold transition-all duration-200 hover:bg-gold-hover active:scale-[0.98]"
               >
                 <span>Get Started Today</span>
                 <svg

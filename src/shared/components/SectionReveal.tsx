@@ -1,34 +1,25 @@
 /**
- * SectionReveal — viewport-triggered reveal animation.
+ * SectionReveal — viewport-triggered reveal animation (zero-JS animation lib).
  *
- * The wrapper element itself is static (no opacity / blur / translate on the
- * section). Instead, every direct child of the section is wrapped in a
- * framer-motion node that starts blurred + nudged downward, then resolves
- * to its final sharp, in-place state the first time the section enters
- * the viewport. Children animate sequentially with a configurable stagger
- * so the page feels like it draws itself in.
+ * The wrapper element itself is static. Every direct child starts blurred +
+ * nudged downward, then resolves to its final state the first time the
+ * section enters the viewport. Children animate sequentially with a
+ * configurable stagger.
  *
- * Why children, not the section:
- *  - The section often carries a background color, image, or full-bleed
- *    shape that should NOT blur away — the reveal needs to live on top of
- *    that surface, not on it.
- *  - Animating children individually lets each block resolve into place
- *    while the rest of the section stays anchored and legible.
- *
- * Defaults are tuned for a calm, premium feel:
- *  - 16px downward translate
- *  - 12px blur
- *  - 0.7s ease-out per child
- *  - 0.1s stagger between children
- *  - Triggers 80px before the section enters the viewport
- *  - Plays once
- *
- * Built with framer-motion so the GPU-friendly `filter` and `transform`
- * properties are interpolated smoothly.
+ * Implementation: IntersectionObserver toggles `.section-reveal-visible`
+ * on the wrapper; CSS transitions (see index.css `.section-reveal-item`)
+ * do the rest — no framer-motion, no GPU-unfriendly JS.
  */
 
-import { motion, useReducedMotion, type Variants } from 'framer-motion'
-import { Children, isValidElement, type ReactNode } from 'react'
+import {
+  Children,
+  isValidElement,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from 'react'
 
 type SectionTag = 'section' | 'div' | 'article' | 'aside' | 'main' | 'header' | 'footer' | 'nav'
 
@@ -48,9 +39,9 @@ export interface SectionRevealProps {
   delay?: number
   /** Time between successive children (seconds). */
   staggerDelay?: number
-  /** How far before the section enters the viewport the animation triggers. */
+  /** Root margin for the IntersectionObserver (e.g. '-80px'). */
   viewportMargin?: string
-  /** If true, replays every time the section enters the viewport. */
+  /** If true, plays once. If false, replays every time it enters. */
   once?: boolean
 }
 
@@ -66,64 +57,62 @@ export function SectionReveal({
   viewportMargin = '-80px',
   once = true,
 }: SectionRevealProps) {
-  const prefersReducedMotion = useReducedMotion()
+  const ref = useRef<HTMLElement | null>(null)
+  // Visible immediately when reduced-motion is preferred or IO is missing
+  // (computed in the initializer so the effect never calls setState directly).
+  const [visible, setVisible] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true
+    if (typeof IntersectionObserver === 'undefined') return true
+    return false
+  })
 
-  // The container only carries the trigger + the stagger orchestration.
-  // It has no visual animation of its own — that's the whole point.
-  const containerVariants: Variants = {
-    hidden: {},
-    show: {
-      transition: {
-        staggerChildren: prefersReducedMotion ? 0 : staggerDelay,
-        delayChildren: prefersReducedMotion ? 0 : delay,
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (visible) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setVisible(true)
+            if (once) observer.disconnect()
+          } else if (!once) {
+            setVisible(false)
+          }
+        }
       },
-    },
-  }
+      { rootMargin: viewportMargin, threshold: 0.1 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [viewportMargin, once, visible])
 
-  // Each child resolves from blurred + nudged to its final sharp, in-place state.
-  const itemVariants: Variants = {
-    hidden: {
-      opacity: 0,
-      y: prefersReducedMotion ? 0 : yOffset,
-      filter: prefersReducedMotion ? 'blur(0px)' : `blur(${blur}px)`,
-    },
-    show: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0px)',
-      transition: {
-        duration: prefersReducedMotion ? 0 : duration,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
-  }
-
-  // Pick a typed motion component for the requested wrapper tag.
-  // `motion[as]` is the official way to address every HTML element variant.
-  const MotionContainer = motion[as] as typeof motion.section
-
-  // Wrap every direct child in a motion node so each one inherits the
-  // container's `hidden` / `show` state. Fragment children (multiple
-  // siblings) and single-element children both work.
+  const Tag = as as 'section'
   const items = Children.toArray(children).filter(isValidElement)
 
   return (
-    <MotionContainer
-      className={className}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once, margin: viewportMargin }}
-      variants={containerVariants}
+    <Tag
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ref={ref as any}
+      className={`${className ?? ''} ${visible ? 'section-reveal-visible' : ''}`.trim() || undefined}
     >
       {items.map((child, idx) => (
-        <motion.div
+        <div
           key={isValidElement(child) && child.key ? child.key : idx}
-          variants={itemVariants}
-          className="will-change-[transform,opacity,filter]"
+          className="section-reveal-item"
+          style={
+            {
+              '--reveal-y': `${yOffset}px`,
+              '--reveal-blur': `${blur}px`,
+              '--reveal-duration': `${duration}s`,
+              '--reveal-delay': `${delay + idx * staggerDelay}s`,
+            } as CSSProperties
+          }
         >
           {child}
-        </motion.div>
+        </div>
       ))}
-    </MotionContainer>
+    </Tag>
   )
 }

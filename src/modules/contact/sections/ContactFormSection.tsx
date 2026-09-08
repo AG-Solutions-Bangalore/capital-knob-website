@@ -349,7 +349,7 @@ export function ContactFormSection() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-button bg-gold px-7 py-3 text-sm font-semibold text-white shadow-gold transition-all duration-200 hover:bg-gold-hover hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70 active:scale-[0.98]"
+                  className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-button bg-gold px-7 py-3 text-sm font-semibold text-ink shadow-gold transition-all duration-200 hover:bg-gold-hover hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70 active:scale-[0.98]"
                 >
                   {isSubmitting ? (
                     <>

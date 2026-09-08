@@ -1,8 +1,7 @@
 import { ROUTES, type RoutePath } from '@/app/routes'
 import { cn } from '@/shared/lib/cn'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState, type CSSProperties } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Button } from './Button'
 import { Container } from './Container'
@@ -99,7 +98,6 @@ export function Header() {
     null,
   )
   const location = useLocation()
-  const prefersReducedMotion = useReducedMotion()
   // Close-delay timer keeps the panel open while the user moves the cursor
   // from the trigger to the dropdown body.
   const closeTimerRef = useRef<number | null>(null)
@@ -211,159 +209,110 @@ export function Header() {
             onClick={() => setOpen((v) => !v)}
             className="flex h-11 w-11 items-center justify-center rounded-button text-ink transition-colors hover:bg-line-soft active:bg-line lg:hidden"
           >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.span
-                key={open ? 'close' : 'menu'}
-                initial={
-                  prefersReducedMotion
-                    ? { opacity: 0 }
-                    : { opacity: 0, rotate: -45, scale: 0.8 }
-                }
-                animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                exit={
-                  prefersReducedMotion
-                    ? { opacity: 0 }
-                    : { opacity: 0, rotate: 45, scale: 0.8 }
-                }
-                transition={{ duration: 0.2, ease: 'easeOut' }}
-                className="inline-flex"
-              >
-                {open ? <CloseIcon /> : <MenuIcon />}
-              </motion.span>
-            </AnimatePresence>
+            <span key={open ? 'close' : 'menu'} className="inline-flex animate-pop-in">
+              {open ? <CloseIcon /> : <MenuIcon />}
+            </span>
           </button>
         </div>
       </Container>
 
       {/* Mobile sidebar + backdrop */}
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.div
-              key="mobile-backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: prefersReducedMotion ? 0 : 0.25 }}
-              onClick={() => setOpen(false)}
-              aria-hidden="true"
-              className="fixed inset-0 z-40 bg-ink/55 backdrop-blur-sm lg:hidden"
-            />
+      {open && (
+        <>
+          <div
+            key="mobile-backdrop"
+            onClick={() => setOpen(false)}
+            aria-hidden="true"
+            className="fixed inset-0 z-40 bg-ink/55 backdrop-blur-sm lg:hidden animate-fade-in"
+          />
 
-            <motion.aside
-              key="mobile-sidebar"
-              id="mobile-sidebar"
-              role="dialog"
-              aria-modal="true"
-              aria-label="CapitalKnob navigation"
-              initial={
-                prefersReducedMotion
-                  ? { x: '-100%', opacity: 0.6 }
-                  : { x: '-100%', opacity: 0, filter: 'blur(6px)' }
-              }
-              animate={{ x: '0%', opacity: 1, filter: 'blur(0px)' }}
-              exit={
-                prefersReducedMotion
-                  ? { x: '-100%', opacity: 0 }
-                  : { x: '-100%', opacity: 0, filter: 'blur(6px)' }
-              }
-              transition={{
-                type: 'spring',
-                stiffness: 320,
-                damping: 32,
-                mass: 0.8,
-              }}
-              className="fixed left-0 top-0 z-50 flex h-dvh w-[85vw] max-w-sm sm:w-80 flex-col overflow-y-auto border-r border-line bg-white text-ink shadow-2xl lg:hidden"
-            >
-              {/* Sidebar header */}
-              <div className="flex h-20 items-center justify-between border-b border-line px-5">
-                <div onClick={() => setOpen(false)}>
-                  <Logo variant="dark" />
-                </div>
-                <button
-                  type="button"
-                  aria-label="Close menu"
-                  onClick={() => setOpen(false)}
-                  className="flex h-11 w-11 items-center justify-center rounded-button text-ink transition-colors hover:bg-line-soft active:bg-line"
-                >
-                  <CloseIcon />
-                </button>
+          <aside
+            key="mobile-sidebar"
+            id="mobile-sidebar"
+            role="dialog"
+            aria-modal="true"
+            aria-label="CapitalKnob navigation"
+            className="fixed left-0 top-0 z-50 flex h-dvh w-[85vw] max-w-sm sm:w-80 flex-col overflow-y-auto border-r border-line bg-white text-ink shadow-2xl lg:hidden animate-sidebar-in"
+          >
+            {/* Sidebar header */}
+            <div className="flex h-20 items-center justify-between border-b border-line px-5">
+              <div onClick={() => setOpen(false)}>
+                <Logo variant="dark" />
               </div>
+              <button
+                type="button"
+                aria-label="Close menu"
+                onClick={() => setOpen(false)}
+                className="flex h-11 w-11 items-center justify-center rounded-button text-ink transition-colors hover:bg-line-soft active:bg-line"
+              >
+                <CloseIcon />
+              </button>
+            </div>
 
-              {/* Nav links */}
-              <nav className="flex-1 px-4 py-6">
-                <p className="px-3 text-[10px] font-bold uppercase tracking-[0.22em] text-muted">
-                  Explore
-                </p>
-                <ul className="mt-3 flex flex-col gap-1 text-sm font-medium">
-                  {navEntries.map((entry, idx) => (
-                    <motion.li
-                      key={entry.kind === 'group' ? `m-group-${entry.label}` : `m-link-${entry.label}`}
-                      initial={
-                        prefersReducedMotion
-                          ? { opacity: 0 }
-                          : { opacity: 0, x: -12, filter: 'blur(4px)' }
-                      }
-                      animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-                      transition={{
-                        duration: 0.35,
-                        delay: prefersReducedMotion ? 0 : 0.1 + idx * 0.04,
-                        ease: [0.16, 1, 0.3, 1],
-                      }}
-                    >
-                      {entry.kind === 'link' ? (
-                        <NavLink
-                          to={entry.to}
-                          title={entry.title}
-                          end={entry.to === ROUTES.home}
-                          onClick={() => setOpen(false)}
-                          className={({ isActive }) =>
-                            cn(
-                              'flex items-center justify-between rounded-button px-3 py-3 transition-colors',
-                              isActive
-                                ? 'bg-navy text-white shadow-soft'
-                                : 'text-ink hover:bg-line-soft',
-                            )
-                          }
-                        >
-                          <span>{entry.label}</span>
-                          <ArrowRightIcon className="h-3.5 w-3.5" />
-                        </NavLink>
-                      ) : (
-                        <MobileGroup
-                          entry={entry}
-                          expanded={mobileExpandedGroup === entry.label}
-                          onToggle={() =>
-                            setMobileExpandedGroup((prev) =>
-                              prev === entry.label ? null : entry.label,
-                            )
-                          }
-                          onPick={() => setOpen(false)}
-                        />
-                      )}
-                    </motion.li>
-                  ))}
-                </ul>
-              </nav>
+            {/* Nav links */}
+            <nav className="flex-1 px-4 py-6">
+              <p className="px-3 text-[10px] font-bold uppercase tracking-[0.22em] text-muted">
+                Explore
+              </p>
+              <ul className="mt-3 flex flex-col gap-1 text-sm font-medium">
+                {navEntries.map((entry, idx) => (
+                  <li
+                    key={entry.kind === 'group' ? `m-group-${entry.label}` : `m-link-${entry.label}`}
+                    className="hero-enter"
+                    style={{ '--enter-delay': `${100 + idx * 40}ms` } as CSSProperties}
+                  >
+                    {entry.kind === 'link' ? (
+                      <NavLink
+                        to={entry.to}
+                        title={entry.title}
+                        end={entry.to === ROUTES.home}
+                        onClick={() => setOpen(false)}
+                        className={({ isActive }) =>
+                          cn(
+                            'flex items-center justify-between rounded-button px-3 py-3 transition-colors',
+                            isActive
+                              ? 'bg-navy text-white shadow-soft'
+                              : 'text-ink hover:bg-line-soft',
+                          )
+                        }
+                      >
+                        <span>{entry.label}</span>
+                        <ArrowRightIcon className="h-3.5 w-3.5" />
+                      </NavLink>
+                    ) : (
+                      <MobileGroup
+                        entry={entry}
+                        expanded={mobileExpandedGroup === entry.label}
+                        onToggle={() =>
+                          setMobileExpandedGroup((prev) =>
+                            prev === entry.label ? null : entry.label,
+                          )
+                        }
+                        onPick={() => setOpen(false)}
+                      />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
-              {/* Sidebar footer: contact CTA */}
-              <div className="border-t border-line bg-[#f4f7fa] px-5 py-5">
-                <Link
-                  to={ROUTES.contact}
-                  title={linkTitleFor(ROUTES.contact)}
-                  onClick={() => setOpen(false)}
-                  className="block"
-                >
-                  <Button variant="gold" className="w-full">
-                    Get a Callback
-                    <ArrowRightIcon />
-                  </Button>
-                </Link>
-              </div>
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
+            {/* Sidebar footer: contact CTA */}
+            <div className="border-t border-line bg-[#f4f7fa] px-5 py-5">
+              <Link
+                to={ROUTES.contact}
+                title={linkTitleFor(ROUTES.contact)}
+                onClick={() => setOpen(false)}
+                className="block"
+              >
+                <Button variant="gold" className="w-full">
+                  Get a Callback
+                  <ArrowRightIcon />
+                </Button>
+              </Link>
+            </div>
+          </aside>
+        </>
+      )}
     </header>
   )
 }
@@ -452,35 +401,29 @@ function DesktopDropdown({
         />
       </button>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            id={panelId}
-            role="menu"
-            initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.15, ease: 'easeOut' }}
-            // `left-1/2 -translate-x-1/2` centers the panel under the trigger
-            // so the dropdown reads as "belonging to" the Solutions label,
-            // rather than being anchored to its left edge.
-            className="absolute left-1/2 top-full z-50 mt-2 min-w-60 -translate-x-1/2 rounded-button border border-line bg-white p-1.5 shadow-card"
-            onMouseEnter={cancelClose}
-            onMouseLeave={scheduleClose}
-          >
-            <ul className="flex gap-2 flex-col">
-              {entry.children.map((child) => (
-                <SolutionChildItem
-                  key={`${entry.label}-${child.label}`}
-                  child={child}
-                  variant="desktop"
-                  onNavigate={() => setOpenGroup(null)}
-                />
-              ))}
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isOpen && (
+        <div
+          id={panelId}
+          role="menu"
+          // `left-1/2 -translate-x-1/2` centers the panel under the trigger
+          // so the dropdown reads as "belonging to" the Solutions label,
+          // rather than being anchored to its left edge.
+          className="absolute left-1/2 top-full z-50 mt-2 min-w-60 -translate-x-1/2 rounded-button border border-line bg-white p-1.5 shadow-card animate-dropdown-in"
+          onMouseEnter={cancelClose}
+          onMouseLeave={scheduleClose}
+        >
+          <ul className="flex gap-2 flex-col">
+            {entry.children.map((child) => (
+              <SolutionChildItem
+                key={`${entry.label}-${child.label}`}
+                child={child}
+                variant="desktop"
+                onNavigate={() => setOpenGroup(null)}
+              />
+            ))}
+          </ul>
+        </div>
+      )}
     </li>
   )
 }
@@ -584,29 +527,23 @@ function MobileGroup({
         />
       </button>
 
-      <AnimatePresence initial={false}>
-        {expanded && (
-          <motion.ul
-            id={SOLUTIONS_GROUP_ID}
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="overflow-hidden pl-2"
-          >
-            <div className="ml-3 mt-1 flex flex-col gap-1 border-l border-line pl-3">
-              {entry.children.map((child) => (
-                <SolutionChildItem
-                  key={`${entry.label}-m-${child.label}`}
-                  child={child}
-                  variant="mobile"
-                  onNavigate={onPick}
-                />
-              ))}
-            </div>
-          </motion.ul>
-        )}
-      </AnimatePresence>
+      {expanded && (
+        <ul
+          id={SOLUTIONS_GROUP_ID}
+          className="overflow-hidden pl-2 animate-fade-in"
+        >
+          <div className="ml-3 mt-1 flex flex-col gap-1 border-l border-line pl-3">
+            {entry.children.map((child) => (
+              <SolutionChildItem
+                key={`${entry.label}-m-${child.label}`}
+                child={child}
+                variant="mobile"
+                onNavigate={onPick}
+              />
+            ))}
+          </div>
+        </ul>
+      )}
     </div>
   )
 }

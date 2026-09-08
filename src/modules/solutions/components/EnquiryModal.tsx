@@ -422,12 +422,12 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="inline-flex min-h-[40px] w-full items-center justify-center gap-2 rounded-button bg-gold px-5 py-2 text-sm font-semibold text-white shadow-gold transition-all hover:bg-gold-hover disabled:cursor-not-allowed disabled:opacity-70 active:scale-[0.98]"
+                    className="inline-flex min-h-[40px] w-full items-center justify-center gap-2 rounded-button bg-gold px-5 py-2 text-sm font-semibold text-ink shadow-gold transition-all hover:bg-gold-hover disabled:cursor-not-allowed disabled:opacity-70 active:scale-[0.98]"
                   >
                     {isSubmitting ? (
                       <>
                         <svg
-                          className="h-4 w-4 animate-spin text-white"
+                          className="h-4 w-4 animate-spin text-ink"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"

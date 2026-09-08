@@ -59,7 +59,7 @@ export function EmiCalculator() {
           className={`flex-1 rounded-md px-1.5 py-1.5 text-center transition-all ${
             loanType === 'home'
               ? 'bg-navy font-bold text-white shadow-sm'
-              : 'text-muted hover:text-ink'
+              : 'text-ink-soft hover:text-ink'
           }`}
         >
           Home Loan
@@ -70,7 +70,7 @@ export function EmiCalculator() {
           className={`flex-1 rounded-md px-1.5 py-1.5 text-center transition-all ${
             loanType === 'topup'
               ? 'bg-navy font-bold text-white shadow-sm'
-              : 'text-muted hover:text-ink'
+              : 'text-ink-soft hover:text-ink'
           }`}
         >
           Top-Up
@@ -81,7 +81,7 @@ export function EmiCalculator() {
           className={`flex-1 rounded-md px-1.5 py-1.5 text-center transition-all ${
             loanType === 'transfer'
               ? 'bg-navy font-bold text-white shadow-sm'
-              : 'text-muted hover:text-ink'
+              : 'text-ink-soft hover:text-ink'
           }`}
         >
           Balance Transfer
@@ -219,7 +219,7 @@ export function EmiCalculator() {
       </Link>
 
       {/* Footnote */}
-      <p className="mt-2.5 text-center text-[10.5px] leading-tight text-muted/80">
+      <p className="mt-2.5 text-center text-[10.5px] leading-tight text-muted">
         *This is an indicative estimate. Actual EMI may vary as per lender terms.
       </p>
     </div>

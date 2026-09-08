@@ -1,9 +1,14 @@
-import { useState } from 'react'
+import { Suspense, lazy, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Container } from '@/shared/components/Container'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
-import { EnquiryModal } from '@/modules/solutions/components/EnquiryModal'
 import { homeSolutionsTabs, individualSolutions } from '../constants'
+
+const EnquiryModal = lazy(() =>
+  import('@/modules/solutions/components/EnquiryModal').then((m) => ({
+    default: m.EnquiryModal,
+  })),
+)
 
 // SVG icons for each service
 function ServiceIcon({ name }: { name: string }) {
@@ -68,6 +73,12 @@ export function HomeSolutionsSection() {
   // Enquiry popup state — the gold arrow opens the modal with this card's
   // title pre-filled in the Subject field (same modal as Solutions page).
   const [enquirySubject, setEnquirySubject] = useState<string | null>(null)
+  const [hasOpened, setHasOpened] = useState(false)
+
+  function openEnquiry(title: string) {
+    setHasOpened(true)
+    setEnquirySubject(title)
+  }
 
   return (
     <section className="bg-white py-16 md:py-20">
@@ -154,6 +165,8 @@ export function HomeSolutionsSection() {
                     title={card.imageTitle}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
+                    decoding="async"
+                    fetchPriority="low"
                   />
                 </div>
 
@@ -198,7 +211,7 @@ export function HomeSolutionsSection() {
               {/* Enquiry arrow button */}
               <button
                 type="button"
-                onClick={() => setEnquirySubject(card.title)}
+                onClick={() => openEnquiry(card.title)}
                 aria-label={`Enquire about ${card.title}`}
                 title={`Enquire about ${card.title}`}
                 className="absolute bottom-4 right-4 z-10 flex h-7 w-7 items-center justify-center rounded-full border border-gold/40 text-gold transition-all duration-300 hover:border-gold hover:bg-gold hover:text-white group-hover:rotate-[-45deg] group-hover:border-gold group-hover:bg-gold group-hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2"
@@ -223,10 +236,14 @@ export function HomeSolutionsSection() {
         </div>
       </Container>
 
-      <EnquiryModal
-        subject={enquirySubject}
-        onClose={() => setEnquirySubject(null)}
-      />
+      {hasOpened && (
+        <Suspense fallback={null}>
+          <EnquiryModal
+            subject={enquirySubject}
+            onClose={() => setEnquirySubject(null)}
+          />
+        </Suspense>
+      )}
     </section>
   )
 }
