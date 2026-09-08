@@ -29,18 +29,18 @@ if (typeof window !== 'undefined') {
     } catch {
       return
     }
-    // Most likely next from landing: Solutions, then Contact. Staggered.
+    // Most likely next from landing: Solutions, then Contact. Staggered after initial paint.
     window.setTimeout(() => {
       import('@/modules/solutions/pages/SolutionsPage').catch(() => {})
-    }, 3500)
+    }, 8000)
     window.setTimeout(() => {
       import('@/modules/contact/pages/ContactPage').catch(() => {})
-    }, 4500)
+    }, 9500)
   }
   if (typeof window.requestIdleCallback === 'function') {
-    window.requestIdleCallback(preload, { timeout: 5000 })
+    window.requestIdleCallback(preload, { timeout: 10000 })
   } else {
-    window.setTimeout(preload, 3800)
+    window.setTimeout(preload, 8000)
   }
 }
 

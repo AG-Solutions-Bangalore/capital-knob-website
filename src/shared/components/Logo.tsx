@@ -21,8 +21,8 @@ const LOGO_SRC = {
 } as const
 
 const LOGO_DIMS = {
-  horizontal: { width: 1590, height: 383 },
-  stacked: { width: 1191, height: 919 },
+  horizontal: { width: 415, height: 100 },
+  stacked: { width: 298, height: 230 },
 } as const
 
 export function Logo({ variant = 'light', layout = 'horizontal', className }: LogoProps) {

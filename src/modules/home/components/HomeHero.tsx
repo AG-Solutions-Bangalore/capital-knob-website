@@ -7,9 +7,9 @@ import { EmiCalculator } from './EmiCalculator'
 // Local responsive LCP banner (public/images/home/…) — vendored from the
 // remote hero_villa.webp measured as LCP (slow host, no cache TTL).
 // 768w ≈39KB (mobile), 1280w ≈78KB / 1440w ≈99KB (desktop), 1920w original.
-const LCP_SRC = '/images/home/hero_villa-1280.webp'
+const LCP_SRC = '/images/home/hero_villa-480.webp'
 const LCP_SRCSET =
-  '/images/home/hero_villa-768.webp 768w, /images/home/hero_villa-1280.webp 1280w, /images/home/hero_villa-1440.webp 1440w, /images/home/hero_villa-1920.webp 1920w'
+  '/images/home/hero_villa-480.webp 480w, /images/home/hero_villa-768.webp 768w, /images/home/hero_villa-1280.webp 1280w, /images/home/hero_villa-1440.webp 1440w, /images/home/hero_villa-1920.webp 1920w'
 // Original asset is 1376×768 — explicit dimensions reserve space (CLS 0).
 const LCP_WIDTH = 1376
 const LCP_HEIGHT = 768
@@ -21,7 +21,7 @@ export function HomeHero() {
   const touchStartXRef = useRef<number | null>(null)
 
   const totalSlides = heroSlides.length
-  const SLIDE_DURATION = 6000 // 6 seconds per slide
+  const SLIDE_DURATION = 10000 // 10 seconds per slide (gives users time to read and prevents premature LCP shifts)
 
   const nextSlide = useCallback(() => {
     setDirection('next')
@@ -79,6 +79,7 @@ export function HomeHero() {
         {heroSlides.map((slide, index) => {
           const isActive = index === currentSlide
           const isPrev =
+            currentSlide !== 0 &&
             (currentSlide - 1 + totalSlides) % totalSlides === index
           const isLcp = index === 0
 
@@ -202,7 +203,7 @@ export function HomeHero() {
                           : 'opacity-0 translate-y-3'
                       }`}
                     >
-                      <h1 className="mt-4 font-display text-3xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+                      <h1 className="mt-4 font-display text-3xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl min-h-[4.5rem] sm:min-h-[5.5rem] md:min-h-[7rem]">
                         {slide.titleLine1} <br className="hidden sm:inline" />
                         <span className="text-white">{slide.titleLine2}</span>
                       </h1>
@@ -247,6 +248,7 @@ export function HomeHero() {
                       <a
                         href={slide.primaryCta.href}
                         title={linkTitleFor(slide.primaryCta.href)}
+                        tabIndex={isActive ? 0 : -1}
                         className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-ink shadow-gold transition-all duration-200 hover:bg-gold-hover hover:scale-[1.02] active:scale-[0.98]"
                       >
                         <span>{slide.primaryCta.label}</span>
@@ -269,6 +271,7 @@ export function HomeHero() {
                       <a
                         href={slide.secondaryCta.href}
                         title={linkTitleFor(slide.secondaryCta.href)}
+                        tabIndex={isActive ? 0 : -1}
                         className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg border border-white/25 bg-navy/60 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/50 hover:bg-navy/80 hover:scale-[1.02] active:scale-[0.98]"
                       >
                         <span>{slide.secondaryCta.label}</span>
