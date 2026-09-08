@@ -2,6 +2,7 @@ import { Container } from '@/shared/components/Container'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { homeStats, homeTestimonials } from '../constants'
 import { TestimonialCarousel } from './TestimonialCarousel'
+import { IMAGE_BASE_URL } from "@/lib/images";
 
 export function HomeCtaSection() {
   return (
@@ -9,7 +10,7 @@ export function HomeCtaSection() {
       {/* Background Skyline Image with moody twilight overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/images/home/cta_skyline.webp"
+          src={`${IMAGE_BASE_URL}/home/cta_skyline.webp`}
           alt="Modern metropolitan skyscraper skyline at dusk"
           title="Modern Metropolitan Skyline – CapitalKnob"
           className="h-full w-full object-cover object-center"

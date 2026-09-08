@@ -1,3 +1,4 @@
+import { IMAGE_BASE_URL } from "@/lib/images";
 /**
  * Contact Us module data and copy.
  */
@@ -27,7 +28,7 @@ export const contactCopy = {
     titleAccent: 'to Help',
     description:
       'Have a question or need guidance? Our team is ready to assist you with the right financing solutions.',
-    receptionImage: '/images/contact/hero-reception.webp',
+    receptionImage: `${IMAGE_BASE_URL}/contact/hero-reception.webp`,
   },
   form: {
     title: 'Send Us a Message',
