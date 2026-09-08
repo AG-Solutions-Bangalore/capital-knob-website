@@ -8,6 +8,7 @@
 import { Container } from '@/shared/components/Container'
 import { iconRegistry } from '../components/icons'
 import { solutionsCopy } from '../constants'
+import { IMAGE_BASE_URL } from "@/lib/images";
 
 /* Decorative oversized quote mark (serif, navy) — used in the quote card. */
 function BigQuoteMark() {
@@ -30,7 +31,7 @@ export function SolutionsHeroSection() {
     <section className="relative overflow-hidden bg-navy text-white">
       {/* High-fidelity architectural skyline backdrop */}
       <img
-        src="/images/solutions/hero-top-banner.webp"
+        src={`${IMAGE_BASE_URL}/solutions/hero-top-banner.webp`}
         alt="CapitalKnob Skyline"
         title="CapitalKnob Skyline – Home Loans"
         className="absolute inset-0 h-full w-full object-cover object-center"
