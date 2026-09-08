@@ -4,6 +4,16 @@ import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { heroSlides } from '../constants'
 import { EmiCalculator } from './EmiCalculator'
 
+// Local responsive LCP banner (public/images/home/…) — vendored from the
+// remote hero_villa.webp measured as LCP (slow host, no cache TTL).
+// 768w ≈39KB (mobile), 1280w ≈78KB / 1440w ≈99KB (desktop), 1920w original.
+const LCP_SRC = '/images/home/hero_villa-480.webp'
+const LCP_SRCSET =
+  '/images/home/hero_villa-480.webp 480w, /images/home/hero_villa-768.webp 768w, /images/home/hero_villa-1280.webp 1280w, /images/home/hero_villa-1440.webp 1440w, /images/home/hero_villa-1920.webp 1920w'
+// Original asset is 1376×768 — explicit dimensions reserve space (CLS 0).
+const LCP_WIDTH = 1376
+const LCP_HEIGHT = 768
+
 export function HomeHero() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [direction, setDirection] = useState<'next' | 'prev'>('next')
@@ -11,7 +21,7 @@ export function HomeHero() {
   const touchStartXRef = useRef<number | null>(null)
 
   const totalSlides = heroSlides.length
-  const SLIDE_DURATION = 6000 // 6 seconds per slide
+  const SLIDE_DURATION = 10000 // 10 seconds per slide (gives users time to read and prevents premature LCP shifts)
 
   const nextSlide = useCallback(() => {
     setDirection('next')
@@ -65,11 +75,13 @@ export function HomeHero() {
       onTouchEnd={handleTouchEnd}
     >
       {/* Background Images with smooth cinematic slide + dissolve */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 z-0 overflow-hidden bg-navy pointer-events-none">
         {heroSlides.map((slide, index) => {
           const isActive = index === currentSlide
           const isPrev =
+            currentSlide !== 0 &&
             (currentSlide - 1 + totalSlides) % totalSlides === index
+          const isLcp = index === 0
 
           return (
             <div
@@ -82,18 +94,37 @@ export function HomeHero() {
                     : 'opacity-0 translate-x-12 scale-105 z-0'
               }`}
             >
-              <img
-                src={slide.imageSrc}
-                alt={slide.imageAlt}
-                title={slide.imageTitle}
-                className="h-full w-full object-cover object-center lg:object-right transition-transform duration-[6000ms] ease-linear"
-                style={{
-                  transform: isActive ? 'scale(1.04)' : 'scale(1)',
-                }}
-                loading={index === 0 ? 'eager' : 'lazy'}
-                fetchPriority={index === 0 ? 'high' : 'low'}
-                decoding={index === 0 ? 'sync' : 'async'}
-              />
+              {isLcp ? (
+                <img
+                  src={LCP_SRC}
+                  srcSet={LCP_SRCSET}
+                  sizes="100vw"
+                  width={LCP_WIDTH}
+                  height={LCP_HEIGHT}
+                  alt={slide.imageAlt}
+                  title={slide.imageTitle}
+                  className="h-full w-full object-cover object-center lg:object-right transition-transform duration-[6000ms] ease-linear"
+                  style={{
+                    transform: isActive ? 'scale(1.04)' : 'scale(1)',
+                  }}
+                  loading="eager"
+                  fetchPriority="high"
+                  decoding="async"
+                />
+              ) : isActive || isPrev ? (
+                <img
+                  src={slide.imageSrc}
+                  alt={slide.imageAlt}
+                  title={slide.imageTitle}
+                  className="h-full w-full object-cover object-center lg:object-right transition-transform duration-[6000ms] ease-linear"
+                  style={{
+                    transform: isActive ? 'scale(1.04)' : 'scale(1)',
+                  }}
+                  loading="lazy"
+                  fetchPriority="low"
+                  decoding="async"
+                />
+              ) : null}
               {/* Navy gradient masks — seamlessly blend with page & guarantee contrast */}
               <div className="absolute inset-0 bg-linear-to-r from-navy via-navy/95 to-navy/80 lg:from-navy lg:via-navy/88 lg:to-transparent" />
             </div>
@@ -118,6 +149,7 @@ export function HomeHero() {
                   <div
                     key={slide.id}
                     aria-hidden={!isActive}
+                    inert={!isActive}
                     className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       isActive
                         ? 'relative opacity-100 translate-x-0 pointer-events-auto z-10'
@@ -171,7 +203,7 @@ export function HomeHero() {
                           : 'opacity-0 translate-y-3'
                       }`}
                     >
-                      <h1 className="mt-4 font-display text-3xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+                      <h1 className="mt-4 font-display text-3xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl min-h-[4.5rem] sm:min-h-[5.5rem] md:min-h-[7rem]">
                         {slide.titleLine1} <br className="hidden sm:inline" />
                         <span className="text-white">{slide.titleLine2}</span>
                       </h1>
@@ -216,7 +248,8 @@ export function HomeHero() {
                       <a
                         href={slide.primaryCta.href}
                         title={linkTitleFor(slide.primaryCta.href)}
-                        className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-white shadow-gold transition-all duration-200 hover:bg-gold-hover hover:scale-[1.02] active:scale-[0.98]"
+                        tabIndex={isActive ? 0 : -1}
+                        className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-ink shadow-gold transition-all duration-200 hover:bg-gold-hover hover:scale-[1.02] active:scale-[0.98]"
                       >
                         <span>{slide.primaryCta.label}</span>
                         <svg
@@ -238,6 +271,7 @@ export function HomeHero() {
                       <a
                         href={slide.secondaryCta.href}
                         title={linkTitleFor(slide.secondaryCta.href)}
+                        tabIndex={isActive ? 0 : -1}
                         className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg border border-white/25 bg-navy/60 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/50 hover:bg-navy/80 hover:scale-[1.02] active:scale-[0.98]"
                       >
                         <span>{slide.secondaryCta.label}</span>

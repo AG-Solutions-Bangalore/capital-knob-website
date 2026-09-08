@@ -80,7 +80,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
             {/* Quick Contact info */}
             <div className="mt-5 space-y-2 text-xs">
               <p className="flex items-center gap-2">
-                <span className="font-semibold text-gold">Phone:</span>
+                <span className="font-semibold text-navy">Phone:</span>
                 <a
                   href="tel:+919876543210"
                   title={linkTitleFor('tel:+919876543210')}
@@ -92,7 +92,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
                 </a>
               </p>
               <p className="flex items-center gap-2">
-                <span className="font-semibold text-gold">Email:</span>
+                <span className="font-semibold text-navy">Email:</span>
                 <a
                   href="mailto:info@capitalknob.com"
                   title={linkTitleFor('mailto:info@capitalknob.com')}
@@ -229,7 +229,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
               <Link
                 to={ROUTES.contact}
                 title={linkTitleFor(ROUTES.contact)}
-                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-gold px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-gold-hover active:scale-[0.98]"
+                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-gold px-4 py-2.5 text-xs font-bold text-ink shadow-sm transition-all hover:bg-gold-hover active:scale-[0.98]"
               >
                 <span>Book Free Consultation</span>
                 <svg

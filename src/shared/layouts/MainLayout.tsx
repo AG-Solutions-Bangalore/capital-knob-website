@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom'
 import { Footer } from '@/shared/components/Footer'
 import { Header } from '@/shared/components/Header'
-import { SmoothScrollProvider } from '@/shared/components/SmoothScrollProvider'
+import { DeferredSmoothScroll } from '@/shared/components/DeferredSmoothScroll'
 
 export function MainLayout() {
   return (
-    <SmoothScrollProvider>
+    <DeferredSmoothScroll>
       <div className="flex min-h-screen flex-col bg-page">
         <Header />
         <main className="flex-1">
@@ -13,6 +13,6 @@ export function MainLayout() {
         </main>
         <Footer />
       </div>
-    </SmoothScrollProvider>
+    </DeferredSmoothScroll>
   )
 }

@@ -10,11 +10,18 @@
     <!-- Fonts Preconnect & Optimized Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
+    <link rel="preconnect" href="https://agsdemo.in" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://agsdemo.in">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&family=Space+Grotesk:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
     <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
     </noscript>
+
+    <!-- LCP image preload — responsive local WebP (see public/images/home/) -->
+    <link rel="preload" as="image" type="image/webp" imagesrcset="/images/home/hero_villa-480.webp 480w, /images/home/hero_villa-768.webp 768w, /images/home/hero_villa-1280.webp 1280w, /images/home/hero_villa-1440.webp 1440w, /images/home/hero_villa-1920.webp 1920w" imagesizes="100vw" href="/images/home/hero_villa-480.webp" fetchpriority="high">
 
     <!-- Core SEO Meta Tags -->
     <title>CapitalKnob – Unlock Your Capital Potential</title>
@@ -38,20 +45,28 @@
     <meta name="twitter:image" content="https://ck.agsdemo.in/favicon.png">
 
     <!-- Structured Data (JSON-LD) for Search Engines & Agentic AI Crawlers -->
+    <!-- Single canonical multi-typed entity: LocalBusiness is already an
+         Organization subtype, so merging both types into ONE object avoids
+         the "2 Organizations / 4 items + Missing address/image" duplication
+         bug. Route-level SEO only emits page schemas (Breadcrumb/Product/FAQ),
+         never Organization again. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
         {
-          "@type": "FinancialService",
+          "@type": ["Organization", "LocalBusiness", "FinancialService"],
           "@id": "https://ck.agsdemo.in/#organization",
           "name": "CapitalKnob",
+          "legalName": "CapitalKnob",
           "url": "https://ck.agsdemo.in/",
           "logo": "https://ck.agsdemo.in/favicon.png",
           "image": "https://ck.agsdemo.in/favicon.png",
           "description": "CapitalKnob helps businesses and individuals unlock their capital potential with smart financial solutions, funding support, and strategic capital guidance.",
+          "foundingDate": "2020-01-01",
           "telephone": "+91-9876543210",
           "email": "hello@capitalknob.com",
+          "priceRange": "$$",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "Prestige Tech Park, 5th Floor, Outer Ring Road, Marathahalli",
@@ -60,13 +75,35 @@
             "postalCode": "560037",
             "addressCountry": "IN"
           },
-          "priceRange": "$$",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 12.956,
+            "longitude": 77.701
+          },
           "openingHoursSpecification": {
             "@type": "OpeningHoursSpecification",
             "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
             "opens": "09:30",
             "closes": "18:30"
-          }
+          },
+          "contactPoint": [
+            {
+              "@type": "ContactPoint",
+              "telephone": "+91-9876543210",
+              "email": "hello@capitalknob.com",
+              "contactType": "sales",
+              "areaServed": "IN",
+              "availableLanguage": ["en", "hi"]
+            },
+            {
+              "@type": "ContactPoint",
+              "telephone": "+91-9876543210",
+              "email": "hello@capitalknob.com",
+              "contactType": "customer support",
+              "areaServed": "IN",
+              "availableLanguage": ["en", "hi"]
+            }
+          ]
         },
         {
           "@type": "WebSite",

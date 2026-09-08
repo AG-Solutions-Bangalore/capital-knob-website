@@ -8,7 +8,7 @@
  * about.
  */
 
-import { useCallback, useState } from 'react'
+import { Suspense, lazy, useCallback, useState } from 'react'
 import { SectionReveal } from '@/shared/components/SectionReveal'
 import { SolutionsHeroSection } from '../sections/SolutionsHeroSection'
 import { IndividualsSection } from '../sections/IndividualsSection'
@@ -16,12 +16,18 @@ import { BusinessesSection } from '../sections/BusinessesSection'
 import { OtherCapitalSection } from '../sections/OtherCapitalSection'
 import { WhyChooseSection } from '../sections/WhyChooseSection'
 import { StepsSection } from '../sections/StepsSection'
-import { EnquiryModal } from '../components/EnquiryModal'
+
+// Heavy dialog: never in the critical path. Gated on first open + lazy.
+const EnquiryModal = lazy(() =>
+  import('../components/EnquiryModal').then((m) => ({ default: m.EnquiryModal })),
+)
 
 export function SolutionsPage() {
   const [enquirySubject, setEnquirySubject] = useState<string | null>(null)
+  const [hasOpened, setHasOpened] = useState(false)
 
   const handleEnquire = useCallback((title: string) => {
+    setHasOpened(true)
     setEnquirySubject(title)
   }, [])
 
@@ -48,7 +54,11 @@ export function SolutionsPage() {
         <StepsSection />
       </SectionReveal>
 
-      <EnquiryModal subject={enquirySubject} onClose={handleClose} />
+      {hasOpened && (
+        <Suspense fallback={null}>
+          <EnquiryModal subject={enquirySubject} onClose={handleClose} />
+        </Suspense>
+      )}
     </>
   )
 }

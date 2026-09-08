@@ -20,6 +20,11 @@ const LOGO_SRC = {
   stacked: '/logo-stacked.webp',
 } as const
 
+const LOGO_DIMS = {
+  horizontal: { width: 415, height: 100 },
+  stacked: { width: 298, height: 230 },
+} as const
+
 export function Logo({ variant = 'light', layout = 'horizontal', className }: LogoProps) {
   void variant
 
@@ -31,9 +36,12 @@ export function Logo({ variant = 'light', layout = 'horizontal', className }: Lo
     >
       <img
         src={LOGO_SRC[layout]}
+        width={LOGO_DIMS[layout].width}
+        height={LOGO_DIMS[layout].height}
         alt="CapitalKnob – Loan and Investment"
         title="CapitalKnob – Loan and Investment"
         decoding="async"
+        fetchPriority="low"
         className={cn(
           'w-auto',
           layout === 'horizontal' ? 'h-10 sm:h-11' : 'h-24',

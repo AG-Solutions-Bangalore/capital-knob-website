@@ -10,7 +10,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<Variant, string> = {
-  gold: 'bg-gold text-white hover:bg-gold-hover shadow-gold',
+  // Gold with dark ink text for 4.5:1 contrast (white on gold is ~2.3:1, fails WCAG).
+  gold: 'bg-gold text-ink hover:bg-gold-hover shadow-gold',
   navy: 'bg-navy text-white hover:bg-navy-soft shadow-card',
   outline: 'border border-line text-ink hover:border-gold hover:text-gold',
   ghost: 'text-ink hover:text-gold',

@@ -61,7 +61,7 @@ export function WhyChooseSection() {
                 </p>
                 <Link
                   to="/contact"
-                  className="mt-6 inline-flex items-center gap-2 rounded-button bg-gold px-5 py-3 text-sm font-semibold text-white shadow-gold transition-colors hover:bg-gold-hover"
+                  className="mt-6 inline-flex items-center gap-2 rounded-button bg-gold px-5 py-3 text-sm font-semibold text-ink shadow-gold transition-colors hover:bg-gold-hover"
                 >
                   Get a Free Consultation
                   <svg
