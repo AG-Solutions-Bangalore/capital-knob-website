@@ -98,16 +98,19 @@ export function Header() {
     null,
   )
   const location = useLocation()
-  // Close-delay timer keeps the panel open while the user moves the cursor
-  // from the trigger to the dropdown body.
-  const closeTimerRef = useRef<number | null>(null)
+  const [prevPathname, setPrevPathname] = useState(location.pathname)
 
-  // Close the sidebar on every route change.
-  useEffect(() => {
+  // Close the sidebar and dropdown menus on every route change.
+  if (prevPathname !== location.pathname) {
+    setPrevPathname(location.pathname)
     setOpen(false)
     setOpenGroup(null)
     setMobileExpandedGroup(null)
-  }, [location.pathname])
+  }
+
+  // Close-delay timer keeps the panel open while the user moves the cursor
+  // from the trigger to the dropdown body.
+  const closeTimerRef = useRef<number | null>(null)
 
   // Lock body scroll while the sidebar is open and restore on close/unmount.
   useEffect(() => {

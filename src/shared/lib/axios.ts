@@ -73,7 +73,6 @@ api.interceptors.request.use(
     }
 
     if (env.isDev) {
-      // eslint-disable-next-line no-console
       console.debug(
         `[api] ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`,
       )
