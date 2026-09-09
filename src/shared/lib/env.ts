@@ -15,6 +15,9 @@ export const env = {
     (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
     'https://agsdemo.in/ck/api',
 
+  /** Secret key for authenticating API requests. */
+  secretKey: import.meta.env.VITE_SECRET_KEY as string | undefined,
+
   /** When true, devtools and verbose axios logging are enabled. */
   isDev: import.meta.env.DEV,
 } as const

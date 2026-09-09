@@ -68,6 +68,10 @@ export const api: AxiosInstance = axios.create({
 
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    if (env.secretKey) {
+      config.headers.Authorization = env.secretKey
+    }
+
     if (env.isDev) {
       // eslint-disable-next-line no-console
       console.debug(
