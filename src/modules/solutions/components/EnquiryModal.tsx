@@ -53,22 +53,27 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
   const [errors, setErrors] = useState<Partial<FormState>>({})
   const [serverError, setServerError] = useState<string | null>(null)
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle')
+  const [prevSubject, setPrevSubject] = useState(subject)
 
   const enquiryMutation = useEnquiryMutation()
   const isSubmitting = enquiryMutation.isPending || status === 'submitting'
 
   // Sync the pre-filled subject whenever the modal opens, and reset
   // everything else so back-to-back opens don't carry stale state.
-  useEffect(() => {
+  if (prevSubject !== subject) {
+    setPrevSubject(subject)
     if (subject !== null) {
       setValues({ ...INITIAL_FORM, subject })
       setErrors({})
       setServerError(null)
       setStatus('idle')
+    }
+  }
+
+  useEffect(() => {
+    if (subject !== null) {
       enquiryMutation.reset()
     }
-    // We intentionally exclude enquiryMutation.reset to avoid resetting
-    // on every render of the hook; it only needs to fire on open.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subject])
 
