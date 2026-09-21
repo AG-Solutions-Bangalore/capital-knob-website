@@ -27,6 +27,13 @@ import { useFaqBySlugQuery } from '@/modules/faq/hooks/useFaqQuery'
 import { useTestimonialsQuery } from '@/modules/testimonial/hooks/useTestimonialQuery'
 import { useClientsQuery } from '@/modules/client/hooks/useClientQuery'
 import { useSitemapQuery } from '@/modules/sitemap/hooks/useSitemapQuery'
+import { CompanyCard } from '@/modules/company/components/CompanyCard'
+import { CategoryGrid } from '@/modules/category/components/CategoryGrid'
+import { BlogDetailCard, BlogList } from '@/modules/blogs/components/BlogList'
+import { FaqAccordion } from '@/modules/faq/components/FaqAccordion'
+import { TestimonialCards } from '@/modules/testimonial/components/TestimonialCards'
+import { ClientGrid } from '@/modules/client/components/ClientGrid'
+import { SitemapList } from '@/modules/sitemap/components/SitemapList'
 
 type Status = 'loading' | 'success' | 'error' | 'idle'
 
@@ -251,6 +258,65 @@ export function ApiCheckPage() {
                 : 'Sitemap pages + blog entries.'
             }
           />
+        </div>
+
+        <h2 className="mt-10 font-display text-xl font-bold text-navy">
+          Live components
+        </h2>
+        <p className="mt-1 text-sm text-muted">
+          The same display components the site uses, rendered with live data.
+          Slug-based components follow the slug input above.
+        </p>
+
+        <div className="mt-4 space-y-8">
+          <section>
+            <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
+              CompanyCard — GET /getCompany
+            </h3>
+            <CompanyCard />
+          </section>
+          <section>
+            <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
+              CategoryGrid — GET /getCategory
+            </h3>
+            <CategoryGrid />
+          </section>
+          <section>
+            <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
+              BlogList — GET /getBlogs
+            </h3>
+            <BlogList />
+          </section>
+          <section>
+            <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
+              BlogDetailCard — GET /getBlogsBySlug/{slug || '{slug}'}
+            </h3>
+            <BlogDetailCard slug={slug} />
+          </section>
+          <section>
+            <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
+              FaqAccordion — GET /getFAQBySlug/{slug || '{slug}'}
+            </h3>
+            <FaqAccordion slug={slug} />
+          </section>
+          <section>
+            <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
+              TestimonialCards — GET /getTestimonial/{slug || '{slug}'}
+            </h3>
+            <TestimonialCards slug={slug} />
+          </section>
+          <section>
+            <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
+              ClientGrid — GET /getClient
+            </h3>
+            <ClientGrid />
+          </section>
+          <section>
+            <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
+              SitemapList — GET /getSitemap
+            </h3>
+            <SitemapList />
+          </section>
         </div>
 
         <h2 className="mt-10 font-display text-xl font-bold text-navy">

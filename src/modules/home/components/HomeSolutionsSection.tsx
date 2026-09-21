@@ -2,7 +2,7 @@ import { Suspense, lazy, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Container } from '@/shared/components/Container'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
-import { homeSolutionsTabs, individualSolutions } from '../constants'
+import { individualSolutions } from '../constants'
 
 const EnquiryModal = lazy(() =>
   import('@/modules/solutions/components/EnquiryModal').then((m) => ({
@@ -69,7 +69,6 @@ function ServiceIcon({ name }: { name: string }) {
 }
 
 export function HomeSolutionsSection() {
-  const [activeTab, setActiveTab] = useState('individuals')
   // Enquiry popup state — the gold arrow opens the modal with this card's
   // title pre-filled in the Subject field (same modal as Solutions page).
   const [enquirySubject, setEnquirySubject] = useState<string | null>(null)

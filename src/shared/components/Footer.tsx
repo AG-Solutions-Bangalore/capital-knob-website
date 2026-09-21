@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ROUTES } from '@/app/routes'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
+import { useCompanyQuery } from '@/modules/company/hooks/useCompanyQuery'
 import { NewsletterForm } from '@/modules/newsletter/components/NewsletterForm'
 import { Container } from './Container'
 import { Logo } from './Logo'
@@ -54,6 +55,20 @@ export function Footer({ variant = 'light' }: FooterProps) {
   // as <Footer variant="dark" /> — ready for next-themes later.
   const isDark = variant === 'dark'
 
+  // Live company contact (GET /getCompany) with static fallback so the
+  // footer never renders empty while loading or when the API is down.
+  const { data: companyData } = useCompanyQuery()
+  const live = companyData?.data
+  const contactPhone = live?.company_mobile_no
+    ? `+91 ${live.company_mobile_no}`
+    : '+91 98765 43210'
+  const contactPhoneHref = live?.company_mobile_no
+    ? `tel:+91${live.company_mobile_no}`
+    : 'tel:+919876543210'
+  const contactEmail = live?.company_email?.trim()
+    ? live.company_email.trim()
+    : 'info@capitalknob.com'
+
   return (
     <footer
       className={
@@ -83,25 +98,25 @@ export function Footer({ variant = 'light' }: FooterProps) {
               <p className="flex items-center gap-2">
                 <span className="font-semibold text-navy">Phone:</span>
                 <a
-                  href="tel:+919876543210"
-                  title={linkTitleFor('tel:+919876543210')}
+                  href={contactPhoneHref}
+                  title={linkTitleFor(contactPhoneHref)}
                   className={`transition-colors ${
                     isDark ? 'text-white/90 hover:text-gold' : 'text-ink hover:text-brand-blue'
                   }`}
                 >
-                  +91 98765 43210
+                  {contactPhone}
                 </a>
               </p>
               <p className="flex items-center gap-2">
                 <span className="font-semibold text-navy">Email:</span>
                 <a
-                  href="mailto:info@capitalknob.com"
-                  title={linkTitleFor('mailto:info@capitalknob.com')}
+                  href={`mailto:${contactEmail}`}
+                  title={linkTitleFor(`mailto:${contactEmail}`)}
                   className={`transition-colors ${
                     isDark ? 'text-white/90 hover:text-gold' : 'text-ink hover:text-brand-blue'
                   }`}
                 >
-                  info@capitalknob.com
+                  {contactEmail}
                 </a>
               </p>
             </div>
@@ -233,7 +248,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
               <Link
                 to={ROUTES.contact}
                 title={linkTitleFor(ROUTES.contact)}
-                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-gold px-4 py-2.5 text-xs font-bold text-ink shadow-sm transition-all hover:bg-gold-hover active:scale-[0.98]"
+                className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-gold px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-gold-hover active:scale-[0.98]"
               >
                 <span>Book Free Consultation</span>
                 <svg

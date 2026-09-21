@@ -120,7 +120,7 @@ export function NewsletterForm({ tone = 'light' }: NewsletterFormProps) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="inline-flex h-11 shrink-0 items-center justify-center rounded-lg bg-gold px-4 text-xs font-bold text-ink shadow-sm transition-all hover:bg-gold-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex h-11 shrink-0 items-center justify-center rounded-lg bg-gold px-4 text-xs font-bold text-white shadow-sm transition-all hover:bg-gold-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
         >
           {isSubmitting ? (
             <>

@@ -40,7 +40,7 @@ export function HomeCtaSection() {
               <a
                 href="/contact"
                 title={linkTitleFor('/contact')}
-                className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-ink shadow-gold transition-all duration-200 hover:bg-gold-hover active:scale-[0.98]"
+                className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-white shadow-gold transition-all duration-200 hover:bg-gold-hover active:scale-[0.98]"
               >
                 <span>Get Started Today</span>
                 <svg

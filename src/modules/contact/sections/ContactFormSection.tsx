@@ -1,6 +1,5 @@
 import { useState, type FormEvent } from 'react'
 import { Container } from '@/shared/components/Container'
-import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { getFriendlyApiErrorMessage } from '@/shared/lib/apiErrors'
 import { getEnquiryFrom, getUtmParams } from '@/shared/lib/utm'
 import { isValidEmail, isValidIndianMobile } from '@/shared/lib/validation'
@@ -8,6 +7,7 @@ import { useEnquiryMutation } from '@/modules/enquiry/hooks/useEnquiryMutation'
 import { contactCopy } from '../constants'
 import { ENQUIRY_FROM_CONTACT } from '@/modules/enquiry/constants'
 import type { EnquiryPayload } from '@/modules/enquiry/api/enquiry.types'
+import { GetInTouchCard } from '../components/GetInTouchCard'
 
 interface FormState {
   fullName: string
@@ -26,7 +26,7 @@ const INITIAL_FORM: FormState = {
 }
 
 export function ContactFormSection() {
-  const { form, touch } = contactCopy
+  const { form } = contactCopy
   const [values, setValues] = useState<FormState>(INITIAL_FORM)
   const [errors, setErrors] = useState<Partial<FormState>>({})
   const [serverError, setServerError] = useState<string | null>(null)
@@ -179,9 +179,8 @@ export function ContactFormSection() {
                         setValues({ ...values, fullName: e.target.value })
                         if (errors.fullName) setErrors({ ...errors, fullName: undefined })
                       }}
-                      className={`mt-2 h-11 w-full rounded-lg border bg-white px-3.5 text-sm text-ink placeholder:text-muted/60 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${
-                        errors.fullName ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-200' : 'border-line'
-                      }`}
+                      className={`mt-2 h-11 w-full rounded-lg border bg-white px-3.5 text-sm text-ink placeholder:text-muted/60 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${errors.fullName ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-200' : 'border-line'
+                        }`}
                     />
                     {errors.fullName && (
                       <p className="mt-1 text-xs text-rose-500">{errors.fullName}</p>
@@ -197,9 +196,8 @@ export function ContactFormSection() {
                       Mobile Number <span className="text-rose-500">*</span>
                     </label>
                     <div
-                      className={`mt-2 flex h-11 w-full items-center rounded-lg border bg-white transition-colors focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/20 ${
-                        errors.phone ? 'border-rose-400 focus-within:border-rose-500 focus-within:ring-rose-200' : 'border-line'
-                      }`}
+                      className={`mt-2 flex h-11 w-full items-center rounded-lg border bg-white transition-colors focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/20 ${errors.phone ? 'border-rose-400 focus-within:border-rose-500 focus-within:ring-rose-200' : 'border-line'
+                        }`}
                     >
                       <div className="flex items-center gap-1 border-r border-line px-3 text-xs font-semibold text-ink">
                         <span>+91</span>
@@ -255,9 +253,8 @@ export function ContactFormSection() {
                         setValues({ ...values, email: e.target.value })
                         if (errors.email) setErrors({ ...errors, email: undefined })
                       }}
-                      className={`mt-2 h-11 w-full rounded-lg border bg-white px-3.5 text-sm text-ink placeholder:text-muted/60 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${
-                        errors.email ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-200' : 'border-line'
-                      }`}
+                      className={`mt-2 h-11 w-full rounded-lg border bg-white px-3.5 text-sm text-ink placeholder:text-muted/60 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${errors.email ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-200' : 'border-line'
+                        }`}
                     />
                     {errors.email && (
                       <p className="mt-1 text-xs text-rose-500">{errors.email}</p>
@@ -280,11 +277,9 @@ export function ContactFormSection() {
                           setValues({ ...values, subject: e.target.value })
                           if (errors.subject) setErrors({ ...errors, subject: undefined })
                         }}
-                        className={`h-11 w-full appearance-none rounded-lg border bg-white px-3.5 pr-8 text-sm text-ink transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${
-                          !values.subject ? 'text-muted/70' : 'text-ink'
-                        } ${
-                          errors.subject ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-200' : 'border-line'
-                        }`}
+                        className={`h-11 w-full appearance-none rounded-lg border bg-white px-3.5 pr-8 text-sm text-ink transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${!values.subject ? 'text-muted/70' : 'text-ink'
+                          } ${errors.subject ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-200' : 'border-line'
+                          }`}
                       >
                         <option value="" disabled>
                           Select a subject
@@ -333,9 +328,8 @@ export function ContactFormSection() {
                       setValues({ ...values, message: e.target.value })
                       if (errors.message) setErrors({ ...errors, message: undefined })
                     }}
-                    className={`mt-2 w-full rounded-lg border bg-white p-3.5 text-sm text-ink placeholder:text-muted/60 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${
-                      errors.message ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-200' : 'border-line'
-                    }`}
+                    className={`mt-2 w-full rounded-lg border bg-white p-3.5 text-sm text-ink placeholder:text-muted/60 transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${errors.message ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-200' : 'border-line'
+                      }`}
                   />
                   {errors.message && (
                     <p className="mt-1 text-xs text-rose-500">{errors.message}</p>
@@ -346,7 +340,7 @@ export function ContactFormSection() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-button bg-gold px-7 py-3 text-sm font-semibold text-ink shadow-gold transition-all duration-200 hover:bg-gold-hover hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70 active:scale-[0.98]"
+                  className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-button bg-gold px-7 py-3 text-sm font-semibold text-white shadow-gold transition-all duration-200 hover:bg-gold-hover hover:shadow-md disabled:cursor-not-allowed disabled:opacity-70 active:scale-[0.98]"
                 >
                   {isSubmitting ? (
                     <>
@@ -395,108 +389,8 @@ export function ContactFormSection() {
             )}
           </div>
 
-          {/* Right Column: Get in Touch Card */}
-          <div className="rounded-2xl border border-line/60 bg-[#F4F7FA] p-6 sm:p-8 md:p-10 lg:col-span-5">
-            <h2 className="font-display text-2xl font-bold text-navy md:text-3xl">
-              {touch.title}
-            </h2>
-            <p className="mt-2 text-sm text-muted md:text-base">
-              {touch.description}
-            </p>
-
-            <div className="mt-8 space-y-7">
-              {/* Call Us */}
-              <div className="flex items-start gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-navy/15 bg-white text-navy shadow-soft">
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-muted">{touch.phone.label}</p>
-                  <a
-                    href={touch.phone.href}
-                    title={linkTitleFor(touch.phone.href)}
-                    className="mt-1 block font-display text-lg font-bold text-navy transition-colors hover:text-gold"
-                  >
-                    {touch.phone.number}
-                  </a>
-                  <p className="mt-0.5 text-xs text-muted">{touch.phone.hours}</p>
-                </div>
-              </div>
-
-              {/* Email Us */}
-              <div className="flex items-start gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-navy/15 bg-white text-navy shadow-soft">
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <rect x="2" y="4" width="20" height="16" rx="2" />
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-muted">{touch.email.label}</p>
-                  <a
-                    href={touch.email.href}
-                    title={linkTitleFor(touch.email.href)}
-                    className="mt-1 block font-display text-lg font-bold text-navy transition-colors hover:text-gold"
-                  >
-                    {touch.email.address}
-                  </a>
-                  <p className="mt-0.5 text-xs text-muted">{touch.email.note}</p>
-                </div>
-              </div>
-
-              {/* Visit Our Office */}
-              <div className="flex items-start gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-navy/15 bg-white text-navy shadow-soft">
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-muted">{touch.office.label}</p>
-                  <p className="mt-1 font-display text-lg font-bold text-navy">
-                    {touch.office.name}
-                  </p>
-                  <address className="mt-1 text-sm not-italic leading-relaxed text-muted">
-                    {touch.office.lines.map((line, idx) => (
-                      <span key={idx} className="block">
-                        {line}
-                      </span>
-                    ))}
-                  </address>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Right Column: Get in Touch Card (live company data) */}
+          <GetInTouchCard />
         </div>
       </Container>
     </section>
