@@ -98,23 +98,7 @@ export function HomeSolutionsSection() {
 
           {/* Right Tabs & Explore Button */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center lg:gap-6">
-            {/* Tabs */}
-            <div className="flex items-center gap-6 overflow-x-auto no-scrollbar border-b border-slate-200 pb-2 sm:border-none sm:pb-0">
-              {homeSolutionsTabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`relative shrink-0 pb-2 text-sm font-medium transition-colors ${
-                    activeTab === tab.id
-                      ? 'font-bold text-ink after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-navy'
-                      : 'text-muted hover:text-ink'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
+        
 
             {/* Explore All CTA */}
             <Link
