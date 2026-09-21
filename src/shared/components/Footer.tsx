@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ROUTES } from '@/app/routes'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
-import { NewsletterForm } from '@/modules/website/components/NewsletterForm'
+import { NewsletterForm } from '@/modules/newsletter/components/NewsletterForm'
 import { Container } from './Container'
 import { Logo } from './Logo'
 

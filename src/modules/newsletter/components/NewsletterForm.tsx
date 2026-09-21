@@ -10,7 +10,7 @@
 import { useState, type FormEvent } from 'react'
 import { getFriendlyApiErrorMessage } from '@/shared/lib/apiErrors'
 import { isValidEmail } from '@/shared/lib/validation'
-import { useNewsletterMutation } from '../hooks/useWebsiteQueries'
+import { useNewsletterMutation } from '../hooks/useNewsletterMutation'
 
 interface NewsletterFormProps {
   /** Match the surrounding footer theme. Defaults to light. */

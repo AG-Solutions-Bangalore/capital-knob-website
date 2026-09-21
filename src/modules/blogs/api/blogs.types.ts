@@ -10,7 +10,7 @@
  * so the exact item shape is still unverified.
  */
 
-import type { ImageUrlEntry } from './company.types'
+import type { ImageUrlEntry } from '@/modules/company/api/company.types'
 
 /** A blog list item. Fields optional until the item shape is verified. */
 export interface Blog {

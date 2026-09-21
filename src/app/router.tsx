@@ -1,9 +1,11 @@
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom'
 import { ROUTES } from './routes'
+import { env } from '@/shared/lib/env'
 import { MainLayout } from '@/shared/layouts/MainLayout'
 import { LazyRoute } from '@/shared/components/LazyRoute'
 import {
   AboutPage,
+  ApiCheckPage,
   BusinessFinancePage,
   ContactPage,
   HomeFinancePage,
@@ -58,6 +60,10 @@ const routes: RouteObject[] = [
       { path: ROUTES.about, element: <LazyRoute Component={AboutPage} /> },
       { path: '/about', element: <Navigate to={ROUTES.about} replace /> },
       { path: ROUTES.contact, element: <LazyRoute Component={ContactPage} /> },
+      // Dev-only backend verification dashboard — never registered in prod.
+      ...(env.isDev
+        ? [{ path: ROUTES.apiCheck, element: <LazyRoute Component={ApiCheckPage} /> }]
+        : []),
       { path: '*', element: <LazyRoute Component={NotFoundPage} /> },
     ],
   },

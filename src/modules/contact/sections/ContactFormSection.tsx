@@ -4,9 +4,10 @@ import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { getFriendlyApiErrorMessage } from '@/shared/lib/apiErrors'
 import { getEnquiryFrom, getUtmParams } from '@/shared/lib/utm'
 import { isValidEmail, isValidIndianMobile } from '@/shared/lib/validation'
-import { useEnquiryMutation } from '../hooks/useEnquiryMutation'
-import { contactCopy, ENQUIRY_FROM_CONTACT } from '../constants'
-import type { EnquiryPayload } from '../api/enquiry.types'
+import { useEnquiryMutation } from '@/modules/enquiry/hooks/useEnquiryMutation'
+import { contactCopy } from '../constants'
+import { ENQUIRY_FROM_CONTACT } from '@/modules/enquiry/constants'
+import type { EnquiryPayload } from '@/modules/enquiry/api/enquiry.types'
 
 interface FormState {
   fullName: string

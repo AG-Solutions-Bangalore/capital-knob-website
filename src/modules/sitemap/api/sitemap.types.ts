@@ -4,7 +4,7 @@
  * Live shape: `{ data: [{ page_two_url, page_two_name, ... }], blog: [] }`.
  */
 
-import type { Blog } from './blogs.types'
+import type { Blog } from '@/modules/blogs/api/blogs.types'
 
 export interface SitemapEntry {
   id?: number

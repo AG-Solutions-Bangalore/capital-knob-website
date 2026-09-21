@@ -8,7 +8,7 @@
 import { api } from '@/shared/lib/axios'
 import { arrayOf, objectOf } from '@/shared/lib/parse'
 import type { Client, ClientResponse } from './client.types'
-import type { ImageUrlEntry } from './company.types'
+import type { ImageUrlEntry } from '@/modules/company/api/company.types'
 
 const CLIENT_ENDPOINT = '/getClient'
 

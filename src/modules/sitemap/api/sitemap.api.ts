@@ -8,7 +8,7 @@
 import { api } from '@/shared/lib/axios'
 import { arrayOf, objectOf } from '@/shared/lib/parse'
 import type { SitemapEntry, SitemapResponse } from './sitemap.types'
-import type { Blog } from './blogs.types'
+import type { Blog } from '@/modules/blogs/api/blogs.types'
 
 const SITEMAP_ENDPOINT = '/getSitemap'
 

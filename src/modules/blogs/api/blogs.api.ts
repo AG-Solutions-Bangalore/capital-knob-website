@@ -13,7 +13,7 @@ import type {
   BlogDetail,
   BlogListResponse,
 } from './blogs.types'
-import type { ImageUrlEntry } from './company.types'
+import type { ImageUrlEntry } from '@/modules/company/api/company.types'
 
 const FRONT_BLOGS_ENDPOINT = '/getFrontBlogs'
 const FEATURED_BLOGS_ENDPOINT = '/getFeaturedBlogs'

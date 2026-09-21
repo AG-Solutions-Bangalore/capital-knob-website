@@ -19,9 +19,9 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { getFriendlyApiErrorMessage } from '@/shared/lib/apiErrors'
 import { getEnquiryFrom, getUtmParams } from '@/shared/lib/utm'
 import { isValidEmail, isValidIndianMobile } from '@/shared/lib/validation'
-import { ENQUIRY_FROM_SOLUTIONS } from '@/modules/contact/constants'
-import { useEnquiryMutation } from '@/modules/contact/hooks/useEnquiryMutation'
-import type { EnquiryPayload } from '@/modules/contact/api/enquiry.types'
+import { ENQUIRY_FROM_SOLUTIONS } from '@/modules/enquiry/constants'
+import { useEnquiryMutation } from '@/modules/enquiry/hooks/useEnquiryMutation'
+import type { EnquiryPayload } from '@/modules/enquiry/api/enquiry.types'
 
 interface EnquiryModalProps {
   /** Pre-fills the Subject field. `null` keeps the modal closed. */

@@ -11,6 +11,8 @@ export const ROUTES = {
   privateCredit: '/private-credit',
   about: '/about-us',
   contact: '/contact',
+  /** Dev-only API verification dashboard (registered only in dev builds). */
+  apiCheck: '/api-check',
 } as const
 
 export type RoutePath = (typeof ROUTES)[keyof typeof ROUTES]

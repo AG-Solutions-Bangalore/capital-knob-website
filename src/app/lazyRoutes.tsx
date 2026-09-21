@@ -36,6 +36,11 @@ export const ContactPage = lazy(() =>
     default: m.ContactPage,
   })),
 )
+export const ApiCheckPage = lazy(() =>
+  import('@/modules/api-check/pages/ApiCheckPage').then((m) => ({
+    default: m.ApiCheckPage,
+  })),
+)
 export const NotFoundPage = lazy(() =>
   import('@/shared/components/NotFoundPage').then((m) => ({
     default: m.NotFoundPage,

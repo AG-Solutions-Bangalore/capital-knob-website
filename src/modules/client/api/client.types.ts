@@ -5,7 +5,7 @@
  * so item fields stay permissive until verified.
  */
 
-import type { ImageUrlEntry } from './company.types'
+import type { ImageUrlEntry } from '@/modules/company/api/company.types'
 
 export interface Client {
   id?: string | number
