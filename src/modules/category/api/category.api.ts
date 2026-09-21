@@ -7,6 +7,7 @@
 
 import { api } from '@/shared/lib/axios'
 import { arrayOf, objectOf } from '@/shared/lib/parse'
+import type { ImageUrlEntry } from '@/modules/company/api/company.types'
 import type { Category, CategoryResponse } from './category.types'
 
 const CATEGORY_ENDPOINT = '/getCategory'
@@ -21,5 +22,6 @@ export async function fetchCategories(): Promise<CategoryResponse> {
   const body = objectOf<Record<string, unknown>>(data, {})
   return {
     data: arrayOf<Category>(body.data),
+    image_url: arrayOf<ImageUrlEntry>(body.image_url),
   }
 }

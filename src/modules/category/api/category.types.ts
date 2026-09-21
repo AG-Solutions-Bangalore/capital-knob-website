@@ -27,6 +27,9 @@ export interface Category {
   [key: string]: unknown
 }
 
+import type { ImageUrlEntry } from '@/modules/company/api/company.types'
+
 export interface CategoryResponse {
   data: Category[]
+  image_url: ImageUrlEntry[]
 }

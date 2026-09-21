@@ -89,6 +89,12 @@ const navEntries: NavEntry[] = [
     to: ROUTES.contact,
     title: 'Contact CapitalKnob',
   },
+  // {
+  //   kind: 'link',
+  //   label: 'Blogs',
+  //   to: ROUTES.blogs,
+  //   title: 'Blogs & Insights – CapitalKnob',
+  // },
 ]
 
 export function Header() {

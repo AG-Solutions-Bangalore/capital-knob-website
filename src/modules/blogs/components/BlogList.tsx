@@ -1,16 +1,12 @@
 /**
- * BlogList + BlogDetailCard — display live blogs.
+ * BlogList — displays the live blog listing (`GET /getBlogs`).
  *
- * `BlogList` renders the full listing; `BlogDetailCard` renders a single
- * blog for a slug with prev/next navigation. Loading, error, and empty
- * states included. Image URLs resolve against the `Blog` asset base URL.
+ * Loading, error, and empty states included. Image URLs resolve against
+ * the `Blog` asset base URL.
  */
 
 import type { Blog } from '../api/blogs.types'
-import {
-  useBlogBySlugQuery,
-  useBlogsQuery,
-} from '../hooks/useBlogsQueries'
+import { useBlogsQuery } from '../hooks/useBlogsQueries'
 
 function imageFor(
   imageUrl: { image_for?: string; image_url?: string }[] | undefined,
@@ -90,63 +86,5 @@ export function BlogList() {
         />
       ))}
     </div>
-  )
-}
-
-export function BlogDetailCard({ slug }: { slug: string }) {
-  const { data, isPending, isError } = useBlogBySlugQuery(slug || undefined)
-
-  if (isPending) {
-    return (
-      <div role="status" className="animate-pulse rounded-xl border border-line bg-white p-6 shadow-soft">
-        <div className="h-6 w-2/3 rounded bg-line-soft" />
-        <div className="mt-3 h-4 w-full rounded bg-line-soft" />
-        <div className="mt-2 h-4 w-5/6 rounded bg-line-soft" />
-      </div>
-    )
-  }
-
-  if (isError) {
-    return (
-      <div role="alert" className="rounded-xl border border-rose-200 bg-rose-50/70 p-6 text-sm text-rose-700">
-        Could not load this blog. Please try again later.
-      </div>
-    )
-  }
-
-  if (!data?.data) {
-    return (
-      <p role="status" className="rounded-xl border border-line bg-white p-6 text-sm text-muted">
-        No blog found for slug “{slug}”.
-      </p>
-    )
-  }
-
-  const blog = data.data
-  const src = imageFor(data.image_url, blog.blog_image)
-
-  return (
-    <article className="overflow-hidden rounded-xl border border-line bg-white shadow-soft">
-      {src && (
-        <img src={src} alt={blog.blog_title ?? 'Blog'} className="h-56 w-full object-cover" loading="lazy" />
-      )}
-      <div className="p-6">
-        <h3 className="font-display text-xl font-bold text-navy">{blog.blog_title}</h3>
-        {blog.blog_description && <p className="mt-2 text-sm text-muted">{blog.blog_description}</p>}
-        {blog.blog_content && <p className="mt-3 text-sm leading-relaxed text-ink">{blog.blog_content}</p>}
-        <div className="mt-5 flex flex-wrap gap-2 text-xs">
-          {data.previous && (
-            <span className="rounded-full bg-line-soft px-3 py-1.5 font-medium text-ink">
-              ← Prev: {data.previous.blog_title ?? data.previous.id}
-            </span>
-          )}
-          {data.next && (
-            <span className="rounded-full bg-line-soft px-3 py-1.5 font-medium text-ink">
-              Next: {data.next.blog_title ?? data.next.id} →
-            </span>
-          )}
-        </div>
-      </div>
-    </article>
   )
 }

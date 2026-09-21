@@ -83,8 +83,9 @@ function EnquireArrowButton({
       aria-label={`Enquire about ${title}`}
       title={`Enquire about ${title}`}
       className={cn(
-        'absolute right-4 bottom-4 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full bg-gold text-ink shadow-soft transition-all duration-200',
-        'hover:scale-105 hover:bg-gold-hover hover:shadow-gold active:scale-95',
+        'absolute right-4 bottom-4 z-10 inline-flex h-9 w-9 items-center justify-center rounded-full border border-gold/40 text-gold transition-all duration-200',
+        'hover:rotate-[-45deg] hover:border-gold hover:bg-gold hover:text-white hover:shadow-gold active:scale-95',
+        'group-hover:rotate-[-45deg] group-hover:border-gold group-hover:bg-gold group-hover:text-white',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
       )}
     >

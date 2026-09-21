@@ -6,6 +6,8 @@ import { LazyRoute } from '@/shared/components/LazyRoute'
 import {
   AboutPage,
   ApiCheckPage,
+  BlogDetailPage,
+  BlogsPage,
   BusinessFinancePage,
   ContactPage,
   HomeFinancePage,
@@ -60,6 +62,8 @@ const routes: RouteObject[] = [
       { path: ROUTES.about, element: <LazyRoute Component={AboutPage} /> },
       { path: '/about', element: <Navigate to={ROUTES.about} replace /> },
       { path: ROUTES.contact, element: <LazyRoute Component={ContactPage} /> },
+      { path: ROUTES.blogs, element: <LazyRoute Component={BlogsPage} /> },
+      { path: ROUTES.blogDetail, element: <LazyRoute Component={BlogDetailPage} /> },
       // Dev-only backend verification dashboard — never registered in prod.
       ...(env.isDev
         ? [{ path: ROUTES.apiCheck, element: <LazyRoute Component={ApiCheckPage} /> }]

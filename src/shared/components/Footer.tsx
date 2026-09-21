@@ -26,6 +26,7 @@ const companyLinks = [
   { label: 'Home', href: ROUTES.home },
   { label: 'Explore All Solutions', href: ROUTES.solutions },
   { label: 'About CapitalKnob', href: ROUTES.about },
+  { label: 'Blogs & Insights', href: ROUTES.blogs },
   { label: 'Lending Partners', href: '/#partners' },
   { label: 'Why Choose Us', href: '/#why-choose' },
   { label: '5-Step Process', href: '/#steps' },

@@ -36,6 +36,16 @@ export const ContactPage = lazy(() =>
     default: m.ContactPage,
   })),
 )
+export const BlogsPage = lazy(() =>
+  import('@/modules/blogs/pages/BlogsPage').then((m) => ({
+    default: m.BlogsPage,
+  })),
+)
+export const BlogDetailPage = lazy(() =>
+  import('@/modules/blogs/pages/BlogDetailPage').then((m) => ({
+    default: m.BlogDetailPage,
+  })),
+)
 export const ApiCheckPage = lazy(() =>
   import('@/modules/api-check/pages/ApiCheckPage').then((m) => ({
     default: m.ApiCheckPage,

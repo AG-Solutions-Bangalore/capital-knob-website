@@ -14,6 +14,7 @@ import { SolutionsHeroSection } from '../sections/SolutionsHeroSection'
 import { IndividualsSection } from '../sections/IndividualsSection'
 import { BusinessesSection } from '../sections/BusinessesSection'
 import { OtherCapitalSection } from '../sections/OtherCapitalSection'
+import { CategoriesSection } from '../sections/CategoriesSection'
 import { WhyChooseSection } from '../sections/WhyChooseSection'
 import { StepsSection } from '../sections/StepsSection'
 
@@ -46,6 +47,9 @@ export function SolutionsPage() {
       </SectionReveal>
       <SectionReveal as="section">
         <OtherCapitalSection onEnquire={handleEnquire} />
+      </SectionReveal>
+      <SectionReveal as="section">
+        <CategoriesSection onEnquire={handleEnquire} />
       </SectionReveal>
       <SectionReveal as="section">
         <WhyChooseSection />

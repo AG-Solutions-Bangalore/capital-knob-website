@@ -88,4 +88,11 @@ export const PAGE_SEO: Record<string, PageSeo> = {
     path: '/contact',
     robots: 'index, follow',
   },
+  blogs: {
+    title: 'Blogs & Insights | CapitalKnob',
+    description:
+      'Read financing guides, market perspectives and practical explainers from the CapitalKnob advisory team.',
+    path: '/blogs',
+    robots: 'index, follow',
+  },
 }
