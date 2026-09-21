@@ -11,6 +11,7 @@ import { useSitemapQuery } from '../hooks/useSitemapQuery'
 /** Backend page slugs → known frontend routes (partial on purpose). */
 const KNOWN_ROUTES: Record<string, string> = {
   'about-us': '/about-us',
+  blogs: '/blogs',
   contacts: '/contact',
   'home-finance': '/home-finance',
   'business-loan': '/business-finance',
