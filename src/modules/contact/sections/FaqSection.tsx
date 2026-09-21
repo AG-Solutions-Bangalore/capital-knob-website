@@ -1,10 +1,24 @@
 import { useState } from 'react'
 import { Container } from '@/shared/components/Container'
+import { useFaqBySlugQuery } from '@/modules/faq/hooks/useFaqQuery'
 import { contactCopy } from '../constants'
 
 export function FaqSection() {
   const { faq } = contactCopy
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+
+  // Live FAQs for the contact page. Backend currently returns [] for this
+  // slug, so the static copy below stays until FAQs are published — then
+  // the live items take over automatically with zero further changes.
+  const { data: liveFaq } = useFaqBySlugQuery('contact')
+  const liveItems = (liveFaq?.data ?? [])
+    .map((item) => ({
+      question: item.faq_question?.trim() ?? '',
+      answer: item.faq_answer?.trim() ?? '',
+    }))
+    .filter((item) => item.question && item.answer)
+
+  const items = liveItems.length > 0 ? liveItems : faq.items
 
   function toggle(index: number) {
     setOpenIndex((prev) => (prev === index ? null : index))
@@ -24,7 +38,7 @@ export function FaqSection() {
         </div>
 
         <div className="mt-8 space-y-3">
-          {faq.items.map((item, index) => {
+          {items.map((item, index) => {
             const isOpen = openIndex === index
             return (
               <div
