@@ -16,10 +16,10 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import {
-  ENQUIRY_PRODUCT,
-  ENQUIRY_UTM,
-} from '@/modules/contact/constants'
+import { getFriendlyApiErrorMessage } from '@/shared/lib/apiErrors'
+import { getEnquiryFrom, getUtmParams } from '@/shared/lib/utm'
+import { isValidEmail, isValidIndianMobile } from '@/shared/lib/validation'
+import { ENQUIRY_FROM_SOLUTIONS } from '@/modules/contact/constants'
 import { useEnquiryMutation } from '@/modules/contact/hooks/useEnquiryMutation'
 import type { EnquiryPayload } from '@/modules/contact/api/enquiry.types'
 
@@ -106,13 +106,13 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
     const cleanedPhone = values.phone.replace(/\D/g, '')
     if (!cleanedPhone) {
       errs.phone = 'Please enter your mobile number.'
-    } else if (cleanedPhone.length !== 10) {
+    } else if (!isValidIndianMobile(values.phone)) {
       errs.phone = 'Mobile number must be exactly 10 digits.'
     }
 
     if (!values.email.trim()) {
       errs.email = 'Please enter your email address.'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
+    } else if (!isValidEmail(values.email)) {
       errs.email = 'Please enter a valid email address.'
     }
 
@@ -138,9 +138,10 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
       enquiryEmail: values.email.trim(),
       enquiryMobile: values.phone.replace(/\D/g, ''),
       // Surface the originating solution so the CRM team can route it.
-      enquiryProduct: `${ENQUIRY_PRODUCT} – ${values.subject}`,
+      enquiryService: values.subject,
       enquiryMessage: values.message.trim(),
-      ...ENQUIRY_UTM,
+      enquiryFrom: getEnquiryFrom(`${ENQUIRY_FROM_SOLUTIONS} – ${values.subject}`),
+      ...getUtmParams(),
     }
 
     try {
@@ -148,11 +149,7 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
       setStatus('success')
     } catch (err) {
       setStatus('idle')
-      setServerError(
-        err instanceof Error
-          ? err.message
-          : 'We could not send your enquiry. Please try again.',
-      )
+      setServerError(getFriendlyApiErrorMessage(err))
     }
   }
 

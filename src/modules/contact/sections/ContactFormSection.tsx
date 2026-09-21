@@ -1,12 +1,11 @@
 import { useState, type FormEvent } from 'react'
 import { Container } from '@/shared/components/Container'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
+import { getFriendlyApiErrorMessage } from '@/shared/lib/apiErrors'
+import { getEnquiryFrom, getUtmParams } from '@/shared/lib/utm'
+import { isValidEmail, isValidIndianMobile } from '@/shared/lib/validation'
 import { useEnquiryMutation } from '../hooks/useEnquiryMutation'
-import {
-  contactCopy,
-  ENQUIRY_PRODUCT,
-  ENQUIRY_UTM,
-} from '../constants'
+import { contactCopy, ENQUIRY_FROM_CONTACT } from '../constants'
 import type { EnquiryPayload } from '../api/enquiry.types'
 
 interface FormState {
@@ -47,13 +46,13 @@ export function ContactFormSection() {
     const cleanedPhone = values.phone.replace(/\D/g, '')
     if (!cleanedPhone) {
       errs.phone = 'Please enter your mobile number.'
-    } else if (cleanedPhone.length !== 10) {
+    } else if (!isValidIndianMobile(values.phone)) {
       errs.phone = 'Mobile number must be exactly 10 digits.'
     }
 
     if (!values.email.trim()) {
       errs.email = 'Please enter your email address.'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
+    } else if (!isValidEmail(values.email)) {
       errs.email = 'Please enter a valid email address.'
     }
 
@@ -82,9 +81,10 @@ export function ContactFormSection() {
       enquiryFullName: values.fullName.trim(),
       enquiryEmail: values.email.trim(),
       enquiryMobile: values.phone.replace(/\D/g, ''),
-      enquiryProduct: ENQUIRY_PRODUCT,
+      enquiryService: values.subject,
       enquiryMessage: values.message.trim(),
-      ...ENQUIRY_UTM,
+      enquiryFrom: getEnquiryFrom(ENQUIRY_FROM_CONTACT),
+      ...getUtmParams(),
     }
 
     try {
@@ -92,11 +92,7 @@ export function ContactFormSection() {
       setStatus('success')
     } catch (err) {
       setStatus('idle')
-      setServerError(
-        err instanceof Error
-          ? err.message
-          : 'We could not send your message. Please try again.',
-      )
+      setServerError(getFriendlyApiErrorMessage(err))
     }
   }
 

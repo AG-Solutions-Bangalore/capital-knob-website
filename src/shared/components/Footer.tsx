@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ROUTES } from '@/app/routes'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
+import { NewsletterForm } from '@/modules/website/components/NewsletterForm'
 import { Container } from './Container'
 import { Logo } from './Logo'
 
@@ -123,6 +124,9 @@ export function Footer({ variant = 'light' }: FooterProps) {
                 </a>
               ))}
             </div>
+
+            {/* Newsletter subscription */}
+            <NewsletterForm tone={isDark ? 'dark' : 'light'} />
           </div>
 
           {/* Mobile links group: Solutions + Navigation in 2 columns on mobile */}

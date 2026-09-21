@@ -4,22 +4,20 @@ import { IMAGE_BASE_URL } from "@/lib/images";
  */
 
 /**
- * Product label sent as `enquiryProduct` to the enquiry API. Keeps the
- * wire value in one place so it can be tweaked without hunting through
- * the form component.
- */
-export const ENQUIRY_PRODUCT = 'Website Enquiry'
-
-/**
- * Static UTM defaults. In a real campaign we'd read these from the URL
- * (`?utm_source=...`) or from a global analytics helper; for now they
- * mirror the payload shape the API expects.
+ * Fallback UTM defaults attached to every enquiry submission. At submit
+ * time `getUtmParams()` (shared/lib/utm) overrides these with the live
+ * URL params / session-stored values so campaign attribution survives
+ * in-app navigation.
  */
 export const ENQUIRY_UTM = {
   utm_medium: 'website',
   utm_source: 'google',
   utm_campaign: 'test',
 } as const
+
+/** Human-readable source labels sent as `enquiryFrom` (pathname appended). */
+export const ENQUIRY_FROM_CONTACT = 'Contact Page'
+export const ENQUIRY_FROM_SOLUTIONS = 'Solutions Page'
 
 export const contactCopy = {
   hero: {
