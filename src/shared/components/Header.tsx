@@ -2,9 +2,8 @@ import { ROUTES, type RoutePath } from '@/app/routes'
 import { cn } from '@/shared/lib/cn'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
-import { categoryAnchor } from '@/modules/category/categoryAnchor'
-import { SolutionsMegaPanel } from '@/modules/category/components/CategoryMegaMenu'
-import { useEffect, useId, useRef, useState } from 'react'
+import { SolutionsMegaPanel, SolutionsMobileLinks } from '@/modules/category/components/CategoryMegaMenu'
+import { useEffect, useId, useRef, useState, type CSSProperties } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Button } from './Button'
 import { Container } from './Container'
@@ -45,6 +44,8 @@ interface NavGroupEntry {
 }
 
 type NavEntry = NavLinkEntry | NavGroupEntry
+
+const SOLUTIONS_GROUP_ID = 'solutions-group'
 
 const navEntries: NavEntry[] = [
   { kind: 'link', label: 'Home', to: ROUTES.home, title: 'CapitalKnob Home' },
@@ -104,20 +105,18 @@ const navEntries: NavEntry[] = [
 export function Header() {
   const [open, setOpen] = useState(false)
   const [openGroup, setOpenGroup] = useState<string | null>(null)
+  const [mobileExpandedGroup, setMobileExpandedGroup] = useState<string | null>(null)
   const location = useLocation()
   const [prevPathname, setPrevPathname] = useState(location.pathname)
 
-  // Close dropdown menus on every route change.
+  // Close dropdown menus and mobile sidebar on every route change.
   if (prevPathname !== location.pathname) {
     setPrevPathname(location.pathname)
     setOpen(false)
     setOpenGroup(null)
+    setMobileExpandedGroup(null)
   }
 
-  const { data: liveCategories } = useCategoryQuery()
-  const solutionsEntry = navEntries.find(
-    (e): e is NavGroupEntry => e.kind === 'group' && e.label === 'Solutions',
-  )
 
   // Close-delay timer keeps the panel open while the user moves the cursor
   // from the trigger to the dropdown body.
@@ -253,134 +252,101 @@ export function Header() {
         </div>
       </Container>
 
-      {/* Mobile end-to-end dropdown + backdrop */}
+      {/* Mobile sidebar + backdrop */}
       {open && (
         <>
           <div
             key="mobile-backdrop"
             onClick={() => setOpen(false)}
             aria-hidden="true"
-            className="fixed inset-0 top-20 z-40 bg-ink/40 backdrop-blur-xs lg:hidden animate-fade-in"
+            className="fixed inset-0 z-40 bg-ink/55 backdrop-blur-sm lg:hidden animate-fade-in"
           />
 
-          <div
-            key="mobile-dropdown"
-            id="mobile-menu"
+          <aside
+            key="mobile-sidebar"
+            id="mobile-sidebar"
             role="dialog"
             aria-modal="true"
             aria-label="CapitalKnob navigation"
-            className="fixed inset-x-0 top-20 z-50 px-3 pt-2 lg:hidden animate-dropdown-in"
+            className="fixed left-0 top-0 z-50 flex h-dvh w-[85vw] max-w-sm sm:w-80 flex-col overflow-y-auto border-r border-line bg-white text-ink shadow-2xl lg:hidden animate-sidebar-in"
           >
-            <div className="mx-auto w-full max-w-lg rounded-2xl border border-line bg-white/98 text-ink shadow-2xl backdrop-blur-md p-4 max-h-[calc(100dvh-5.5rem)] overflow-y-auto">
-              <div className="flex flex-col gap-3.5">
-                {/* Row 1: Primary Page Links */}
-                <div className="grid grid-cols-3 gap-2">
-                  <NavLink
-                    to={ROUTES.home}
-                    end
-                    onClick={() => setOpen(false)}
-                    className={({ isActive }) =>
-                      cn(
-                        'flex items-center justify-center rounded-xl py-2.5 text-[13px] font-semibold transition-colors',
-                        isActive
-                          ? 'bg-navy text-white shadow-soft'
-                          : 'bg-line-soft/70 text-ink hover:bg-line-soft',
-                      )
-                    }
-                  >
-                    Home
-                  </NavLink>
-                  <NavLink
-                    to={ROUTES.about}
-                    onClick={() => setOpen(false)}
-                    className={({ isActive }) =>
-                      cn(
-                        'flex items-center justify-center rounded-xl py-2.5 text-[13px] font-semibold transition-colors',
-                        isActive
-                          ? 'bg-navy text-white shadow-soft'
-                          : 'bg-line-soft/70 text-ink hover:bg-line-soft',
-                      )
-                    }
-                  >
-                    About Us
-                  </NavLink>
-                  <NavLink
-                    to={ROUTES.contact}
-                    onClick={() => setOpen(false)}
-                    className={({ isActive }) =>
-                      cn(
-                        'flex items-center justify-center rounded-xl py-2.5 text-[13px] font-semibold transition-colors',
-                        isActive
-                          ? 'bg-navy text-white shadow-soft'
-                          : 'bg-line-soft/70 text-ink hover:bg-line-soft',
-                      )
-                    }
-                  >
-                    Contact Us
-                  </NavLink>
-                </div>
-
-                {/* Row 2: Solutions Header */}
-                <div className="flex items-center justify-between px-1 pt-1">
-                  <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
-                    Financial Solutions
-                  </span>
-                  <Link
-                    to={ROUTES.solutions}
-                    onClick={() => setOpen(false)}
-                    className="flex items-center gap-1 text-[12px] font-semibold text-navy transition-colors hover:text-gold"
-                  >
-                    <span>View All</span>
-                    <ArrowRightIcon className="h-3 w-3" />
-                  </Link>
-                </div>
-
-                {/* Row 3: Solutions Grid (4-5 per line on md, 3 on sm, 2 on xs) */}
-                <div className="grid grid-cols-2 min-[440px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-1.5">
-                  {liveCategories?.data && liveCategories.data.length > 0 ? (
-                    liveCategories.data.map((cat) => (
-                      <Link
-                        key={cat.id ?? cat.category_slug}
-                        to={categoryAnchor(cat.category_slug)}
-                        onClick={() => setOpen(false)}
-                        className="group flex items-center justify-between rounded-lg border border-line bg-slate-50/90 px-2.5 py-1.5 text-[11px] sm:text-[12px] font-medium text-ink transition-all active:scale-[0.98] hover:border-navy/30 hover:bg-navy/5 hover:text-navy"
-                      >
-                        <span className="truncate">{cat.category_name}</span>
-                        <ArrowRightIcon className="h-2.5 w-2.5 shrink-0 text-muted opacity-40 transition-transform group-hover:translate-x-0.5 group-hover:text-navy" />
-                      </Link>
-                    ))
-                  ) : (
-                    (solutionsEntry?.children ?? []).map((child) => (
-                      <Link
-                        key={child.to}
-                        to={child.to}
-                        onClick={() => setOpen(false)}
-                        className="group flex items-center justify-between rounded-lg border border-line bg-slate-50/90 px-2.5 py-1.5 text-[11px] sm:text-[12px] font-medium text-ink transition-all active:scale-[0.98] hover:border-navy/30 hover:bg-navy/5 hover:text-navy"
-                      >
-                        <span className="truncate">{child.label}</span>
-                        <ArrowRightIcon className="h-2.5 w-2.5 shrink-0 text-muted opacity-40 transition-transform group-hover:translate-x-0.5 group-hover:text-navy" />
-                      </Link>
-                    ))
-                  )}
-                </div>
-
-                {/* Row 4: Get a Callback CTA */}
-                <div className="pt-1">
-                  <Link
-                    to={ROUTES.contact}
-                    title={linkTitleFor(ROUTES.contact)}
-                    onClick={() => setOpen(false)}
-                    className="block w-full"
-                  >
-                    <Button variant="gold" size="md" className="w-full justify-center shadow-soft">
-                      <span>Get a Callback</span>
-                      <ArrowRightIcon className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                </div>
+            {/* Sidebar header */}
+            <div className="flex h-20 items-center justify-between border-b border-line px-5">
+              <div onClick={() => setOpen(false)}>
+                <Logo variant="dark" />
               </div>
+              <button
+                type="button"
+                aria-label="Close menu"
+                onClick={() => setOpen(false)}
+                className="flex h-11 w-11 items-center justify-center rounded-button text-ink transition-colors hover:bg-line-soft active:bg-line"
+              >
+                <CloseIcon />
+              </button>
             </div>
-          </div>
+
+            {/* Nav links */}
+            <nav className="flex-1 px-4 py-6">
+              <p className="px-3 text-[10px] font-bold uppercase tracking-[0.22em] text-muted">
+                Explore
+              </p>
+              <ul className="mt-3 flex flex-col gap-1 text-sm font-medium">
+                {navEntries.map((entry, idx) => (
+                  <li
+                    key={entry.kind === 'group' ? `m-group-${entry.label}` : `m-link-${entry.label}`}
+                    className="hero-enter"
+                    style={{ '--enter-delay': `${100 + idx * 40}ms` } as CSSProperties}
+                  >
+                    {entry.kind === 'link' ? (
+                      <NavLink
+                        to={entry.to}
+                        title={entry.title}
+                        end={entry.to === ROUTES.home}
+                        onClick={() => setOpen(false)}
+                        className={({ isActive }) =>
+                          cn(
+                            'flex items-center justify-between rounded-button px-3 py-3 transition-colors',
+                            isActive
+                              ? 'bg-navy text-white shadow-soft'
+                              : 'text-ink hover:bg-line-soft',
+                          )
+                        }
+                      >
+                        <span>{entry.label}</span>
+                        <ArrowRightIcon className="h-3.5 w-3.5" />
+                      </NavLink>
+                    ) : (
+                      <MobileGroup
+                        entry={entry}
+                        expanded={mobileExpandedGroup === entry.label}
+                        onToggle={() =>
+                          setMobileExpandedGroup((prev) =>
+                            prev === entry.label ? null : entry.label,
+                          )
+                        }
+                        onPick={() => setOpen(false)}
+                      />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            {/* Sidebar footer: contact CTA */}
+            <div className="border-t border-line bg-[#f4f7fa] px-5 py-5">
+              <Link
+                to={ROUTES.contact}
+                title={linkTitleFor(ROUTES.contact)}
+                onClick={() => setOpen(false)}
+                className="block"
+              >
+                <Button variant="gold" className="w-full">
+                  Get a Callback
+                  <ArrowRightIcon />
+                </Button>
+              </Link>
+            </div>
+          </aside>
         </>
       )}
     </header>
@@ -615,6 +581,72 @@ function SolutionChildItem({
         />
       </Link>
     </li>
+  )
+}
+
+/* -------------------- Mobile subcomponents -------------------- */
+
+function MobileGroup({
+  entry,
+  expanded,
+  onToggle,
+  onPick,
+}: {
+  entry: NavGroupEntry
+  expanded: boolean
+  onToggle: () => void
+  onPick: () => void
+}) {
+  const isOnGroupRoute = useOnRoute(entry.to)
+  const { data: liveCategories } = useCategoryQuery()
+  const hasLiveCategories = !!entry.mega && (liveCategories?.data.length ?? 0) > 0
+
+  return (
+    <div>
+      <button
+        type="button"
+        aria-expanded={expanded}
+        aria-controls={SOLUTIONS_GROUP_ID}
+        title={entry.title}
+        onClick={onToggle}
+        className={cn(
+          'flex w-full items-center justify-between rounded-button px-3 py-3 text-left transition-colors',
+          isOnGroupRoute
+            ? 'bg-navy/5 font-semibold text-navy'
+            : 'text-ink hover:bg-line-soft',
+        )}
+      >
+        <span>{entry.label}</span>
+        <ChevronDownIcon
+          className={cn(
+            'h-3.5 w-3.5 transition-transform duration-200',
+            expanded && 'rotate-180',
+          )}
+        />
+      </button>
+
+      {expanded && (
+        <div
+          id={SOLUTIONS_GROUP_ID}
+          className="overflow-hidden pl-2 animate-fade-in"
+        >
+          <div className="ml-3 mt-1 flex flex-col gap-1 border-l border-line pl-3">
+            {hasLiveCategories ? (
+              <SolutionsMobileLinks onPick={onPick} />
+            ) : (
+              entry.children.map((child) => (
+                <SolutionChildItem
+                  key={`${entry.label}-m-${child.label}`}
+                  child={child}
+                  variant="mobile"
+                  onNavigate={onPick}
+                />
+              ))
+            )}
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
 

@@ -142,8 +142,8 @@ export function SolutionsMegaPanel({ onNavigate }: { onNavigate: () => void }) {
 
   return (
     <div className="space-y-6">
-      {/* 4-5 menus in one line (grid-cols-5 on desktop) */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-7 gap-y-6">
+      {/* 4-5 menus in one line (responsive 2-3-4-5 columns) */}
+      <div className="grid grid-cols-2 min-[460px]:grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-x-5 sm:gap-x-7 gap-y-5 sm:gap-y-6">
         {cats.map((cat, idx) => (
           <MegaCell
             key={cat.id ?? cat.category_slug}
@@ -154,20 +154,7 @@ export function SolutionsMegaPanel({ onNavigate }: { onNavigate: () => void }) {
         ))}
       </div>
 
-      {/* Footer info bar */}
-      <div className="flex flex-wrap items-center justify-between border-t border-line pt-3.5 text-xs text-muted">
-        <div className="flex items-center gap-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-          <span>Institutional &amp; corporate financing solutions across India &amp; overseas</span>
-        </div>
-        <Link
-          to={ROUTES.solutions}
-          onClick={onNavigate}
-          className="font-semibold text-navy hover:text-gold hover:underline"
-        >
-          View all {cats.length} Solutions &amp; 60+ Products →
-        </Link>
-      </div>
+    
     </div>
   )
 }
