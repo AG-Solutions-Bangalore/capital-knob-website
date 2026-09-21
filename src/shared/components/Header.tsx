@@ -1,7 +1,10 @@
 import { ROUTES, type RoutePath } from '@/app/routes'
 import { cn } from '@/shared/lib/cn'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
-import { useEffect, useId, useRef, useState, type CSSProperties } from 'react'
+import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
+import { categoryAnchor } from '@/modules/category/categoryAnchor'
+import { SolutionsMegaPanel } from '@/modules/category/components/CategoryMegaMenu'
+import { useEffect, useId, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Button } from './Button'
 import { Container } from './Container'
@@ -37,11 +40,11 @@ interface NavGroupEntry {
   to: RoutePath
   title: string
   children: NavChildLink[]
+  /** When true, the desktop dropdown renders the live mega-menu panel. */
+  mega?: boolean
 }
 
 type NavEntry = NavLinkEntry | NavGroupEntry
-
-const SOLUTIONS_GROUP_ID = 'solutions-group'
 
 const navEntries: NavEntry[] = [
   { kind: 'link', label: 'Home', to: ROUTES.home, title: 'CapitalKnob Home' },
@@ -56,6 +59,7 @@ const navEntries: NavEntry[] = [
     label: 'Solutions',
     to: ROUTES.solutions,
     title: 'Explore CapitalKnob Solutions',
+    mega: true,
     children: [
       {
         kind: 'link',
@@ -100,19 +104,20 @@ const navEntries: NavEntry[] = [
 export function Header() {
   const [open, setOpen] = useState(false)
   const [openGroup, setOpenGroup] = useState<string | null>(null)
-  const [mobileExpandedGroup, setMobileExpandedGroup] = useState<string | null>(
-    null,
-  )
   const location = useLocation()
   const [prevPathname, setPrevPathname] = useState(location.pathname)
 
-  // Close the sidebar and dropdown menus on every route change.
+  // Close dropdown menus on every route change.
   if (prevPathname !== location.pathname) {
     setPrevPathname(location.pathname)
     setOpen(false)
     setOpenGroup(null)
-    setMobileExpandedGroup(null)
   }
+
+  const { data: liveCategories } = useCategoryQuery()
+  const solutionsEntry = navEntries.find(
+    (e): e is NavGroupEntry => e.kind === 'group' && e.label === 'Solutions',
+  )
 
   // Close-delay timer keeps the panel open while the user moves the cursor
   // from the trigger to the dropdown body.
@@ -156,7 +161,7 @@ export function Header() {
 
   const scheduleClose = () => {
     if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
-    closeTimerRef.current = window.setTimeout(() => setOpenGroup(null), 120)
+    closeTimerRef.current = window.setTimeout(() => setOpenGroup(null), 200)
   }
   const cancelClose = () => {
     if (closeTimerRef.current) {
@@ -165,21 +170,41 @@ export function Header() {
     }
   }
 
+  // Close dropdown on main window scroll
+  useEffect(() => {
+    if (!openGroup) return
+    const onScroll = () => {
+      cancelClose()
+      setOpenGroup(null)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [openGroup])
+
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-white text-ink shadow-soft">
+    <header
+      className="sticky top-0 z-40 border-b border-line bg-white text-ink shadow-soft"
+      onMouseLeave={scheduleClose}
+    >
       <Container size="4xl">
         <div className="flex h-20 items-center justify-between gap-4 lg:gap-6">
           {/* Logo */}
-          <Logo variant="dark" />
+          <div onMouseEnter={() => { cancelClose(); setOpenGroup(null); }}>
+            <Logo variant="dark" />
+          </div>
 
           {/* Desktop nav */}
-          <nav className="hidden lg:flex">
-            <ul className="flex items-center gap-4 xl:gap-8 text-[13px] xl:text-sm font-medium text-ink-soft">
+          <nav className="hidden lg:flex h-full">
+            <ul className="flex h-full items-center gap-4 xl:gap-8 text-[13px] xl:text-sm font-medium text-ink-soft">
               {navEntries.map((entry) =>
                 entry.kind === 'link' ? (
                   <DesktopTopLink
                     key={`link-${entry.label}`}
                     entry={entry}
+                    onHover={() => {
+                      cancelClose()
+                      setOpenGroup(null)
+                    }}
                   />
                 ) : (
                   <DesktopDropdown
@@ -196,7 +221,10 @@ export function Header() {
           </nav>
 
           {/* Right cluster */}
-          <div className="hidden items-center gap-4 lg:flex xl:gap-6">
+          <div
+            className="hidden items-center gap-4 lg:flex xl:gap-6"
+            onMouseEnter={() => { cancelClose(); setOpenGroup(null); }}
+          >
             <Link
               to={ROUTES.contact}
               title={linkTitleFor(ROUTES.contact)}
@@ -225,101 +253,134 @@ export function Header() {
         </div>
       </Container>
 
-      {/* Mobile sidebar + backdrop */}
+      {/* Mobile end-to-end dropdown + backdrop */}
       {open && (
         <>
           <div
             key="mobile-backdrop"
             onClick={() => setOpen(false)}
             aria-hidden="true"
-            className="fixed inset-0 z-40 bg-ink/55 backdrop-blur-sm lg:hidden animate-fade-in"
+            className="fixed inset-0 top-20 z-40 bg-ink/40 backdrop-blur-xs lg:hidden animate-fade-in"
           />
 
-          <aside
-            key="mobile-sidebar"
-            id="mobile-sidebar"
+          <div
+            key="mobile-dropdown"
+            id="mobile-menu"
             role="dialog"
             aria-modal="true"
             aria-label="CapitalKnob navigation"
-            className="fixed left-0 top-0 z-50 flex h-dvh w-[85vw] max-w-sm sm:w-80 flex-col overflow-y-auto border-r border-line bg-white text-ink shadow-2xl lg:hidden animate-sidebar-in"
+            className="fixed inset-x-0 top-20 z-50 px-3 pt-2 lg:hidden animate-dropdown-in"
           >
-            {/* Sidebar header */}
-            <div className="flex h-20 items-center justify-between border-b border-line px-5">
-              <div onClick={() => setOpen(false)}>
-                <Logo variant="dark" />
-              </div>
-              <button
-                type="button"
-                aria-label="Close menu"
-                onClick={() => setOpen(false)}
-                className="flex h-11 w-11 items-center justify-center rounded-button text-ink transition-colors hover:bg-line-soft active:bg-line"
-              >
-                <CloseIcon />
-              </button>
-            </div>
-
-            {/* Nav links */}
-            <nav className="flex-1 px-4 py-6">
-              <p className="px-3 text-[10px] font-bold uppercase tracking-[0.22em] text-muted">
-                Explore
-              </p>
-              <ul className="mt-3 flex flex-col gap-1 text-sm font-medium">
-                {navEntries.map((entry, idx) => (
-                  <li
-                    key={entry.kind === 'group' ? `m-group-${entry.label}` : `m-link-${entry.label}`}
-                    className="hero-enter"
-                    style={{ '--enter-delay': `${100 + idx * 40}ms` } as CSSProperties}
+            <div className="mx-auto w-full max-w-lg rounded-2xl border border-line bg-white/98 text-ink shadow-2xl backdrop-blur-md p-4 max-h-[calc(100dvh-5.5rem)] overflow-y-auto">
+              <div className="flex flex-col gap-3.5">
+                {/* Row 1: Primary Page Links */}
+                <div className="grid grid-cols-3 gap-2">
+                  <NavLink
+                    to={ROUTES.home}
+                    end
+                    onClick={() => setOpen(false)}
+                    className={({ isActive }) =>
+                      cn(
+                        'flex items-center justify-center rounded-xl py-2.5 text-[13px] font-semibold transition-colors',
+                        isActive
+                          ? 'bg-navy text-white shadow-soft'
+                          : 'bg-line-soft/70 text-ink hover:bg-line-soft',
+                      )
+                    }
                   >
-                    {entry.kind === 'link' ? (
-                      <NavLink
-                        to={entry.to}
-                        title={entry.title}
-                        end={entry.to === ROUTES.home}
-                        onClick={() => setOpen(false)}
-                        className={({ isActive }) =>
-                          cn(
-                            'flex items-center justify-between rounded-button px-3 py-3 transition-colors',
-                            isActive
-                              ? 'bg-navy text-white shadow-soft'
-                              : 'text-ink hover:bg-line-soft',
-                          )
-                        }
-                      >
-                        <span>{entry.label}</span>
-                        <ArrowRightIcon className="h-3.5 w-3.5" />
-                      </NavLink>
-                    ) : (
-                      <MobileGroup
-                        entry={entry}
-                        expanded={mobileExpandedGroup === entry.label}
-                        onToggle={() =>
-                          setMobileExpandedGroup((prev) =>
-                            prev === entry.label ? null : entry.label,
-                          )
-                        }
-                        onPick={() => setOpen(false)}
-                      />
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </nav>
+                    Home
+                  </NavLink>
+                  <NavLink
+                    to={ROUTES.about}
+                    onClick={() => setOpen(false)}
+                    className={({ isActive }) =>
+                      cn(
+                        'flex items-center justify-center rounded-xl py-2.5 text-[13px] font-semibold transition-colors',
+                        isActive
+                          ? 'bg-navy text-white shadow-soft'
+                          : 'bg-line-soft/70 text-ink hover:bg-line-soft',
+                      )
+                    }
+                  >
+                    About Us
+                  </NavLink>
+                  <NavLink
+                    to={ROUTES.contact}
+                    onClick={() => setOpen(false)}
+                    className={({ isActive }) =>
+                      cn(
+                        'flex items-center justify-center rounded-xl py-2.5 text-[13px] font-semibold transition-colors',
+                        isActive
+                          ? 'bg-navy text-white shadow-soft'
+                          : 'bg-line-soft/70 text-ink hover:bg-line-soft',
+                      )
+                    }
+                  >
+                    Contact Us
+                  </NavLink>
+                </div>
 
-            {/* Sidebar footer: contact CTA */}
-            <div className="border-t border-line bg-[#f4f7fa] px-5 py-5">
-              <Link
-                to={ROUTES.contact}
-                title={linkTitleFor(ROUTES.contact)}
-                onClick={() => setOpen(false)}
-                className="block"
-              >
-                <Button variant="gold" className="w-full">
-                  Get a Callback
-                  <ArrowRightIcon />
-                </Button>
-              </Link>
+                {/* Row 2: Solutions Header */}
+                <div className="flex items-center justify-between px-1 pt-1">
+                  <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
+                    Financial Solutions
+                  </span>
+                  <Link
+                    to={ROUTES.solutions}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-1 text-[12px] font-semibold text-navy transition-colors hover:text-gold"
+                  >
+                    <span>View All</span>
+                    <ArrowRightIcon className="h-3 w-3" />
+                  </Link>
+                </div>
+
+                {/* Row 3: Solutions Grid (4-5 per line on md, 3 on sm, 2 on xs) */}
+                <div className="grid grid-cols-2 min-[440px]:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-1.5">
+                  {liveCategories?.data && liveCategories.data.length > 0 ? (
+                    liveCategories.data.map((cat) => (
+                      <Link
+                        key={cat.id ?? cat.category_slug}
+                        to={categoryAnchor(cat.category_slug)}
+                        onClick={() => setOpen(false)}
+                        className="group flex items-center justify-between rounded-lg border border-line bg-slate-50/90 px-2.5 py-1.5 text-[11px] sm:text-[12px] font-medium text-ink transition-all active:scale-[0.98] hover:border-navy/30 hover:bg-navy/5 hover:text-navy"
+                      >
+                        <span className="truncate">{cat.category_name}</span>
+                        <ArrowRightIcon className="h-2.5 w-2.5 shrink-0 text-muted opacity-40 transition-transform group-hover:translate-x-0.5 group-hover:text-navy" />
+                      </Link>
+                    ))
+                  ) : (
+                    (solutionsEntry?.children ?? []).map((child) => (
+                      <Link
+                        key={child.to}
+                        to={child.to}
+                        onClick={() => setOpen(false)}
+                        className="group flex items-center justify-between rounded-lg border border-line bg-slate-50/90 px-2.5 py-1.5 text-[11px] sm:text-[12px] font-medium text-ink transition-all active:scale-[0.98] hover:border-navy/30 hover:bg-navy/5 hover:text-navy"
+                      >
+                        <span className="truncate">{child.label}</span>
+                        <ArrowRightIcon className="h-2.5 w-2.5 shrink-0 text-muted opacity-40 transition-transform group-hover:translate-x-0.5 group-hover:text-navy" />
+                      </Link>
+                    ))
+                  )}
+                </div>
+
+                {/* Row 4: Get a Callback CTA */}
+                <div className="pt-1">
+                  <Link
+                    to={ROUTES.contact}
+                    title={linkTitleFor(ROUTES.contact)}
+                    onClick={() => setOpen(false)}
+                    className="block w-full"
+                  >
+                    <Button variant="gold" size="md" className="w-full justify-center shadow-soft">
+                      <span>Get a Callback</span>
+                      <ArrowRightIcon className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             </div>
-          </aside>
+          </div>
         </>
       )}
     </header>
@@ -328,16 +389,22 @@ export function Header() {
 
 /* -------------------- Desktop subcomponents -------------------- */
 
-function DesktopTopLink({ entry }: { entry: NavLinkEntry }) {
+function DesktopTopLink({
+  entry,
+  onHover,
+}: {
+  entry: NavLinkEntry
+  onHover: () => void
+}) {
   return (
-    <li className="relative">
+    <li className="relative flex h-full items-center" onMouseEnter={onHover}>
       <NavLink
         to={entry.to}
         title={entry.title}
         end={entry.to === ROUTES.home}
         className={({ isActive }) =>
           cn(
-            'relative whitespace-nowrap py-2 my-3 transition-colors hover:text-navy',
+            'relative whitespace-nowrap py-2 transition-colors hover:text-navy',
             isActive
               ? 'font-semibold text-navy after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-navy'
               : 'text-ink-soft',
@@ -366,14 +433,45 @@ function DesktopDropdown({
   const isOpen = openGroup === entry.label
   const panelId = useId()
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const itemRef = useRef<HTMLLIElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
 
   // Mark this group as active when user is on the Solutions route, regardless
   // of whether the dropdown is open.
   const isOnGroupRoute = useOnRoute(entry.to)
 
+  // Close on click outside
+  useEffect(() => {
+    if (!isOpen) return
+    function onPointerDown(e: PointerEvent) {
+      const target = e.target as Node
+      if (
+        itemRef.current &&
+        !itemRef.current.contains(target) &&
+        panelRef.current &&
+        !panelRef.current.contains(target)
+      ) {
+        cancelClose()
+        setOpenGroup(null)
+      }
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => document.removeEventListener('pointerdown', onPointerDown)
+  }, [isOpen, setOpenGroup, cancelClose])
+
+  // Live categories power the mega panel. Fires once per load (cached
+  // 30 min) and doubles as a cache warmer for the Solutions page. While
+  // loading we still show the mega panel (it has its own skeleton); the
+  // static list below is only a fallback for error/empty.
+  const { data: liveCategories, isPending: livePending } = useCategoryQuery()
+  const showMega =
+    !!entry.mega &&
+    (livePending || (liveCategories?.data.length ?? 0) > 0)
+
   return (
     <li
-      className="relative"
+      ref={itemRef}
+      className="relative flex h-full items-center"
       onMouseEnter={() => {
         cancelClose()
         setOpenGroup(entry.label)
@@ -387,9 +485,12 @@ function DesktopDropdown({
         aria-expanded={isOpen}
         aria-controls={panelId}
         onClick={() => setOpenGroup(isOpen ? null : entry.label)}
-        onFocus={() => setOpenGroup(entry.label)}
+        onFocus={() => {
+          cancelClose()
+          setOpenGroup(entry.label)
+        }}
         className={cn(
-          'relative flex items-center gap-1 whitespace-nowrap py-2 my-4 transition-colors hover:text-navy',
+          'relative flex items-center gap-1 whitespace-nowrap py-2 transition-colors hover:text-navy',
           isOpen || isOnGroupRoute
             ? 'font-semibold text-navy'
             : 'text-ink-soft',
@@ -410,28 +511,48 @@ function DesktopDropdown({
         />
       </button>
 
-      {isOpen && (
+      {isOpen && showMega ? (
         <div
           id={panelId}
           role="menu"
-          // `left-1/2 -translate-x-1/2` centers the panel under the trigger
-          // so the dropdown reads as "belonging to" the Solutions label,
-          // rather than being anchored to its left edge.
-          className="absolute left-1/2 top-full z-50 mt-2 min-w-60 -translate-x-1/2 rounded-button border border-line bg-white p-1.5 shadow-card animate-dropdown-in"
-          onMouseEnter={cancelClose}
-          onMouseLeave={scheduleClose}
+          className="fixed inset-x-0 top-20 z-50 pointer-events-none pt-2"
         >
-          <ul className="flex gap-2 flex-col">
-            {entry.children.map((child) => (
-              <SolutionChildItem
-                key={`${entry.label}-${child.label}`}
-                child={child}
-                variant="desktop"
-                onNavigate={() => setOpenGroup(null)}
-              />
-            ))}
-          </ul>
+          <div
+            ref={panelRef}
+            data-lenis-prevent
+            className="pointer-events-auto relative mx-auto max-h-[calc(100dvh-5.5rem)] w-[min(1380px,96vw)] overflow-y-auto rounded-2xl border border-line bg-white p-6 shadow-2xl animate-dropdown-in lg:p-7 before:absolute before:-top-3 before:inset-x-0 before:h-3 before:content-['']"
+            onMouseEnter={cancelClose}
+            onMouseLeave={scheduleClose}
+          >
+            <SolutionsMegaPanel onNavigate={() => setOpenGroup(null)} />
+          </div>
         </div>
+      ) : (
+        isOpen && (
+          <div
+            ref={panelRef}
+            id={panelId}
+            role="menu"
+            // `left-1/2 -translate-x-1/2` centers the panel under the trigger
+            // pt-2 provides seamless hover bridge between button and dropdown
+            className="absolute left-1/2 top-full z-50 pt-2 -translate-x-1/2"
+            onMouseEnter={cancelClose}
+            onMouseLeave={scheduleClose}
+          >
+            <div className="min-w-60 rounded-button border border-line bg-white p-1.5 shadow-card animate-dropdown-in">
+              <ul className="flex gap-2 flex-col">
+                {entry.children.map((child) => (
+                  <SolutionChildItem
+                    key={`${entry.label}-${child.label}`}
+                    child={child}
+                    variant="desktop"
+                    onNavigate={() => setOpenGroup(null)}
+                  />
+                ))}
+              </ul>
+            </div>
+          </div>
+        )
       )}
     </li>
   )
@@ -494,66 +615,6 @@ function SolutionChildItem({
         />
       </Link>
     </li>
-  )
-}
-
-/* -------------------- Mobile subcomponents -------------------- */
-
-function MobileGroup({
-  entry,
-  expanded,
-  onToggle,
-  onPick,
-}: {
-  entry: NavGroupEntry
-  expanded: boolean
-  onToggle: () => void
-  onPick: () => void
-}) {
-  const isOnGroupRoute = useOnRoute(entry.to)
-
-  return (
-    <div>
-      <button
-        type="button"
-        aria-expanded={expanded}
-        aria-controls={SOLUTIONS_GROUP_ID}
-        title={entry.title}
-        onClick={onToggle}
-        className={cn(
-          'flex w-full items-center justify-between rounded-button px-3 py-3 text-left transition-colors',
-          isOnGroupRoute
-            ? 'bg-navy/5 font-semibold text-navy'
-            : 'text-ink hover:bg-line-soft',
-        )}
-      >
-        <span>{entry.label}</span>
-        <ChevronDownIcon
-          className={cn(
-            'h-3.5 w-3.5 transition-transform duration-200',
-            expanded && 'rotate-180',
-          )}
-        />
-      </button>
-
-      {expanded && (
-        <ul
-          id={SOLUTIONS_GROUP_ID}
-          className="overflow-hidden pl-2 animate-fade-in"
-        >
-          <div className="ml-3 mt-1 flex flex-col gap-1 border-l border-line pl-3">
-            {entry.children.map((child) => (
-              <SolutionChildItem
-                key={`${entry.label}-m-${child.label}`}
-                child={child}
-                variant="mobile"
-                onNavigate={onPick}
-              />
-            ))}
-          </div>
-        </ul>
-      )}
-    </div>
   )
 }
 

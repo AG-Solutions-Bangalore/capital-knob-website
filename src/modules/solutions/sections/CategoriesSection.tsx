@@ -6,6 +6,8 @@
  * section never breaks the page when the API is down.
  */
 
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Container } from '@/shared/components/Container'
 import { CategoryGrid } from '@/modules/category/components/CategoryGrid'
 
@@ -14,6 +16,23 @@ interface CategoriesSectionProps {
 }
 
 export function CategoriesSection({ onEnquire }: CategoriesSectionProps) {
+  // Deep-link support: `#category-{slug}` (e.g. from the nav mega-menu)
+  // scrolls to the matching live card and highlights it.
+  const { hash } = useLocation()
+  const highlightSlug = hash.startsWith('#category-')
+    ? decodeURIComponent(hash.replace('#category-', ''))
+    : null
+
+  useEffect(() => {
+    if (!highlightSlug) return
+    // Wait a tick so the live grid has rendered before scrolling.
+    const t = window.setTimeout(() => {
+      document
+        .getElementById(`category-${highlightSlug}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }, 150)
+    return () => window.clearTimeout(t)
+  }, [highlightSlug, hash])
   return (
     <section className="bg-surface py-16 md:py-20">
       <Container size="4xl">
@@ -30,7 +49,7 @@ export function CategoriesSection({ onEnquire }: CategoriesSectionProps) {
           </p>
         </div>
         <div className="mt-8 sm:mt-10">
-          <CategoryGrid onEnquire={onEnquire} />
+          <CategoryGrid onEnquire={onEnquire} highlightSlug={highlightSlug} />
         </div>
       </Container>
     </section>

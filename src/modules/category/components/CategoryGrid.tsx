@@ -18,6 +18,8 @@ import type { Category } from '../api/category.types'
 interface CategoryGridProps {
   /** Opens the enquiry modal for a category. Hides the arrow when omitted. */
   onEnquire?: (title: string) => void
+  /** Backend slug of the card to highlight (driven by the URL hash). */
+  highlightSlug?: string | null
 }
 
 /** Slug → app icon language (same set as the solution cards). */
@@ -127,9 +129,11 @@ function GoldArrow({ label, onClick }: { label: string; onClick: () => void }) {
 function CategoryCard({
   category,
   onEnquire,
+  highlighted,
 }: {
   category: Category
   onEnquire?: (title: string) => void
+  highlighted?: boolean
 }) {
   const [expanded, setExpanded] = useState(false)
   const subs = category.category_subs ?? []
@@ -137,7 +141,13 @@ function CategoryCard({
   const title = category.category_name ?? 'Untitled'
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-xl border border-line bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:border-gold/50 hover:shadow-lg">
+    <div
+      id={`category-${category.category_slug ?? ''}`}
+      aria-current={highlighted ? 'true' : undefined}
+      className={`group relative flex scroll-mt-28 flex-col overflow-hidden rounded-xl border bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:border-gold/50 hover:shadow-lg ${
+        highlighted ? 'border-gold ring-2 ring-gold/40 shadow-card' : 'border-line'
+      }`}
+    >
       {/* Icon + Title */}
       <div className="flex items-center gap-2.5 text-navy transition-colors group-hover:text-gold">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gold/10 text-gold">
@@ -205,7 +215,7 @@ function CategoryCard({
   )
 }
 
-export function CategoryGrid({ onEnquire }: CategoryGridProps = {}) {
+export function CategoryGrid({ onEnquire, highlightSlug }: CategoryGridProps = {}) {
   const { data, isPending, isError } = useCategoryQuery()
 
   if (isPending) {
@@ -249,6 +259,7 @@ export function CategoryGrid({ onEnquire }: CategoryGridProps = {}) {
           key={cat.id ?? cat.category_slug ?? cat.category_name}
           category={cat}
           onEnquire={onEnquire}
+          highlighted={!!highlightSlug && cat.category_slug === highlightSlug}
         />
       ))}
     </div>
