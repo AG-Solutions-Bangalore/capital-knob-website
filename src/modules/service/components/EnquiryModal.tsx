@@ -49,7 +49,10 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
   const isOpen = subject !== null
   const prefersReducedMotion = useReducedMotion()
 
-  const [values, setValues] = useState<FormState>(INITIAL_FORM)
+  // Seed from the prop: callers mount the modal lazily on first open, at
+  // which point `subject` is already set — without this, `values.subject`
+  // would stay '' and the backend would save enquiryService as NULL.
+  const [values, setValues] = useState<FormState>({ ...INITIAL_FORM, subject: subject ?? '' })
   const [errors, setErrors] = useState<Partial<FormState>>({})
   const [serverError, setServerError] = useState<string | null>(null)
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle')
@@ -116,6 +119,11 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
       errs.email = 'Please enter a valid email address.'
     }
 
+    // Never let an empty service reach the backend as NULL — block submit.
+    if (!values.subject.trim()) {
+      errs.subject = 'Service is missing. Please close and reopen this form.'
+    }
+
     if (!values.message.trim()) {
       errs.message = 'Please enter your message.'
     } else if (values.message.trim().length < 10) {
@@ -138,7 +146,8 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
       enquiryEmail: values.email.trim(),
       enquiryMobile: values.phone.replace(/\D/g, ''),
       // Surface the originating solution so the CRM team can route it.
-      enquiryService: values.subject,
+      // Fall back to the prop (never send '') so the DB column is never NULL.
+      enquiryService: values.subject.trim() || subject?.trim() || 'General Inquiry',
       enquiryMessage: values.message.trim(),
       enquiryFrom: getEnquiryFrom(`${ENQUIRY_FROM_SOLUTIONS} – ${values.subject}`),
       ...getUtmParams(),
@@ -373,16 +382,16 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                     )}
                   </div>
 
-                  {/* Subject — pre-filled from the card the user clicked */}
+                  {/* Service — pre-filled from the card the user clicked */}
                   <div>
                     <label
-                      htmlFor="enquiry-subject"
+                      htmlFor="enquiry-service"
                       className="block text-xs font-semibold text-ink"
                     >
-                      Subject
+                      Service
                     </label>
                     <input
-                      id="enquiry-subject"
+                      id="enquiry-service"
                       type="text"
                       value={values.subject}
                       readOnly
@@ -391,6 +400,9 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                     <p className="mt-0.5 text-[11px] leading-snug text-muted">
                       Pre-filled based on the service you selected.
                     </p>
+                    {errors.subject && (
+                      <p className="mt-0.5 text-xs text-rose-500">{errors.subject}</p>
+                    )}
                   </div>
 
                   {/* Message */}

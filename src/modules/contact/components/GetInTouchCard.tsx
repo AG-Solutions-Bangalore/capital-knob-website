@@ -30,9 +30,10 @@ export function GetInTouchCard() {
   const emailAddress =
     live?.company_email?.trim() ? live.company_email.trim() : touch.email.address
   const emailHref = `mailto:${emailAddress}`
+  const landline = live?.company_landline_no?.trim() || ''
 
   return (
-    <div className="rounded-2xl border border-line/60 bg-[#F4F7FA] p-6 sm:p-8 md:p-10 lg:col-span-5">
+    <div className="flex h-full flex-col rounded-2xl border border-line/60 bg-[#F4F7FA] p-6 sm:p-8 md:p-10 lg:col-span-5">
       <h2 className="font-display text-2xl font-bold text-navy md:text-3xl">
         {touch.title}
       </h2>
@@ -40,7 +41,7 @@ export function GetInTouchCard() {
         {touch.description}
       </p>
 
-      <div className="mt-8 space-y-7">
+      <div className="mt-8 flex flex-1 flex-col justify-around gap-7">
         {/* Call Us */}
         <div className="flex items-start gap-4">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-navy/15 bg-white text-navy shadow-soft">
@@ -67,6 +68,17 @@ export function GetInTouchCard() {
               {phoneNumber}
             </a>
             <p className="mt-0.5 text-xs text-muted">{touch.phone.hours}</p>
+            {landline && (
+              <p className="mt-1 text-xs text-muted">
+                Landline:{' '}
+                <a
+                  href={`tel:${landline.replace(/\D/g, '')}`}
+                  className="font-semibold text-navy hover:text-gold"
+                >
+                  {landline}
+                </a>
+              </p>
+            )}
           </div>
         </div>
 

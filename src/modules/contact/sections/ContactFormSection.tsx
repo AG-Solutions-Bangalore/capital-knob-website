@@ -27,6 +27,7 @@ const INITIAL_FORM: FormState = {
 
 export function ContactFormSection() {
   const { form } = contactCopy
+  const subjects = form.subjects
   const [values, setValues] = useState<FormState>(INITIAL_FORM)
   const [errors, setErrors] = useState<Partial<FormState>>({})
   const [serverError, setServerError] = useState<string | null>(null)
@@ -108,7 +109,7 @@ export function ContactFormSection() {
   return (
     <section className="bg-white py-8 lg:py-12">
       <Container size="4xl">
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-start">
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-stretch">
           {/* Left Column: Form Card */}
           <div className="rounded-2xl border border-line bg-white p-5 sm:p-8 md:p-10 lg:col-span-7 shadow-soft">
             <h2 className="font-display text-2xl font-bold text-navy md:text-3xl">
@@ -284,7 +285,7 @@ export function ContactFormSection() {
                         <option value="" disabled>
                           Select a subject
                         </option>
-                        {form.subjects.map((sub) => (
+                        {subjects.map((sub) => (
                           <option key={sub} value={sub} className="text-ink">
                             {sub}
                           </option>
