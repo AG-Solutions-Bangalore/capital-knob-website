@@ -130,24 +130,46 @@ function CategoryCard({
   category,
   onEnquire,
   highlighted,
+  imageBase,
+  noImage,
 }: {
   category: Category
   onEnquire?: (title: string) => void
   highlighted?: boolean
+  imageBase?: string
+  noImage?: string | null
 }) {
   const [expanded, setExpanded] = useState(false)
   const subs = category.category_subs ?? []
   const icon = iconFor(category.category_slug)
   const title = category.category_name ?? 'Untitled'
+  // Dynamic image: live banner when uploaded, else the backend No Image
+  // placeholder. Path always comes from the API `image_url` entries.
+  const file = category.category_banner_image?.trim()
+  const bannerSrc = file
+    ? `${imageBase ?? ''}${file}`
+    : noImage
 
   return (
     <div
       id={`category-${category.category_slug ?? ''}`}
       aria-current={highlighted ? 'true' : undefined}
-      className={`group relative flex scroll-mt-28 flex-col overflow-hidden rounded-xl border bg-white p-5 transition-all duration-200 hover:-translate-y-1 hover:border-gold/50 hover:shadow-lg ${
+      className={`group relative flex scroll-mt-28 flex-col overflow-hidden rounded-xl border bg-white transition-all duration-200 hover:-translate-y-1 hover:border-gold/50 hover:shadow-lg ${
         highlighted ? 'border-gold ring-2 ring-gold/40 shadow-card' : 'border-line'
       }`}
     >
+      {bannerSrc && (
+        <div className="relative aspect-[16/8] w-full overflow-hidden bg-slate-100">
+          <img
+            src={bannerSrc}
+            alt={title}
+            className="h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      )}
+      <div className="flex flex-1 flex-col p-5">
       {/* Icon + Title */}
       <div className="flex items-center gap-2.5 text-navy transition-colors group-hover:text-gold">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gold/10 text-gold">
@@ -211,6 +233,7 @@ function CategoryCard({
           onClick={() => onEnquire(title)}
         />
       )}
+      </div>
     </div>
   )
 }
@@ -252,6 +275,11 @@ export function CategoryGrid({ onEnquire, highlightSlug }: CategoryGridProps = {
     )
   }
 
+  const imageBase =
+    data?.image_url?.find((e) => e.image_for === 'Category')?.image_url ?? ''
+  const noImage =
+    data?.image_url?.find((e) => e.image_for === 'No Image')?.image_url ?? null
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
       {categories.map((cat) => (
@@ -260,6 +288,8 @@ export function CategoryGrid({ onEnquire, highlightSlug }: CategoryGridProps = {
           category={cat}
           onEnquire={onEnquire}
           highlighted={!!highlightSlug && cat.category_slug === highlightSlug}
+          imageBase={imageBase}
+          noImage={noImage}
         />
       ))}
     </div>

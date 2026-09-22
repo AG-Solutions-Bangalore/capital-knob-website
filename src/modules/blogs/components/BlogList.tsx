@@ -12,13 +12,31 @@ function imageFor(
   imageUrl: { image_for?: string; image_url?: string }[] | undefined,
   file: string | null | undefined,
 ): string | null {
-  if (!file) return null
-  const base = imageUrl?.find((e) => e.image_for === 'Blog')?.image_url ?? ''
-  return `${base}${file}`
+  const name = file?.trim()
+  // Dynamic path: live file against the `Blog` base, else the backend
+  // `No Image` placeholder — never a hardcoded image.
+  if (name) {
+    const base = imageUrl?.find((e) => e.image_for === 'Blog')?.image_url ?? ''
+    return `${base}${name}`
+  }
+  return imageUrl?.find((e) => e.image_for === 'No Image')?.image_url ?? null
+}
+
+function blogImage(blog: Blog): string | null | undefined {
+  return blog.blog_banner_image ?? blog.blog_image
+}
+
+function blogExcerpt(blog: Blog): string | null {
+  const raw =
+    blog.blog_short_description?.trim() || blog.blog_description?.trim() || null
+  if (!raw) return null
+  // Backend `blog_description` is HTML — strip tags for the card excerpt.
+  return raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() || null
 }
 
 function BlogCard({ blog, base }: { blog: Blog; base: { image_for?: string; image_url?: string }[] }) {
-  const src = imageFor(base, blog.blog_image)
+  const src = imageFor(base, blogImage(blog))
+  const excerpt = blogExcerpt(blog)
   return (
     <article className="overflow-hidden rounded-xl border border-line bg-white shadow-soft transition-shadow hover:shadow-md">
       {src && (
@@ -33,9 +51,9 @@ function BlogCard({ blog, base }: { blog: Blog; base: { image_for?: string; imag
         <h3 className="font-display text-base font-bold text-navy">
           {blog.blog_title ?? `Blog #${blog.id ?? ''}`}
         </h3>
-        {blog.blog_description && (
+        {excerpt && (
           <p className="mt-1.5 line-clamp-3 text-xs leading-relaxed text-muted">
-            {blog.blog_description}
+            {excerpt}
           </p>
         )}
       </div>

@@ -39,16 +39,34 @@ export function BlogDetailCard({ slug }: { slug: string }) {
 
   const blog = data.data
   const base = data.image_url?.find((e) => e.image_for === 'Blog')?.image_url ?? ''
-  const src = blog.blog_image ? `${base}${blog.blog_image}` : null
+  const noImage = data.image_url?.find((e) => e.image_for === 'No Image')?.image_url ?? null
+  const imageFile = (blog.blog_banner_image ?? blog.blog_image)?.trim()
+  // Dynamic path: live banner when uploaded, else the backend No Image placeholder.
+  const src = imageFile ? `${base}${imageFile}` : noImage
+  const excerpt =
+    blog.blog_short_description?.trim() ||
+    (blog.blog_description && !/<[a-z][\s\S]*>/i.test(blog.blog_description)
+      ? blog.blog_description
+      : null)
+  const htmlBody =
+    blog.blog_description && /<[a-z][\s\S]*>/i.test(blog.blog_description)
+      ? blog.blog_description
+      : null
 
   return (
     <article className="overflow-hidden rounded-xl border border-line bg-white shadow-soft">
       {src && (
-        <img src={src} alt={blog.blog_title ?? 'Blog'} className="h-56 w-full object-cover" loading="lazy" />
+        <img src={src} alt={blog.blog_banner_image_alt ?? blog.blog_title ?? 'Blog'} className="h-56 w-full object-cover" loading="lazy" />
       )}
       <div className="p-6">
         <h3 className="font-display text-xl font-bold text-navy">{blog.blog_title}</h3>
-        {blog.blog_description && <p className="mt-2 text-sm text-muted">{blog.blog_description}</p>}
+        {excerpt && <p className="mt-2 text-sm text-muted">{excerpt}</p>}
+        {htmlBody && (
+          <div
+            className="mt-3 text-sm leading-relaxed text-ink [&_a]:text-brand-blue [&_a]:underline"
+            dangerouslySetInnerHTML={{ __html: htmlBody }}
+          />
+        )}
         {blog.blog_content && <p className="mt-3 text-sm leading-relaxed text-ink">{blog.blog_content}</p>}
         <div className="mt-5 flex flex-wrap gap-2 text-xs">
           {data.previous && (

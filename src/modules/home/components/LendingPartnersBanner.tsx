@@ -1,6 +1,33 @@
 import { Container } from '@/shared/components/Container'
+import { useClientsQuery } from '@/modules/client/hooks/useClientQuery'
+
+function clientName(c: { client_name?: string | null; clients_name?: string | null }): string {
+  return c.clients_name?.trim() || c.client_name?.trim() || 'Lending Partner'
+}
+
+function clientImage(
+  c: { client_image?: string | null; clients_image?: string | null },
+  base: string,
+  noImage: string | null,
+): string | null {
+  const file = (c.clients_image || c.client_image)?.trim()
+  if (file) return `${base}${file}`
+  return noImage
+}
 
 export function LendingPartnersBanner() {
+  // Live lending partners (GET /getClient) with fully dynamic paths.
+  // Each logo is the live file when uploaded, else the backend No Image
+  // placeholder. Old static strip stays only as the loading / error /
+  // empty fallback so the section never looks broken.
+  const { data, isPending, isError } = useClientsQuery()
+  const clients = data?.data ?? []
+  const base =
+    data?.image_url?.find((e) => e.image_for === 'Client')?.image_url ?? ''
+  const noImage =
+    data?.image_url?.find((e) => e.image_for === 'No Image')?.image_url ?? null
+  const showLive = !isPending && !isError && clients.length > 0
+
   return (
     <section className="border-b border-line bg-white py-5 shadow-xs">
       <Container size="4xl">
@@ -12,7 +39,40 @@ export function LendingPartnersBanner() {
             </span>
           </div>
 
-          {/* Bank Logos Strip */}
+          {/* Bank Logos Strip — live client logos when published, old static strip otherwise */}
+          {showLive ? (
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3.5 sm:gap-8 md:justify-between lg:flex-1">
+              {clients.map((c, idx) => {
+                const name = clientName(c)
+                const src = clientImage(c, base, noImage)
+                return (
+                  <div
+                    key={`${name}-${idx}`}
+                    className="flex items-center gap-1.5 transition-opacity hover:opacity-85"
+                    title={name}
+                  >
+                    {src ? (
+                      <img
+                        src={src}
+                        alt={name}
+                        title={name}
+                        className="h-6 w-auto max-w-28 object-contain"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <span className="text-xs font-black tracking-tight text-navy">
+                        {name}
+                      </span>
+                    )}
+                  </div>
+                )
+              })}
+              <span className="text-xs font-medium text-muted">
+                And Many More...
+              </span>
+            </div>
+          ) : (
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3.5 sm:gap-8 md:justify-between lg:flex-1">
             {/* HDFC Bank */}
             <div className="flex items-center gap-1.5 transition-opacity hover:opacity-85" title="HDFC Bank">
@@ -96,6 +156,7 @@ export function LendingPartnersBanner() {
               And Many More...
             </span>
           </div>
+          )}
         </div>
       </Container>
     </section>

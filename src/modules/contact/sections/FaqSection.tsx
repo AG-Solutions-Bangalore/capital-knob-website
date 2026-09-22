@@ -13,8 +13,8 @@ export function FaqSection() {
   const { data: liveFaq } = useFaqBySlugQuery('contact')
   const liveItems = (liveFaq?.data ?? [])
     .map((item) => ({
-      question: item.faq_question?.trim() ?? '',
-      answer: item.faq_answer?.trim() ?? '',
+      question: (item.faq_que ?? item.faq_question)?.trim() ?? '',
+      answer: (item.faq_ans ?? item.faq_answer)?.trim() ?? '',
     }))
     .filter((item) => item.question && item.answer)
 

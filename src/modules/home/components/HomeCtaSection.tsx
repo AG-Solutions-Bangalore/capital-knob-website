@@ -1,10 +1,30 @@
 import { Container } from '@/shared/components/Container'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { homeStats, homeTestimonials } from '../constants'
+import type { HomeTestimonial } from '../constants'
 import { TestimonialCarousel } from './TestimonialCarousel'
+import { useTestimonialsQuery } from '@/modules/testimonial/hooks/useTestimonialQuery'
 import { IMAGE_BASE_URL } from "@/lib/images";
 
+const TONES: NonNullable<HomeTestimonial['tone']>[] = ['navy', 'gold', 'brandBlue', 'slate']
+
 export function HomeCtaSection() {
+  // Live testimonials for the homepage (GET /getTestimonial/home).
+  // Falls back to the static `homeTestimonials` while loading, on error,
+  // or when nothing is published — old carousel look never breaks.
+  const { data: liveData } = useTestimonialsQuery('home')
+  const liveItems: HomeTestimonial[] = []
+  for (const [idx, t] of (liveData?.data ?? []).entries()) {
+    const quote = t.testimonial_description?.trim() ?? ''
+    if (!quote) continue
+    liveItems.push({
+      quote,
+      name: t.testimonial_client_name?.trim() || 'CapitalKnob Customer',
+      role: 'Verified Customer',
+      tone: TONES[idx % TONES.length],
+    })
+  }
+  const testimonials = liveItems.length > 0 ? liveItems : homeTestimonials
   return (
     <section className="relative overflow-hidden bg-navy py-14 text-white sm:py-16 md:py-20">
       {/* Background Skyline Image with moody twilight overlay */}
@@ -63,7 +83,7 @@ export function HomeCtaSection() {
 
           {/* Center Column — Auto-scrolling Infinite-loop Testimonial Carousel */}
           <div className="min-w-0 lg:col-span-7">
-            <TestimonialCarousel testimonials={homeTestimonials} />
+            <TestimonialCarousel testimonials={testimonials} />
           </div>
 
           {/* Right Column — Stats Metrics (narrower, left-aligned so the

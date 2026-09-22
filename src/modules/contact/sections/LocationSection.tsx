@@ -50,8 +50,8 @@ export function LocationSection() {
           <div className="lg:col-span-7">
             <div className="group relative h-[340px] w-full overflow-hidden rounded-2xl border border-line bg-surface shadow-soft sm:h-[380px] lg:h-[420px]">
               <iframe
-                title="CapitalKnob Office Location at Prestige Tech Park, Bengaluru"
-                src="https://maps.google.com/maps?q=Prestige+Tech+Park,+Outer+Ring+Road,+Marathahalli,+Bengaluru,+Karnataka+560037&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                title="CapitalKnob Office Location at JP Nagar, Bengaluru"
+                src="https://maps.google.com/maps?q=No.+8,+1st+Floor,+24th+Main,+5th+Phase,+JP+Nagar,+Bengaluru,+Karnataka+560078&t=&z=15&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -80,7 +80,7 @@ export function LocationSection() {
                 </span>
                 <div>
                   <p className="text-xs font-bold text-navy">CapitalKnob</p>
-                  <p className="text-[11px] text-muted">Prestige Tech Park, Bengaluru</p>
+                  <p className="text-[11px] text-muted">JP Nagar, Bengaluru</p>
                 </div>
               </div>
             </div>

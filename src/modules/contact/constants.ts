@@ -43,12 +43,11 @@ export const contactCopy = {
       label: 'Visit Our Office',
       name: 'CapitalKnob',
       lines: [
-        'Prestige Tech Park, 5th Floor',
-        'Outer Ring Road, Marathahalli',
-        'Bengaluru, Karnataka – 560037',
+        'No. 8, 1st Floor, 24th Main, 5th Phase',
+        'JP Nagar, Bengaluru, Karnataka – 560078',
         'India',
       ],
-      mapsUrl: 'https://maps.google.com/?q=Prestige+Tech+Park,+Marathahalli,+Bengaluru',
+      mapsUrl: 'https://maps.google.com/?q=No.+8,+1st+Floor,+24th+Main,+5th+Phase,+JP+Nagar,+Bengaluru+560078',
     },
   },
   location: {
@@ -58,7 +57,7 @@ export const contactCopy = {
       "Prefer a face-to-face conversation? We'd be happy to meet you at our office.",
     buttonText: 'Get Directions',
     directionsUrl:
-      'https://maps.google.com/?q=Prestige+Tech+Park,+Marathahalli,+Bengaluru',
+      'https://maps.google.com/?q=No.+8,+1st+Floor,+24th+Main,+5th+Phase,+JP+Nagar,+Bengaluru+560078',
   },
   faq: {
     eyebrow: 'STILL HAVE QUESTIONS?',

@@ -13,8 +13,9 @@ import { useLocation } from 'react-router-dom'
 import { Container } from '@/shared/components/Container'
 import { SectionHeading } from '../components/SectionHeading'
 import { ServiceCard } from '../components/ServiceCard'
-import { SolutionsTabs } from '../components/SolutionsTabs'
+import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
 import { individualsCards } from '../constants'
+import { liveSubCards } from '../liveCards'
 
 interface IndividualsSectionProps {
   onEnquire?: (title: string) => void
@@ -24,11 +25,19 @@ export function IndividualsSection({ onEnquire }: IndividualsSectionProps) {
   const { hash } = useLocation()
   const activeId = hash ? hash.slice(1) : ''
 
+  // Same old cards, same style — titles, descriptions and images come
+  // live from the `home-finance` category's sub-categories. Static
+  // `individualsCards` stay only as the loading/empty fallback.
+  const { data } = useCategoryQuery()
+  const live = data?.data.find((c) => c.category_slug === 'home-finance')
+  const cards =
+    (live?.category_subs?.length ?? 0) > 0
+      ? liveSubCards(live, data?.image_url, individualsCards)
+      : individualsCards
+
   return (
     <section id="individuals" className="bg-surface py-16 md:py-20">
       <Container size="4xl">
-        <SolutionsTabs defaultTab="individuals" />
-
         <div className="pt-10">
           <SectionHeading
             title="Financing Solutions for Individuals"
@@ -37,7 +46,7 @@ export function IndividualsSection({ onEnquire }: IndividualsSectionProps) {
           />
 
           <div className="grid w-full gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-            {individualsCards.map((card) => (
+            {cards.map((card) => (
               <ServiceCard
                 key={card.id}
                 {...card}

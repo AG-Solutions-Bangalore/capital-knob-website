@@ -19,6 +19,12 @@ export interface Blog {
   blog_title?: string | null
   blog_description?: string | null
   blog_image?: string | null
+  /** Live wire format (`GET /getBlogs`, `/getBlogsBySlug/{slug}`). */
+  blog_banner_image?: string | null
+  blog_banner_image_alt?: string | null
+  blog_short_description?: string | null
+  blog_created_date?: string | null
+  categories?: string | null
   [key: string]: unknown
 }
 

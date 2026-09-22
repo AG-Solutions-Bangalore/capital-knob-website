@@ -27,14 +27,9 @@ import { useFaqBySlugQuery } from '@/modules/faq/hooks/useFaqQuery'
 import { useTestimonialsQuery } from '@/modules/testimonial/hooks/useTestimonialQuery'
 import { useClientsQuery } from '@/modules/client/hooks/useClientQuery'
 import { useSitemapQuery } from '@/modules/sitemap/hooks/useSitemapQuery'
-import { CompanyCard } from '@/modules/company/components/CompanyCard'
 import { CategoryGrid } from '@/modules/category/components/CategoryGrid'
 import { BlogList } from '@/modules/blogs/components/BlogList'
 import { BlogDetailCard } from '@/modules/blogs/components/BlogDetailCard'
-import { FaqAccordion } from '@/modules/faq/components/FaqAccordion'
-import { TestimonialCards } from '@/modules/testimonial/components/TestimonialCards'
-import { ClientGrid } from '@/modules/client/components/ClientGrid'
-import { SitemapList } from '@/modules/sitemap/components/SitemapList'
 
 type Status = 'loading' | 'success' | 'error' | 'idle'
 
@@ -272,9 +267,24 @@ export function ApiCheckPage() {
         <div className="mt-4 space-y-8">
           <section>
             <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
-              CompanyCard — GET /getCompany
+              Company — GET /getCompany
             </h3>
-            <CompanyCard />
+            <div className="rounded-xl border border-line bg-white p-4 text-sm shadow-soft">
+              {company.isPending ? (
+                <p className="text-muted">Loading company…</p>
+              ) : company.isError ? (
+                <p className="text-rose-600">Could not load company.</p>
+              ) : (
+                <p className="text-ink">
+                  {company.data?.data.company_name ?? '—'} ·{' '}
+                  {company.data?.data.company_email ?? '—'} · +91{' '}
+                  {company.data?.data.company_mobile_no ?? '—'}
+                </p>
+              )}
+              <p className="mt-1 text-xs text-muted">
+                Full profile renders live in the site footer on every page.
+              </p>
+            </div>
           </section>
           <section>
             <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
@@ -296,27 +306,110 @@ export function ApiCheckPage() {
           </section>
           <section>
             <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
-              FaqAccordion — GET /getFAQBySlug/{slug || '{slug}'}
+              FAQ — GET /getFAQBySlug/{slug || '{slug}'}
             </h3>
-            <FaqAccordion slug={slug} />
+            <div className="rounded-xl border border-line bg-white p-4 text-sm shadow-soft">
+              {faqBySlug.isPending ? (
+                <p className="text-muted">Loading FAQs…</p>
+              ) : faqBySlug.isError ? (
+                <p className="text-rose-600">Could not load FAQs.</p>
+              ) : (faqBySlug.data?.data ?? []).length === 0 ? (
+                <p className="text-muted">No FAQs published for “{slug}” yet.</p>
+              ) : (
+                <ul className="space-y-2">
+                  {(faqBySlug.data?.data ?? []).map((f, i) => (
+                    <li key={String(f.id ?? i)} className="text-ink">
+                      <span className="font-semibold">
+                        {f.faq_que ?? f.faq_question ?? `Q${i + 1}`}
+                      </span>
+                      {(f.faq_ans ?? f.faq_answer) && (
+                        <span className="block text-xs text-muted">
+                          {f.faq_ans ?? f.faq_answer}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <p className="mt-1 text-xs text-muted">
+                Contact page FAQ section renders these live with static fallback.
+              </p>
+            </div>
           </section>
           <section>
             <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
-              TestimonialCards — GET /getTestimonial/{slug || '{slug}'}
+              Testimonials — GET /getTestimonial/{slug || '{slug}'}
             </h3>
-            <TestimonialCards slug={slug} />
+            <div className="rounded-xl border border-line bg-white p-4 text-sm shadow-soft">
+              {testimonials.isPending ? (
+                <p className="text-muted">Loading testimonials…</p>
+              ) : testimonials.isError ? (
+                <p className="text-rose-600">Could not load testimonials.</p>
+              ) : (testimonials.data?.data ?? []).length === 0 ? (
+                <p className="text-muted">No testimonials for “{slug}” yet.</p>
+              ) : (
+                <ul className="space-y-2">
+                  {(testimonials.data?.data ?? []).map((t, i) => (
+                    <li key={i} className="text-ink">
+                      <span className="font-semibold">
+                        {t.testimonial_client_name ?? 'Anonymous'}
+                      </span>
+                      {t.testimonial_description && (
+                        <span className="block text-xs text-muted">
+                          {t.testimonial_description}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <p className="mt-1 text-xs text-muted">
+                Homepage carousel renders slug “home” live with static fallback.
+              </p>
+            </div>
           </section>
           <section>
             <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
-              ClientGrid — GET /getClient
+              Clients — GET /getClient
             </h3>
-            <ClientGrid />
+            <div className="rounded-xl border border-line bg-white p-4 text-sm shadow-soft">
+              {clients.isPending ? (
+                <p className="text-muted">Loading clients…</p>
+              ) : clients.isError ? (
+                <p className="text-rose-600">Could not load clients.</p>
+              ) : (clients.data?.data ?? []).length === 0 ? (
+                <p className="text-muted">No clients published yet.</p>
+              ) : (
+                <p className="text-ink">
+                  {(clients.data?.data ?? [])
+                    .map((c) => c.clients_name ?? c.client_name ?? '?')
+                    .join(', ')}
+                </p>
+              )}
+              <p className="mt-1 text-xs text-muted">
+                Homepage lending-partners strip renders these live with static fallback.
+              </p>
+            </div>
           </section>
           <section>
             <h3 className="mb-2 font-mono text-xs font-bold uppercase tracking-wider text-muted">
-              SitemapList — GET /getSitemap
+              Sitemap — GET /getSitemap
             </h3>
-            <SitemapList />
+            <div className="rounded-xl border border-line bg-white p-4 text-sm shadow-soft">
+              {sitemap.isPending ? (
+                <p className="text-muted">Loading sitemap…</p>
+              ) : sitemap.isError ? (
+                <p className="text-rose-600">Could not load sitemap.</p>
+              ) : (
+                <p className="text-ink">
+                  {(sitemap.data?.data ?? []).length} pages,{' '}
+                  {sitemap.data?.blog.length ?? 0} blog entries.
+                </p>
+              )}
+              <p className="mt-1 text-xs text-muted">
+                Build-time sitemap generator consumes this endpoint.
+              </p>
+            </div>
           </section>
         </div>
 

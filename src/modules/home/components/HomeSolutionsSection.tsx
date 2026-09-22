@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { Container } from '@/shared/components/Container'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { individualSolutions } from '../constants'
+import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
+import { categoryAnchor } from '@/modules/category/categoryAnchor'
 
 const EnquiryModal = lazy(() =>
   import('@/modules/solutions/components/EnquiryModal').then((m) => ({
@@ -79,6 +81,49 @@ export function HomeSolutionsSection() {
     setEnquirySubject(title)
   }
 
+  // Live categories (GET /getCategory) rendered in the SAME old card style.
+  // Falls back to the static `individualSolutions` while loading, on error,
+  // or when the backend has no rows — old look never breaks.
+  const { data: categoryData } = useCategoryQuery()
+  const liveCats = (categoryData?.data ?? []).filter((c) => c.category_name)
+  const categoryImageBase =
+    categoryData?.image_url?.find((e) => e.image_for === 'Category')?.image_url ?? ''
+  const noImageSrc =
+    categoryData?.image_url?.find((e) => e.image_for === 'No Image')?.image_url ?? null
+  const liveCards =
+    liveCats.length > 0
+      ? liveCats.slice(0, 5).map((cat, idx) => {
+          const fallback = individualSolutions[idx % individualSolutions.length]
+          const slug = (cat.category_slug ?? '').toLowerCase()
+          const icon = slug.includes('home')
+            ? 'home'
+            : slug.includes('business') || slug.includes('growth') || slug.includes('capital')
+              ? 'stack'
+              : slug.includes('real-estate') || slug.includes('distressed')
+                ? 'crane'
+                : slug.includes('private') || slug.includes('ipo')
+                  ? 'document'
+                  : slug.includes('export') || slug.includes('import') || slug.includes('trade')
+                    ? 'refresh'
+                    : 'tools'
+          return {
+            id: `live-${cat.category_slug ?? idx}`,
+            title: cat.category_name ?? fallback.title,
+            description: cat.category_description ?? fallback.description,
+            // Dynamic image path: live banner when uploaded, else the
+            // backend No Image placeholder. `fallback` only supplies the
+            // icon mapping below — never a hardcoded image.
+            imageSrc: cat.category_banner_image?.trim()
+              ? `${categoryImageBase}${cat.category_banner_image.trim()}`
+              : (noImageSrc ?? fallback.imageSrc),
+            imageTitle: cat.category_name ?? fallback.imageTitle,
+            icon,
+            href: categoryAnchor(cat.category_slug),
+          } as const
+        })
+      : null
+  const cards = liveCards ?? individualSolutions.slice(0, 5)
+
   return (
     <section className="bg-white py-16 md:py-20">
       <Container size="4xl">
@@ -130,7 +175,7 @@ export function HomeSolutionsSection() {
             the Subject pre-filled. The button sits as a sibling of the
             <Link> (never nested inside it) for valid HTML. */}
         <div className="mt-8 sm:mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-          {individualSolutions.slice(0, 5).map((card) => (
+          {cards.map((card) => (
             <div
               key={card.id}
               className="group relative flex flex-col overflow-hidden rounded-xl border border-line bg-white transition-all duration-200 hover:-translate-y-1 hover:border-gold/50 hover:shadow-lg"
