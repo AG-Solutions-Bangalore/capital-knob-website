@@ -15,7 +15,7 @@ export const ROUTES = {
   /** Blog detail pattern — build concrete URLs with `blogPath(slug)`. */
   blogDetail: '/blogs/:slug',
   /** Service detail pattern — build concrete URLs with `servicePath(slug)`. */
-  serviceDetail: '/services/:slug',
+  serviceDetail: '/:slug',
   /** Dev-only API verification dashboard (registered only in dev builds). */
   apiCheck: '/api-check',
 } as const
@@ -27,7 +27,7 @@ export function blogPath(slug: string): string {
   return `/blogs/${encodeURIComponent(slug)}`
 }
 
-/** Concrete service-detail URL for a category slug, e.g. `/services/home-finance`. */
+/** Concrete service-detail URL for a category slug, e.g. `/home-finance`. */
 export function servicePath(slug: string): string {
-  return `/services/${encodeURIComponent(slug)}`
+  return `/${encodeURIComponent(slug)}`
 }

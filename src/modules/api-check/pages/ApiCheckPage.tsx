@@ -442,10 +442,10 @@ export function ApiCheckPage() {
             <p className="font-mono text-xs font-bold text-ink">
               POST /createEnquiry
             </p>
-            <p className="mt-1 text-xs text-muted">
-              Enquiry form on the Contact page, plus the Enquire modal behind
-              every Solutions card.
-            </p>
+              <p className="mt-1 text-xs text-muted">
+                Enquiry form on the Contact page, plus the Enquire modal behind
+                every service card on Home and each service page.
+              </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Link
                 to={ROUTES.contact}
@@ -454,10 +454,10 @@ export function ApiCheckPage() {
                 Open Contact form
               </Link>
               <Link
-                to={ROUTES.services}
+                to={ROUTES.home}
                 className="inline-flex min-h-[40px] items-center rounded-button bg-gold px-5 py-2 text-xs font-bold text-ink transition-colors hover:bg-gold-hover"
               >
-                Open Solutions modal
+                Open Home services
               </Link>
             </div>
           </div>

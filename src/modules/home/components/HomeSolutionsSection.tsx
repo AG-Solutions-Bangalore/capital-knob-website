@@ -4,7 +4,7 @@ import { Container } from '@/shared/components/Container'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { individualSolutions } from '../constants'
 import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
-import { ROUTES, servicePath } from '@/app/routes'
+import { servicePath } from '@/app/routes'
 
 const EnquiryModal = lazy(() =>
   import('@/modules/service/components/EnquiryModal').then((m) => ({
@@ -92,7 +92,7 @@ export function HomeSolutionsSection() {
     categoryData?.image_url?.find((e) => e.image_for === 'No Image')?.image_url ?? null
   const liveCards =
     liveCats.length > 0
-      ? liveCats.slice(0, 5).map((cat, idx) => {
+      ? liveCats.map((cat, idx) => {
         const fallback = individualSolutions[idx % individualSolutions.length]
         const slug = (cat.category_slug ?? '').toLowerCase()
         const icon = slug.includes('home')
@@ -122,59 +122,29 @@ export function HomeSolutionsSection() {
         } as const
       })
       : null
-  const cards = liveCards ?? individualSolutions.slice(0, 5)
+  const cards = liveCards ?? individualSolutions
 
   return (
     <section className="bg-white py-16 md:py-20">
       <Container size="4xl">
         {/* Section Header */}
-        <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-          <div>
-            <h2 className="font-display text-3xl font-extrabold text-ink sm:text-4xl">
-              Services for <br className="hidden sm:inline" />
-              Every Capital Need
-            </h2>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
-              From buying your first home to growing your business, CapitalKnob
-              helps you explore the right financing options based on your goals.
-            </p>
-          </div>
-
-          {/* Right Tabs & Explore Button */}
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center lg:gap-6">
-
-
-            {/* Explore All CTA */}
-            <Link
-              to={ROUTES.services}
-              title={linkTitleFor(ROUTES.services)}
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink shadow-2xs transition-colors hover:border-navy hover:text-navy active:bg-line-soft"
-            >
-              <span>Explore All Services</span>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </Link>
-          </div>
+        <div className="max-w-2xl">
+          <h2 className="font-display text-3xl font-extrabold text-ink sm:text-4xl">
+            Services for <br className="hidden sm:inline" />
+            Every Capital Need
+          </h2>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
+            From buying your first home to growing your business, CapitalKnob
+            helps you explore the right financing options based on your goals.
+          </p>
         </div>
 
-        {/* 5 Cards Grid — shows the first 5 live categories.
+        {/* All live services — 3 per row.
             "Know More" opens the service's own live detail page; the
             circular arrow button opens the enquiry popup with
             the Subject pre-filled. The button sits as a sibling of the
             <Link> (never nested inside it) for valid HTML. */}
-        <div className="mt-8 sm:mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+        <div className="mt-8 sm:mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {cards.map((card) => (
             <div
               key={card.id}

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ROUTES } from '@/app/routes'
+import { ROUTES, servicePath } from '@/app/routes'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { useCompanyQuery } from '@/modules/company/hooks/useCompanyQuery'
 import { NewsletterForm } from '@/modules/newsletter/components/NewsletterForm'
@@ -13,18 +13,17 @@ import { Logo } from './Logo'
  * user can see at a glance which solution they selected.
  */
 const solutionLinks = [
-  { label: 'Services Hub', href: ROUTES.services },
-  { label: 'Home Finance & Loans', href: `${ROUTES.services}#home-loans` },
-  { label: 'Business & Working Capital', href: `${ROUTES.services}#working-capital` },
-  { label: 'Real Estate & Project Finance', href: `${ROUTES.services}#real-estate` },
-  { label: 'Private Credit & Structured Debt', href: `${ROUTES.services}#private-credit` },
-  { label: 'Home Loan Balance Transfer', href: `${ROUTES.services}#balance-transfer` },
-  { label: 'Loan Against Property (LAP)', href: `${ROUTES.services}#loan-against-property` },
+  { label: 'Services Hub', href: ROUTES.home },
+  { label: 'Home Finance & Loans', href: servicePath('home-finance') },
+  { label: 'Business & Working Capital', href: servicePath('business-loan') },
+  { label: 'Real Estate & Project Finance', href: servicePath('real-estate-project-finance') },
+  { label: 'Private Credit & Structured Debt', href: servicePath('private-credit') },
+  { label: 'Home Loan Balance Transfer', href: servicePath('home-finance') },
+  { label: 'Loan Against Property (LAP)', href: servicePath('home-finance') },
 ]
 
 const companyLinks = [
   { label: 'Home', href: ROUTES.home },
-  { label: 'Explore All Services', href: ROUTES.services },
   { label: 'About CapitalKnob', href: ROUTES.about },
   { label: 'Blogs & Insights', href: ROUTES.blogs },
   { label: 'Lending Partners', href: '/#partners' },
@@ -218,8 +217,8 @@ export function Footer({ variant = 'light' }: FooterProps) {
                 <li key={l.label}>
                   {l.href.startsWith('tel:') ? (
                     <a
-                      href={l.href}
-                      title={linkTitleFor(l.href)}
+                      href={contactPhoneHref}
+                      title={linkTitleFor(contactPhoneHref) ?? 'Talk to an Advisor'}
                       className={`transition-colors ${
                         isDark
                           ? 'text-white/70 hover:text-gold'
@@ -294,24 +293,40 @@ export function Footer({ variant = 'light' }: FooterProps) {
 
 function LinkedInIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.61 0 4.28 2.37 4.28 5.46v6.28zM5.34 7.43a-1.55 1.55 0 1 1 0-3.11 1.55 1.55 0 0 1 0 3.11zM6.75 20.45H3.2V9h3.55v11.45z" />
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden>
+      <rect width="24" height="24" rx="5" fill="#0A66C2" />
+      <path
+        fill="#FFFFFF"
+        d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.61 0 4.28 2.37 4.28 5.46v6.28zM5.34 7.43a-1.55 1.55 0 1 1 0-3.11 1.55 1.55 0 0 1 0 3.11zM6.75 20.45H3.2V9h3.55v11.45z"
+      />
     </svg>
   )
 }
 
 function InstagramIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.5" y2="6.5" />
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden>
+      <defs>
+        <linearGradient id="ig-gradient" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0%" stopColor="#FEDA75" />
+          <stop offset="35%" stopColor="#FA7E1E" />
+          <stop offset="65%" stopColor="#D62976" />
+          <stop offset="100%" stopColor="#962FBF" />
+        </linearGradient>
+      </defs>
+      <rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="url(#ig-gradient)" />
+      <rect x="6" y="6" width="12" height="12" rx="3.5" fill="none" stroke="#FFFFFF" strokeWidth="1.8" />
+      <circle cx="12" cy="12" r="2.8" fill="none" stroke="#FFFFFF" strokeWidth="1.8" />
+      <circle cx="16.4" cy="7.6" r="1.3" fill="#FFFFFF" />
     </svg>
   )
 }
 
 function YouTubeIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M23.5 6.2a3 3 0 0 0-2.1-2.12C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.58A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.12C4.5 20.5 12 20.5 12 20.5s7.5 0 9.4-.58a3 3 0 0 0 2.1-2.12A31.4 31.4 0 0 0 24 12a31.4 31.4 0 0 0-.5-5.8zM9.75 15.5v-7l6.5 3.5-6.5 3.5z" />
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden>
+      <rect x="1" y="5" width="22" height="14" rx="4" fill="#FF0000" />
+      <path d="M10.25 9.25v5.5l4.75-2.75-4.75-2.75z" fill="#FFFFFF" />
     </svg>
   )
 }

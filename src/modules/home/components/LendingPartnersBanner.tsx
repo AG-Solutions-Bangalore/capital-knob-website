@@ -39,36 +39,36 @@ export function LendingPartnersBanner() {
             </span>
           </div>
 
-          {/* Bank Logos Strip — live client logos when published, old static strip otherwise */}
+          {/* Bank Logos Strip — uniform tiles: equal height, bigger marks, tight gaps */}
           {showLive ? (
-            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3.5 sm:gap-8 md:justify-between lg:flex-1">
+            <div className="flex w-full flex-1 flex-wrap items-center justify-between gap-x-6 gap-y-4">
               {clients.map((c, idx) => {
                 const name = clientName(c)
                 const src = clientImage(c, base, noImage)
                 return (
                   <div
                     key={`${name}-${idx}`}
-                    className="flex items-center gap-1.5 transition-opacity hover:opacity-85"
                     title={name}
+                    className="flex items-center"
                   >
                     {src ? (
                       <img
                         src={src}
                         alt={name}
                         title={name}
-                        className="h-6 w-auto max-w-28 object-contain"
+                        className="max-h-9 w-auto max-w-32 object-contain md:max-h-10"
                         loading="lazy"
                         decoding="async"
                       />
                     ) : (
-                      <span className="text-xs font-black tracking-tight text-navy">
+                      <span className="whitespace-nowrap text-xs font-black tracking-tight text-navy">
                         {name}
                       </span>
                     )}
                   </div>
                 )
               })}
-              <span className="text-xs font-medium text-muted">
+              <span className="whitespace-nowrap text-xs font-medium text-muted">
                 And Many More...
               </span>
             </div>

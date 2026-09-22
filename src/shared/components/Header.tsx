@@ -1,4 +1,4 @@
-import { ROUTES, type RoutePath } from '@/app/routes'
+import { ROUTES, servicePath, type RoutePath } from '@/app/routes'
 import { cn } from '@/shared/lib/cn'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
@@ -58,35 +58,41 @@ const navEntries: NavEntry[] = [
   {
     kind: 'group',
     label: 'Services',
-    to: ROUTES.services,
-    title: 'Explore CapitalKnob Services',
+    to: ROUTES.home,
+    title: 'Explore all services on Home',
     mega: true,
     children: [
       {
         kind: 'link',
         label: 'Home Finance',
-        to: `${ROUTES.services}#home-loans`,
+        to: servicePath('home-finance'),
         title: 'Home Finance Services – CapitalKnob',
       },
       {
         kind: 'link',
         label: 'Business Finance',
-        to: `${ROUTES.services}#working-capital`,
+        to: servicePath('business-loan'),
         title: 'Business Finance Services – CapitalKnob',
       },
       {
         kind: 'link',
         label: 'Real Estate Finance',
-        to: `${ROUTES.services}#real-estate`,
+        to: servicePath('real-estate-project-finance'),
         title: 'Real Estate Finance Services – CapitalKnob',
       },
       {
         kind: 'link',
         label: 'Private Credit',
-        to: `${ROUTES.services}#private-credit`,
+        to: servicePath('private-credit'),
         title: 'Private Credit Services – CapitalKnob',
       },
     ],
+  },
+  {
+    kind: 'link',
+    label: 'Blogs',
+    to: ROUTES.blogs,
+    title: 'Blogs & Insights – CapitalKnob',
   },
   {
     kind: 'link',
@@ -94,12 +100,6 @@ const navEntries: NavEntry[] = [
     to: ROUTES.contact,
     title: 'Contact CapitalKnob',
   },
-  // {
-  //   kind: 'link',
-  //   label: 'Blogs',
-  //   to: ROUTES.blogs,
-  //   title: 'Blogs & Insights – CapitalKnob',
-  // },
 ]
 
 export function Header() {
@@ -402,9 +402,9 @@ function DesktopDropdown({
   const itemRef = useRef<HTMLLIElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
 
-  // Mark this group as active when user is on the Solutions route, regardless
-  // of whether the dropdown is open.
-  const isOnGroupRoute = useOnRoute(entry.to)
+  // Mark this group as active when user is on any service page (a static
+  // child link or a live `/{slug}` detail page) — never on `/` itself.
+  const isOnGroupRoute = useOnServicesRoute(entry.children)
 
   // Close on click outside
   useEffect(() => {
@@ -524,12 +524,18 @@ function DesktopDropdown({
   )
 }
 
-/** Returns true when the current pathname matches `to` (or starts with it
- *  for non-home paths). Used to keep the dropdown trigger styled as active. */
-function useOnRoute(to: RoutePath): boolean {
+/**
+ * Returns true when the user is on any service page: a static child link
+ * or a live service-detail page (`/{category-slug}`). The Services group
+ * has no page of its own, so it highlights from its destinations instead —
+ * never from `/` (that would light up alongside Home).
+ */
+function useOnServicesRoute(children: NavChildLink[]): boolean {
   const { pathname } = useLocation()
-  if (to === ROUTES.home) return pathname === '/'
-  return pathname === to || pathname.startsWith(`${to}/`)
+  const { data } = useCategoryQuery()
+  if (children.some((c) => pathname === c.to)) return true
+  const slugs = data?.data ?? []
+  return slugs.some((c) => c.category_slug && pathname === `/${c.category_slug}`)
 }
 
 /**
@@ -597,7 +603,7 @@ function MobileGroup({
   onToggle: () => void
   onPick: () => void
 }) {
-  const isOnGroupRoute = useOnRoute(entry.to)
+  const isOnGroupRoute = useOnServicesRoute(entry.children)
   const { data: liveCategories } = useCategoryQuery()
   const hasLiveCategories = !!entry.mega && (liveCategories?.data.length ?? 0) > 0
 

@@ -28,6 +28,7 @@ const SLUG_TO_PATH = {
   'about-us': '/about-us',
   blogs: '/blogs',
   contacts: '/contact',
+  contact: '/contact',
   'home-finance': '/home-finance',
   'business-loan': '/business-finance',
   'real-estate-project-finance': '/real-estate-finance',
@@ -36,7 +37,6 @@ const SLUG_TO_PATH = {
 
 const STATIC_FALLBACK = [
   { loc: '/', priority: '1.0', changefreq: 'weekly' },
-  { loc: '/services', priority: '0.9', changefreq: 'weekly' },
   { loc: '/blogs', priority: '0.8', changefreq: 'weekly' },
   { loc: '/home-finance', priority: '0.8', changefreq: 'monthly' },
   { loc: '/business-finance', priority: '0.8', changefreq: 'monthly' },
@@ -87,7 +87,6 @@ async function fetchLiveUrls() {
 
   const urls = [
     { loc: '/', priority: '1.0', changefreq: 'weekly', lastmod: today() },
-    { loc: '/services', priority: '0.9', changefreq: 'weekly', lastmod: today() },
   ]
   const seen = new Set(urls.map((u) => u.loc))
 
@@ -105,7 +104,7 @@ async function fetchLiveUrls() {
     })
   }
 
-  // One detail page per live service category: /services/{slug}.
+  // One detail page per live service category: /{slug}.
   try {
     const res = await fetch(`${API_BASE_URL}/getCategory`, {
       signal: AbortSignal.timeout(15_000),
@@ -118,7 +117,7 @@ async function fetchLiveUrls() {
         const slug =
           typeof c?.category_slug === 'string' ? c.category_slug.trim() : ''
         if (!slug) continue
-        const loc = `/services/${slug}`
+        const loc = `/${slug}`
         if (seen.has(loc)) continue
         seen.add(loc)
         urls.push({ loc, priority: '0.8', changefreq: 'monthly', lastmod: today() })

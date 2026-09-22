@@ -177,8 +177,8 @@ export function SolutionsMobileLinks({ onPick }: { onPick: () => void }) {
     <ul className="flex flex-col gap-1">
       <li>
         <Link
-          to={ROUTES.services}
-          title={linkTitleFor(ROUTES.services)}
+          to={ROUTES.home}
+          title={linkTitleFor(ROUTES.home)}
           onClick={onPick}
           className="flex items-center justify-between rounded-button px-3 py-2.5 text-[13px] font-semibold text-navy transition-colors hover:bg-line-soft"
         >

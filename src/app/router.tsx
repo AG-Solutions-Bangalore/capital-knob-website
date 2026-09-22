@@ -10,13 +10,10 @@ import {
   BlogsPage,
   BusinessFinancePage,
   ContactPage,
-  HomeFinancePage,
   HomePage,
   NotFoundPage,
-  PrivateCreditPage,
   RealEstateFinancePage,
   ServiceDetailPage,
-  SolutionsPage,
 } from './lazyRoutes'
 
 // Idle route-preloading: only the 1–2 most likely next routes, staggered,
@@ -54,19 +51,20 @@ const routes: RouteObject[] = [
     element: <MainLayout />,
     children: [
       { path: ROUTES.home, element: <LazyRoute Component={HomePage} /> },
-      { path: ROUTES.services, element: <LazyRoute Component={SolutionsPage} /> },
-      { path: ROUTES.serviceDetail, element: <LazyRoute Component={ServiceDetailPage} /> },
-      { path: '/solution', element: <Navigate to={ROUTES.services} replace /> },
-      { path: '/solutions', element: <Navigate to={ROUTES.services} replace /> },
-      { path: ROUTES.homeFinance, element: <LazyRoute Component={HomeFinancePage} /> },
+      // Listing page retired — home shows all 10 live services.
+      { path: ROUTES.services, element: <Navigate to={ROUTES.home} replace /> },
+      { path: '/solution', element: <Navigate to={ROUTES.home} replace /> },
+      { path: '/solutions', element: <Navigate to={ROUTES.home} replace /> },
       { path: ROUTES.businessFinance, element: <LazyRoute Component={BusinessFinancePage} /> },
       { path: ROUTES.realEstateFinance, element: <LazyRoute Component={RealEstateFinancePage} /> },
-      { path: ROUTES.privateCredit, element: <LazyRoute Component={PrivateCreditPage} /> },
       { path: ROUTES.about, element: <LazyRoute Component={AboutPage} /> },
       { path: '/about', element: <Navigate to={ROUTES.about} replace /> },
       { path: ROUTES.contact, element: <LazyRoute Component={ContactPage} /> },
       { path: ROUTES.blogs, element: <LazyRoute Component={BlogsPage} /> },
       { path: ROUTES.blogDetail, element: <LazyRoute Component={BlogDetailPage} /> },
+      // Live service detail (`/:slug`) — last so static routes win.
+      // Unknown slugs render the page's own "not found" state.
+      { path: ROUTES.serviceDetail, element: <LazyRoute Component={ServiceDetailPage} /> },
       // Dev-only backend verification dashboard — never registered in prod.
       ...(env.isDev
         ? [{ path: ROUTES.apiCheck, element: <LazyRoute Component={ApiCheckPage} /> }]
