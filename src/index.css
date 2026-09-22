@@ -290,23 +290,22 @@ button,
 }
 
 /* -----------------------------------------------------------------------------
-   Testimonial ticker — CSS marquee (replaces framer-motion x animation).
-   Seamless -50% loop, pauses on hover/focus, static when reduced-motion
-   (handled globally above).
+   Success-story marquee — mirrors igli's two-track loop: each duplicate
+   track animates its own width + gap, duration = width / 140px per second
+   (set inline as --ck-duration). Pauses on hover, static when
+   reduced-motion (handled globally below).
    ----------------------------------------------------------------------------- */
-@keyframes testimonial-scroll {
+@keyframes ck-marquee {
   from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  to { transform: translateX(calc(-100% - 1rem)); }
 }
 
-.testimonial-track {
-  animation: testimonial-scroll 40s linear infinite;
+.ck-marquee-track {
+  animation: ck-marquee var(--ck-duration, 40s) linear infinite;
   will-change: transform;
 }
 
-.testimonial-paused .testimonial-track,
-.testimonial-root:hover .testimonial-track,
-.testimonial-root:focus-within .testimonial-track {
+.ck-marquee-group:hover .ck-marquee-track {
   animation-play-state: paused;
 }
 

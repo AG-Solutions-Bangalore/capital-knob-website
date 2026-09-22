@@ -1,17 +1,24 @@
 import { Container } from '@/shared/components/Container'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
-import { homeStats, homeTestimonials } from '../constants'
-import type { HomeTestimonial } from '../constants'
-import { TestimonialGrid } from './TestimonialGrid'
+import { homeStats } from '../constants'
+import { TestimonialsMarquee, type MarqueeTestimonial } from './TestimonialsMarquee'
 import { useTestimonialsQuery } from '@/modules/testimonial/hooks/useTestimonialQuery'
 import { IMAGE_BASE_URL } from "@/lib/images";
-
-const TONES: NonNullable<HomeTestimonial['tone']>[] = ['navy', 'gold', 'brandBlue', 'slate']
 
 function parseRating(value: string | number | null | undefined): number | undefined {
   const n = typeof value === 'string' ? parseInt(value, 10) : value
   if (typeof n !== 'number' || !Number.isFinite(n) || n <= 0) return undefined
   return Math.min(5, Math.max(1, Math.round(n)))
+}
+
+/** "2026-09-22" → "22 SEP 2026" without timezone pitfalls. */
+function formatCertDate(value: string | null | undefined): string | undefined {
+  if (!value) return undefined
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(value.trim())
+  if (!m) return value.trim() || undefined
+  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+  const month = months[Math.min(11, Math.max(0, parseInt(m[2], 10) - 1))]
+  return `${m[3]} ${month} ${m[1]}`
 }
 
 /** Gold outline icons for the stats band. */
@@ -66,23 +73,31 @@ function StatIcon({ name }: { name: string }) {
 const STAT_ICONS = ['people', 'handshake', 'coins', 'star']
 
 export function HomeCtaSection() {
-  // Live testimonials for the homepage (GET /getTestimonial/home).
-  // Falls back to the static `homeTestimonials` while loading, on error,
-  // or when nothing is published.
-  const { data: liveData } = useTestimonialsQuery('home')
-  const liveItems: HomeTestimonial[] = []
-  for (const [idx, t] of (liveData?.data ?? []).entries()) {
-    const quote = t.testimonial_description?.trim() ?? ''
-    if (!quote) continue
-    liveItems.push({
-      quote,
-      name: t.testimonial_client_name?.trim() || 'CapitalKnob Customer',
-      role: 'Verified Customer',
-      tone: TONES[idx % TONES.length],
-      rating: parseRating(t.testimonial_rating),
+  // Homepage testimonials — LIVE from GET /getTestimonial/home.
+  // EVERY row is rendered (name, description, rating, date); nothing is
+  // mocked. The marquee renders null until at least one live row exists.
+  const { data: liveData, isPending, isError } = useTestimonialsQuery('home')
+  const liveRows = liveData?.data ?? []
+  const marqueeItems: MarqueeTestimonial[] = liveRows
+    .map((t) => {
+      const date = formatCertDate(t.testimonial_created_date)
+      return {
+        name: t.testimonial_client_name?.trim() || 'CapitalKnob Customer',
+        detail: t.testimonial_description?.trim() || undefined,
+        rating: parseRating(t.testimonial_rating) ?? 5,
+        footer: date ? `VERIFIED · ${date}` : 'VERIFIED CUSTOMER',
+      }
     })
+    .filter((t) => t.name !== 'CapitalKnob Customer' || t.detail)
+
+  // Only 1 live row exists right now — cycle it to fill the strip
+  // (8 cards) so the marquee loops seamlessly. New backend rows join
+  // the rotation automatically; the loop shrinks as real data grows.
+  const MIN_MARQUEE_CARDS = 8
+  const loopItems: MarqueeTestimonial[] = []
+  for (let i = 0; marqueeItems.length > 0 && loopItems.length < MIN_MARQUEE_CARDS; i++) {
+    loopItems.push(marqueeItems[i % marqueeItems.length])
   }
-  const testimonials = liveItems.length > 0 ? liveItems : homeTestimonials
   const [primaryStat] = homeStats
 
   return (
@@ -115,10 +130,7 @@ export function HomeCtaSection() {
               <br />
               <span className="text-gold">Customers Say</span>
             </h2>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-slate-300 sm:text-base">
-              Real stories. Real progress. Here&rsquo;s what our customers have
-              to say about their lending experience with us.
-            </p>
+    
           </div>
 
           <div className="flex flex-col items-start gap-3 lg:col-span-5 lg:items-end lg:pt-2">
@@ -164,10 +176,16 @@ export function HomeCtaSection() {
           </div>
         </div>
 
-        {/* Testimonial cards — middle card elevated on desktop */}
-        <div className="mt-12 lg:mt-14">
-          <TestimonialGrid testimonials={testimonials} />
-        </div>
+        {/* Success-story marquee — live API rows via the reusable cert SVG */}
+        {!isPending && !isError && loopItems.length > 0 && (
+          <div className="mt-12 lg:mt-14">
+            <TestimonialsMarquee
+              title="We Stand by Results — Real Stories, Real Sanctions"
+           
+              testimonials={loopItems}
+            />
+          </div>
+        )}
 
         {/* Stats band with gold icons and dividers */}
         <div className="mt-12 border-t border-white/15 pt-8">
@@ -193,35 +211,7 @@ export function HomeCtaSection() {
           </dl>
         </div>
 
-        {/* Corner flourishes */}
-        <div className="mt-10 flex items-end justify-between gap-6">
-          <p className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.3em] text-slate-500">
-            <span className="leading-loose">
-              Trust
-              <br />
-              Finances
-              <br />
-              Brighter Lives
-            </span>
-            <span aria-hidden="true" className="h-px w-12 bg-slate-600" />
-          </p>
-          <p className="relative text-right font-script text-2xl font-bold leading-tight text-gold sm:text-3xl">
-            People Build
-            <br />
-            Brighter Tomorrows
-            <svg
-              viewBox="0 0 220 20"
-              className="absolute -bottom-2 right-0 h-4 w-44 text-gold/80"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              aria-hidden="true"
-            >
-              <path d="M5 12 Q 100 2, 210 10" />
-            </svg>
-          </p>
-        </div>
+      
       </Container>
     </section>
   )
