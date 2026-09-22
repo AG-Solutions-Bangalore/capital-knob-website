@@ -1,11 +1,9 @@
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom'
 import { ROUTES } from './routes'
-import { env } from '@/shared/lib/env'
 import { MainLayout } from '@/shared/layouts/MainLayout'
 import { LazyRoute } from '@/shared/components/LazyRoute'
 import {
   AboutPage,
-  ApiCheckPage,
   BlogDetailPage,
   BlogsPage,
   BusinessFinancePage,
@@ -31,13 +29,10 @@ if (typeof window !== 'undefined') {
     } catch {
       return
     }
-    // Most likely next from landing: Solutions, then Contact. Staggered after initial paint.
-    window.setTimeout(() => {
-      import('@/modules/service/pages/SolutionsPage').catch(() => { })
-    }, 8000)
+    // Most likely next from landing: Contact. Staggered after initial paint.
     window.setTimeout(() => {
       import('@/modules/contact/pages/ContactPage').catch(() => { })
-    }, 9500)
+    }, 8000)
   }
   if (typeof window.requestIdleCallback === 'function') {
     window.requestIdleCallback(preload, { timeout: 10000 })
@@ -65,10 +60,6 @@ const routes: RouteObject[] = [
       // Live service detail (`/:slug`) — last so static routes win.
       // Unknown slugs render the page's own "not found" state.
       { path: ROUTES.serviceDetail, element: <LazyRoute Component={ServiceDetailPage} /> },
-      // Dev-only backend verification dashboard — never registered in prod.
-      ...(env.isDev
-        ? [{ path: ROUTES.apiCheck, element: <LazyRoute Component={ApiCheckPage} /> }]
-        : []),
       { path: '*', element: <LazyRoute Component={NotFoundPage} /> },
     ],
   },

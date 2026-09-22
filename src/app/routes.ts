@@ -16,8 +16,6 @@ export const ROUTES = {
   blogDetail: '/blogs/:slug',
   /** Service detail pattern — build concrete URLs with `servicePath(slug)`. */
   serviceDetail: '/:slug',
-  /** Dev-only API verification dashboard (registered only in dev builds). */
-  apiCheck: '/api-check',
 } as const
 
 export type RoutePath = (typeof ROUTES)[keyof typeof ROUTES]

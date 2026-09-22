@@ -3,19 +3,9 @@ import { lazy } from 'react'
 export const HomePage = lazy(() =>
   import('@/modules/home/pages/HomePage').then((m) => ({ default: m.HomePage })),
 )
-export const SolutionsPage = lazy(() =>
-  import('@/modules/service/pages/SolutionsPage').then((m) => ({
-    default: m.SolutionsPage,
-  })),
-)
 export const ServiceDetailPage = lazy(() =>
   import('@/modules/service/pages/ServiceDetailPage').then((m) => ({
     default: m.ServiceDetailPage,
-  })),
-)
-export const HomeFinancePage = lazy(() =>
-  import('@/modules/home-finance/pages/HomeFinancePage').then((m) => ({
-    default: m.HomeFinancePage,
   })),
 )
 export const BusinessFinancePage = lazy(() =>
@@ -27,11 +17,6 @@ export const RealEstateFinancePage = lazy(() =>
   import('@/modules/real-estate-finance/pages/RealEstateFinancePage').then(
     (m) => ({ default: m.RealEstateFinancePage }),
   ),
-)
-export const PrivateCreditPage = lazy(() =>
-  import('@/modules/private-credit/pages/PrivateCreditPage').then((m) => ({
-    default: m.PrivateCreditPage,
-  })),
 )
 export const AboutPage = lazy(() =>
   import('@/modules/about/pages/AboutPage').then((m) => ({ default: m.AboutPage })),
@@ -49,11 +34,6 @@ export const BlogsPage = lazy(() =>
 export const BlogDetailPage = lazy(() =>
   import('@/modules/blogs/pages/BlogDetailPage').then((m) => ({
     default: m.BlogDetailPage,
-  })),
-)
-export const ApiCheckPage = lazy(() =>
-  import('@/modules/api-check/pages/ApiCheckPage').then((m) => ({
-    default: m.ApiCheckPage,
   })),
 )
 export const NotFoundPage = lazy(() =>
