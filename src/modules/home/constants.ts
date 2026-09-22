@@ -335,16 +335,18 @@ export interface HomeTestimonial {
   name: string
   role: string
   /**
-   * Optional photo. When omitted, the carousel renders an initials avatar so
-   * the loop looks varied without needing a unique portrait per testimonial.
+   * Optional photo. When omitted, the grid renders an initials avatar so
+   * cards look varied without needing a unique portrait per testimonial.
    */
   avatar?: string
   avatarTitle?: string
   /**
-   * Visual tone used for the initials avatar background — keeps the carousel
+   * Visual tone used for the initials avatar background — keeps the grid
    * varied without requiring a portrait per entry.
    */
   tone?: 'navy' | 'gold' | 'brandBlue' | 'slate'
+  /** 1–5 star rating. Stars render only when present and valid. */
+  rating?: number
 }
 
 export const homeTestimonials: HomeTestimonial[] = [
