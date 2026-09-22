@@ -36,7 +36,7 @@ const SLUG_TO_PATH = {
 
 const STATIC_FALLBACK = [
   { loc: '/', priority: '1.0', changefreq: 'weekly' },
-  { loc: '/solutions', priority: '0.9', changefreq: 'weekly' },
+  { loc: '/services', priority: '0.9', changefreq: 'weekly' },
   { loc: '/blogs', priority: '0.8', changefreq: 'weekly' },
   { loc: '/home-finance', priority: '0.8', changefreq: 'monthly' },
   { loc: '/business-finance', priority: '0.8', changefreq: 'monthly' },
@@ -87,7 +87,7 @@ async function fetchLiveUrls() {
 
   const urls = [
     { loc: '/', priority: '1.0', changefreq: 'weekly', lastmod: today() },
-    { loc: '/solutions', priority: '0.9', changefreq: 'weekly', lastmod: today() },
+    { loc: '/services', priority: '0.9', changefreq: 'weekly', lastmod: today() },
   ]
   const seen = new Set(urls.map((u) => u.loc))
 
@@ -103,6 +103,29 @@ async function fetchLiveUrls() {
       changefreq: parseFloat(priority) >= 0.9 ? 'weekly' : 'monthly',
       lastmod: toDate(e?.updated_at ?? e?.created_at),
     })
+  }
+
+  // One detail page per live service category: /services/{slug}.
+  try {
+    const res = await fetch(`${API_BASE_URL}/getCategory`, {
+      signal: AbortSignal.timeout(15_000),
+      headers: { Accept: 'application/json' },
+    })
+    if (res.ok) {
+      const body = await res.json()
+      const cats = Array.isArray(body?.data) ? body.data : []
+      for (const c of cats) {
+        const slug =
+          typeof c?.category_slug === 'string' ? c.category_slug.trim() : ''
+        if (!slug) continue
+        const loc = `/services/${slug}`
+        if (seen.has(loc)) continue
+        seen.add(loc)
+        urls.push({ loc, priority: '0.8', changefreq: 'monthly', lastmod: today() })
+      }
+    }
+  } catch {
+    // Categories stay out of the sitemap when unreachable — never fail builds.
   }
   return urls
 }

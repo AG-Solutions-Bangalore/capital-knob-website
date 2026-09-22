@@ -15,6 +15,7 @@ import {
   NotFoundPage,
   PrivateCreditPage,
   RealEstateFinancePage,
+  ServiceDetailPage,
   SolutionsPage,
 } from './lazyRoutes'
 
@@ -53,8 +54,10 @@ const routes: RouteObject[] = [
     element: <MainLayout />,
     children: [
       { path: ROUTES.home, element: <LazyRoute Component={HomePage} /> },
-      { path: ROUTES.solutions, element: <LazyRoute Component={SolutionsPage} /> },
-      { path: '/solution', element: <Navigate to={ROUTES.solutions} replace /> },
+      { path: ROUTES.services, element: <LazyRoute Component={SolutionsPage} /> },
+      { path: ROUTES.serviceDetail, element: <LazyRoute Component={ServiceDetailPage} /> },
+      { path: '/solution', element: <Navigate to={ROUTES.services} replace /> },
+      { path: '/solutions', element: <Navigate to={ROUTES.services} replace /> },
       { path: ROUTES.homeFinance, element: <LazyRoute Component={HomeFinancePage} /> },
       { path: ROUTES.businessFinance, element: <LazyRoute Component={BusinessFinancePage} /> },
       { path: ROUTES.realEstateFinance, element: <LazyRoute Component={RealEstateFinancePage} /> },

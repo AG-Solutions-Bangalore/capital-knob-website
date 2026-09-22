@@ -12,6 +12,9 @@
  */
 
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { servicePath } from '@/app/routes'
+import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { useCategoryQuery } from '../hooks/useCategoryQuery'
 import type { Category } from '../api/category.types'
 
@@ -184,6 +187,31 @@ function CategoryCard({
         <p className="mt-3 flex-1 text-xs leading-relaxed text-muted">
           {category.category_description}
         </p>
+      )}
+
+      {/* Explore link — opens this service's own live detail page */}
+      {category.category_slug && (
+        <Link
+          to={servicePath(category.category_slug)}
+          title={linkTitleFor(servicePath(category.category_slug))}
+          className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-navy transition-colors hover:text-gold"
+        >
+          Explore {title}
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14" />
+            <path d="m13 6 6 6-6 6" />
+          </svg>
+        </Link>
       )}
 
       {/* Sub-category options */}

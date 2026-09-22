@@ -4,7 +4,7 @@ import { Container } from '@/shared/components/Container'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { individualSolutions } from '../constants'
 import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
-import { categoryAnchor } from '@/modules/category/categoryAnchor'
+import { ROUTES, servicePath } from '@/app/routes'
 
 const EnquiryModal = lazy(() =>
   import('@/modules/service/components/EnquiryModal').then((m) => ({
@@ -117,8 +117,8 @@ export function HomeSolutionsSection() {
             ? `${categoryImageBase}${cat.category_banner_image.trim()}`
             : (noImageSrc ?? fallback.imageSrc),
           imageTitle: cat.category_name ?? fallback.imageTitle,
-          icon,
-          href: categoryAnchor(cat.category_slug),
+            icon,
+            href: servicePath(cat.category_slug ?? ''),
         } as const
       })
       : null
@@ -146,8 +146,8 @@ export function HomeSolutionsSection() {
 
             {/* Explore All CTA */}
             <Link
-              to="/solutions"
-              title={linkTitleFor('/solutions')}
+              to={ROUTES.services}
+              title={linkTitleFor(ROUTES.services)}
               className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink shadow-2xs transition-colors hover:border-navy hover:text-navy active:bg-line-soft"
             >
               <span>Explore All Services</span>
@@ -169,9 +169,9 @@ export function HomeSolutionsSection() {
           </div>
         </div>
 
-        {/* 5 Cards Grid — shows the first 5 individual solutions.
-            "Know More" navigates to the Solutions page and highlights the
-            card; the circular arrow button opens the enquiry popup with
+        {/* 5 Cards Grid — shows the first 5 live categories.
+            "Know More" opens the service's own live detail page; the
+            circular arrow button opens the enquiry popup with
             the Subject pre-filled. The button sits as a sibling of the
             <Link> (never nested inside it) for valid HTML. */}
         <div className="mt-8 sm:mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">

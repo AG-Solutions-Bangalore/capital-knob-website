@@ -41,7 +41,7 @@ export function IndividualsSection({ onEnquire }: IndividualsSectionProps) {
         <div className="pt-10">
           <SectionHeading
             title="Financing Services for Individuals"
-            subtitle="Turn your aspirations into reality with the right home and personal financing solutions."
+            subtitle="Turn your aspirations into reality with the right home and personal financing services."
             description="Whether you are buying, building, renovating or unlocking the value of your property, we help you explore suitable financing options through our network of trusted lenders."
           />
 

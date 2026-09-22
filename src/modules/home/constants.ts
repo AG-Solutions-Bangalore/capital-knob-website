@@ -196,7 +196,7 @@ export const individualSolutions: HomeCard[] = [
     imageTitle: 'Home Loans – CapitalKnob',
     icon: 'home',
     // "Know More" lands on the Solutions page and highlights this card.
-    href: '/solutions#home-loans',
+    href: '/services#home-loans',
   },
   {
     id: 'balance-transfer',
@@ -205,7 +205,7 @@ export const individualSolutions: HomeCard[] = [
     imageSrc: `${IMAGE_BASE_URL}/home/card_balance_transfer.webp`,
     imageTitle: 'Home Loan Balance Transfer – CapitalKnob',
     icon: 'refresh',
-    href: '/solutions#balance-transfer',
+    href: '/services#balance-transfer',
   },
   {
     id: 'top-up',
@@ -214,7 +214,7 @@ export const individualSolutions: HomeCard[] = [
     imageSrc: `${IMAGE_BASE_URL}/home/card_home_top_up.webp`,
     imageTitle: 'Home Loan Top-Up – CapitalKnob',
     icon: 'stack',
-    href: '/solutions#top-up',
+    href: '/services#top-up',
   },
   {
     id: 'construction',
@@ -223,7 +223,7 @@ export const individualSolutions: HomeCard[] = [
     imageSrc: `${IMAGE_BASE_URL}/home/card_construction.webp`,
     imageTitle: 'Construction Finance – CapitalKnob',
     icon: 'crane',
-    href: '/solutions#construction',
+    href: '/services#construction',
   },
   {
     id: 'renovation',
@@ -234,7 +234,7 @@ export const individualSolutions: HomeCard[] = [
     icon: 'tools',
     // No dedicated renovation card on the Solutions page — scroll to the
     // individuals grid instead of highlighting the wrong card.
-    href: '/solutions#individuals',
+    href: '/services#individuals',
   },
   {
     id: 'loan-against-property',
@@ -243,7 +243,7 @@ export const individualSolutions: HomeCard[] = [
     imageSrc: `${IMAGE_BASE_URL}/home/card_loan_property.webp`,
     imageTitle: 'Loan Against Property – CapitalKnob',
     icon: 'document',
-    href: '/solutions#loan-against-property',
+    href: '/services#loan-against-property',
   },
 ]
 

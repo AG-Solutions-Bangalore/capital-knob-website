@@ -1,24 +1,22 @@
 /**
- * CategoryMegaMenu — live Solutions mega-menu content (`GET /getCategory`).
+ * CategoryMegaMenu — live Services mega-menu content (`GET /getCategory`).
  *
  * `SolutionsMegaPanel` reproduces the approved mega-menu layout: one column
  * per category with its sub-category links, Export + Import combined into a
  * single wide cell, and Structured Trade Finance as a full-width inline row.
- * Every link points at `/solutions#category-{slug}` so the Solutions page
- * scrolls to and highlights the matching live card.
+ * Every link opens that service's own live detail page (`/services/{slug}`).
  *
  * `SolutionsMobileLinks` is the compact sidebar version: "View All
- * Solutions" plus one link per live category. Both fall back to `null`
+ * Services" plus one link per live category. Both fall back to `null`
  * (callers render the static children instead) while loading, on error, or
  * when the backend has no categories.
  */
 
 import { Link, useLocation } from 'react-router-dom'
 import type { CSSProperties } from 'react'
-import { ROUTES } from '@/app/routes'
+import { ROUTES, servicePath } from '@/app/routes'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { useCategoryQuery } from '../hooks/useCategoryQuery'
-import { categoryAnchor } from '../categoryAnchor'
 import type { Category, CategorySub } from '../api/category.types'
 
 /** One deep-blue tone per parent heading, in render order. */
@@ -100,7 +98,7 @@ function MegaCell({
   return (
     <div className="min-w-0">
       <HeadingLink
-        to={categoryAnchor(slug)}
+        to={servicePath(slug)}
         label={category.category_name ?? 'Untitled'}
         onNavigate={onNavigate}
         tone={tone}
@@ -109,7 +107,7 @@ function MegaCell({
         {subs.map((sub: CategorySub) => (
           <li key={sub.id ?? sub.category_sub_name}>
             <SubLink
-              to={categoryAnchor(slug)}
+              to={servicePath(slug)}
               label={sub.category_sub_name ?? ''}
               onNavigate={onNavigate}
             />
@@ -179,8 +177,8 @@ export function SolutionsMobileLinks({ onPick }: { onPick: () => void }) {
     <ul className="flex flex-col gap-1">
       <li>
         <Link
-          to={ROUTES.solutions}
-          title={linkTitleFor(ROUTES.solutions)}
+          to={ROUTES.services}
+          title={linkTitleFor(ROUTES.services)}
           onClick={onPick}
           className="flex items-center justify-between rounded-button px-3 py-2.5 text-[13px] font-semibold text-navy transition-colors hover:bg-line-soft"
         >
@@ -190,8 +188,8 @@ export function SolutionsMobileLinks({ onPick }: { onPick: () => void }) {
       {cats.map((cat) => (
         <li key={cat.id ?? cat.category_slug}>
           <Link
-            to={categoryAnchor(cat.category_slug)}
-            title={linkTitleFor(categoryAnchor(cat.category_slug ?? ''))}
+            to={servicePath(cat.category_slug ?? '')}
+            title={linkTitleFor(servicePath(cat.category_slug ?? ''))}
             onClick={onPick}
             className="flex items-center justify-between rounded-button px-3 py-2.5 text-[13px] text-ink-soft transition-colors hover:bg-line-soft hover:text-ink"
           >

@@ -389,7 +389,7 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                       className="mt-1 h-9 w-full cursor-default rounded-lg border border-line bg-line-soft/60 px-3 text-sm font-semibold text-ink focus:outline-none"
                     />
                     <p className="mt-0.5 text-[11px] leading-snug text-muted">
-                      Pre-filled based on the solution you selected.
+                      Pre-filled based on the service you selected.
                     </p>
                   </div>
 

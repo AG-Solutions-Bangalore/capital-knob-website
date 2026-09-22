@@ -58,32 +58,32 @@ const navEntries: NavEntry[] = [
   {
     kind: 'group',
     label: 'Services',
-    to: ROUTES.solutions,
+    to: ROUTES.services,
     title: 'Explore CapitalKnob Services',
     mega: true,
     children: [
       {
         kind: 'link',
         label: 'Home Finance',
-        to: `${ROUTES.solutions}#home-loans`,
+        to: `${ROUTES.services}#home-loans`,
         title: 'Home Finance Services – CapitalKnob',
       },
       {
         kind: 'link',
         label: 'Business Finance',
-        to: `${ROUTES.solutions}#working-capital`,
+        to: `${ROUTES.services}#working-capital`,
         title: 'Business Finance Services – CapitalKnob',
       },
       {
         kind: 'link',
         label: 'Real Estate Finance',
-        to: `${ROUTES.solutions}#real-estate`,
+        to: `${ROUTES.services}#real-estate`,
         title: 'Real Estate Finance Services – CapitalKnob',
       },
       {
         kind: 'link',
         label: 'Private Credit',
-        to: `${ROUTES.solutions}#private-credit`,
+        to: `${ROUTES.services}#private-credit`,
         title: 'Private Credit Services – CapitalKnob',
       },
     ],

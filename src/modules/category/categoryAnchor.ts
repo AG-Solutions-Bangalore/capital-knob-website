@@ -9,5 +9,5 @@ import { ROUTES } from '@/app/routes'
  * e.g. `/solutions#category-home-finance`.
  */
 export function categoryAnchor(slug: string | null | undefined): string {
-  return `${ROUTES.solutions}#category-${slug ?? ''}`
+  return `${ROUTES.services}#category-${slug ?? ''}`
 }

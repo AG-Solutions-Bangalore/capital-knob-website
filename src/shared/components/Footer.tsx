@@ -13,18 +13,18 @@ import { Logo } from './Logo'
  * user can see at a glance which solution they selected.
  */
 const solutionLinks = [
-  { label: 'Services Hub', href: ROUTES.solutions },
-  { label: 'Home Finance & Loans', href: `${ROUTES.solutions}#home-loans` },
-  { label: 'Business & Working Capital', href: `${ROUTES.solutions}#working-capital` },
-  { label: 'Real Estate & Project Finance', href: `${ROUTES.solutions}#real-estate` },
-  { label: 'Private Credit & Structured Debt', href: `${ROUTES.solutions}#private-credit` },
-  { label: 'Home Loan Balance Transfer', href: `${ROUTES.solutions}#balance-transfer` },
-  { label: 'Loan Against Property (LAP)', href: `${ROUTES.solutions}#loan-against-property` },
+  { label: 'Services Hub', href: ROUTES.services },
+  { label: 'Home Finance & Loans', href: `${ROUTES.services}#home-loans` },
+  { label: 'Business & Working Capital', href: `${ROUTES.services}#working-capital` },
+  { label: 'Real Estate & Project Finance', href: `${ROUTES.services}#real-estate` },
+  { label: 'Private Credit & Structured Debt', href: `${ROUTES.services}#private-credit` },
+  { label: 'Home Loan Balance Transfer', href: `${ROUTES.services}#balance-transfer` },
+  { label: 'Loan Against Property (LAP)', href: `${ROUTES.services}#loan-against-property` },
 ]
 
 const companyLinks = [
   { label: 'Home', href: ROUTES.home },
-  { label: 'Explore All Services', href: ROUTES.solutions },
+  { label: 'Explore All Services', href: ROUTES.services },
   { label: 'About CapitalKnob', href: ROUTES.about },
   { label: 'Blogs & Insights', href: ROUTES.blogs },
   { label: 'Lending Partners', href: '/#partners' },

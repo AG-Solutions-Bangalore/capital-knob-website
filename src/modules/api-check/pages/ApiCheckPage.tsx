@@ -454,7 +454,7 @@ export function ApiCheckPage() {
                 Open Contact form
               </Link>
               <Link
-                to={ROUTES.solutions}
+                to={ROUTES.services}
                 className="inline-flex min-h-[40px] items-center rounded-button bg-gold px-5 py-2 text-xs font-bold text-ink transition-colors hover:bg-gold-hover"
               >
                 Open Solutions modal

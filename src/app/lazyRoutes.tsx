@@ -8,6 +8,11 @@ export const SolutionsPage = lazy(() =>
     default: m.SolutionsPage,
   })),
 )
+export const ServiceDetailPage = lazy(() =>
+  import('@/modules/service/pages/ServiceDetailPage').then((m) => ({
+    default: m.ServiceDetailPage,
+  })),
+)
 export const HomeFinancePage = lazy(() =>
   import('@/modules/home-finance/pages/HomeFinancePage').then((m) => ({
     default: m.HomeFinancePage,
