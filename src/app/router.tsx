@@ -35,10 +35,10 @@ if (typeof window !== 'undefined') {
     }
     // Most likely next from landing: Solutions, then Contact. Staggered after initial paint.
     window.setTimeout(() => {
-      import('@/modules/solutions/pages/SolutionsPage').catch(() => {})
+      import('@/modules/service/pages/SolutionsPage').catch(() => { })
     }, 8000)
     window.setTimeout(() => {
-      import('@/modules/contact/pages/ContactPage').catch(() => {})
+      import('@/modules/contact/pages/ContactPage').catch(() => { })
     }, 9500)
   }
   if (typeof window.requestIdleCallback === 'function') {

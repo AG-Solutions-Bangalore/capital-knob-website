@@ -70,7 +70,7 @@ export function HomeHero() {
       className="relative overflow-hidden bg-navy text-white select-none"
       role="region"
       aria-roledescription="carousel"
-      aria-label="CapitalKnob Financing Solutions"
+      aria-label="CapitalKnob Financing Services"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >

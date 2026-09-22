@@ -69,7 +69,7 @@ export const heroSlides: HeroSlide[] = [
     titleLine2: 'Made Simple',
     tagline: 'Compare. Plan. Save. Own.',
     description:
-      'Explore the right home finance solution with expert guidance and access to multiple lenders — all in one place.',
+      'Explore the right home finance service with expert guidance and access to multiple lenders — all in one place.',
     imageSrc: `${IMAGE_BASE_URL}/home/hero_villa.webp`,
     imageAlt: 'Luxury modern villa at dusk',
     imageTitle: 'Luxury Modern Villa – CapitalKnob',
@@ -132,7 +132,7 @@ export const heroSlides: HeroSlide[] = [
     titleLine2: 'From Land to Completion',
     tagline: 'Structured. Scalable. Certain.',
     description:
-      'End-to-end capital solutions for land acquisition, builder construction finance, and commercial property development.',
+      'End-to-end capital services for land acquisition, builder construction finance, and commercial property development.',
     imageSrc: `${IMAGE_BASE_URL}/home/cta_skyline.webp`,
     imageAlt: 'Metropolitan skyline at twilight with modern architecture',
     imageTitle: 'Metropolitan Skyline – CapitalKnob',
@@ -152,7 +152,7 @@ export const homeHeroData = {
   title: 'Home Loans Made Simple',
   tagline: 'Compare. Plan. Save. Own.',
   description:
-    'Explore the right home finance solution with expert guidance and access to multiple lenders — all in one place.',
+    'Explore the right home finance service with expert guidance and access to multiple lenders — all in one place.',
   handwrittenScript: 'A Home A Brighter You',
   primaryCta: {
     label: 'Check Your Eligibility',

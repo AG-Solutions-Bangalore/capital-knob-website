@@ -48,7 +48,7 @@ export function OtherCapitalSection({ onEnquire }: OtherCapitalSectionProps) {
     <section id="other-solutions" className="bg-surface py-16 md:py-20">
       <Container size="4xl">
         <SectionHeading
-          title="Other Capital Solutions"
+            title="Other Capital Services"
           description="Specialised financing for investors, developers and large capital requirements."
         />
 

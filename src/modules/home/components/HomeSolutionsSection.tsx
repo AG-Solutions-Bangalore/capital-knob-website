@@ -7,7 +7,7 @@ import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
 import { categoryAnchor } from '@/modules/category/categoryAnchor'
 
 const EnquiryModal = lazy(() =>
-  import('@/modules/solutions/components/EnquiryModal').then((m) => ({
+  import('@/modules/service/components/EnquiryModal').then((m) => ({
     default: m.EnquiryModal,
   })),
 )
@@ -93,34 +93,34 @@ export function HomeSolutionsSection() {
   const liveCards =
     liveCats.length > 0
       ? liveCats.slice(0, 5).map((cat, idx) => {
-          const fallback = individualSolutions[idx % individualSolutions.length]
-          const slug = (cat.category_slug ?? '').toLowerCase()
-          const icon = slug.includes('home')
-            ? 'home'
-            : slug.includes('business') || slug.includes('growth') || slug.includes('capital')
-              ? 'stack'
-              : slug.includes('real-estate') || slug.includes('distressed')
-                ? 'crane'
-                : slug.includes('private') || slug.includes('ipo')
-                  ? 'document'
-                  : slug.includes('export') || slug.includes('import') || slug.includes('trade')
-                    ? 'refresh'
-                    : 'tools'
-          return {
-            id: `live-${cat.category_slug ?? idx}`,
-            title: cat.category_name ?? fallback.title,
-            description: cat.category_description ?? fallback.description,
-            // Dynamic image path: live banner when uploaded, else the
-            // backend No Image placeholder. `fallback` only supplies the
-            // icon mapping below — never a hardcoded image.
-            imageSrc: cat.category_banner_image?.trim()
-              ? `${categoryImageBase}${cat.category_banner_image.trim()}`
-              : (noImageSrc ?? fallback.imageSrc),
-            imageTitle: cat.category_name ?? fallback.imageTitle,
-            icon,
-            href: categoryAnchor(cat.category_slug),
-          } as const
-        })
+        const fallback = individualSolutions[idx % individualSolutions.length]
+        const slug = (cat.category_slug ?? '').toLowerCase()
+        const icon = slug.includes('home')
+          ? 'home'
+          : slug.includes('business') || slug.includes('growth') || slug.includes('capital')
+            ? 'stack'
+            : slug.includes('real-estate') || slug.includes('distressed')
+              ? 'crane'
+              : slug.includes('private') || slug.includes('ipo')
+                ? 'document'
+                : slug.includes('export') || slug.includes('import') || slug.includes('trade')
+                  ? 'refresh'
+                  : 'tools'
+        return {
+          id: `live-${cat.category_slug ?? idx}`,
+          title: cat.category_name ?? fallback.title,
+          description: cat.category_description ?? fallback.description,
+          // Dynamic image path: live banner when uploaded, else the
+          // backend No Image placeholder. `fallback` only supplies the
+          // icon mapping below — never a hardcoded image.
+          imageSrc: cat.category_banner_image?.trim()
+            ? `${categoryImageBase}${cat.category_banner_image.trim()}`
+            : (noImageSrc ?? fallback.imageSrc),
+          imageTitle: cat.category_name ?? fallback.imageTitle,
+          icon,
+          href: categoryAnchor(cat.category_slug),
+        } as const
+      })
       : null
   const cards = liveCards ?? individualSolutions.slice(0, 5)
 
@@ -131,7 +131,7 @@ export function HomeSolutionsSection() {
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div>
             <h2 className="font-display text-3xl font-extrabold text-ink sm:text-4xl">
-              Solutions for <br className="hidden sm:inline" />
+              Services for <br className="hidden sm:inline" />
               Every Capital Need
             </h2>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
@@ -142,7 +142,7 @@ export function HomeSolutionsSection() {
 
           {/* Right Tabs & Explore Button */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center lg:gap-6">
-        
+
 
             {/* Explore All CTA */}
             <Link
@@ -150,7 +150,7 @@ export function HomeSolutionsSection() {
               title={linkTitleFor('/solutions')}
               className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink shadow-2xs transition-colors hover:border-navy hover:text-navy active:bg-line-soft"
             >
-              <span>Explore All Solutions</span>
+              <span>Explore All Services</span>
               <svg
                 width="14"
                 height="14"

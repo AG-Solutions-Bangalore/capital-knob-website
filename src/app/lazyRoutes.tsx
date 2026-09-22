@@ -4,7 +4,7 @@ export const HomePage = lazy(() =>
   import('@/modules/home/pages/HomePage').then((m) => ({ default: m.HomePage })),
 )
 export const SolutionsPage = lazy(() =>
-  import('@/modules/solutions/pages/SolutionsPage').then((m) => ({
+  import('@/modules/service/pages/SolutionsPage').then((m) => ({
     default: m.SolutionsPage,
   })),
 )

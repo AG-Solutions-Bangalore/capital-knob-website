@@ -3,7 +3,7 @@
  * so the sections stay presentational.
  */
 
-import type { IconKey } from '@/modules/solutions/constants'
+import type { IconKey } from '@/modules/service/constants'
 import { IMAGE_BASE_URL } from "@/lib/images";
 
 /* -----------------------------------------------------------------------------
@@ -14,7 +14,7 @@ export const aboutHero = {
   titleLead: 'More Than Loans.',
   titleAccent: 'A Stronger Tomorrow.',
   description:
-    'At CapitalKnob, we believe that the right capital at the right time can turn aspirations into achievements. We are a capital advisory platform that helps individuals, businesses, investors and developers access the right financing solutions through a transparent, expert-led and technology-enabled process.',
+    'At CapitalKnob, we believe that the right capital at the right time can turn aspirations into achievements. We are a capital advisory platform that helps individuals, businesses, investors and developers access the right financing services through a transparent, expert-led and technology-enabled process.',
   ctaLabel: 'Our Story',
   ctaHref: '#our-story',
   /* Local high-fidelity visual asset — terrace & skyline overlooking city */
@@ -45,7 +45,7 @@ export const ourStory = {
   paragraphs: [
     'CapitalKnob was founded with a simple belief — access to capital should be easier, more transparent and more aligned with your goals.',
     'We saw individuals struggling to find the right home loans, businesses facing funding challenges, and developers and investors looking for reliable capital partners. The process was often fragmented, complex and time-consuming.',
-    "So, we built CapitalKnob — a unified platform that brings together multiple financing solutions, lender access, expert guidance and end-to-end support, all in one place.",
+    "So, we built CapitalKnob — a unified platform that brings together multiple financing services, lender access, expert guidance and end-to-end support, all in one place.",
   ],
   /* Local high-fidelity visual asset — modern reception lobby with 3D logo */
   image: `${IMAGE_BASE_URL}/about/story-reception.webp`,
@@ -160,7 +160,7 @@ export const commitments = [
    ----------------------------------------------------------------------------- */
 export const aboutCta = {
   title: 'Let’s Build a Stronger Tomorrow — Together.',
-  description: 'Explore financing solutions with a team that understands your goals.',
+  description: 'Explore financing services with a team that understands your goals.',
   ctaLabel: 'Get in Touch',
   ctaHref: '/contact',
 } as const

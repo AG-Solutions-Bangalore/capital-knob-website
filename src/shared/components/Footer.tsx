@@ -13,7 +13,7 @@ import { Logo } from './Logo'
  * user can see at a glance which solution they selected.
  */
 const solutionLinks = [
-  { label: 'Solutions Hub', href: ROUTES.solutions },
+  { label: 'Services Hub', href: ROUTES.solutions },
   { label: 'Home Finance & Loans', href: `${ROUTES.solutions}#home-loans` },
   { label: 'Business & Working Capital', href: `${ROUTES.solutions}#working-capital` },
   { label: 'Real Estate & Project Finance', href: `${ROUTES.solutions}#real-estate` },
@@ -24,7 +24,7 @@ const solutionLinks = [
 
 const companyLinks = [
   { label: 'Home', href: ROUTES.home },
-  { label: 'Explore All Solutions', href: ROUTES.solutions },
+  { label: 'Explore All Services', href: ROUTES.solutions },
   { label: 'About CapitalKnob', href: ROUTES.about },
   { label: 'Blogs & Insights', href: ROUTES.blogs },
   { label: 'Lending Partners', href: '/#partners' },
@@ -91,7 +91,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
             >
               Empowering individuals, enterprises, and real estate developers with
               transparent financial advisory, access to 50+ leading lenders, and structured
-              financing solutions.
+              financing services.
             </p>
 
             {/* Quick Contact info */}
@@ -154,7 +154,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
                   isDark ? 'text-white' : 'text-ink'
                 }`}
               >
-                Financial Solutions
+                Financial Services
               </h3>
               <ul className="mt-4 space-y-2.5 text-xs sm:text-sm">
                 {solutionLinks.map((l) => (

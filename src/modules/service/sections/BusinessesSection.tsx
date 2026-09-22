@@ -39,11 +39,11 @@ export function BusinessesSection({ onEnquire }: BusinessesSectionProps) {
         <SectionHeading
           title={
             <>
-              Financing Solutions for{' '}
+              Financing Services for{' '}
               <span className="text-navy">Businesses &amp; MSMEs</span>
             </>
           }
-          subtitle="Power your business ambitions with trusted and flexible financing solutions."
+          subtitle="Power your business ambitions with trusted and flexible financing services."
           description="From working capital to expansion, equipment finance to refinancing, we help businesses access capital at every stage of growth."
         />
 

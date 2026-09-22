@@ -9,8 +9,8 @@ import { IMAGE_BASE_URL } from "@/lib/images";
    ----------------------------------------------------------------------------- */
 export const solutionsCopy = {
   hero: {
-    eyebrow: 'Our Solutions',
-    titleLead: 'Solutions for',
+    eyebrow: 'Our Services',
+    titleLead: 'Services for',
     titleAccent: 'Every Capital Need',
     description:
       'From buying your first home to growing your business, CapitalKnob helps you explore the right financing options based on your goals.',
@@ -205,7 +205,7 @@ export const otherCapitalCards: ServiceCard[] = [
 export const whyChooseFeatures = [
   { title: 'Wide Network of Lenders', icon: 'trophy' },
   { title: 'Expert Advisory', icon: 'people' },
-  { title: 'Tailored Solutions', icon: 'scissors' },
+  { title: 'Tailored Services', icon: 'scissors' },
   { title: 'Transparent & Fair Process', icon: 'scale' },
   { title: 'End-to-End Support', icon: 'clock' },
   { title: 'Long-Term Partnership', icon: 'handshake' },

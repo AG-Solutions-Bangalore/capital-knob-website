@@ -184,7 +184,7 @@ export function SolutionsMobileLinks({ onPick }: { onPick: () => void }) {
           onClick={onPick}
           className="flex items-center justify-between rounded-button px-3 py-2.5 text-[13px] font-semibold text-navy transition-colors hover:bg-line-soft"
         >
-          <span>View All Solutions</span>
+          <span>View All Services</span>
         </Link>
       </li>
       {cats.map((cat) => (

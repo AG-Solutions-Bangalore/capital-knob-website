@@ -7,7 +7,7 @@
  */
 
 import { Container } from '@/shared/components/Container'
-import { iconRegistry } from '@/modules/solutions/components/icons'
+import { iconRegistry } from '@/modules/service/components/icons'
 import { aboutQuote, aboutStats } from '../constants'
 
 export function StatsSection() {

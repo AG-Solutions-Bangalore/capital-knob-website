@@ -54,7 +54,7 @@ export function WhyChooseSection() {
 
               <div className="relative">
                 <h3 className="font-display text-2xl font-extrabold leading-tight">
-                  Let&rsquo;s Find the Right Solution for You
+                  Let&rsquo;s Find the Right Service for You
                 </h3>
                 <p className="mt-3 text-sm text-white/75">
                   Speak with our experts and explore the best financing options for your goals.
