@@ -13,7 +13,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/shared/lib/cn'
-import { CertificateCardColor } from './CertificateCardColor'
+import { TestimonialCard } from './TestimonialCard'
 
 export interface MarqueeTestimonial {
   name: string
@@ -35,9 +35,6 @@ interface TestimonialsMarqueeProps {
   buttonText?: string
   buttonLink?: string
 }
-
-/** All seals use the green verified tick. */
-const SEAL = 'green' as const
 
 export function TestimonialsMarquee({
   title = 'Success Stories',
@@ -61,7 +58,7 @@ export function TestimonialsMarquee({
 
   if (!testimonials || testimonials.length === 0) return null
 
-  const cardClass = cn('h-[180px] w-[280px] md:h-[220px] md:w-[340px]', cardClassName)
+  const cardClass = cn('h-[200px] w-[300px] sm:h-[210px] sm:w-[340px] md:h-[220px] md:w-[360px]', cardClassName)
 
   return (
     <div className={cn('flex flex-col items-center gap-4 text-center sm:gap-6', className)}>
@@ -85,13 +82,12 @@ export function TestimonialsMarquee({
           {/* FIRST SET */}
           <div ref={marqueeRef} className="ck-marquee-track flex shrink-0 gap-4">
             {testimonials.map((t, i) => (
-              <CertificateCardColor
+              <TestimonialCard
                 key={`first-${t.name}-${i}`}
                 name={t.name}
                 detail={t.detail}
                 rating={t.rating}
                 footer={t.footer}
-                seal={SEAL}
                 href={t.href}
                 target="_blank"
                 className={cardClass}
@@ -102,13 +98,12 @@ export function TestimonialsMarquee({
           {/* DUPLICATE SET */}
           <div className="ck-marquee-track flex shrink-0 gap-4" aria-hidden="true">
             {testimonials.map((t, i) => (
-              <CertificateCardColor
+              <TestimonialCard
                 key={`second-${t.name}-${i}`}
                 name={t.name}
                 detail={t.detail}
                 rating={t.rating}
                 footer={t.footer}
-                seal={SEAL}
                 href={t.href}
                 target="_blank"
                 className={cardClass}

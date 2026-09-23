@@ -85,7 +85,7 @@ export function HomeCtaSection() {
         name: t.testimonial_client_name?.trim() || 'CapitalKnob Customer',
         detail: t.testimonial_description?.trim() || undefined,
         rating: parseRating(t.testimonial_rating) ?? 5,
-        footer: date ? `VERIFIED · ${date}` : 'VERIFIED CUSTOMER',
+        footer: date ? `Verified Client · ${date}` : 'Verified Client',
       }
     })
     .filter((t) => t.name !== 'CapitalKnob Customer' || t.detail)
@@ -101,7 +101,7 @@ export function HomeCtaSection() {
   const [primaryStat] = homeStats
 
   return (
-    <section className="relative overflow-hidden bg-navy py-14 text-white">
+    <section className="relative overflow-hidden bg-navy py-8 text-white">
       {/* Night-city background with deep navy overlay */}
       <div className="absolute inset-0 z-0 bg-navy">
         <img
@@ -119,7 +119,7 @@ export function HomeCtaSection() {
 
       <Container size="4xl" className="relative z-10">
         {/* Header: headline left, CTA + badge right */}
-        <div className="grid items-start gap-8 lg:grid-cols-12">
+        <div className="grid items-start gap-4 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <p className="flex items-center gap-4 text-xs font-bold uppercase tracking-[0.22em] text-slate-200">
               <span>More Than Loans — A Stronger Tomorrow</span>
@@ -189,7 +189,7 @@ export function HomeCtaSection() {
 
         {/* Stats band with gold icons and dividers */}
         <div className="mt-12 border-t border-white/15 pt-8">
-          <dl className="grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4">
+          <dl className="grid grid-cols-2 gap-x-4 gap-y-6 lg:grid-cols-4">
             {homeStats.map((stat, idx) => (
               <div
                 key={stat.label}
