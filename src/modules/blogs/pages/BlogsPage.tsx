@@ -5,6 +5,8 @@
 import { usePageSeo } from '@/shared/seo/usePageSeo'
 import { Container } from '@/shared/components/Container'
 import { PageHero } from '@/shared/components/PageHero'
+import { SectionReveal } from '@/shared/components/SectionReveal'
+import { FaqSection } from '@/modules/faq'
 import { BlogList } from '../components/BlogList'
 
 export function BlogsPage() {
@@ -22,6 +24,10 @@ export function BlogsPage() {
           <BlogList />
         </Container>
       </section>
+      <SectionReveal as="section">
+        <FaqSection slug="blogs" />
+      </SectionReveal>
     </>
   )
 }
+

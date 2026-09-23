@@ -33,6 +33,11 @@ const HomeCtaSection = lazy(() =>
     default: m.HomeCtaSection,
   })),
 )
+const FaqSection = lazy(() =>
+  import('@/modules/faq').then((m) => ({
+    default: m.FaqSection,
+  })),
+)
 
 export function HomePage() {
   usePageSeo('home')
@@ -63,7 +68,12 @@ export function HomePage() {
           <HomeStepsSection />
         </SectionReveal>
 
-        {/* 6. High-Rise Dusk Banner, Testimonial & Social Proof Metrics */}
+        {/* 6. Frequently Asked Questions */}
+        <SectionReveal as="section">
+          <FaqSection slug="home" />
+        </SectionReveal>
+
+        {/* 7. High-Rise Dusk Banner, Testimonial & Social Proof Metrics */}
         <SectionReveal as="section">
           <HomeCtaSection />
         </SectionReveal>

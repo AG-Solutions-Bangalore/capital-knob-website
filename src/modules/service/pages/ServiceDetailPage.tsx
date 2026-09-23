@@ -20,6 +20,7 @@ import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
 import { ServiceCard } from '../components/ServiceCard'
 import { WhyChooseSection } from '../sections/WhyChooseSection'
 import { StepsSection } from '../sections/StepsSection'
+import { FaqSection } from '@/modules/faq'
 import {
   businessesCards,
   individualsCards,
@@ -256,6 +257,9 @@ export function ServiceDetailPage() {
       </SectionReveal>
       <SectionReveal as="section">
         <StepsSection />
+      </SectionReveal>
+      <SectionReveal as="section">
+        <FaqSection slug={decoded} title={`${name} FAQs`} />
       </SectionReveal>
 
       {hasOpened && (

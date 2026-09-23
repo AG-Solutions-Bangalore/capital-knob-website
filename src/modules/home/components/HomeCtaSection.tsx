@@ -101,7 +101,7 @@ export function HomeCtaSection() {
   const [primaryStat] = homeStats
 
   return (
-    <section className="relative overflow-hidden bg-navy py-14 text-white sm:py-16 md:py-20">
+    <section className="relative overflow-hidden bg-navy py-14 text-white">
       {/* Night-city background with deep navy overlay */}
       <div className="absolute inset-0 z-0 bg-navy">
         <img
