@@ -17,32 +17,38 @@ export function BlogDetailPage() {
 
   return (
     <>
-      <section className="bg-navy py-10 text-white md:py-12">
+      <section className="bg-navy py-6 text-white md:py-8">
         <Container size="4xl">
-          <Link
-            to={ROUTES.blogs}
-            title={linkTitleFor(ROUTES.blogs)}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/80 transition-colors hover:text-gold"
-          >
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-medium text-white/70">
+              <Link to={ROUTES.home} className="transition-colors hover:text-gold">Home</Link>
+              <span className="text-white/30">/</span>
+              <Link to={ROUTES.blogs} className="transition-colors hover:text-gold">Blogs &amp; Insights</Link>
+              <span className="text-white/30">/</span>
+              <span className="truncate text-gold max-w-[200px] sm:max-w-md">Details</span>
+            </nav>
+            <Link
+              to={ROUTES.blogs}
+              title={linkTitleFor(ROUTES.blogs)}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/80 transition-colors hover:text-gold"
             >
-              <path d="M19 12H5" />
-              <path d="m11 18-6-6 6-6" />
-            </svg>
-            All Blogs
-          </Link>
-          <h1 className="mt-2 font-display text-2xl font-extrabold leading-tight sm:text-3xl">
-            Blog
-          </h1>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M19 12H5" />
+                <path d="m11 18-6-6 6-6" />
+              </svg>
+              All Articles
+            </Link>
+          </div>
         </Container>
       </section>
       <section className="bg-surface py-10 md:py-14">

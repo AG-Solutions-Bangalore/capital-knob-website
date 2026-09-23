@@ -57,6 +57,8 @@ export async function fetchBlogs(): Promise<BlogListResponse> {
  *
  * @throws {ApiError} on network/HTTP failure.
  */
+import type { FaqItem } from '@/modules/faq/api/faq.types'
+
 export async function fetchBlogBySlug(slug: string): Promise<BlogBySlugResponse> {
   const { data } = await api.get(
     `${BLOG_BY_SLUG_ENDPOINT}/${encodeURIComponent(slug)}`,
@@ -67,5 +69,7 @@ export async function fetchBlogBySlug(slug: string): Promise<BlogBySlugResponse>
     image_url: arrayOf<ImageUrlEntry>(body.image_url),
     previous: toNullableBlog(body.previous),
     next: toNullableBlog(body.next),
+    featured: arrayOf<Blog>(body.featured),
+    faq: arrayOf<FaqItem>(body.faq),
   }
 }

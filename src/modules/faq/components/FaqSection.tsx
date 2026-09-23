@@ -4,9 +4,13 @@ import { Container } from '@/shared/components/Container'
 import { useFaqBySlugQuery } from '../hooks/useFaqQuery'
 
 
+import type { FaqItem } from '../api/faq.types'
+
 export interface FaqSectionProps {
   /** Page or category slug to fetch FAQs for, e.g. 'home', 'contact', 'about-us', 'blogs', or service slugs. */
-  slug: string
+  slug?: string
+  /** Direct FAQ items from parent response (e.g. blog.faq) */
+  items?: FaqItem[]
   /** Section title override. Defaults to first live item's `faq_heading`, or "Frequently Asked Questions". */
   title?: string
   /** Eyebrow text above the title. Defaults to "STILL HAVE QUESTIONS?". */
@@ -17,6 +21,7 @@ export interface FaqSectionProps {
 
 export function FaqSection({
   slug,
+  items: directItems,
   title,
   eyebrow = 'STILL HAVE QUESTIONS?',
   className = 'bg-brand-blue-soft/30 py-16 lg:py-20',
@@ -26,13 +31,18 @@ export function FaqSection({
 
   const { data: liveFaq } = useFaqBySlugQuery(slug)
 
-  const items = (liveFaq?.data ?? [])
-    .map((item) => ({
-      question: (item.faq_que ?? item.faq_question)?.trim() ?? '',
-      answer: (item.faq_ans ?? item.faq_answer)?.trim() ?? '',
-      heading: item.faq_heading?.trim() || null,
-      sort: typeof item.faq_sort === 'number' ? item.faq_sort : Number(item.faq_sort) || 0,
-    }))
+  const rawList = directItems && directItems.length > 0 ? directItems : (liveFaq?.data ?? [])
+
+  const items = rawList
+    .map((item) => {
+      const rawQ = typeof item.question === 'string' ? item.question : (item.faq_que ?? item.faq_question ?? '')
+      const rawA = typeof item.answer === 'string' ? item.answer : (item.faq_ans ?? item.faq_answer ?? '')
+      const question = rawQ ? String(rawQ).trim() : ''
+      const answer = rawA ? String(rawA).trim() : ''
+      const heading = item.faq_heading ? String(item.faq_heading).trim() : null
+      const sort = typeof item.faq_sort === 'number' ? item.faq_sort : Number(item.faq_sort) || 0
+      return { question, answer, heading, sort }
+    })
     .filter((item) => item.question && item.answer)
     .sort((a, b) => a.sort - b.sort)
 

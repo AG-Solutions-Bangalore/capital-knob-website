@@ -11,6 +11,7 @@
  */
 
 import type { ImageUrlEntry } from '@/modules/company/api/company.types'
+import type { FaqItem } from '@/modules/faq/api/faq.types'
 
 /** A blog list item. Fields optional until the item shape is verified. */
 export interface Blog {
@@ -24,7 +25,12 @@ export interface Blog {
   blog_banner_image_alt?: string | null
   blog_short_description?: string | null
   blog_created_date?: string | null
+  blog_updated_date?: string | null
+  created_by?: string | null
   categories?: string | null
+  blog_meta_title?: string | null
+  blog_meta_description?: string | null
+  blog_meta_keywords?: string | null
   [key: string]: unknown
 }
 
@@ -43,4 +49,7 @@ export interface BlogBySlugResponse {
   image_url: ImageUrlEntry[]
   previous: Blog | null
   next: Blog | null
+  featured?: Blog[]
+  faq?: FaqItem[]
 }
+
