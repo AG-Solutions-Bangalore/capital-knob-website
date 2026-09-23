@@ -46,9 +46,8 @@ function SubLink({ to, label, onNavigate }: { to: string; label: string; onNavig
       title={linkTitleFor(to)}
       onClick={onNavigate}
       aria-current={active ? 'true' : undefined}
-      className={`text-xs transition-colors hover:text-navy hover:underline hover:underline-offset-4 ${
-        active ? 'font-semibold text-navy' : 'text-muted'
-      }`}
+      className={`text-xs transition-colors hover:text-navy hover:underline hover:underline-offset-4 ${active ? 'font-semibold text-navy' : 'text-muted'
+        }`}
     >
       {label}
     </Link>
@@ -74,9 +73,8 @@ function HeadingLink({
       onClick={onNavigate}
       aria-current={active ? 'true' : undefined}
       style={tone ? ({ '--heading': tone } as CSSProperties) : undefined}
-      className={`text-[13px] font-bold transition-colors hover:text-gold hover:underline hover:underline-offset-4 ${
-        active ? 'text-gold' : tone ? 'text-[var(--heading)]' : 'text-navy'
-      }`}
+      className={`text-[13px] font-bold transition-colors hover:text-gold hover:underline hover:underline-offset-4 ${active ? 'text-gold' : tone ? 'text-[var(--heading)]' : 'text-navy'
+        }`}
     >
       {label}
     </Link>
@@ -152,7 +150,7 @@ export function SolutionsMegaPanel({ onNavigate }: { onNavigate: () => void }) {
         ))}
       </div>
 
-    
+
     </div>
   )
 }
@@ -175,16 +173,7 @@ export function SolutionsMobileLinks({ onPick }: { onPick: () => void }) {
 
   return (
     <ul className="flex flex-col gap-1">
-      <li>
-        <Link
-          to={ROUTES.home}
-          title={linkTitleFor(ROUTES.home)}
-          onClick={onPick}
-          className="flex items-center justify-between rounded-button px-3 py-2.5 text-[13px] font-semibold text-navy transition-colors hover:bg-line-soft"
-        >
-          <span>View All Services</span>
-        </Link>
-      </li>
+
       {cats.map((cat) => (
         <li key={cat.id ?? cat.category_slug}>
           <Link

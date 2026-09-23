@@ -130,7 +130,7 @@ export function HomeCtaSection() {
               <br />
               <span className="text-gold">Customers Say</span>
             </h2>
-    
+
           </div>
 
           <div className="flex flex-col items-start gap-3 lg:col-span-5 lg:items-end lg:pt-2">
@@ -181,7 +181,7 @@ export function HomeCtaSection() {
           <div className="mt-12 lg:mt-14">
             <TestimonialsMarquee
               title="We Stand by Results — Real Stories, Real Sanctions"
-           
+
               testimonials={loopItems}
             />
           </div>
@@ -211,7 +211,7 @@ export function HomeCtaSection() {
           </dl>
         </div>
 
-      
+
       </Container>
     </section>
   )

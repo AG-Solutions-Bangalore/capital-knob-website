@@ -61,28 +61,7 @@ export function LocationSection() {
                 className="h-full w-full"
               />
 
-              {/* Pin badge overlay */}
-              <div className="pointer-events-none absolute left-4 top-4 hidden items-center gap-2 rounded-xl border border-line/60 bg-white/95 px-3.5 py-2 shadow-soft backdrop-blur-xs sm:flex">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-navy text-white">
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                </span>
-                <div>
-                  <p className="text-xs font-bold text-navy">CapitalKnob</p>
-                  <p className="text-[11px] text-muted">JP Nagar, Bengaluru</p>
-                </div>
-              </div>
+            
             </div>
           </div>
         </div>

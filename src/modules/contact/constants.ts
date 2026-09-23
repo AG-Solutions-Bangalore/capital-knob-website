@@ -9,7 +9,7 @@ export const contactCopy = {
     titleLead: "We're Here",
     titleAccent: 'to Help',
     description:
-      'Have a question or need guidance? Our team is ready to assist you with the right financing services.',
+      'Have a question or need guidance? Our team is ready to assist you with the right financing solutions.',
     receptionImage: `${IMAGE_BASE_URL}/contact/hero-reception.webp`,
   },
   form: {
