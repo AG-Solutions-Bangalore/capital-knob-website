@@ -14,7 +14,7 @@
 
 import { Link, useLocation } from 'react-router-dom'
 import type { CSSProperties } from 'react'
-import { ROUTES, servicePath } from '@/app/routes'
+import { servicePath } from '@/app/routes'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { useCategoryQuery } from '../hooks/useCategoryQuery'
 import type { Category, CategorySub } from '../api/category.types'

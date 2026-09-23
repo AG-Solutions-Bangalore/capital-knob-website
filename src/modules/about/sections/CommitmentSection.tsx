@@ -21,19 +21,19 @@ export function CommitmentSection() {
             <div className="mt-2 h-1 w-10 bg-gold" />
           </div>
 
-          {/* 4 horizontal commitment items with dividers */}
-          <ul className="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4 lg:col-span-9">
+          {/* 4 commitment items: 1-col cards on mobile (<sm) to prevent word wrapping/hyphenation, 4-col inline on desktop */}
+          <ul className="grid grid-cols-1 gap-3 sm:grid-cols-4 sm:gap-x-6 sm:gap-y-6 lg:col-span-9">
             {commitments.map((item) => {
               const Icon = iconRegistry[item.icon]
               return (
                 <li
                   key={item.title}
-                  className="flex items-center gap-3 border-r border-line/70 pr-4 last:border-r-0"
+                  className="flex items-center gap-3.5 rounded-xl border border-line/60 bg-line-soft/30 p-3 sm:rounded-none sm:border-0 sm:border-r sm:border-line/70 sm:bg-transparent sm:p-0 sm:pr-4 sm:last:border-r-0"
                 >
                   <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-blue-soft text-brand-blue">
                     <Icon size={18} />
                   </span>
-                  <div>
+                  <div className="min-w-0">
                     <p className="font-semibold text-sm leading-tight text-navy">
                       {item.title}
                     </p>

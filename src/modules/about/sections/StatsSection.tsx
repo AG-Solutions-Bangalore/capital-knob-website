@@ -15,23 +15,23 @@ export function StatsSection() {
     <section className="border-b border-line bg-[#f1f6fc] py-8 md:py-10">
       <Container size="4xl">
         <div className="grid items-center gap-8 lg:grid-cols-12">
-          {/* Stats grid */}
-          <ul className="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4 lg:col-span-9">
+          {/* Stats grid: 2x2 vertical cards on mobile (<sm) to prevent number/text clipping, 4-up inline on desktop */}
+          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-x-6 sm:gap-y-6 lg:col-span-9">
             {aboutStats.map((stat) => {
               const Icon = iconRegistry[stat.icon]
               return (
                 <li
                   key={stat.label}
-                  className="flex items-center gap-3.5 border-r border-line/70 pr-4 even:border-r-0 sm:even:border-r sm:last:border-r-0"
+                  className="flex flex-col items-start rounded-xl border border-line/70 bg-white/80 p-3.5 shadow-xs sm:flex-row sm:items-center sm:gap-3.5 sm:rounded-none sm:border-0 sm:border-r sm:border-line/70 sm:bg-transparent sm:p-0 sm:pr-4 sm:shadow-none sm:even:border-r sm:last:border-r-0"
                 >
-                  <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-blue-soft text-brand-blue">
-                    <Icon size={20} />
+                  <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-blue-soft text-brand-blue sm:h-11 sm:w-11">
+                    <Icon size={18} />
                   </span>
-                  <div className="flex flex-col leading-tight">
-                    <span className="font-display text-2xl font-bold text-navy md:text-[28px]">
+                  <div className="mt-2.5 flex flex-col leading-tight sm:mt-0">
+                    <span className="font-display text-xl font-bold tracking-tight text-navy whitespace-nowrap sm:text-2xl md:text-[28px]">
                       {stat.value}
                     </span>
-                    <span className="mt-1 text-xs font-medium text-slate-500 md:text-sm">
+                    <span className="mt-1 text-xs font-medium text-slate-600 sm:text-slate-500 md:text-sm">
                       {stat.label}
                     </span>
                   </div>

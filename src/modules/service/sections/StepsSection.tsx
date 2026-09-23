@@ -19,7 +19,7 @@ function Chevron() {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="mx-2 mt-4.25 hidden text-muted/40 lg:block"
+      className="mx-2 mt-4 text-muted/40"
       aria-hidden="true"
     >
       <path d="m9 6 6 6-6 6" />
@@ -41,32 +41,70 @@ export function StepsSection() {
             </p>
           </div>
 
-          <ol className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:col-span-8 lg:flex lg:items-start lg:justify-between lg:gap-0">
-            {steps.map((step, idx) => {
-              const Icon = iconRegistry[step.icon]
-              return (
-                <li
-                  key={step.number}
-                  className="flex items-start lg:flex-1"
-                >
-                  <div className="flex flex-col items-center text-center">
-                    <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-navy/15 bg-brand-blue-soft text-navy">
-                      <Icon size={22} />
+          <div className="lg:col-span-8">
+            {/* Mobile View (< lg): Clean vertical connected timeline */}
+            <ol className="relative flex flex-col gap-3.5 lg:hidden">
+              {steps.map((step, idx) => {
+                const Icon = iconRegistry[step.icon]
+                const isLast = idx === steps.length - 1
+
+                return (
+                  <li key={step.number} className="relative flex items-center gap-3.5">
+                    {/* Vertical connector line */}
+                    {!isLast && (
+                      <span
+                        aria-hidden="true"
+                        className="absolute left-6 top-10 h-full w-0.5 bg-line"
+                      />
+                    )}
+
+                    {/* Step Icon Node */}
+                    <span className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-navy/15 bg-brand-blue-soft text-navy shadow-xs">
+                      <Icon size={20} />
                     </span>
-                    <span className="mt-3 text-xs font-bold text-gold">
-                      {String(step.number).padStart(2, '0')}
-                    </span>
-                    <span className="mt-1 font-display text-sm font-extrabold leading-tight text-ink">
-                      {step.title}
-                      <br />
-                      {step.subtitle}
-                    </span>
-                  </div>
-                  {idx < steps.length - 1 && <Chevron />}
-                </li>
-              )
-            })}
-          </ol>
+
+                    {/* Step Content Card */}
+                    <div className="flex min-w-0 flex-1 flex-col rounded-xl border border-line bg-surface px-4 py-3 shadow-xs">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-gold">
+                        Step {String(step.number).padStart(2, '0')}
+                      </span>
+                      <span className="mt-0.5 font-display text-sm font-extrabold leading-snug text-ink">
+                        {step.title} {step.subtitle}
+                      </span>
+                    </div>
+                  </li>
+                )
+              })}
+            </ol>
+
+            {/* Desktop View (lg+): Horizontal layout with chevron dividers */}
+            <ol className="hidden lg:flex lg:items-start lg:justify-between lg:gap-0">
+              {steps.map((step, idx) => {
+                const Icon = iconRegistry[step.icon]
+                return (
+                  <li
+                    key={step.number}
+                    className="flex items-start lg:flex-1"
+                  >
+                    <div className="flex flex-col items-center text-center">
+                      <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-navy/15 bg-brand-blue-soft text-navy">
+                        <Icon size={22} />
+                      </span>
+                      <span className="mt-3 text-xs font-bold text-gold">
+                        {String(step.number).padStart(2, '0')}
+                      </span>
+                      <span className="mt-1 font-display text-sm font-extrabold leading-tight text-ink">
+                        {step.title}
+                        <br />
+                        {step.subtitle}
+                      </span>
+                    </div>
+                    {idx < steps.length - 1 && <Chevron />}
+                  </li>
+                )
+              })}
+            </ol>
+          </div>
         </div>
       </Container>
     </section>
