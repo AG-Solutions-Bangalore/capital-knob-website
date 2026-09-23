@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+
 import { Link } from 'react-router-dom'
 import { blogPath } from '@/app/routes'
 import { useBlogBySlugQuery } from '../hooks/useBlogsQueries'
@@ -24,22 +24,7 @@ export function BlogDetailCard({ slug }: { slug: string }) {
   const blog = data?.data
   const featured = data?.featured ?? []
 
-  // Dynamic SEO based on live blog meta tags
-  useEffect(() => {
-    if (typeof document === 'undefined' || !blog) return
-    const title = blog.blog_meta_title?.trim() || `${blog.blog_title} | CapitalKnob`
-    document.title = title
-    const desc = blog.blog_meta_description?.trim() || blog.blog_short_description?.trim() || ''
-    if (desc) {
-      let tag = document.querySelector<HTMLMetaElement>('meta[name="description"]')
-      if (!tag) {
-        tag = document.createElement('meta')
-        tag.setAttribute('name', 'description')
-        document.head.appendChild(tag)
-      }
-      tag.setAttribute('content', desc)
-    }
-  }, [blog])
+
 
   if (isPending) {
     return (

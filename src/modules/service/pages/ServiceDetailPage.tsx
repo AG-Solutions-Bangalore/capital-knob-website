@@ -10,8 +10,8 @@
  * used everywhere — identical on every service page.
  */
 
-import { Suspense, lazy, useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Suspense, lazy, useState } from 'react'
+import { Link, useParams, useLocation } from 'react-router-dom'
 import { ROUTES, servicePath } from '@/app/routes'
 import { Container } from '@/shared/components/Container'
 import { SectionReveal } from '@/shared/components/SectionReveal'
@@ -40,31 +40,13 @@ const EnquiryModal = lazy(() =>
   import('../components/EnquiryModal').then((m) => ({ default: m.EnquiryModal })),
 )
 
-function useServiceSeo(title: string, description: string, path: string) {
-  useEffect(() => {
-    if (typeof document === 'undefined' || !title) return
-    document.title = title
-    const head = document.head
-    let tag = head.querySelector<HTMLMetaElement>('meta[name="description"]')
-    if (!tag) {
-      tag = document.createElement('meta')
-      tag.setAttribute('name', 'description')
-      head.appendChild(tag)
-    }
-    if (description) tag.setAttribute('content', description)
-    let canonical = head.querySelector<HTMLLinkElement>('link[rel="canonical"]')
-    if (!canonical) {
-      canonical = document.createElement('link')
-      canonical.setAttribute('rel', 'canonical')
-      head.appendChild(canonical)
-    }
-    canonical.setAttribute('href', `https://ck.agsdemo.in${path}`)
-  }, [title, description, path])
-}
 
-export function ServiceDetailPage() {
-  const { slug = '' } = useParams<{ slug: string }>()
-  const decoded = decodeURIComponent(slug)
+export function ServiceDetailPage({ categorySlug }: { categorySlug?: string } = {}) {
+  const { slug: paramSlug = '' } = useParams<{ slug: string }>()
+  const location = useLocation()
+  const pathSlug = location.pathname.replace(/^\//, '').split('/')[0]
+  const rawSlug = categorySlug || paramSlug || pathSlug || ''
+  const decoded = decodeURIComponent(rawSlug)
   const { data, isPending, isError } = useCategoryQuery()
   const [enquirySubject, setEnquirySubject] = useState<string | null>(null)
   const [hasOpened, setHasOpened] = useState(false)
@@ -81,19 +63,6 @@ export function ServiceDetailPage() {
 
   const bannerFile = category?.category_banner_image?.trim()
   const bannerSrc = bannerFile ? `${categoryBase}${bannerFile}` : noImage
-
-  useServiceSeo(
-    category
-      ? (category.category_meta_title?.trim() ||
-          `${category.category_name} Services in India | CapitalKnob`)
-      : 'Service | CapitalKnob',
-    category
-      ? (category.category_meta_description?.trim() ||
-          category.category_description ||
-          '')
-      : '',
-    servicePath(decoded),
-  )
 
   function openEnquiry(title: string) {
     setHasOpened(true)
