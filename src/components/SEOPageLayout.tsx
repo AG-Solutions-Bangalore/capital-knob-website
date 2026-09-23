@@ -22,10 +22,38 @@ export default function SEOPageLayout({
   const pageGraphPayload =
     structuredSchemas.length > 0 ? createCompositeGraph(structuredSchemas) : null;
 
+  // On first client render after SSR hydration, the browser-side SEO engine has
+  // no build-time API cache (testimonials/FAQs/blogs are empty client-side), so
+  // its graph is a subset of what the SSG pre-renderer injected. Overwriting
+  // unconditionally would wipe Review/FAQ/BlogPosting nodes that Google already
+  // sees in the static HTML. Preserve the richer SSG graph on first sync only;
+  // subsequent SPA navigations always sync to the new route's graph.
+  const isFirstSync = React.useRef(true);
+
   React.useEffect(() => {
     if (!pageGraphPayload || typeof document === 'undefined') return;
     const jsonStr = JSON.stringify(pageGraphPayload);
     const existing = document.getElementById('schema-jsonld') as HTMLScriptElement | null;
+
+    if (isFirstSync.current) {
+      isFirstSync.current = false;
+      if (existing && existing.textContent) {
+        try {
+          const existingJson = JSON.parse(existing.textContent) as {
+            '@graph'?: unknown[];
+          };
+          const existingCount = Array.isArray(existingJson['@graph'])
+            ? existingJson['@graph'].length
+            : 0;
+          const newCount = Array.isArray(pageGraphPayload['@graph'])
+            ? pageGraphPayload['@graph'].length
+            : 0;
+          if (existingCount > newCount) return;
+        } catch {
+          // Malformed existing script — fall through and overwrite below.
+        }
+      }
+    }
 
     if (existing) {
       if (existing.textContent !== jsonStr) existing.textContent = jsonStr;

@@ -5,6 +5,21 @@
 import type { Graph, Thing } from 'schema-dts';
 import { SITE_EMAIL, SITE_LOGO, SITE_NAME, SITE_ORIGIN, SITE_PHONE, getCanonicalUrl } from './site';
 
+/**
+ * Normalizes any date string (e.g. "2026-09-23", "2026-01-01", etc.)
+ * into a strict ISO-8601 string containing explicit timezone information (+05:30 or Z).
+ * Prevents Google Rich Results "missing a timezone" and "Invalid datetime value" warnings.
+ */
+export function formatIsoDateWithTimezone(dateStr?: string | null): string {
+  const DEFAULT_DATE = '2026-01-01T00:00:00+05:30';
+  if (!dateStr || typeof dateStr !== 'string' || !dateStr.trim()) return DEFAULT_DATE;
+  const trimmed = dateStr.trim();
+  if (trimmed.includes('T') && (trimmed.includes('+') || trimmed.endsWith('Z'))) return trimmed;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return `${trimmed}T00:00:00+05:30`;
+  const d = new Date(trimmed);
+  return isNaN(d.getTime()) ? DEFAULT_DATE : d.toISOString();
+}
+
 export const organizationSchema: Thing = {
   '@type': ['Organization', 'LocalBusiness', 'FinancialService'] as unknown as 'Organization',
   '@id': `${SITE_ORIGIN}/#organization`,
@@ -74,33 +89,15 @@ export function createOrganizationWithReviews(options?: {
   );
 
   if (realTestimonials.length > 0) {
-    const reviews = realTestimonials.map((t) => {
-      const rating = Number(t.testimonial_rating) || 5;
-      return {
-        '@type': 'Review',
-        itemReviewed: { '@id': `${SITE_ORIGIN}/#organization` },
-        author: {
-          '@type': 'Person',
-          name: (t.testimonial_client_name || 'Client').trim(),
-        },
-        datePublished: t.testimonial_created_date || '2026-01-01',
-        reviewRating: {
-          '@type': 'Rating',
-          ratingValue: String(rating),
-          bestRating: '5',
-          worstRating: '1',
-        },
-        reviewBody: (t.testimonial_description || '').replace(/<[^>]*>?/gm, '').trim().slice(0, 300),
-      };
-    });
-
     const sumRating = realTestimonials.reduce(
       (acc, t) => acc + (Number(t.testimonial_rating) || 5),
       0,
     );
     const avgRating = (sumRating / realTestimonials.length).toFixed(1);
 
-    base.review = reviews;
+    // NOTE: individual reviews are emitted as top-level Review nodes via
+    // createTestimonialReviewSchema (igli docs pattern) — only the
+    // aggregate lives on the Organization to avoid duplicating each review.
     base.aggregateRating = {
       '@type': 'AggregateRating',
       ratingValue: avgRating,
@@ -115,6 +112,47 @@ export function createOrganizationWithReviews(options?: {
 
 // Alias for backwards compatibility
 export const createHomeOrganizationSchema = createOrganizationWithReviews;
+
+/**
+ * Builds a standalone top-level Review node for one testimonial row
+ * (igli docs pattern: mirrors createStudentReviewSchema — verified Review
+ * with itemReviewed linked to #organization, Person author, rating).
+ * Returns null when the row has no usable name/body so junk rows never
+ * poison the graph.
+ */
+export function createTestimonialReviewSchema(
+  testimonial: {
+    testimonial_client_name?: string | null;
+    testimonial_description?: string | null;
+    testimonial_created_date?: string | null;
+    testimonial_rating?: string | number | null;
+  },
+  canonicalPath: string,
+  index: number,
+): Thing | null {
+  const name = (testimonial.testimonial_client_name || '').trim();
+  const body = (testimonial.testimonial_description || '')
+    .replace(/<[^>]*>?/gm, '')
+    .trim()
+    .slice(0, 300);
+  if (!name || !body) return null;
+  const canonicalUrl = getCanonicalUrl(canonicalPath);
+  const rating = Number(testimonial.testimonial_rating) || 5;
+  return {
+    '@type': 'Review',
+    '@id': `${canonicalUrl}#review-${index + 1}`,
+    itemReviewed: { '@id': `${SITE_ORIGIN}/#organization` },
+    author: { '@type': 'Person', name },
+    datePublished: formatIsoDateWithTimezone(testimonial.testimonial_created_date),
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: String(rating),
+      bestRating: '5',
+      worstRating: '1',
+    },
+    reviewBody: body,
+  } as Thing;
+}
 
 export const websiteSchema: Thing = {
   '@type': 'WebSite',
@@ -187,14 +225,17 @@ export function createBlogPostingSchema(blog: {
     : SITE_LOGO;
 
   return {
-    '@type': 'BlogPosting',
+    '@type': ['Article', 'BlogPosting'] as unknown as 'BlogPosting',
     '@id': `${canonicalUrl}#blogposting`,
     headline: title,
     description: description.replace(/<[^>]*>?/gm, '').trim().slice(0, 300),
-    image,
-    datePublished: blog.blog_created_date || '2026-01-01',
-    dateModified: blog.blog_updated_date || blog.blog_created_date || '2026-01-01',
-    mainEntityOfPage: { '@id': `${canonicalUrl}#webpage` },
+    image: [image],
+    datePublished: formatIsoDateWithTimezone(blog.blog_created_date),
+    dateModified: formatIsoDateWithTimezone(blog.blog_updated_date || blog.blog_created_date),
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${canonicalUrl}#webpage`,
+    },
     author: {
       '@type': 'Organization',
       name: SITE_NAME,
@@ -283,7 +324,7 @@ export function createReviewSchema(review: {
       worstRating: '1',
     },
     reviewBody: review.reviewBody.replace(/<[^>]*>?/gm, '').trim().slice(0, 300),
-    datePublished: review.datePublished || '2026-01-01',
+    datePublished: formatIsoDateWithTimezone(review.datePublished),
   } as Thing;
 }
 

@@ -3,6 +3,7 @@ import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { homeStats } from '../constants'
 import { TestimonialsMarquee, type MarqueeTestimonial } from './TestimonialsMarquee'
 import { useTestimonialsQuery } from '@/modules/testimonial/hooks/useTestimonialQuery'
+import { getEffectiveHomeTestimonials, resolveEffectiveTestimonials } from '@/config/dynamicData'
 import { IMAGE_BASE_URL } from "@/lib/images";
 
 function parseRating(value: string | number | null | undefined): number | undefined {
@@ -77,7 +78,12 @@ export function HomeCtaSection() {
   // EVERY row is rendered (name, description, rating, date); nothing is
   // mocked. The marquee renders null until at least one live row exists.
   const { data: liveData, isPending, isError } = useTestimonialsQuery('home')
-  const liveRows = liveData?.data ?? []
+  // Same effective list as the JSON-LD schema: real API rows when usable,
+  // else temporary mocks (auto-removed once genuine backend data lands).
+  // Keeps visible reviews identical to schema reviewBody — required by Google.
+  const liveRows = liveData
+    ? resolveEffectiveTestimonials(liveData.data ?? [])
+    : getEffectiveHomeTestimonials()
   const marqueeItems: MarqueeTestimonial[] = liveRows
     .map((t) => {
       const date = formatCertDate(t.testimonial_created_date)

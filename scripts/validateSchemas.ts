@@ -52,6 +52,32 @@ for (const file of htmlFiles) {
       if (!json['@context'] || !json['@graph']) {
         console.error(`❌ [${relFile}] Missing @context or @graph!`);
         hasError = true;
+      } else {
+        // Validate Google Rich Results datetime rules (strict ISO 8601 with timezone offset)
+        for (const item of json['@graph']) {
+          if (item.datePublished) {
+            const hasTz =
+              item.datePublished.includes('T') &&
+              (item.datePublished.includes('+') || item.datePublished.endsWith('Z'));
+            if (!hasTz || isNaN(new Date(item.datePublished).getTime())) {
+              console.error(
+                `❌ [${relFile}] datePublished "${item.datePublished}" missing timezone or invalid ISO!`,
+              );
+              hasError = true;
+            }
+          }
+          if (item.dateModified) {
+            const hasTz =
+              item.dateModified.includes('T') &&
+              (item.dateModified.includes('+') || item.dateModified.endsWith('Z'));
+            if (!hasTz || isNaN(new Date(item.dateModified).getTime())) {
+              console.error(
+                `❌ [${relFile}] dateModified "${item.dateModified}" missing timezone or invalid ISO!`,
+              );
+              hasError = true;
+            }
+          }
+        }
       }
     } catch {
       console.error(`❌ [${relFile}] Malformed JSON-LD!`);

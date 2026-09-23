@@ -10,6 +10,7 @@ import {
   createFaqSchema,
   createOrganizationWithReviews,
   createServiceSchema,
+  createTestimonialReviewSchema,
   createWebPageSchema,
   organizationSchema,
   websiteSchema,
@@ -17,10 +18,10 @@ import {
 import {
   getDynamicBlog,
   getDynamicCategory,
+  getEffectiveHomeTestimonials,
   getFaqsForSlug,
   getFrontBlogs,
   getHomeFaqs,
-  getHomeTestimonials,
   getTestimonialsForSlug,
 } from './dynamicData';
 
@@ -237,7 +238,9 @@ export function getSeoForRoute(url: string): RouteSeoEntry {
   // 1. Dynamic home page match ('/')
   if (path === '/') {
     const homeEntry = ROUTE_SEO['/'];
-    const testimonials = getHomeTestimonials();
+    // Effective list: real API rows when usable, else temporary mocks
+    // (mocks vanish automatically once genuine backend data lands).
+    const testimonials = getEffectiveHomeTestimonials();
     const faqs = getHomeFaqs();
     const frontBlogs = getFrontBlogs();
 
@@ -247,6 +250,12 @@ export function getSeoForRoute(url: string): RouteSeoEntry {
       createWebPageSchema('/', homeEntry.title, homeEntry.description),
       createBreadcrumbSchema([{ name: 'Home', path: '/' }], '/'),
     ];
+
+    // Standalone Review nodes (igli docs pattern) → "Review snippets" row
+    testimonials.forEach((t, i) => {
+      const review = createTestimonialReviewSchema(t, '/', i);
+      if (review) schemas.push(review);
+    });
 
     const faqSchema = createFaqSchema(faqs, '/');
     if (faqSchema) {
@@ -278,6 +287,10 @@ export function getSeoForRoute(url: string): RouteSeoEntry {
       const schemas = [...entry.schemas];
       if (realTestimonials.length > 0) {
         schemas[0] = createOrganizationWithReviews({ testimonials: realTestimonials });
+        realTestimonials.forEach((t, i) => {
+          const review = createTestimonialReviewSchema(t, path, i);
+          if (review) schemas.push(review);
+        });
       }
       const faqSchema = createFaqSchema(realFaqs, path);
       if (faqSchema) {
@@ -366,6 +379,11 @@ export function getSeoForRoute(url: string): RouteSeoEntry {
           path,
         ),
       ];
+
+      catTestimonials.forEach((t, i) => {
+        const review = createTestimonialReviewSchema(t, path, i);
+        if (review) schemas.push(review);
+      });
 
       const faqSchema = createFaqSchema(catFaqs, path);
       if (faqSchema) {

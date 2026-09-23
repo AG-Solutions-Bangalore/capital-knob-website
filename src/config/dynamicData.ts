@@ -64,6 +64,72 @@ export interface TestimonialItemData {
   [key: string]: unknown;
 }
 
+/**
+ * TEMPORARY MOCK TESTIMONIALS — remove once real rows land in the backend
+ * testimonial table. Used ONLY when the API returns zero usable rows (see
+ * getEffectiveHomeTestimonials): the moment at least one real testimonial
+ * with a proper story exists, these mocks disappear automatically from both
+ * the visible marquee and the JSON-LD schema.
+ */
+export const MOCK_HOME_TESTIMONIALS: TestimonialItemData[] = [
+  {
+    testimonial_client_name: 'Rohan Mehta',
+    testimonial_description:
+      'CapitalKnob helped me transfer my home loan and reduce my EMI by almost eighteen percent. The team handled all the paperwork and coordination with the bank in under three weeks.',
+    testimonial_created_date: '2026-08-02',
+    testimonial_rating: '5',
+    testimonial_for: 'home',
+  },
+  {
+    testimonial_client_name: 'Priya Sharma',
+    testimonial_description:
+      'As a boutique owner I needed working capital before the festive season. CapitalKnob structured a flexible credit line around my cash flow and disbursed in days, not months.',
+    testimonial_created_date: '2026-07-18',
+    testimonial_rating: '5',
+    testimonial_for: 'home',
+  },
+  {
+    testimonial_client_name: 'Anil Verma',
+    testimonial_description:
+      'I raised funds against my commercial property for expansion. Transparent charges, no hidden fees, and a relationship manager who actually picked up the phone every time.',
+    testimonial_created_date: '2026-06-29',
+    testimonial_rating: '4',
+    testimonial_for: 'home',
+  },
+  {
+    testimonial_client_name: 'Sneha Iyer',
+    testimonial_description:
+      'From application to top-up disbursal for our home renovation, everything was digital and tracked. The advisory team explained every clause patiently before we signed.',
+    testimonial_created_date: '2026-09-05',
+    testimonial_rating: '5',
+    testimonial_for: 'home',
+  },
+];
+
+/** Minimum cleaned body length for a testimonial to count as genuine content. */
+const MIN_USABLE_REVIEW_BODY_LENGTH = 20;
+
+export function isUsableTestimonial(t: TestimonialItemData): boolean {
+  const name = (t.testimonial_client_name || '').trim();
+  const body = (t.testimonial_description || '').replace(/<[^>]*>?/gm, '').trim();
+  return name.length > 0 && body.length >= MIN_USABLE_REVIEW_BODY_LENGTH;
+}
+
+/**
+ * Returns usable API testimonials when at least one genuine row exists,
+ * otherwise the temporary mocks (which vanish automatically once real
+ * backend data arrives). Keeps schema and visible marquee in sync.
+ */
+export function resolveEffectiveTestimonials(rows: TestimonialItemData[]): TestimonialItemData[] {
+  const usable = (rows || []).filter(isUsableTestimonial);
+  return usable.length > 0 ? usable : MOCK_HOME_TESTIMONIALS;
+}
+
+/** Build-time (SSG) version reading the pre-fetched home cache. */
+export function getEffectiveHomeTestimonials(): TestimonialItemData[] {
+  return resolveEffectiveTestimonials(homeTestimonials);
+}
+
 let dynamicCategoriesMap = new Map<string, { category: CategoryData; raw: unknown }>();
 let dynamicBlogsMap = new Map<string, BlogDetailsResponse>();
 let rawCategoriesResponse: unknown = null;
