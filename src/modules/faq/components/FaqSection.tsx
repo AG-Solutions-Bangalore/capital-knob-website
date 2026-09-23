@@ -81,11 +81,10 @@ export function FaqSection({
             return (
               <div
                 key={`${item.question}-${index}`}
-                className={`overflow-hidden rounded-xl border bg-white transition-all duration-300 ${
-                  isOpen
+                className={`overflow-hidden rounded-xl border bg-white transition-all duration-300 ${isOpen
                     ? 'border-gold/50 shadow-md ring-1 ring-gold/20'
                     : 'border-line shadow-soft hover:border-gold/30 hover:shadow-md'
-                }`}
+                  }`}
               >
                 <button
                   type="button"
@@ -96,9 +95,8 @@ export function FaqSection({
                   className="group flex w-full items-center justify-between gap-4 p-5 text-left transition-colors duration-200 hover:bg-line-soft/30 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2"
                 >
                   <span
-                    className={`font-display text-base font-bold transition-colors duration-200 md:text-lg ${
-                      isOpen ? 'text-navy' : 'text-navy/90 group-hover:text-navy'
-                    }`}
+                    className={`font-display text-base font-bold transition-colors duration-200 md:text-lg ${isOpen ? 'text-navy' : 'text-navy/90 group-hover:text-navy'
+                      }`}
                   >
                     {item.question}
                   </span>

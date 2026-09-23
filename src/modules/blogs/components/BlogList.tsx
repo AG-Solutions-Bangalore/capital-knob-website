@@ -48,7 +48,7 @@ function blogExcerpt(blog: Blog): string | null {
   return raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() || null
 }
 
-function BlogCard({
+export function BlogCard({
   blog,
   base,
 }: {

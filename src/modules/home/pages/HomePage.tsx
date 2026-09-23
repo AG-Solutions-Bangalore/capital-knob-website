@@ -33,6 +33,11 @@ const HomeCtaSection = lazy(() =>
     default: m.HomeCtaSection,
   })),
 )
+const HomeBlogSection = lazy(() =>
+  import('../components/HomeBlogSection').then((m) => ({
+    default: m.HomeBlogSection,
+  })),
+)
 const FaqSection = lazy(() =>
   import('@/modules/faq').then((m) => ({
     default: m.FaqSection,
@@ -68,12 +73,17 @@ export function HomePage() {
           <HomeStepsSection />
         </SectionReveal>
 
-        {/* 6. Frequently Asked Questions */}
+        {/* 6. Latest Insights & Blogs */}
+        <SectionReveal as="section">
+          <HomeBlogSection />
+        </SectionReveal>
+
+        {/* 7. Frequently Asked Questions */}
         <SectionReveal as="section">
           <FaqSection slug="home" />
         </SectionReveal>
 
-        {/* 7. High-Rise Dusk Banner, Testimonial & Social Proof Metrics */}
+        {/* 8. High-Rise Dusk Banner, Testimonial & Social Proof Metrics */}
         <SectionReveal as="section">
           <HomeCtaSection />
         </SectionReveal>
