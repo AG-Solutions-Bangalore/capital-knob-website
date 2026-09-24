@@ -287,6 +287,52 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
       ),
     ],
   },
+  '/disclaimer': {
+    title: 'Disclaimer | CapitalKnob Investment & Financial Advisors',
+    description:
+      'Content on this website is provided by CapitalKnob Investment & Financial Advisors for general informational, educational, business facilitation, and capital advisory purposes only.',
+    keywords: 'CapitalKnob disclaimer, legal notice',
+    canonicalPath: '/disclaimer',
+    noIndex: true,
+    schemas: [
+      organizationSchema,
+      createWebPageSchema(
+        '/disclaimer',
+        'Disclaimer | CapitalKnob Investment & Financial Advisors',
+        'Content on this website is provided by CapitalKnob Investment & Financial Advisors for general informational, educational, business facilitation, and capital advisory purposes only.',
+      ),
+      createBreadcrumbSchema(
+        [
+          { name: 'Home', path: '/' },
+          { name: 'Disclaimer', path: '/disclaimer' },
+        ],
+        '/disclaimer',
+      ),
+    ],
+  },
+  '/privacy-policy': {
+    title: 'Privacy Policy & Terms | CapitalKnob Investment & Financial Advisors',
+    description:
+      'How CapitalKnob collects, uses, and protects your information — privacy policy, terms, cookie, grievance, refund, and consent policies.',
+    keywords: 'CapitalKnob privacy policy, terms and conditions',
+    canonicalPath: '/privacy-policy',
+    noIndex: true,
+    schemas: [
+      organizationSchema,
+      createWebPageSchema(
+        '/privacy-policy',
+        'Privacy Policy & Terms | CapitalKnob Investment & Financial Advisors',
+        'How CapitalKnob collects, uses, and protects your information — privacy policy, terms, cookie, grievance, refund, and consent policies.',
+      ),
+      createBreadcrumbSchema(
+        [
+          { name: 'Home', path: '/' },
+          { name: 'Privacy Policy', path: '/privacy-policy' },
+        ],
+        '/privacy-policy',
+      ),
+    ],
+  },
 };
 
 /** "real-estate-project-finance" → "Real Estate Project Finance". */

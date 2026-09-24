@@ -106,4 +106,11 @@ export const PAGE_SEO: Record<string, PageSeo> = {
     path: '/blogs',
     robots: 'index, follow',
   },
+  disclaimer: {
+    title: 'Disclaimer | CapitalKnob Investment & Financial Advisors',
+    description:
+      'Content on this website is provided by CapitalKnob Investment & Financial Advisors for general informational, educational, business facilitation, and capital advisory purposes only.',
+    path: '/disclaimer',
+    robots: 'noindex, nofollow',
+  },
 }

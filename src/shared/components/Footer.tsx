@@ -30,6 +30,8 @@ const companyLinks = [
   { label: 'Why Choose Us', href: '/#why-choose' },
   { label: '5-Step Process', href: '/#steps' },
   { label: 'Contact Us', href: ROUTES.contact },
+  { label: 'Disclaimer', href: ROUTES.disclaimer },
+  { label: 'Privacy Policy', href: ROUTES.privacyPolicy },
 ]
 
 const advisoryLinks = [
@@ -286,8 +288,17 @@ export function Footer({ variant = 'light' }: FooterProps) {
         >
           <p>© 2026 CapitalKnob. All rights reserved.</p>
           <p className="max-w-2xl text-center md:text-right">
-            Disclaimer: CapitalKnob does not guarantee loan approval. Final approval, pricing, tenure, security
-            requirements and other terms are determined by the respective lender or financial institution.
+            CapitalKnob does not guarantee loan approval. Final approval, pricing, tenure, security
+            requirements and other terms are determined by the respective lender or financial institution.{' '}
+            <Link
+              to={ROUTES.disclaimer}
+              title={t(ROUTES.disclaimer)}
+              className={`underline underline-offset-2 transition-colors ${
+                isDark ? 'hover:text-gold' : 'hover:text-navy'
+              }`}
+            >
+              Full Disclaimer
+            </Link>
           </p>
         </div>
       </Container>

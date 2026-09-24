@@ -41,3 +41,13 @@ export const NotFoundPage = lazy(() =>
     default: m.NotFoundPage,
   })),
 )
+export const DisclaimerPage = lazy(() =>
+  import('@/modules/disclaimer/pages/DisclaimerPage').then((m) => ({
+    default: m.DisclaimerPage,
+  })),
+)
+export const PrivacyPolicyPage = lazy(() =>
+  import('@/modules/privacy/pages/PrivacyPolicyPage').then((m) => ({
+    default: m.PrivacyPolicyPage,
+  })),
+)

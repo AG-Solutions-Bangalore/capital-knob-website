@@ -44,6 +44,8 @@ const TITLE_BY_HREF: Record<string, string> = {
   '/business-finance': 'Business Finance Services',
   '/business-finance#loan-against-property': 'Business Loan Against Property',
   '/contact': 'Contact CapitalKnob',
+  '/disclaimer': 'CapitalKnob Website Disclaimer',
+  '/privacy-policy': 'CapitalKnob Privacy Policy',
   '/home-finance': 'Home Finance Services',
   '/home-finance#balance-transfer': 'Home Loan Balance Transfer',
   '/home-finance#home-loans': 'Home Loan Services',

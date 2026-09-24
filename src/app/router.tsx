@@ -8,8 +8,10 @@ import {
   BlogsPage,
   BusinessFinancePage,
   ContactPage,
+  DisclaimerPage,
   HomePage,
   NotFoundPage,
+  PrivacyPolicyPage,
   RealEstateFinancePage,
   ServiceDetailPage,
 } from './lazyRoutes'
@@ -57,6 +59,8 @@ const routes: RouteObject[] = [
       { path: ROUTES.contact, element: <LazyRoute Component={ContactPage} /> },
       { path: ROUTES.blogs, element: <LazyRoute Component={BlogsPage} /> },
       { path: ROUTES.blogDetail, element: <LazyRoute Component={BlogDetailPage} /> },
+      { path: ROUTES.disclaimer, element: <LazyRoute Component={DisclaimerPage} /> },
+      { path: ROUTES.privacyPolicy, element: <LazyRoute Component={PrivacyPolicyPage} /> },
       // Live service detail (`/:slug`) — last so static routes win.
       // Unknown slugs render the page's own "not found" state.
       { path: ROUTES.serviceDetail, element: <LazyRoute Component={ServiceDetailPage} /> },

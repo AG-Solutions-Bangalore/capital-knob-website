@@ -12,6 +12,8 @@ export const ROUTES = {
   about: '/about-us',
   contact: '/contact',
   blogs: '/blogs',
+  disclaimer: '/disclaimer',
+  privacyPolicy: '/privacy-policy',
   /** Blog detail pattern — build concrete URLs with `blogPath(slug)`. */
   blogDetail: '/blogs/:slug',
   /** Service detail pattern — build concrete URLs with `servicePath(slug)`. */

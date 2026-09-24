@@ -19,8 +19,10 @@ import {
   BlogsPage,
   BusinessFinancePage,
   ContactPage,
+  DisclaimerPage,
   HomePage,
   NotFoundPage,
+  PrivacyPolicyPage,
   RealEstateFinancePage,
   ServiceDetailPage,
 } from '@/app/lazyRoutes';
@@ -127,6 +129,22 @@ export default function AppRoutes({
           element={
             <PageSEO path="/private-credit">
               <ServiceDetailPage categorySlug="private-credit" />
+            </PageSEO>
+          }
+        />
+        <Route
+          path="/disclaimer"
+          element={
+            <PageSEO path="/disclaimer">
+              <DisclaimerPage />
+            </PageSEO>
+          }
+        />
+        <Route
+          path="/privacy-policy"
+          element={
+            <PageSEO path="/privacy-policy">
+              <PrivacyPolicyPage />
             </PageSEO>
           }
         />
