@@ -22,6 +22,35 @@ export default function SEOPageLayout({
   const pageGraphPayload =
     structuredSchemas.length > 0 ? createCompositeGraph(structuredSchemas) : null;
 
+  // Dedup stale SSG head tags after Helmet commits. react-helmet-async v3
+  // does NOT adopt prerendered data-rh nodes — it appends its own copies,
+  // leaving stale duplicates that crawlers/tools read first. Helmet always
+  // appends after, so keep the last (freshest) of each key. This effect
+  // runs after Helmet's own commit (child effects flush first).
+  React.useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const selectors = [
+      'meta[name="description"]',
+      'meta[name="author"]',
+      'meta[name="robots"]',
+      'meta[name="keywords"]',
+      'meta[property="og:title"]',
+      'meta[property="og:description"]',
+      'meta[property="og:url"]',
+      'meta[property="og:type"]',
+      'meta[property="og:image"]',
+      'meta[name="twitter:card"]',
+      'meta[name="twitter:title"]',
+      'meta[name="twitter:description"]',
+      'meta[name="twitter:image"]',
+      'link[rel="canonical"]',
+    ];
+    for (const sel of selectors) {
+      const nodes = document.head.querySelectorAll(sel);
+      for (let i = 0; i < nodes.length - 1; i++) nodes[i].remove();
+    }
+  }, [seo]);
+
   // On first client render after SSR hydration, the browser-side SEO engine has
   // no build-time API cache (testimonials/FAQs/blogs are empty client-side), so
   // its graph is a subset of what the SSG pre-renderer injected. Overwriting

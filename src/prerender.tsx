@@ -114,27 +114,37 @@ export async function prerender(data: { url: string }) {
     .replace(/<meta[^>]*>/gi, '')
     .replace(/<link[^>]*>/gi, '');
 
+  // Every tag carries data-rh="true" so react-helmet-async adopts (not
+  // duplicates) them on hydration — without it, SPA navigation appends a
+  // second description/canonical set and crawlers/tools read the stale copy.
   const elements = new Set<Record<string, unknown>>([
-    { type: 'meta', props: { name: 'description', content: seo.description } },
-    { type: 'meta', props: { name: 'author', content: SITE_NAME } },
-    { type: 'link', props: { rel: 'canonical', href: canonical } },
+    { type: 'meta', props: { name: 'description', content: seo.description, 'data-rh': 'true' } },
+    { type: 'meta', props: { name: 'author', content: SITE_NAME, 'data-rh': 'true' } },
+    { type: 'link', props: { rel: 'canonical', href: canonical, 'data-rh': 'true' } },
     {
       type: 'meta',
-      props: { name: 'robots', content: seo.noIndex ? 'noindex, nofollow' : 'index, follow' },
+      props: {
+        name: 'robots',
+        content: seo.noIndex ? 'noindex, nofollow' : 'index, follow',
+        'data-rh': 'true',
+      },
     },
-    { type: 'meta', props: { property: 'og:title', content: seo.title } },
-    { type: 'meta', props: { property: 'og:description', content: seo.description } },
-    { type: 'meta', props: { property: 'og:url', content: canonical } },
-    { type: 'meta', props: { property: 'og:type', content: 'website' } },
-    { type: 'meta', props: { property: 'og:image', content: SITE_LOGO } },
-    { type: 'meta', props: { name: 'twitter:card', content: 'summary_large_image' } },
-    { type: 'meta', props: { name: 'twitter:title', content: seo.title } },
-    { type: 'meta', props: { name: 'twitter:description', content: seo.description } },
-    { type: 'meta', props: { name: 'twitter:image', content: SITE_LOGO } },
+    { type: 'meta', props: { property: 'og:title', content: seo.title, 'data-rh': 'true' } },
+    { type: 'meta', props: { property: 'og:description', content: seo.description, 'data-rh': 'true' } },
+    { type: 'meta', props: { property: 'og:url', content: canonical, 'data-rh': 'true' } },
+    { type: 'meta', props: { property: 'og:type', content: 'website', 'data-rh': 'true' } },
+    { type: 'meta', props: { property: 'og:image', content: SITE_LOGO, 'data-rh': 'true' } },
+    { type: 'meta', props: { name: 'twitter:card', content: 'summary_large_image', 'data-rh': 'true' } },
+    { type: 'meta', props: { name: 'twitter:title', content: seo.title, 'data-rh': 'true' } },
+    { type: 'meta', props: { name: 'twitter:description', content: seo.description, 'data-rh': 'true' } },
+    { type: 'meta', props: { name: 'twitter:image', content: SITE_LOGO, 'data-rh': 'true' } },
   ]);
 
   if (seo.keywords) {
-    elements.add({ type: 'meta', props: { name: 'keywords', content: seo.keywords } });
+    elements.add({
+      type: 'meta',
+      props: { name: 'keywords', content: seo.keywords, 'data-rh': 'true' },
+    });
   }
 
   if (seo.schemas.length > 0) {

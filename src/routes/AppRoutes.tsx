@@ -3,7 +3,7 @@
  * Decoupled route table wrapped in PageSEO for bulletproof metadata and SSR pre-rendering.
  */
 import React, { Suspense, useEffect, useSyncExternalStore } from 'react';
-import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import { Route, Routes, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { MainLayout } from '@/shared/layouts/MainLayout';
 import SEOPageLayout from '@/components/SEOPageLayout';
 import { getSeoForRoute } from '@/shared/seo/seoEngine';
@@ -26,6 +26,24 @@ import {
   RealEstateFinancePage,
   ServiceDetailPage,
 } from '@/app/lazyRoutes';
+
+/**
+ * Forces the address-bar URL to always equal the canonical URL.
+ * Canonicals are slash-free (`/about-us`, never `/about-us/`), but static
+ * hosting serves both variants — without this, the trailing-slash variant
+ * shows a URL ≠ canonical and SEO tools flag the page "Canonicalised".
+ */
+function TrailingSlashNormalizer() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  useEffect(() => {
+    const { pathname, search, hash } = location;
+    if (pathname.length > 1 && pathname.endsWith('/')) {
+      navigate(`${pathname.slice(0, -1)}${search}${hash}`, { replace: true });
+    }
+  }, [location, navigate]);
+  return null;
+}
 
 function PageSEO({ path, children }: { path?: string; children: React.ReactNode }) {
   const location = useLocation();
@@ -54,7 +72,9 @@ export default function AppRoutes({
   queryClient?: QueryClient;
 } = {}) {
   const routesContent = (
-    <Routes>
+    <>
+      <TrailingSlashNormalizer />
+      <Routes>
       <Route element={<MainLayout />}>
         <Route
           path="/"
@@ -166,6 +186,7 @@ export default function AppRoutes({
         />
       </Route>
     </Routes>
+    </>
   );
 
   if (initialQueryClient) {
