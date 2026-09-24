@@ -287,6 +287,146 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
       ),
     ],
   },
+  '/growth-capital-pe-vc': {
+    title: 'Growth Capital, PE & VC Funding | CapitalKnob',
+    description:
+      'Explore growth capital, PE & VC funding solutions with CapitalKnob. Get strategic funding support and capital guidance for business growth.',
+    keywords: 'growth capital, PE funding, VC funding, business growth capital',
+    canonicalPath: '/growth-capital-pe-vc',
+    schemas: [
+      organizationSchema,
+      createWebPageSchema(
+        '/growth-capital-pe-vc',
+        'Growth Capital, PE & VC Funding | CapitalKnob',
+        'Explore growth capital, PE & VC funding solutions with CapitalKnob. Get strategic funding support and capital guidance for business growth.',
+      ),
+      createServiceSchema({
+        name: 'Growth Capital, PE & VC Funding',
+        description:
+          'Explore growth capital, PE & VC funding solutions with CapitalKnob. Get strategic funding support and capital guidance for business growth.',
+        path: '/growth-capital-pe-vc',
+      }),
+      createBreadcrumbSchema(
+        [
+          { name: 'Home', path: '/' },
+          { name: 'Growth Capital PE VC', path: '/growth-capital-pe-vc' },
+        ],
+        '/growth-capital-pe-vc',
+      ),
+    ],
+  },
+  '/pre-ipo-and-ipo-capital': {
+    title: 'Pre-IPO & IPO Funding Solutions | CapitalKnob',
+    description:
+      'Explore Pre-IPO and IPO funding solutions with CapitalKnob. Get strategic capital support for fundraising, listing preparation, and business growth.',
+    keywords: 'pre-IPO funding, IPO capital, listing preparation, fundraising',
+    canonicalPath: '/pre-ipo-and-ipo-capital',
+    schemas: [
+      organizationSchema,
+      createWebPageSchema(
+        '/pre-ipo-and-ipo-capital',
+        'Pre-IPO & IPO Funding Solutions | CapitalKnob',
+        'Explore Pre-IPO and IPO funding solutions with CapitalKnob. Get strategic capital support for fundraising, listing preparation, and business growth.',
+      ),
+      createServiceSchema({
+        name: 'Pre-IPO & IPO Funding Solutions',
+        description:
+          'Explore Pre-IPO and IPO funding solutions with CapitalKnob. Get strategic capital support for fundraising, listing preparation, and business growth.',
+        path: '/pre-ipo-and-ipo-capital',
+      }),
+      createBreadcrumbSchema(
+        [
+          { name: 'Home', path: '/' },
+          { name: 'Pre-IPO & IPO Capital', path: '/pre-ipo-and-ipo-capital' },
+        ],
+        '/pre-ipo-and-ipo-capital',
+      ),
+    ],
+  },
+  '/export-finance': {
+    title: 'Export Finance Solutions | CapitalKnob',
+    description:
+      'Explore export finance solutions with CapitalKnob, offering funding support and strategic capital guidance to help businesses manage international trade.',
+    keywords: 'export finance, international trade funding, export funding',
+    canonicalPath: '/export-finance',
+    schemas: [
+      organizationSchema,
+      createWebPageSchema(
+        '/export-finance',
+        'Export Finance Solutions | CapitalKnob',
+        'Explore export finance solutions with CapitalKnob, offering funding support and strategic capital guidance to help businesses manage international trade.',
+      ),
+      createServiceSchema({
+        name: 'Export Finance Solutions',
+        description:
+          'Explore export finance solutions with CapitalKnob, offering funding support and strategic capital guidance to help businesses manage international trade.',
+        path: '/export-finance',
+      }),
+      createBreadcrumbSchema(
+        [
+          { name: 'Home', path: '/' },
+          { name: 'Export Finance', path: '/export-finance' },
+        ],
+        '/export-finance',
+      ),
+    ],
+  },
+  '/import-finance': {
+    title: 'Import Finance Solutions | CapitalKnob',
+    description:
+      'Explore import finance solutions with CapitalKnob, providing funding support and strategic guidance to help businesses manage international trade.',
+    keywords: 'import finance, international trade funding, import funding',
+    canonicalPath: '/import-finance',
+    schemas: [
+      organizationSchema,
+      createWebPageSchema(
+        '/import-finance',
+        'Import Finance Solutions | CapitalKnob',
+        'Explore import finance solutions with CapitalKnob, providing funding support and strategic guidance to help businesses manage international trade.',
+      ),
+      createServiceSchema({
+        name: 'Import Finance Solutions',
+        description:
+          'Explore import finance solutions with CapitalKnob, providing funding support and strategic guidance to help businesses manage international trade.',
+        path: '/import-finance',
+      }),
+      createBreadcrumbSchema(
+        [
+          { name: 'Home', path: '/' },
+          { name: 'Import Finance', path: '/import-finance' },
+        ],
+        '/import-finance',
+      ),
+    ],
+  },
+  '/structured-trade-finance': {
+    title: 'Structured Trade Finance Solutions | CapitalKnob',
+    description:
+      'Explore structured trade finance solutions with CapitalKnob, providing tailored funding and strategic support for complex trade transactions.',
+    keywords: 'structured trade finance, trade funding, complex trade transactions',
+    canonicalPath: '/structured-trade-finance',
+    schemas: [
+      organizationSchema,
+      createWebPageSchema(
+        '/structured-trade-finance',
+        'Structured Trade Finance Solutions | CapitalKnob',
+        'Explore structured trade finance solutions with CapitalKnob, providing tailored funding and strategic support for complex trade transactions.',
+      ),
+      createServiceSchema({
+        name: 'Structured Trade Finance Solutions',
+        description:
+          'Explore structured trade finance solutions with CapitalKnob, providing tailored funding and strategic support for complex trade transactions.',
+        path: '/structured-trade-finance',
+      }),
+      createBreadcrumbSchema(
+        [
+          { name: 'Home', path: '/' },
+          { name: 'Structured Trade Finance', path: '/structured-trade-finance' },
+        ],
+        '/structured-trade-finance',
+      ),
+    ],
+  },
   '/disclaimer': {
     title: 'Disclaimer | CapitalKnob Investment & Financial Advisors',
     description:

@@ -66,9 +66,9 @@ export function TestimonialCard({
         </span>
       </div>
 
-      {/* Middle: Review Quote Body */}
+      {/* Middle: Review Body (no wrapping quotes — the quote icon above already signals a testimonial) */}
       <p className="my-3 line-clamp-3 text-sm leading-relaxed text-slate-600 md:text-[15px]">
-        {detail ? `“${detail}”` : '“CapitalKnob provided outstanding advisory and made securing our capital seamless.”'}
+        {detail || 'CapitalKnob provided outstanding advisory and made securing our capital seamless.'}
       </p>
 
       {/* Bottom: Client Profile & Verified Tag */}

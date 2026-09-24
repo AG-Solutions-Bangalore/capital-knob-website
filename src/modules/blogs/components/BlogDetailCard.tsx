@@ -1,6 +1,7 @@
 
 import { Link } from 'react-router-dom'
 import { blogPath } from '@/app/routes'
+import { blogLinkTitle } from '@/shared/seo/linkTitles'
 import { useBlogBySlugQuery } from '../hooks/useBlogsQueries'
 import { FaqSection } from '@/modules/faq'
 
@@ -185,6 +186,7 @@ export function BlogDetailCard({ slug }: { slug: string }) {
             {data.previous ? (
               <Link
                 to={blogPath(data.previous.blog_slug || String(data.previous.id))}
+                title={blogLinkTitle(data.previous.blog_slug || String(data.previous.id), data.previous.blog_title)}
                 className="group flex items-center gap-2 rounded-xl border border-line bg-surface px-4 py-2.5 text-xs font-semibold text-navy transition-all hover:border-gold/50 hover:bg-gold/5"
               >
                 <span className="text-gold transition-transform group-hover:-translate-x-1">&larr;</span>
@@ -197,6 +199,7 @@ export function BlogDetailCard({ slug }: { slug: string }) {
             {data.next && (
               <Link
                 to={blogPath(data.next.blog_slug || String(data.next.id))}
+                title={blogLinkTitle(data.next.blog_slug || String(data.next.id), data.next.blog_title)}
                 className="group ml-auto flex items-center gap-2 rounded-xl border border-line bg-surface px-4 py-2.5 text-xs font-semibold text-navy transition-all hover:border-gold/50 hover:bg-gold/5"
               >
                 <span className="max-w-[200px] truncate sm:max-w-[280px]">
@@ -225,6 +228,7 @@ export function BlogDetailCard({ slug }: { slug: string }) {
               <Link
                 key={f.id ?? f.blog_slug}
                 to={blogPath(f.blog_slug || String(f.id))}
+                title={blogLinkTitle(f.blog_slug || String(f.id), f.blog_title)}
                 className="group flex flex-col overflow-hidden rounded-xl border border-line/80 bg-white shadow-soft transition-all hover:-translate-y-1 hover:border-gold/40 hover:shadow-card"
               >
                 <div className="p-5">

@@ -187,12 +187,7 @@ export function SolutionsMobileLinks({ onPick }: { onPick: () => void }) {
               onClick={onPick}
               className="flex items-center justify-between rounded-button px-3 py-2.5 text-[13px] text-ink-soft transition-colors hover:bg-line-soft hover:text-ink"
             >
-              <span>
-                {cat.category_name}
-                <span className="ml-1.5 text-[11px] text-muted">
-                  {(cat.category_subs ?? []).length}
-                </span>
-              </span>
+              <span>{cat.category_name}</span>
             </Link>
           </li>
         )

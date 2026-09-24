@@ -7,7 +7,7 @@
 
 import { Link } from 'react-router-dom'
 import { blogPath } from '@/app/routes'
-import { linkTitleFor } from '@/shared/seo/linkTitles'
+import { blogLinkTitle } from '@/shared/seo/linkTitles'
 import type { Blog } from '../api/blogs.types'
 import { useBlogsQuery } from '../hooks/useBlogsQueries'
 
@@ -87,7 +87,7 @@ export function BlogCard({
     <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-line/80 bg-white shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-gold/40 hover:shadow-card">
       <Link
         to={blogPath(slug)}
-        title={linkTitleFor(blogPath(slug))}
+        title={blogLinkTitle(slug, blog.blog_title)}
         className="flex h-full flex-col"
       >
         {/* Thumbnail Image Container with Zoom Effect & Floating Category Badge */}

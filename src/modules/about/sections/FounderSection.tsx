@@ -20,7 +20,7 @@ export function FounderSection() {
               <img
                 src={founder.image}
                 alt={`${founder.name}, Founder & CEO of CapitalKnob`}
-                title="Rohan Mehta – Founder and CEO of CapitalKnob"
+                title="Goutham – Founder and CEO of CapitalKnob"
                 loading="lazy"
                 className="aspect-[4/3] w-full object-cover lg:h-[430px]"
               />

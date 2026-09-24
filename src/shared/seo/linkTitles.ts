@@ -71,12 +71,12 @@ const TITLE_BY_HREF: Record<string, string> = {
   // in LONG_TITLE_BY_HREF below.
   '/business-loan': 'Business Loan Services',
   '/distressed-assets-and-special-situations': 'Distressed Assets & Special Situations',
-  '/export-finance': 'Export Finance Services',
+  '/export-finance': 'Export Finance Solutions',
   '/growth-capital-pe-vc': 'Growth Capital, PE & VC Funding',
-  '/import-finance': 'Import Finance Services',
-  '/pre-ipo-and-ipo-capital': 'Pre-IPO & IPO Capital',
+  '/import-finance': 'Import Finance Solutions',
+  '/pre-ipo-and-ipo-capital': 'Pre-IPO & IPO Funding Solutions',
   '/real-estate-project-finance': 'Real Estate Project Finance',
-  '/structured-trade-finance': 'Structured Trade Finance',
+  '/structured-trade-finance': 'Structured Trade Finance Solutions',
 
   // ── Contact / communication: SHORT defaults ──────────────────────
   'mailto:advisory@capitalknob.com': 'Email CapitalKnob Advisory',
@@ -163,6 +163,24 @@ export function linkTitleFor(href: string | undefined | null): string | undefine
     return lower.includes('advisory') ? 'Email CapitalKnob Advisory' : 'Email CapitalKnob'
   }
   return undefined
+}
+
+/**
+ * Per-blog link titles from the on-page audit. `demoblogs` /
+ * `demoblogs123` must read "CapitalKnob Financial Insights Blog";
+ * everything else falls back to "{blog title} – CapitalKnob" so no
+ * `/blogs/:slug` link ever renders without a title attribute.
+ */
+const BLOG_LINK_TITLES: Record<string, string> = {
+  demoblogs: 'CapitalKnob Financial Insights Blog',
+  demoblogs123: 'CapitalKnob Financial Insights Blog',
+}
+
+export function blogLinkTitle(slug: string | null | undefined, blogTitle?: string | null): string {
+  const clean = (slug ?? '').trim()
+  if (clean && BLOG_LINK_TITLES[clean]) return BLOG_LINK_TITLES[clean]
+  const t = (blogTitle ?? '').trim()
+  return t ? `${t} – CapitalKnob` : 'CapitalKnob Financial Insights Blog'
 }
 
 /**

@@ -279,9 +279,10 @@ export function HomeHero() {
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
             >
-              {/* Slide Tabs */}
+              {/* Slide Tabs — wrap on mobile so every pill is fully
+                  visible (no mid-pill cut); single scrollable row on sm+. */}
               <div
-                className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 pb-2 sm:pb-1"
+                className="flex flex-wrap items-center gap-2 py-1 sm:flex-nowrap sm:overflow-x-auto no-scrollbar sm:py-1 sm:pb-1"
                 role="tablist"
                 aria-label="Financing categories"
               >

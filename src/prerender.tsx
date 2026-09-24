@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import { QueryClient } from '@tanstack/react-query';
-import { getCanonicalUrl, SITE_LOGO } from '@/shared/seo/site';
+import { getCanonicalUrl, SITE_LOGO, SITE_NAME } from '@/shared/seo/site';
 import { getSeoForRoute, ROUTE_SEO } from '@/shared/seo/seoEngine';
 import { createCompositeGraph } from '@/shared/seo/schemaExamples';
 import {
@@ -116,6 +116,7 @@ export async function prerender(data: { url: string }) {
 
   const elements = new Set<Record<string, unknown>>([
     { type: 'meta', props: { name: 'description', content: seo.description } },
+    { type: 'meta', props: { name: 'author', content: SITE_NAME } },
     { type: 'link', props: { rel: 'canonical', href: canonical } },
     {
       type: 'meta',

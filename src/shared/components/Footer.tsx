@@ -2,15 +2,14 @@ import { Link, useLocation } from 'react-router-dom'
 import { ROUTES, servicePath } from '@/app/routes'
 import { linkTitleForPage } from '@/shared/seo/linkTitles'
 import { useCompanyQuery } from '@/modules/company/hooks/useCompanyQuery'
+import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
 import { NewsletterForm } from '@/modules/newsletter/components/NewsletterForm'
 import { Container } from './Container'
 import { Logo } from './Logo'
 
 /**
- * Financial-solution links — every entry routes to the Solutions page
- * with a hash that targets a specific card. The Solutions page uses that
- * hash to scroll the matching card into view and highlight it so the
- * user can see at a glance which solution they selected.
+ * Static fallback service links — used only while live categories load
+ * or when the API is down, so the footer never renders empty.
  */
 const solutionLinks = [
   { label: 'Services Hub', href: ROUTES.home },
@@ -77,6 +76,20 @@ export function Footer({ variant = 'light' }: FooterProps) {
     ? live.company_email.trim()
     : 'advisory@capitalknob.com'
 
+  // Live services (GET /getCategory) — every API category becomes a footer
+  // link; the static list above is only the loading/error fallback.
+  const { data: categoryData } = useCategoryQuery()
+  const liveServices = (categoryData?.data ?? []).filter((c) =>
+    c.category_slug?.trim(),
+  )
+  const serviceLinks =
+    liveServices.length > 0
+      ? liveServices.map((c) => ({
+          label: (c.category_name ?? '').trim() || 'Service',
+          href: servicePath((c.category_slug ?? '').trim()),
+        }))
+      : solutionLinks
+
   return (
     <footer
       className={
@@ -92,9 +105,8 @@ export function Footer({ variant = 'light' }: FooterProps) {
           <div className="lg:col-span-4">
             <Logo variant={isDark ? 'light' : 'dark'} layout="horizontal" />
             <p
-              className={`mt-4 max-w-sm text-sm leading-relaxed ${
-                isDark ? 'text-white/75' : 'text-muted'
-              }`}
+              className={`mt-4 max-w-sm text-sm leading-relaxed ${isDark ? 'text-white/75' : 'text-muted'
+                }`}
             >
               Empowering individuals, enterprises, and real estate developers with
               transparent financial advisory, access to 50+ leading lenders, and structured
@@ -108,9 +120,8 @@ export function Footer({ variant = 'light' }: FooterProps) {
                 <a
                   href={contactPhoneHref}
                   title={t(contactPhoneHref)}
-                  className={`transition-colors ${
-                    isDark ? 'text-white/90 hover:text-gold' : 'text-ink hover:text-brand-blue'
-                  }`}
+                  className={`transition-colors ${isDark ? 'text-white/90 hover:text-gold' : 'text-ink hover:text-brand-blue'
+                    }`}
                 >
                   {contactPhone}
                 </a>
@@ -120,9 +131,8 @@ export function Footer({ variant = 'light' }: FooterProps) {
                 <a
                   href={`mailto:${contactEmail}`}
                   title={t(`mailto:${contactEmail}`)}
-                  className={`transition-colors ${
-                    isDark ? 'text-white/90 hover:text-gold' : 'text-ink hover:text-brand-blue'
-                  }`}
+                  className={`transition-colors ${isDark ? 'text-white/90 hover:text-gold' : 'text-ink hover:text-brand-blue'
+                    }`}
                 >
                   {contactEmail}
                 </a>
@@ -137,11 +147,10 @@ export function Footer({ variant = 'light' }: FooterProps) {
                   href={s.href}
                   title={t(s.href)}
                   aria-label={s.label}
-                  className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border transition-all ${
-                    isDark
-                      ? 'border-white/15 bg-white/5 text-white/80 hover:border-gold hover:text-gold'
-                      : 'border-line bg-line-soft text-muted hover:border-navy hover:text-navy'
-                  }`}
+                  className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border transition-all ${isDark
+                    ? 'border-white/15 bg-white/5 text-white/80 hover:border-gold hover:text-gold'
+                    : 'border-line bg-line-soft text-muted hover:border-navy hover:text-navy'
+                    }`}
                 >
                   {s.icon}
                 </a>
@@ -154,26 +163,24 @@ export function Footer({ variant = 'light' }: FooterProps) {
 
           {/* Mobile links group: Solutions + Navigation in 2 columns on mobile */}
           <div className="grid grid-cols-2 gap-6 sm:contents">
-            {/* Col 2: Solutions & Offerings (Span 3) */}
+            {/* Col 2: Services (Span 3) */}
             <div className="lg:col-span-3">
               <h3
-                className={`font-display text-sm font-bold uppercase tracking-wider ${
-                  isDark ? 'text-white' : 'text-ink'
-                }`}
+                className={`font-display text-sm font-bold uppercase tracking-wider ${isDark ? 'text-white' : 'text-ink'
+                  }`}
               >
-                Financial Services
+                Services
               </h3>
               <ul className="mt-4 space-y-2.5 text-xs sm:text-sm">
-                {solutionLinks.map((l) => (
-                  <li key={l.label}>
+                {serviceLinks.map((l, i) => (
+                  <li key={`${l.href}-${i}`}>
                     <Link
                       to={l.href}
                       title={t(l.href)}
-                      className={`transition-colors ${
-                        isDark
-                          ? 'text-white/70 hover:text-gold'
-                          : 'text-muted hover:text-navy'
-                      }`}
+                      className={`transition-colors ${isDark
+                        ? 'text-white/70 hover:text-gold'
+                        : 'text-muted hover:text-navy'
+                        }`}
                     >
                       {l.label}
                     </Link>
@@ -185,9 +192,8 @@ export function Footer({ variant = 'light' }: FooterProps) {
             {/* Col 3: Company & Exploration (Span 2) */}
             <div className="lg:col-span-2">
               <h3
-                className={`font-display text-sm font-bold uppercase tracking-wider ${
-                  isDark ? 'text-white' : 'text-ink'
-                }`}
+                className={`font-display text-sm font-bold uppercase tracking-wider ${isDark ? 'text-white' : 'text-ink'
+                  }`}
               >
                 Navigation
               </h3>
@@ -197,11 +203,10 @@ export function Footer({ variant = 'light' }: FooterProps) {
                     <Link
                       to={l.href}
                       title={t(l.href)}
-                      className={`transition-colors ${
-                        isDark
-                          ? 'text-white/70 hover:text-gold'
-                          : 'text-muted hover:text-navy'
-                      }`}
+                      className={`transition-colors ${isDark
+                        ? 'text-white/70 hover:text-gold'
+                        : 'text-muted hover:text-navy'
+                        }`}
                     >
                       {l.label}
                     </Link>
@@ -214,9 +219,8 @@ export function Footer({ variant = 'light' }: FooterProps) {
           {/* Col 4: Advisory, Tools & Consultation CTA (Span 3) */}
           <div className="lg:col-span-3">
             <h3
-              className={`font-display text-sm font-bold uppercase tracking-wider ${
-                isDark ? 'text-white' : 'text-ink'
-              }`}
+              className={`font-display text-sm font-bold uppercase tracking-wider ${isDark ? 'text-white' : 'text-ink'
+                }`}
             >
               Advisory & Tools
             </h3>
@@ -227,11 +231,10 @@ export function Footer({ variant = 'light' }: FooterProps) {
                     <a
                       href={contactPhoneHref}
                       title={t(contactPhoneHref) ?? 'Talk to an Advisor'}
-                      className={`transition-colors ${
-                        isDark
-                          ? 'text-white/70 hover:text-gold'
-                          : 'text-muted hover:text-navy'
-                      }`}
+                      className={`transition-colors ${isDark
+                        ? 'text-white/70 hover:text-gold'
+                        : 'text-muted hover:text-navy'
+                        }`}
                     >
                       {l.label}
                     </a>
@@ -239,11 +242,10 @@ export function Footer({ variant = 'light' }: FooterProps) {
                     <Link
                       to={l.href}
                       title={t(l.href)}
-                      className={`transition-colors ${
-                        isDark
-                          ? 'text-white/70 hover:text-gold'
-                          : 'text-muted hover:text-navy'
-                      }`}
+                      className={`transition-colors ${isDark
+                        ? 'text-white/70 hover:text-gold'
+                        : 'text-muted hover:text-navy'
+                        }`}
                     >
                       {l.label}
                     </Link>
@@ -280,11 +282,10 @@ export function Footer({ variant = 'light' }: FooterProps) {
 
         {/* Bottom row: Copyright & Disclaimer */}
         <div
-          className={`mt-12 flex flex-col items-center justify-between gap-4 border-t pt-6 text-xs md:flex-row ${
-            isDark
-              ? 'border-white/10 text-white/60'
-              : 'border-line/80 text-muted'
-          }`}
+          className={`mt-12 flex flex-col items-center justify-between gap-4 border-t pt-6 text-xs md:flex-row ${isDark
+            ? 'border-white/10 text-white/60'
+            : 'border-line/80 text-muted'
+            }`}
         >
           <p>© 2026 CapitalKnob. All rights reserved.</p>
           <p className="max-w-2xl text-center md:text-right">
@@ -293,9 +294,8 @@ export function Footer({ variant = 'light' }: FooterProps) {
             <Link
               to={ROUTES.disclaimer}
               title={t(ROUTES.disclaimer)}
-              className={`underline underline-offset-2 transition-colors ${
-                isDark ? 'hover:text-gold' : 'hover:text-navy'
-              }`}
+              className={`underline underline-offset-2 transition-colors ${isDark ? 'hover:text-gold' : 'hover:text-navy'
+                }`}
             >
               Full Disclaimer
             </Link>

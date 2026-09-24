@@ -5,7 +5,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import type { Thing } from 'schema-dts';
-import { getCanonicalUrl, SITE_LOGO } from '@/shared/seo/site';
+import { getCanonicalUrl, SITE_LOGO, SITE_NAME } from '@/shared/seo/site';
 import { type RouteSeoEntry } from '@/shared/seo/seoEngine';
 import { createCompositeGraph } from '@/shared/seo/schemaExamples';
 
@@ -77,6 +77,7 @@ export default function SEOPageLayout({
       <Helmet>
         <title>{seo.title}</title>
         <meta name="description" content={seo.description} />
+        <meta name="author" content={SITE_NAME} />
         {seo.keywords ? <meta name="keywords" content={seo.keywords} /> : null}
         <link rel="canonical" href={finalCanonical} />
         <meta name="robots" content={seo.noIndex ? 'noindex, nofollow' : 'index, follow'} />
