@@ -91,8 +91,8 @@ export function getEffectiveHomeTestimonials(): TestimonialItemData[] {
   return resolveEffectiveTestimonials(homeTestimonials);
 }
 
-let dynamicCategoriesMap = new Map<string, { category: CategoryData; raw: unknown }>();
-let dynamicBlogsMap = new Map<string, BlogDetailsResponse>();
+const dynamicCategoriesMap = new Map<string, { category: CategoryData; raw: unknown }>();
+const dynamicBlogsMap = new Map<string, BlogDetailsResponse>();
 let rawCategoriesResponse: unknown = null;
 let rawBlogsResponse: unknown = null;
 let rawFrontBlogsResponse: unknown = null;
@@ -102,8 +102,8 @@ let rawHomeTestimonialsResponse: unknown = null;
 let homeFaqs: FaqItemData[] = [];
 let homeTestimonials: TestimonialItemData[] = [];
 let frontBlogs: BlogData[] = [];
-let testimonialsBySlug = new Map<string, TestimonialItemData[]>();
-let faqsBySlug = new Map<string, FaqItemData[]>();
+const testimonialsBySlug = new Map<string, TestimonialItemData[]>();
+const faqsBySlug = new Map<string, FaqItemData[]>();
 let isLoaded = false;
 let loadPromise: Promise<void> | null = null;
 

@@ -17,8 +17,9 @@ if (MessagePort && MessagePort.prototype) {
     Object.defineProperty(MessagePort.prototype, 'onmessage', {
       set(fn) {
         origOn.set!.call(this, fn)
-        if (fn && typeof (this as any).unref === 'function') {
-          (this as any).unref()
+        const port = this as MessagePort & { unref?: () => void }
+        if (fn && typeof port.unref === 'function') {
+          port.unref()
         }
       },
       get() {
