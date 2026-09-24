@@ -79,7 +79,7 @@ export const heroSlides: HeroSlide[] = [
     },
     secondaryCta: {
       label: 'Talk to an Expert',
-      href: 'tel:+919876543210',
+      href: 'tel:+919986900144',
     },
   },
   {
@@ -100,7 +100,7 @@ export const heroSlides: HeroSlide[] = [
     },
     secondaryCta: {
       label: 'Speak with an Advisor',
-      href: 'tel:+919876543210',
+      href: 'tel:+919986900144',
     },
   },
   {
@@ -121,7 +121,7 @@ export const heroSlides: HeroSlide[] = [
     },
     secondaryCta: {
       label: 'Get Free Assessment',
-      href: 'tel:+919876543210',
+      href: 'tel:+919986900144',
     },
   },
   {
@@ -142,7 +142,7 @@ export const heroSlides: HeroSlide[] = [
     },
     secondaryCta: {
       label: 'Consult Our Team',
-      href: 'tel:+919876543210',
+      href: 'tel:+919986900144',
     },
   },
 ]
@@ -160,7 +160,7 @@ export const homeHeroData = {
   },
   secondaryCta: {
     label: 'Talk to an Expert',
-    href: 'tel:+919876543210',
+    href: 'tel:+919986900144',
   },
   trustBadges: [
     { label: 'Best Interest Rates', icon: 'percent' },

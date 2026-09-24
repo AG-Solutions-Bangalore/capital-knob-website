@@ -15,7 +15,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import type { CSSProperties } from 'react'
 import { servicePath } from '@/app/routes'
-import { linkTitleFor } from '@/shared/seo/linkTitles'
+import { linkTitleFor, linkTitleForPage } from '@/shared/seo/linkTitles'
 import { useCategoryQuery } from '../hooks/useCategoryQuery'
 import type { Category, CategorySub } from '../api/category.types'
 
@@ -40,10 +40,11 @@ function useActiveTo(to: string): boolean {
 
 function SubLink({ to, label, onNavigate }: { to: string; label: string; onNavigate: () => void }) {
   const active = useActiveTo(to)
+  const { pathname } = useLocation()
   return (
     <Link
       to={to}
-      title={linkTitleFor(to)}
+      title={linkTitleForPage(to, pathname) ?? linkTitleFor(to)}
       onClick={onNavigate}
       aria-current={active ? 'true' : undefined}
       className={`text-xs transition-colors hover:text-navy hover:underline hover:underline-offset-4 ${active ? 'font-semibold text-navy' : 'text-muted'
@@ -66,10 +67,11 @@ function HeadingLink({
   tone?: string
 }) {
   const active = useActiveTo(to)
+  const { pathname } = useLocation()
   return (
     <Link
       to={to}
-      title={linkTitleFor(to)}
+      title={linkTitleForPage(to, pathname) ?? linkTitleFor(to)}
       onClick={onNavigate}
       aria-current={active ? 'true' : undefined}
       style={tone ? ({ '--heading': tone } as CSSProperties) : undefined}
@@ -157,6 +159,7 @@ export function SolutionsMegaPanel({ onNavigate }: { onNavigate: () => void }) {
 
 export function SolutionsMobileLinks({ onPick }: { onPick: () => void }) {
   const { data, isPending, isError } = useCategoryQuery()
+  const { pathname } = useLocation()
 
   if (isPending) {
     return (
@@ -174,23 +177,26 @@ export function SolutionsMobileLinks({ onPick }: { onPick: () => void }) {
   return (
     <ul className="flex flex-col gap-1">
 
-      {cats.map((cat) => (
-        <li key={cat.id ?? cat.category_slug}>
-          <Link
-            to={servicePath(cat.category_slug ?? '')}
-            title={linkTitleFor(servicePath(cat.category_slug ?? ''))}
-            onClick={onPick}
-            className="flex items-center justify-between rounded-button px-3 py-2.5 text-[13px] text-ink-soft transition-colors hover:bg-line-soft hover:text-ink"
-          >
-            <span>
-              {cat.category_name}
-              <span className="ml-1.5 text-[11px] text-muted">
-                {(cat.category_subs ?? []).length}
+      {cats.map((cat) => {
+        const path = servicePath(cat.category_slug ?? '')
+        return (
+          <li key={cat.id ?? cat.category_slug}>
+            <Link
+              to={path}
+              title={linkTitleForPage(path, pathname) ?? linkTitleFor(path)}
+              onClick={onPick}
+              className="flex items-center justify-between rounded-button px-3 py-2.5 text-[13px] text-ink-soft transition-colors hover:bg-line-soft hover:text-ink"
+            >
+              <span>
+                {cat.category_name}
+                <span className="ml-1.5 text-[11px] text-muted">
+                  {(cat.category_subs ?? []).length}
+                </span>
               </span>
-            </span>
-          </Link>
-        </li>
-      ))}
+            </Link>
+          </li>
+        )
+      })}
     </ul>
   )
 }

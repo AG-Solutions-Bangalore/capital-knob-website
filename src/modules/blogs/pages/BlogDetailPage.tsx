@@ -5,14 +5,12 @@
  */
 
 import { Link, useParams } from 'react-router-dom'
-import { usePageSeo } from '@/shared/seo/usePageSeo'
 import { Container } from '@/shared/components/Container'
 import { ROUTES } from '@/app/routes'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { BlogDetailCard } from '../components/BlogDetailCard'
 
 export function BlogDetailPage() {
-  usePageSeo('blogs')
   const { slug = '' } = useParams<{ slug: string }>()
 
   return (

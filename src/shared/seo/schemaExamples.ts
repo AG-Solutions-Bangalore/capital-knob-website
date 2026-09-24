@@ -199,6 +199,16 @@ export function createServiceSchema(service: {
     provider: { '@id': `${SITE_ORIGIN}/#organization` },
     url,
     image: service.image || SITE_LOGO,
+    telephone: SITE_PHONE,
+    priceRange: '$$',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Prestige Tech Park, 5th Floor, Outer Ring Road, Marathahalli',
+      addressLocality: 'Bengaluru',
+      addressRegion: 'Karnataka',
+      postalCode: '560037',
+      addressCountry: 'IN',
+    },
     areaServed: 'IN',
   } as Thing;
 }

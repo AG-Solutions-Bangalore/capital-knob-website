@@ -289,14 +289,98 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
   },
 };
 
+/** "real-estate-project-finance" → "Real Estate Project Finance". */
+function humanizeSlug(slug: string): string {
+  let decoded = slug;
+  try {
+    decoded = decodeURIComponent(slug);
+  } catch {
+    // Malformed % sequences — fall through with the raw slug.
+  }
+  const words = decoded
+    .replace(/[-_]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+  return words || 'Service';
+}
+
+function safeDecodeSlug(slug: string): string {
+  try {
+    return decodeURIComponent(slug).trim();
+  } catch {
+    return slug.trim();
+  }
+}
+
+/**
+ * Generic indexable SEO for a single-segment service slug missing from the
+ * build-time category cache (cache not yet warmed on SPA navigation, or slug
+ * added after the last build). The UI fetches the category live, so emitting
+ * the 404 fallback here (`Page Not Found` + noindex) would de-index a real
+ * money page — hence a humanized, indexable entry instead.
+ */
+function createGenericServiceSeo(slug: string, path: string): RouteSeoEntry {
+  const name = humanizeSlug(slug);
+  const title = `${name} Services in India | ${SITE_NAME}`;
+  const description = `Explore flexible ${name} services from ${SITE_NAME}.`;
+  return {
+    title,
+    description,
+    keywords: `${name}, finance services, CapitalKnob`,
+    canonicalPath: path,
+    schemas: [
+      organizationSchema,
+      websiteSchema,
+      createWebPageSchema(path, title, description),
+      createServiceSchema({ name: `${name} Services`, description, path }),
+      createBreadcrumbSchema(
+        [
+          { name: 'Home', path: '/' },
+          { name, path },
+        ],
+        path,
+      ),
+    ],
+  };
+}
+
+/**
+ * Generic indexable SEO for a `/blogs/:slug` missing from the build-time
+ * blog cache (same cold-cache reason as services). Indexable so real
+ * articles never ship a 404 title + noindex while the UI renders them.
+ */
+function createGenericBlogSeo(slug: string, path: string): RouteSeoEntry {
+  const name = humanizeSlug(slug);
+  const title = `${name} | ${SITE_NAME}`;
+  const description = `Read about ${name} — financial insights and guides from ${SITE_NAME}.`;
+  return {
+    title,
+    description,
+    keywords: `${name}, financial guidance`,
+    canonicalPath: path,
+    schemas: [
+      organizationSchema,
+      websiteSchema,
+      createWebPageSchema(path, title, description),
+      createBreadcrumbSchema(
+        [
+          { name: 'Home', path: '/' },
+          { name: 'Blogs', path: '/blogs' },
+          { name, path },
+        ],
+        path,
+      ),
+    ],
+  };
+}
+
 export function getSeoForRoute(url: string): RouteSeoEntry {
   const path = url.split('?')[0].split('#')[0].replace(/\/$/, '') || '/';
-
   // 1. Dynamic home page match ('/')
   if (path === '/') {
     const homeEntry = ROUTE_SEO['/'];
-    // Effective list: real API rows when usable, else temporary mocks
-    // (mocks vanish automatically once genuine backend data lands).
+    // Real API rows only from GET /getTestimonial/home — no mocks.
     const testimonials = getEffectiveHomeTestimonials();
     const faqs = getHomeFaqs();
     const frontBlogs = getFrontBlogs();
@@ -365,7 +449,7 @@ export function getSeoForRoute(url: string): RouteSeoEntry {
   // 3. Dynamic blog match (/blogs/:slug)
   const blogMatch = path.match(/^\/blogs\/([^/]+)$/);
   if (blogMatch) {
-    const slug = blogMatch[1];
+    const slug = safeDecodeSlug(blogMatch[1]);
     const blogData = getDynamicBlog(slug);
     if (blogData && blogData.data) {
       const b = blogData.data;
@@ -403,12 +487,15 @@ export function getSeoForRoute(url: string): RouteSeoEntry {
         schemas,
       };
     }
+    // Cache miss (cold SPA cache or post-build slug) — the UI still fetches
+    // the article live, so return generic indexable SEO, never the 404 entry.
+    return createGenericBlogSeo(slug, path);
   }
 
   // 3. Dynamic service / category match (/:slug)
   const categoryMatch = path.match(/^\/([^/]+)$/);
   if (categoryMatch) {
-    const slug = categoryMatch[1];
+    const slug = safeDecodeSlug(categoryMatch[1]);
     const categoryEntry = getDynamicCategory(slug);
     if (categoryEntry && categoryEntry.category) {
       const c = categoryEntry.category;
@@ -455,6 +542,9 @@ export function getSeoForRoute(url: string): RouteSeoEntry {
         schemas,
       };
     }
+    // Cache miss (cold SPA cache or post-build slug) — the UI still fetches
+    // the category live, so return generic indexable SEO, never the 404 entry.
+    return createGenericServiceSeo(slug, path);
   }
 
   // 4. Fallback 404

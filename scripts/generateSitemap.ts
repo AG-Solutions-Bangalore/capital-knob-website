@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SITE_ORIGIN } from '../src/config/site';
+import { SITE_ORIGIN } from '../src/shared/seo/site';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -50,17 +50,17 @@ const today = new Date().toISOString().split('T')[0];
 const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${routes
-  .map((route) => {
-    const { priority, changefreq } = getPriority(route);
-    const loc = route === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${route}`;
-    return `  <url>
+    .map((route) => {
+      const { priority, changefreq } = getPriority(route);
+      const loc = route === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${route}`;
+      return `  <url>
     <loc>${loc}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>`;
-  })
-  .join('\n')}
+    })
+    .join('\n')}
 </urlset>`;
 
 fs.mkdirSync(distDir, { recursive: true });

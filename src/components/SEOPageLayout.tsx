@@ -5,9 +5,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import type { Thing } from 'schema-dts';
-import { getCanonicalUrl, SITE_LOGO } from '@/config/site';
-import { type RouteSeoEntry } from '@/config/seoEngine';
-import { createCompositeGraph } from '@/config/schemaExamples';
+import { getCanonicalUrl, SITE_LOGO } from '@/shared/seo/site';
+import { type RouteSeoEntry } from '@/shared/seo/seoEngine';
+import { createCompositeGraph } from '@/shared/seo/schemaExamples';
 
 export default function SEOPageLayout({
   seo,

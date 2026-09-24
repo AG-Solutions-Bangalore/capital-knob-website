@@ -53,10 +53,19 @@ function blogExcerpt(blog: Blog): string | null {
 // renders without a title.
 const BLOG_IMAGE_TITLES: Record<string, string> = {
   demoblogs: 'CapitalKnob Financial Insights and Blogs',
+  demoblogs123: 'CapitalKnob Financial Insights and Blogs',
 }
 
 function blogImageTitle(blog: Blog, slug: string): string {
-  if (BLOG_IMAGE_TITLES[slug]) return BLOG_IMAGE_TITLES[slug]
+  const file = blogImage(blog)?.trim()
+  if (
+    file === '1.webp' ||
+    slug === 'demoblogs' ||
+    slug === 'demoblogs123' ||
+    BLOG_IMAGE_TITLES[slug]
+  ) {
+    return 'CapitalKnob Financial Insights and Blogs'
+  }
   const t = blog.blog_title?.trim()
   return t ? `${t} – CapitalKnob` : 'CapitalKnob Financial Insights and Blogs'
 }

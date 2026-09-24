@@ -4,9 +4,9 @@
  */
 import React from 'react';
 import { QueryClient } from '@tanstack/react-query';
-import { getCanonicalUrl, SITE_LOGO } from '@/config/site';
-import { getSeoForRoute, ROUTE_SEO } from '@/config/seoEngine';
-import { createCompositeGraph } from '@/config/schemaExamples';
+import { getCanonicalUrl, SITE_LOGO } from '@/shared/seo/site';
+import { getSeoForRoute, ROUTE_SEO } from '@/shared/seo/seoEngine';
+import { createCompositeGraph } from '@/shared/seo/schemaExamples';
 import {
   getAllDynamicRouteUrls,
   getCachedBlogsResponse,
@@ -16,7 +16,7 @@ import {
   getCachedHomeTestimonialsResponse,
   getDynamicBlog,
   loadDynamicData,
-} from '@/config/dynamicData';
+} from '@/shared/seo/dynamicData';
 
 async function renderToStringAsync(element: React.ReactNode): Promise<string> {
   const { renderToReadableStream } = await import('react-dom/server');

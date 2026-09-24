@@ -36,7 +36,7 @@ const advisoryLinks = [
   { label: 'Free EMI Calculator', href: '/#calculator' },
   { label: 'Check Loan Eligibility', href: ROUTES.contact },
   { label: 'Request Callback', href: ROUTES.contact },
-  { label: 'Talk to an Advisor', href: 'tel:+919876543210' },
+  { label: 'Talk to an Advisor', href: 'tel:+919986900144' },
   { label: 'Partnership Inquiry', href: ROUTES.contact },
 ]
 
@@ -67,13 +67,13 @@ export function Footer({ variant = 'light' }: FooterProps) {
   const live = companyData?.data
   const contactPhone = live?.company_mobile_no
     ? `+91 ${live.company_mobile_no}`
-    : '+91 98765 43210'
+    : '+91 99869 00144'
   const contactPhoneHref = live?.company_mobile_no
-    ? `tel:+91${live.company_mobile_no}`
-    : 'tel:+919876543210'
+    ? `tel:+91${live.company_mobile_no.replace(/\D/g, '')}`
+    : 'tel:+919986900144'
   const contactEmail = live?.company_email?.trim()
     ? live.company_email.trim()
-    : 'info@capitalknob.com'
+    : 'advisory@capitalknob.com'
 
   return (
     <footer

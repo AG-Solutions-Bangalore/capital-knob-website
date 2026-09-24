@@ -29,15 +29,15 @@ export const contactCopy = {
     description: 'You can also reach us through the following channels.',
     phone: {
       label: 'Call Us',
-      number: '+91 98765 43210',
+      number: '+91 99869 00144',
       hours: 'Mon – Sat | 9:30 AM – 6:30 PM',
-      href: 'tel:+919876543210',
+      href: 'tel:+919986900144',
     },
     email: {
       label: 'Email Us',
-      address: 'hello@capitalknob.com',
+      address: 'advisory@capitalknob.com',
       note: 'We typically respond within 24 hours',
-      href: 'mailto:hello@capitalknob.com',
+      href: 'mailto:advisory@capitalknob.com',
     },
     office: {
       label: 'Visit Our Office',

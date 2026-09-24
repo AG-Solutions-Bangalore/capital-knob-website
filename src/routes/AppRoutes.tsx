@@ -2,11 +2,16 @@
  * @file src/routes/AppRoutes.tsx
  * Decoupled route table wrapped in PageSEO for bulletproof metadata and SSR pre-rendering.
  */
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useSyncExternalStore } from 'react';
 import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 import { MainLayout } from '@/shared/layouts/MainLayout';
 import SEOPageLayout from '@/components/SEOPageLayout';
-import { getSeoForRoute } from '@/config/seoEngine';
+import { getSeoForRoute } from '@/shared/seo/seoEngine';
+import {
+  ensureDynamicData,
+  getDynamicDataVersion,
+  subscribeDynamicData,
+} from '@/shared/seo/dynamicData';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   AboutPage,
@@ -22,6 +27,16 @@ import {
 
 function PageSEO({ path, children }: { path?: string; children: React.ReactNode }) {
   const location = useLocation();
+  // The SSG category/blog maps are empty on first SPA paint. Warm them once
+  // and re-render when ready so dynamic routes upgrade from generic SEO to
+  // full API-driven meta + schemas instead of sticking on cold-cache output.
+  // Third arg = server snapshot (required by React during SSG prerendering).
+  useSyncExternalStore(subscribeDynamicData, getDynamicDataVersion, getDynamicDataVersion);
+  useEffect(() => {
+    ensureDynamicData().catch(() => {
+      // Warmer never rejects (errors are swallowed internally) — belt & braces.
+    });
+  }, []);
   const currentPath = path || location.pathname;
   const seo = getSeoForRoute(currentPath);
   return (

@@ -73,6 +73,7 @@ export function GetInTouchCard() {
                 Landline:{' '}
                 <a
                   href={`tel:${landline.replace(/\D/g, '')}`}
+                  title={linkTitleForPage(`tel:${landline.replace(/\D/g, '')}`, '/contact')}
                   className="font-semibold text-navy hover:text-gold"
                 >
                   {landline}

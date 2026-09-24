@@ -4,7 +4,6 @@
  */
 
 import { Suspense, lazy } from 'react'
-import { usePageSeo } from '@/shared/seo/usePageSeo'
 import { SectionReveal } from '@/shared/components/SectionReveal'
 import { HomeHero } from '../components/HomeHero'
 
@@ -45,8 +44,6 @@ const FaqSection = lazy(() =>
 )
 
 export function HomePage() {
-  usePageSeo('home')
-
   return (
     <div className="flex flex-col bg-page">
       {/* 1. Hero with modern luxury villa visual & live EMI Calculator */}

@@ -1,6 +1,6 @@
 import { ROUTES, servicePath, type RoutePath } from '@/app/routes'
 import { cn } from '@/shared/lib/cn'
-import { linkTitleFor } from '@/shared/seo/linkTitles'
+import { linkTitleFor, linkTitleForPage } from '@/shared/seo/linkTitles'
 import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
 import { SolutionsMegaPanel, SolutionsMobileLinks } from '@/modules/category/components/CategoryMegaMenu'
 import { useEffect, useId, useRef, useState, type CSSProperties } from 'react'
@@ -66,19 +66,19 @@ const navEntries: NavEntry[] = [
         kind: 'link',
         label: 'Home Finance',
         to: servicePath('home-finance'),
-        title: 'Home Finance Services – CapitalKnob',
+        title: 'Home Finance Services',
       },
       {
         kind: 'link',
         label: 'Business Finance',
         to: servicePath('business-loan'),
-        title: 'Business Finance Services – CapitalKnob',
+        title: 'Business Loan Services',
       },
       {
         kind: 'link',
         label: 'Real Estate Finance',
         to: servicePath('real-estate-project-finance'),
-        title: 'Real Estate Finance Services – CapitalKnob',
+        title: 'Real Estate Project Finance',
       },
       {
         kind: 'link',
@@ -562,7 +562,7 @@ function SolutionChildItem({
     <li role={desktop ? 'none' : undefined}>
       <Link
         to={child.to}
-        title={child.title}
+        title={linkTitleForPage(child.to, pathname) ?? child.title}
         role={desktop ? 'menuitem' : undefined}
         onClick={onNavigate}
         aria-current={isActive ? 'true' : undefined}

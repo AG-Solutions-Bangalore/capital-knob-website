@@ -2,7 +2,6 @@
  * BlogsPage — public blog listing fed by live data (`GET /getBlogs`).
  */
 
-import { usePageSeo } from '@/shared/seo/usePageSeo'
 import { Container } from '@/shared/components/Container'
 import { PageHero } from '@/shared/components/PageHero'
 import { SectionReveal } from '@/shared/components/SectionReveal'
@@ -10,8 +9,6 @@ import { FaqSection } from '@/modules/faq'
 import { BlogList } from '../components/BlogList'
 
 export function BlogsPage() {
-  usePageSeo('blogs')
-
   return (
     <>
       <PageHero

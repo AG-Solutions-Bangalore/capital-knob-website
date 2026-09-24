@@ -128,15 +128,16 @@ export function linkTitleForPage(
   pathname: string | undefined | null,
 ): string | undefined {
   if (!href) return undefined
+  const target = href.startsWith('/') ? (href.split('?')[0].split('#')[0].replace(/\/$/, '') || '/') : href
   const long = isLongTitlePage(pathname)
-  if (long && LONG_TITLE_BY_HREF[href]) return LONG_TITLE_BY_HREF[href]
-  if (TITLE_BY_HREF[href]) {
+  if (long && LONG_TITLE_BY_HREF[target]) return LONG_TITLE_BY_HREF[target]
+  if (TITLE_BY_HREF[target]) {
     // On long pages the generic fallback-number tel: href (used while the
     // company API loads) must still render the LONG title.
-    if (long && href === 'tel:+919876543210') return LONG_TEL_TITLE
-    return TITLE_BY_HREF[href]
+    if (long && target === 'tel:+919876543210') return LONG_TEL_TITLE
+    return TITLE_BY_HREF[target]
   }
-  const lower = href.toLowerCase()
+  const lower = target.toLowerCase()
   if (lower.startsWith('tel:')) {
     return long ? LONG_TEL_TITLE : 'Call CapitalKnob'
   }
@@ -144,7 +145,7 @@ export function linkTitleForPage(
     if (lower.includes('advisory')) {
       return long ? LONG_ADVISORY_TITLE : 'Email CapitalKnob Advisory'
     }
-    return 'Email CapitalKnob'
+    return long ? LONG_ADVISORY_TITLE : 'Email CapitalKnob'
   }
   return undefined
 }
@@ -152,8 +153,9 @@ export function linkTitleForPage(
 /** Exact-match title lookup (plus generic tel:/mailto: fallback). */
 export function linkTitleFor(href: string | undefined | null): string | undefined {
   if (!href) return undefined
-  if (TITLE_BY_HREF[href]) return TITLE_BY_HREF[href]
-  const lower = href.toLowerCase()
+  const target = href.startsWith('/') ? (href.split('?')[0].split('#')[0].replace(/\/$/, '') || '/') : href
+  if (TITLE_BY_HREF[target]) return TITLE_BY_HREF[target]
+  const lower = target.toLowerCase()
   if (lower.startsWith('tel:')) return 'Call CapitalKnob'
   if (lower.startsWith('mailto:')) {
     return lower.includes('advisory') ? 'Email CapitalKnob Advisory' : 'Email CapitalKnob'

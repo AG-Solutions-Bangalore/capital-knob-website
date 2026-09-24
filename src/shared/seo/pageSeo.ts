@@ -5,16 +5,13 @@
  * Each entry matches the recommendations table in the audit PDF
  * (Meta Title, Meta Description, Canonical URL, Robots Tag, Author, Publisher).
  *
- * The `usePageSeo` hook applies these values to <title> + <meta> tags in
- * the document head whenever a page mounts.
+ * SEO metadata and schemas are centrally managed by SEOPageLayout
+ * (via seoEngine.getSeoForRoute) — pages must not set <title>/<meta> themselves.
  */
 
-export const SITE_NAME = 'CapitalKnob'
-export const SITE_AUTHOR = 'CapitalKnob'
-export const SITE_PUBLISHER = 'CapitalKnob'
+import { SITE_ORIGIN } from "./site"
 
-/** Origin used when building the canonical URL for the current page. */
-export const SITE_ORIGIN = 'https://ck.agsdemo.in'
+
 
 /**
  * Absolutize a `"/"`-rooted path via the site URL for crawlers.

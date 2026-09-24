@@ -22,6 +22,7 @@ function formatBlogDate(dateStr: string | null | undefined): string | null {
 // "CapitalKnob Financial Insights and Blogs" for the demoblogs banner.
 const BLOG_DETAIL_IMAGE_TITLES: Record<string, string> = {
   demoblogs: 'CapitalKnob Financial Insights and Blogs',
+  demoblogs123: 'CapitalKnob Financial Insights and Blogs',
 }
 
 export function BlogDetailCard({ slug }: { slug: string }) {
@@ -92,6 +93,7 @@ export function BlogDetailCard({ slug }: { slug: string }) {
               src={src}
               alt={blog.blog_banner_image_alt ?? blog.blog_title ?? 'Blog Banner'}
               title={
+                (imageFile === '1.webp' ? 'CapitalKnob Financial Insights and Blogs' : undefined) ??
                 BLOG_DETAIL_IMAGE_TITLES[slug] ??
                 (blog.blog_title?.trim()
                   ? `${blog.blog_title.trim()} – CapitalKnob`

@@ -1,13 +1,10 @@
 import { PageHero } from '@/shared/components/PageHero'
 import { Container } from '@/shared/components/Container'
 import { SectionReveal } from '@/shared/components/SectionReveal'
-import { usePageSeo } from '@/shared/seo/usePageSeo'
 import { FaqSection } from '@/modules/faq'
 import { realEstateFinanceCopy } from '../constants'
 
 export function RealEstateFinancePage() {
-  usePageSeo('realEstateFinance')
-
   return (
     <>
       <PageHero

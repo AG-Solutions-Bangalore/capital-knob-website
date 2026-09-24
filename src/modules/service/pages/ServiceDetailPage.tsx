@@ -54,6 +54,21 @@ const HERO_IMAGE_SEO: Record<string, { alt: string; title: string }> = {
   },
 }
 
+const HERO_IMAGE_SEO_BY_FILE: Record<string, { alt: string; title: string }> = {
+  '1.webp': {
+    alt: 'Home Finance Services in Bangalore',
+    title: 'Home Finance Services',
+  },
+  '2.webp': {
+    alt: 'Business Loan Services in Bangalore',
+    title: 'Business Loan Services',
+  },
+  '3.webp': {
+    alt: 'Real Estate Project Finance',
+    title: 'Real Estate Project Finance',
+  },
+}
+
 const EnquiryModal = lazy(() =>
   import('../components/EnquiryModal').then((m) => ({ default: m.EnquiryModal })),
 )
@@ -132,10 +147,12 @@ export function ServiceDetailPage({ categorySlug }: { categorySlug?: string } = 
   }
 
   const name = category.category_name ?? 'Service'
-  const heroImageSeo = HERO_IMAGE_SEO[decoded] ?? {
-    alt: name,
-    title: `${name} – CapitalKnob`,
-  }
+  const heroImageSeo =
+    (bannerFile ? HERO_IMAGE_SEO_BY_FILE[bannerFile] : undefined) ??
+    HERO_IMAGE_SEO[decoded] ?? {
+      alt: name,
+      title: `${name} – CapitalKnob`,
+    }
 
   return (
     <>
