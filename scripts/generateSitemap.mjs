@@ -1,19 +1,23 @@
 /**
- * @file scripts/generateSitemap.ts
+ * @file scripts/generateSitemap.mjs
  * Automated build-time sitemap & robots generator based on pre-rendered HTML files.
+ *
+ * Plain Node (no bun/TS) so it runs in CI and anywhere `npm run build` runs.
+ * SITE_ORIGIN must match `src/shared/seo/site.ts` — update both together.
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SITE_ORIGIN } from '../src/shared/seo/site';
+
+const SITE_ORIGIN = 'https://ck.agsdemo.in';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const distDir = path.resolve(__dirname, '../dist');
 const publicDir = path.resolve(__dirname, '../public');
 
-function getHtmlRoutes(dir: string, baseDir: string = dir): string[] {
-  let results: string[] = [];
+function getHtmlRoutes(dir, baseDir = dir) {
+  let results = [];
   if (!fs.existsSync(dir)) return results;
 
   for (const item of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -32,7 +36,7 @@ function getHtmlRoutes(dir: string, baseDir: string = dir): string[] {
   return results;
 }
 
-function getPriority(route: string) {
+function getPriority(route) {
   if (route === '/') return { priority: '1.0', changefreq: 'weekly' };
   if (route.startsWith('/blogs')) return { priority: '0.8', changefreq: 'weekly' };
   if (route === '/about-us' || route === '/contact')
