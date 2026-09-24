@@ -32,6 +32,7 @@ export default function SEOPageLayout({
     const selectors = [
       'meta[name="description"]',
       'meta[name="author"]',
+      'meta[name="publisher"]',
       'meta[name="robots"]',
       'meta[name="keywords"]',
       'meta[property="og:title"]',
@@ -107,6 +108,7 @@ export default function SEOPageLayout({
         <title>{seo.title}</title>
         <meta name="description" content={seo.description} />
         <meta name="author" content={SITE_NAME} />
+        <meta name="publisher" content={SITE_NAME} />
         {seo.keywords ? <meta name="keywords" content={seo.keywords} /> : null}
         <link rel="canonical" href={finalCanonical} />
         <meta name="robots" content={seo.noIndex ? 'noindex, nofollow' : 'index, follow'} />

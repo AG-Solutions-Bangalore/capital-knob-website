@@ -120,6 +120,7 @@ export async function prerender(data: { url: string }) {
   const elements = new Set<Record<string, unknown>>([
     { type: 'meta', props: { name: 'description', content: seo.description, 'data-rh': 'true' } },
     { type: 'meta', props: { name: 'author', content: SITE_NAME, 'data-rh': 'true' } },
+    { type: 'meta', props: { name: 'publisher', content: SITE_NAME, 'data-rh': 'true' } },
     { type: 'link', props: { rel: 'canonical', href: canonical, 'data-rh': 'true' } },
     {
       type: 'meta',

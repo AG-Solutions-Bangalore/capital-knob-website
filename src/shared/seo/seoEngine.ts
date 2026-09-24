@@ -532,11 +532,69 @@ function createGenericServiceSeo(slug: string, path: string): RouteSeoEntry {
 }
 
 /**
+ * Curated per-blog SEO overrides (SEO audit recommendations).
+ * These take precedence over `blog_meta_*` values coming from the API,
+ * so junk/test meta in the backend (e.g. "demoblogs123", "dxcfvgbh")
+ * never reaches crawlers. Canonical stays `/blogs/<slug>` → absolute
+ * URL via `SITE_ORIGIN` (https://ck.agsdemo.in), robots INDEX,FOLLOW,
+ * author/publisher CapitalKnob (emitted globally by SEOPageLayout).
+ */
+const BLOG_SEO_OVERRIDES: Record<
+  string,
+  { title: string; description: string; keywords: string }
+> = {
+  sample: {
+    title: 'CapitalKnob Blog – Real Estate Insights & Updates',
+    description:
+      'Explore CapitalKnob insights, real estate trends, property finance updates, and expert tips to make informed real estate decisions.',
+    keywords:
+      'CapitalKnob blog, real estate insights, property finance updates, real estate trends',
+  },
+  demoblogs: {
+    title: 'Financial Guidance & Real Estate Insights | CapitalKnob',
+    description:
+      'Get practical financial guidance, real estate insights, property finance tips, and expert advice from CapitalKnob.',
+    keywords:
+      'financial guidance, real estate insights, property finance tips, CapitalKnob',
+  },
+};
+
+function getBlogSeoOverride(slug: string) {
+  return BLOG_SEO_OVERRIDES[slug.toLowerCase()];
+}
+
+/**
  * Generic indexable SEO for a `/blogs/:slug` missing from the build-time
  * blog cache (same cold-cache reason as services). Indexable so real
  * articles never ship a 404 title + noindex while the UI renders them.
  */
 function createGenericBlogSeo(slug: string, path: string): RouteSeoEntry {
+  const override = getBlogSeoOverride(slug);
+  if (override) {
+    const breadcrumbName =
+      slug.toLowerCase() === 'sample'
+        ? 'CapitalKnob Blog – Real Estate Insights & Updates'
+        : humanizeSlug(slug);
+    return {
+      title: override.title,
+      description: override.description,
+      keywords: override.keywords,
+      canonicalPath: path,
+      schemas: [
+        organizationSchema,
+        websiteSchema,
+        createWebPageSchema(path, override.title, override.description),
+        createBreadcrumbSchema(
+          [
+            { name: 'Home', path: '/' },
+            { name: 'Blogs', path: '/blogs' },
+            { name: breadcrumbName, path },
+          ],
+          path,
+        ),
+      ],
+    };
+  }
   const name = humanizeSlug(slug);
   const title = `${name} | ${SITE_NAME}`;
   const description = `Read about ${name} — financial insights and guides from ${SITE_NAME}.`;
@@ -636,20 +694,37 @@ export function getSeoForRoute(url: string): RouteSeoEntry {
   const blogMatch = path.match(/^\/blogs\/([^/]+)$/);
   if (blogMatch) {
     const slug = safeDecodeSlug(blogMatch[1]);
+    const override = getBlogSeoOverride(slug);
     const blogData = getDynamicBlog(slug);
     if (blogData && blogData.data) {
       const b = blogData.data;
-      const title = b.blog_meta_title?.trim() || `${b.blog_title || slug} | ${SITE_NAME}`;
+      const title =
+        override?.title ||
+        b.blog_meta_title?.trim() ||
+        `${b.blog_title || slug} | ${SITE_NAME}`;
       const description =
+        override?.description ||
         b.blog_meta_description?.trim() ||
         b.blog_short_description?.trim() ||
         b.blog_description?.replace(/<[^>]*>?/gm, '').trim().slice(0, 160) ||
         title;
+      const keywords =
+        override?.keywords ||
+        b.blog_meta_keywords ||
+        `${b.blog_title || slug}, financial guidance`;
+      // Feed the final (override-aware) meta into BlogPosting so the
+      // JSON-LD description never shows stale API junk while <head> shows
+      // the curated copy.
+      const schemaBlog = {
+        ...b,
+        blog_meta_title: title,
+        blog_meta_description: description,
+      };
       const schemas: Thing[] = [
         organizationSchema,
         websiteSchema,
         createWebPageSchema(path, title, description),
-        createBlogPostingSchema(b),
+        createBlogPostingSchema(schemaBlog),
         createBreadcrumbSchema(
           [
             { name: 'Home', path: '/' },
@@ -668,7 +743,7 @@ export function getSeoForRoute(url: string): RouteSeoEntry {
       return {
         title,
         description,
-        keywords: b.blog_meta_keywords || `${b.blog_title || slug}, financial guidance`,
+        keywords,
         canonicalPath: path,
         schemas,
       };
