@@ -18,6 +18,12 @@ function formatBlogDate(dateStr: string | null | undefined): string | null {
   return `${day} ${month} ${year}`
 }
 
+// Matches BlogList override — audit recommends
+// "CapitalKnob Financial Insights and Blogs" for the demoblogs banner.
+const BLOG_DETAIL_IMAGE_TITLES: Record<string, string> = {
+  demoblogs: 'CapitalKnob Financial Insights and Blogs',
+}
+
 export function BlogDetailCard({ slug }: { slug: string }) {
   const { data, isPending, isError } = useBlogBySlugQuery(slug || undefined)
 
@@ -85,6 +91,12 @@ export function BlogDetailCard({ slug }: { slug: string }) {
             <img
               src={src}
               alt={blog.blog_banner_image_alt ?? blog.blog_title ?? 'Blog Banner'}
+              title={
+                BLOG_DETAIL_IMAGE_TITLES[slug] ??
+                (blog.blog_title?.trim()
+                  ? `${blog.blog_title.trim()} – CapitalKnob`
+                  : 'CapitalKnob Financial Insights and Blogs')
+              }
               className="h-full w-full object-cover"
               loading="eager"
             />

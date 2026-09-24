@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { ROUTES, servicePath } from '@/app/routes'
-import { linkTitleFor } from '@/shared/seo/linkTitles'
+import { linkTitleForPage } from '@/shared/seo/linkTitles'
 import { useCompanyQuery } from '@/modules/company/hooks/useCompanyQuery'
 import { NewsletterForm } from '@/modules/newsletter/components/NewsletterForm'
 import { Container } from './Container'
@@ -51,6 +51,12 @@ interface FooterProps {
 }
 
 export function Footer({ variant = 'light' }: FooterProps) {
+  // Page-aware link titles: REPF / Blogs / Contact pages require the LONG
+  // audit variants ("... Services" / "... Team" / "... Financial Advisors")
+  // while Home / About / Home-Finance / Business-Loan require the SHORT
+  // forms for the same hrefs.
+  const { pathname } = useLocation()
+  const t = (href: string | undefined | null) => linkTitleForPage(href, pathname)
   // Default light white everywhere. Dark only when explicitly passed
   // as <Footer variant="dark" /> — ready for next-themes later.
   const isDark = variant === 'dark'
@@ -99,7 +105,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
                 <span className="font-semibold text-navy">Phone:</span>
                 <a
                   href={contactPhoneHref}
-                  title={linkTitleFor(contactPhoneHref)}
+                  title={t(contactPhoneHref)}
                   className={`transition-colors ${
                     isDark ? 'text-white/90 hover:text-gold' : 'text-ink hover:text-brand-blue'
                   }`}
@@ -111,7 +117,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
                 <span className="font-semibold text-navy">Email:</span>
                 <a
                   href={`mailto:${contactEmail}`}
-                  title={linkTitleFor(`mailto:${contactEmail}`)}
+                  title={t(`mailto:${contactEmail}`)}
                   className={`transition-colors ${
                     isDark ? 'text-white/90 hover:text-gold' : 'text-ink hover:text-brand-blue'
                   }`}
@@ -127,7 +133,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
                 <a
                   key={s.label}
                   href={s.href}
-                  title={linkTitleFor(s.href)}
+                  title={t(s.href)}
                   aria-label={s.label}
                   className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border transition-all ${
                     isDark
@@ -160,7 +166,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
                   <li key={l.label}>
                     <Link
                       to={l.href}
-                      title={linkTitleFor(l.href)}
+                      title={t(l.href)}
                       className={`transition-colors ${
                         isDark
                           ? 'text-white/70 hover:text-gold'
@@ -188,7 +194,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
                   <li key={l.label}>
                     <Link
                       to={l.href}
-                      title={linkTitleFor(l.href)}
+                      title={t(l.href)}
                       className={`transition-colors ${
                         isDark
                           ? 'text-white/70 hover:text-gold'
@@ -218,7 +224,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
                   {l.href.startsWith('tel:') ? (
                     <a
                       href={contactPhoneHref}
-                      title={linkTitleFor(contactPhoneHref) ?? 'Talk to an Advisor'}
+                      title={t(contactPhoneHref) ?? 'Talk to an Advisor'}
                       className={`transition-colors ${
                         isDark
                           ? 'text-white/70 hover:text-gold'
@@ -230,7 +236,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
                   ) : (
                     <Link
                       to={l.href}
-                      title={linkTitleFor(l.href)}
+                      title={t(l.href)}
                       className={`transition-colors ${
                         isDark
                           ? 'text-white/70 hover:text-gold'
@@ -247,7 +253,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
             <div className="mt-6">
               <Link
                 to={ROUTES.contact}
-                title={linkTitleFor(ROUTES.contact)}
+                title={t(ROUTES.contact)}
                 className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-gold px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-gold-hover active:scale-[0.98]"
               >
                 <span>Book Free Consultation</span>

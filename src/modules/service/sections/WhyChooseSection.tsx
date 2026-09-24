@@ -6,6 +6,7 @@
 import { Container } from '@/shared/components/Container'
 import { iconRegistry } from '../components/icons'
 import { whyChooseFeatures } from '../constants'
+import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { Link } from 'react-router-dom'
 
 export function WhyChooseSection() {
@@ -61,6 +62,7 @@ export function WhyChooseSection() {
                 </p>
                 <Link
                   to="/contact"
+                  title={linkTitleFor('/contact')}
                   className="mt-6 inline-flex items-center gap-2 rounded-button bg-gold px-5 py-3 text-sm font-semibold text-white  shadow-gold transition-colors hover:bg-gold-hover"
                 >
                   Get a Free Consultation

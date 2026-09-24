@@ -48,6 +48,19 @@ function blogExcerpt(blog: Blog): string | null {
   return raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() || null
 }
 
+// Per-blog image title overrides from the on-page audit.
+// Falls back to "{blog title} – CapitalKnob" so no blog banner ever
+// renders without a title.
+const BLOG_IMAGE_TITLES: Record<string, string> = {
+  demoblogs: 'CapitalKnob Financial Insights and Blogs',
+}
+
+function blogImageTitle(blog: Blog, slug: string): string {
+  if (BLOG_IMAGE_TITLES[slug]) return BLOG_IMAGE_TITLES[slug]
+  const t = blog.blog_title?.trim()
+  return t ? `${t} – CapitalKnob` : 'CapitalKnob Financial Insights and Blogs'
+}
+
 export function BlogCard({
   blog,
   base,
@@ -74,6 +87,7 @@ export function BlogCard({
             <img
               src={src}
               alt={blog.blog_banner_image_alt ?? blog.blog_title ?? 'Blog thumbnail'}
+              title={blogImageTitle(blog, slug)}
               className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
               loading="lazy"
             />

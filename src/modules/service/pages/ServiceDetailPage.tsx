@@ -36,6 +36,24 @@ const VISUAL_POOL: Pick<ServiceCardData, 'iconKey' | 'art'>[] = [
   ...otherCapitalCards.map((c) => ({ iconKey: c.iconKey, art: c.art })),
 ]
 
+// Per-service hero image SEO overrides from the on-page audit.
+// Falls back to the live category name so no service banner ever
+// renders without alt/title.
+const HERO_IMAGE_SEO: Record<string, { alt: string; title: string }> = {
+  'home-finance': {
+    alt: 'Home Finance Services in Bangalore',
+    title: 'Home Finance Services',
+  },
+  'business-loan': {
+    alt: 'Business Loan Services in Bangalore',
+    title: 'Business Loan Services',
+  },
+  'real-estate-project-finance': {
+    alt: 'Real Estate Project Finance',
+    title: 'Real Estate Project Finance',
+  },
+}
+
 const EnquiryModal = lazy(() =>
   import('../components/EnquiryModal').then((m) => ({ default: m.EnquiryModal })),
 )
@@ -114,6 +132,10 @@ export function ServiceDetailPage({ categorySlug }: { categorySlug?: string } = 
   }
 
   const name = category.category_name ?? 'Service'
+  const heroImageSeo = HERO_IMAGE_SEO[decoded] ?? {
+    alt: name,
+    title: `${name} – CapitalKnob`,
+  }
 
   return (
     <>
@@ -167,7 +189,8 @@ export function ServiceDetailPage({ categorySlug }: { categorySlug?: string } = 
                 <div className="overflow-hidden rounded-card border border-white/10 shadow-card">
                   <img
                     src={bannerSrc}
-                    alt={name}
+                    alt={heroImageSeo.alt}
+                    title={heroImageSeo.title}
                     className="aspect-[16/9] w-full object-cover"
                     loading="eager"
                     decoding="async"

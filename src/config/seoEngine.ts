@@ -97,17 +97,17 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
     ],
   },
   '/blogs': {
-    title: 'Blogs & Insights | CapitalKnob',
+    title: 'Financial Insights & Financing Guides | CapitalKnob',
     description:
-      'Read financing guides, market perspectives and practical explainers from the CapitalKnob advisory team.',
+      'Explore CapitalKnob financing guides, real estate finance insights, business loans, private credit and market perspectives.',
     keywords: 'finance blogs, capital market insights',
     canonicalPath: '/blogs',
     schemas: [
       organizationSchema,
       createWebPageSchema(
         '/blogs',
-        'Blogs & Insights | CapitalKnob',
-        'Read financing guides, market perspectives and practical explainers from the CapitalKnob advisory team.',
+        'Financial Insights & Financing Guides | CapitalKnob',
+        'Explore CapitalKnob financing guides, real estate finance insights, business loans, private credit and market perspectives.',
       ),
       createBreadcrumbSchema(
         [
@@ -119,22 +119,22 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
     ],
   },
   '/home-finance': {
-    title: 'Home Finance & Home Loans in India | CapitalKnob',
+    title: 'Home Finance Services in Bangalore | CapitalKnob',
     description:
-      'Explore flexible home finance services with CapitalKnob, including home loans, balance transfers, top-up loans, renovation finance and property loans.',
+      'Home finance solutions in Bangalore for home purchase, construction, balance transfer, top-up loans and property-backed funding.',
     keywords: 'home loans, balance transfer, property loans, home finance',
     canonicalPath: '/home-finance',
     schemas: [
       organizationSchema,
       createWebPageSchema(
         '/home-finance',
-        'Home Finance & Home Loans in India | CapitalKnob',
-        'Explore flexible home finance services with CapitalKnob, including home loans, balance transfers, top-up loans, renovation finance and property loans.',
+        'Home Finance Services in Bangalore | CapitalKnob',
+        'Home finance solutions in Bangalore for home purchase, construction, balance transfer, top-up loans and property-backed funding.',
       ),
       createServiceSchema({
         name: 'Home Finance Services',
         description:
-          'Explore flexible home finance services with CapitalKnob, including home loans, balance transfers, top-up loans, renovation finance and property loans.',
+          'Home finance solutions in Bangalore for home purchase, construction, balance transfer, top-up loans and property-backed funding.',
         path: '/home-finance',
       }),
       createBreadcrumbSchema(
@@ -174,6 +174,34 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
       ),
     ],
   },
+  '/business-loan': {
+    title: 'Business Loan Services in Bangalore | CapitalKnob',
+    description:
+      'Business loan solutions in Bangalore for working capital, business expansion, secured funding, project finance and growth needs.',
+    keywords: 'business loans, working capital, expansion finance, business loan Bangalore',
+    canonicalPath: '/business-loan',
+    schemas: [
+      organizationSchema,
+      createWebPageSchema(
+        '/business-loan',
+        'Business Loan Services in Bangalore | CapitalKnob',
+        'Business loan solutions in Bangalore for working capital, business expansion, secured funding, project finance and growth needs.',
+      ),
+      createServiceSchema({
+        name: 'Business Loan Services',
+        description:
+          'Business loan solutions in Bangalore for working capital, business expansion, secured funding, project finance and growth needs.',
+        path: '/business-loan',
+      }),
+      createBreadcrumbSchema(
+        [
+          { name: 'Home', path: '/' },
+          { name: 'Business Loan', path: '/business-loan' },
+        ],
+        '/business-loan',
+      ),
+    ],
+  },
   '/real-estate-finance': {
     title: 'Real Estate Finance Services in India | CapitalKnob',
     description:
@@ -199,6 +227,35 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
           { name: 'Real Estate Finance', path: '/real-estate-finance' },
         ],
         '/real-estate-finance',
+      ),
+    ],
+  },
+  '/real-estate-project-finance': {
+    title: 'Real Estate Project Finance in Bangalore | CapitalKnob',
+    description:
+      'Real estate project finance solutions in Bangalore for land acquisition, construction, completion, inventory and stalled projects.',
+    keywords:
+      'real estate project finance, land acquisition funding, construction finance Bangalore',
+    canonicalPath: '/real-estate-project-finance',
+    schemas: [
+      organizationSchema,
+      createWebPageSchema(
+        '/real-estate-project-finance',
+        'Real Estate Project Finance in Bangalore | CapitalKnob',
+        'Real estate project finance solutions in Bangalore for land acquisition, construction, completion, inventory and stalled projects.',
+      ),
+      createServiceSchema({
+        name: 'Real Estate Project Finance Services',
+        description:
+          'Real estate project finance solutions in Bangalore for land acquisition, construction, completion, inventory and stalled projects.',
+        path: '/real-estate-project-finance',
+      }),
+      createBreadcrumbSchema(
+        [
+          { name: 'Home', path: '/' },
+          { name: 'Real Estate Project Finance', path: '/real-estate-project-finance' },
+        ],
+        '/real-estate-project-finance',
       ),
     ],
   },

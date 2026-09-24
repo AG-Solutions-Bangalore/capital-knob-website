@@ -7,7 +7,7 @@
  * stay static (the backend currently returns no address).
  */
 
-import { linkTitleFor } from '@/shared/seo/linkTitles'
+import { linkTitleForPage } from '@/shared/seo/linkTitles'
 import { useCompanyQuery } from '@/modules/company/hooks/useCompanyQuery'
 import { contactCopy } from '../constants'
 
@@ -62,7 +62,7 @@ export function GetInTouchCard() {
             <p className="text-xs font-medium text-muted">{touch.phone.label}</p>
             <a
               href={phoneHref}
-              title={linkTitleFor(phoneHref)}
+              title={linkTitleForPage(phoneHref, '/contact')}
               className="mt-1 block font-display text-lg font-bold text-navy transition-colors hover:text-gold"
             >
               {phoneNumber}
@@ -103,7 +103,7 @@ export function GetInTouchCard() {
             <p className="text-xs font-medium text-muted">{touch.email.label}</p>
             <a
               href={emailHref}
-              title={linkTitleFor(emailHref)}
+              title={linkTitleForPage(emailHref, '/contact')}
               className="mt-1 block font-display text-lg font-bold text-navy transition-colors hover:text-gold"
             >
               {emailAddress}
