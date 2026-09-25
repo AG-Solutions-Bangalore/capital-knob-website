@@ -42,9 +42,9 @@ const advisoryLinks = [
 ]
 
 const socialLinks = [
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/capitalknob', icon: <LinkedInIcon /> },
-  { label: 'Facebook', href: 'https://www.facebook.com/capitalknob', icon: <FacebookIcon /> },
-  { label: 'YouTube', href: 'https://www.youtube.com/channel/UCAO3v7__wS5S1HtvaqBduPw', icon: <YouTubeIcon /> },
+  { label: 'LinkedIn', title: 'CapitalKnob on LinkedIn', href: 'https://www.linkedin.com/company/capitalknob', icon: <LinkedInIcon /> },
+  { label: 'Facebook', title: 'CapitalKnob on Facebook', href: 'https://www.facebook.com/capitalknob', icon: <FacebookIcon /> },
+  { label: 'YouTube', title: 'CapitalKnob on YouTube', href: 'https://www.youtube.com/channel/UCAO3v7__wS5S1HtvaqBduPw', icon: <YouTubeIcon /> },
 ]
 
 interface FooterProps {
@@ -145,7 +145,7 @@ export function Footer({ variant = 'light' }: FooterProps) {
                 <a
                   key={s.label}
                   href={s.href}
-                  title={t(s.href)}
+                  title={s.title || t(s.href)}
                   aria-label={s.label}
                   target="_blank"
                   rel="noopener noreferrer"
