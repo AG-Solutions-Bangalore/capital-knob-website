@@ -8,6 +8,7 @@ import { ContactHeroSection } from '../sections/ContactHeroSection'
 import { ContactFormSection } from '../sections/ContactFormSection'
 import { LocationSection } from '../sections/LocationSection'
 import { FaqSection } from '../sections/FaqSection'
+import { TestimonialSection } from '@/modules/testimonial/components/TestimonialSection'
 
 export function ContactPage() {
   return (
@@ -18,6 +19,9 @@ export function ContactPage() {
       </SectionReveal>
       <SectionReveal as="section">
         <LocationSection />
+      </SectionReveal>
+      <SectionReveal as="section">
+        <TestimonialSection slug="contact" />
       </SectionReveal>
       <SectionReveal as="section">
         <FaqSection />

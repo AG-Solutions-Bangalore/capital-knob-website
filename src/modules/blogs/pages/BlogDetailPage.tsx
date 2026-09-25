@@ -62,7 +62,7 @@ export function BlogDetailPage() {
           <BlogDetailCard slug={slug} />
         </Container>
       </section>
-      <FaqSection slug={slug} fallbackSlug="blogs" items={data?.faq} title="FAQ" />
+      <FaqSection slug={slug} items={data?.faq} title="FAQ" />
     </>
   )
 }

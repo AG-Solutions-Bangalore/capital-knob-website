@@ -13,6 +13,7 @@ import { FounderSection } from '../sections/FounderSection'
 import { CommitmentSection } from '../sections/CommitmentSection'
 import { AboutCta } from '../sections/AboutCta'
 import { FaqSection } from '@/modules/faq'
+import { TestimonialSection } from '@/modules/testimonial/components/TestimonialSection'
 
 export function AboutPage() {
   return (
@@ -34,7 +35,10 @@ export function AboutPage() {
         <CommitmentSection />
       </SectionReveal>
       <SectionReveal as="section">
-        <FaqSection slug="about-us" />
+        <TestimonialSection slug="about-us" />
+      </SectionReveal>
+      <SectionReveal as="section">
+        <FaqSection slug="about-us" title="FAQ" />
       </SectionReveal>
       <SectionReveal as="section">
         <AboutCta />

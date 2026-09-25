@@ -2,6 +2,7 @@ import { PageHero } from '@/shared/components/PageHero'
 import { Container } from '@/shared/components/Container'
 import { SectionReveal } from '@/shared/components/SectionReveal'
 import { FaqSection } from '@/modules/faq'
+import { TestimonialSection } from '@/modules/testimonial/components/TestimonialSection'
 import { businessFinanceCopy } from '../constants'
 
 export function BusinessFinancePage() {
@@ -17,7 +18,8 @@ export function BusinessFinancePage() {
           <p className="text-center text-muted">Business Finance content coming up.</p>
         </Container>
       </SectionReveal>
-      <FaqSection slug="business-finance" title="Business Finance FAQs" />
+      <TestimonialSection slug="business-finance" />
+      <FaqSection slug="business-finance" title="FAQ" />
     </>
   )
 }
