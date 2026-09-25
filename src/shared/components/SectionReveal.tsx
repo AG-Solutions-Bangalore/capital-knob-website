@@ -54,15 +54,16 @@ export function SectionReveal({
   duration = 0.7,
   delay = 0,
   staggerDelay = 0.1,
-  viewportMargin = '-80px',
+  viewportMargin = '50px 0px 50px 0px',
   once = true,
 }: SectionRevealProps) {
   const ref = useRef<HTMLElement | null>(null)
-  // Visible immediately when reduced-motion is preferred or IO is missing
-  // (computed in the initializer so the effect never calls setState directly).
+  // Visible immediately when reduced-motion is preferred, on mobile viewports (<=768px),
+  // or when IntersectionObserver is missing (computed in initializer so no extra rerenders).
   const [visible, setVisible] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true
+    if (window.innerWidth <= 768) return true
     if (typeof IntersectionObserver === 'undefined') return true
     return false
   })
@@ -82,7 +83,7 @@ export function SectionReveal({
           }
         }
       },
-      { rootMargin: viewportMargin, threshold: 0.1 },
+      { rootMargin: viewportMargin, threshold: 0 },
     )
     observer.observe(el)
     return () => observer.disconnect()

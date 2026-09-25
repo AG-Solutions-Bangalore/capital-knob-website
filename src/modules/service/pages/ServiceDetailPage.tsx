@@ -21,6 +21,7 @@ import { ServiceCard } from '../components/ServiceCard'
 import { WhyChooseSection } from '../sections/WhyChooseSection'
 import { StepsSection } from '../sections/StepsSection'
 import { FaqSection } from '@/modules/faq'
+import { TestimonialSection } from '@/modules/testimonial/components/TestimonialSection'
 import {
   businessesCards,
   individualsCards,
@@ -268,7 +269,10 @@ export function ServiceDetailPage({ categorySlug }: { categorySlug?: string } = 
         <StepsSection />
       </SectionReveal>
       <SectionReveal as="section">
-        <FaqSection slug={decoded} title={`${name} FAQs`} />
+        <TestimonialSection slug={decoded} />
+      </SectionReveal>
+      <SectionReveal as="section">
+        <FaqSection slug={decoded} title="FAQ" />
       </SectionReveal>
 
       {hasOpened && (

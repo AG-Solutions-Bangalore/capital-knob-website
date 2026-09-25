@@ -149,38 +149,29 @@ export async function loadDynamicData(): Promise<void> {
 
   loadPromise = (async () => {
     try {
-      console.log('🔄 [SSG] Pre-fetching dynamic data from CapitalKnob API...');
+      const isServer = typeof window === 'undefined';
+      if (isServer) {
+        console.log('🔄 [SSG] Pre-fetching dynamic data from CapitalKnob API...');
+      }
 
-      // 1. Fetch categories, blogs, front blogs, home FAQs, and home testimonials in parallel
-      const [categoriesRes, blogsRes, frontBlogsRes, homeFaqRes, homeTestimonialsRes] = await Promise.all([
+      // 1. Fetch categories, blogs, and front blogs (needed for metadata maps)
+      const [categoriesRes, blogsRes, frontBlogsRes] = await Promise.all([
         fetch(`${API_BASE_URL}/getCategory`, { signal: AbortSignal.timeout(15000) })
           .then((r) => r.json())
           .catch((err) => {
-            console.warn('⚠️ [SSG] Failed to fetch /getCategory:', err.message);
+            if (isServer) console.warn('⚠️ [SSG] Failed to fetch /getCategory:', err.message);
             return { data: [] };
           }),
         fetch(`${API_BASE_URL}/getBlogs`, { signal: AbortSignal.timeout(15000) })
           .then((r) => r.json())
           .catch((err) => {
-            console.warn('⚠️ [SSG] Failed to fetch /getBlogs:', err.message);
+            if (isServer) console.warn('⚠️ [SSG] Failed to fetch /getBlogs:', err.message);
             return { data: [] };
           }),
         fetch(`${API_BASE_URL}/getFrontBlogs`, { signal: AbortSignal.timeout(15000) })
           .then((r) => r.json())
           .catch((err) => {
-            console.warn('⚠️ [SSG] Failed to fetch /getFrontBlogs:', err.message);
-            return { data: [] };
-          }),
-        fetch(`${API_BASE_URL}/getFAQBySlug/home`, { signal: AbortSignal.timeout(15000) })
-          .then((r) => r.json())
-          .catch((err) => {
-            console.warn('⚠️ [SSG] Failed to fetch /getFAQBySlug/home:', err.message);
-            return { data: [] };
-          }),
-        fetch(`${API_BASE_URL}/getTestimonial/home`, { signal: AbortSignal.timeout(15000) })
-          .then((r) => r.json())
-          .catch((err) => {
-            console.warn('⚠️ [SSG] Failed to fetch /getTestimonial/home:', err.message);
+            if (isServer) console.warn('⚠️ [SSG] Failed to fetch /getFrontBlogs:', err.message);
             return { data: [] };
           }),
       ]);
@@ -188,15 +179,7 @@ export async function loadDynamicData(): Promise<void> {
       rawCategoriesResponse = categoriesRes;
       rawBlogsResponse = blogsRes;
       rawFrontBlogsResponse = frontBlogsRes;
-      rawHomeFaqResponse = homeFaqRes;
-      rawHomeTestimonialsResponse = homeTestimonialsRes;
-
-      homeFaqs = Array.isArray(homeFaqRes?.data) ? homeFaqRes.data : [];
-      homeTestimonials = Array.isArray(homeTestimonialsRes?.data) ? homeTestimonialsRes.data : [];
       frontBlogs = Array.isArray(frontBlogsRes?.data) ? frontBlogsRes.data : [];
-
-      testimonialsBySlug.set('home', homeTestimonials);
-      faqsBySlug.set('home', homeFaqs);
 
       const catList: CategoryData[] = Array.isArray(categoriesRes?.data) ? categoriesRes.data : [];
       for (const cat of catList) {
@@ -208,55 +191,81 @@ export async function loadDynamicData(): Promise<void> {
         }
       }
 
-      // 2. Fetch category testimonials and FAQs in parallel
-      await Promise.all(
-        catList.map(async (cat) => {
-          if (!cat.category_slug) return;
-          const slug = cat.category_slug.trim();
-          try {
-            const [tRes, fRes] = await Promise.all([
-              fetch(`${API_BASE_URL}/getTestimonial/${encodeURIComponent(slug)}`, {
-                signal: AbortSignal.timeout(10000),
-              })
-                .then((r) => r.json())
-                .catch(() => null),
-              fetch(`${API_BASE_URL}/getFAQBySlug/${encodeURIComponent(slug)}`, {
-                signal: AbortSignal.timeout(10000),
-              })
-                .then((r) => r.json())
-                .catch(() => null),
-            ]);
-            if (Array.isArray(tRes?.data) && tRes.data.length > 0) {
-              testimonialsBySlug.set(slug, tRes.data);
-            }
-            if (Array.isArray(fRes?.data) && fRes.data.length > 0) {
-              faqsBySlug.set(slug, fRes.data);
-            }
-          } catch {
-            // Ignore polite failures
-          }
-        }),
-      );
+      // 2. Server-only SSG pre-hydration (home & category FAQs / testimonials).
+      // In the browser, each page component fetches its own slug on demand via React Query.
+      if (isServer) {
+        const [homeFaqRes, homeTestimonialsRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/getFAQBySlug/home`, { signal: AbortSignal.timeout(15000) })
+            .then((r) => r.json())
+            .catch((err) => {
+              console.warn('⚠️ [SSG] Failed to fetch /getFAQBySlug/home:', err.message);
+              return { data: [] };
+            }),
+          fetch(`${API_BASE_URL}/getTestimonial/home`, { signal: AbortSignal.timeout(15000) })
+            .then((r) => r.json())
+            .catch((err) => {
+              console.warn('⚠️ [SSG] Failed to fetch /getTestimonial/home:', err.message);
+              return { data: [] };
+            }),
+        ]);
 
-      const blogList: BlogData[] = Array.isArray(blogsRes?.data) ? blogsRes.data : [];
+        rawHomeFaqResponse = homeFaqRes;
+        rawHomeTestimonialsResponse = homeTestimonialsRes;
+        homeFaqs = Array.isArray(homeFaqRes?.data) ? homeFaqRes.data : [];
+        homeTestimonials = Array.isArray(homeTestimonialsRes?.data) ? homeTestimonialsRes.data : [];
+        testimonialsBySlug.set('home', homeTestimonials);
+        faqsBySlug.set('home', homeFaqs);
 
-      // 3. Fetch full blog details in polite batches
-      const batchSize = 10;
-      for (let i = 0; i < blogList.length; i += batchSize) {
-        const batch = blogList.slice(i, i + batchSize);
+        // Fetch category testimonials and FAQs in parallel
         await Promise.all(
-          batch.map(async (b) => {
-            if (!b.blog_slug) return;
+          catList.map(async (cat) => {
+            if (!cat.category_slug) return;
+            const slug = cat.category_slug.trim();
             try {
-              const res = await fetch(`${API_BASE_URL}/getBlogsBySlug/${encodeURIComponent(b.blog_slug)}`, {
-                signal: AbortSignal.timeout(10000),
-              }).then((r) => r.json());
-              dynamicBlogsMap.set(b.blog_slug, res || { data: b });
+              const [tRes, fRes] = await Promise.all([
+                fetch(`${API_BASE_URL}/getTestimonial/${encodeURIComponent(slug)}`, {
+                  signal: AbortSignal.timeout(10000),
+                })
+                  .then((r) => r.json())
+                  .catch(() => null),
+                fetch(`${API_BASE_URL}/getFAQBySlug/${encodeURIComponent(slug)}`, {
+                  signal: AbortSignal.timeout(10000),
+                })
+                  .then((r) => r.json())
+                  .catch(() => null),
+              ]);
+              if (Array.isArray(tRes?.data) && tRes.data.length > 0) {
+                testimonialsBySlug.set(slug, tRes.data);
+              }
+              if (Array.isArray(fRes?.data) && fRes.data.length > 0) {
+                faqsBySlug.set(slug, fRes.data);
+              }
             } catch {
-              dynamicBlogsMap.set(b.blog_slug, { data: b });
+              // Ignore polite failures
             }
           }),
         );
+
+        const blogList: BlogData[] = Array.isArray(blogsRes?.data) ? blogsRes.data : [];
+
+        // 3. Fetch full blog details in polite batches
+        const batchSize = 10;
+        for (let i = 0; i < blogList.length; i += batchSize) {
+          const batch = blogList.slice(i, i + batchSize);
+          await Promise.all(
+            batch.map(async (b) => {
+              if (!b.blog_slug) return;
+              try {
+                const res = await fetch(`${API_BASE_URL}/getBlogsBySlug/${encodeURIComponent(b.blog_slug)}`, {
+                  signal: AbortSignal.timeout(10000),
+                }).then((r) => r.json());
+                dynamicBlogsMap.set(b.blog_slug, res || { data: b });
+              } catch {
+                dynamicBlogsMap.set(b.blog_slug, { data: b });
+              }
+            }),
+          );
+        }
       }
 
       isLoaded = true;

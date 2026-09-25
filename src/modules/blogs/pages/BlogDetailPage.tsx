@@ -2,16 +2,24 @@
  * BlogDetailPage — public single-blog view (`GET /getBlogsBySlug/{slug}`).
  *
  * Unknown slugs render the card's "not found" state instead of crashing.
+ * FAQ renders as a full-width sibling below the article (same band layout
+ * as every other page), driven by the blog slug with fallback to the
+ * shared `blogs` data. No testimonial section on this page by design.
  */
 
 import { Link, useParams } from 'react-router-dom'
 import { Container } from '@/shared/components/Container'
 import { ROUTES } from '@/app/routes'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
+import { FaqSection } from '@/modules/faq'
+import { useBlogBySlugQuery } from '../hooks/useBlogsQueries'
 import { BlogDetailCard } from '../components/BlogDetailCard'
 
 export function BlogDetailPage() {
   const { slug = '' } = useParams<{ slug: string }>()
+  // Same query key as BlogDetailCard — cached, no extra network request.
+  // Only needed for the direct `faq` items embedded in the detail response.
+  const { data } = useBlogBySlugQuery(slug || undefined)
 
   return (
     <>
@@ -54,6 +62,7 @@ export function BlogDetailPage() {
           <BlogDetailCard slug={slug} />
         </Container>
       </section>
+      <FaqSection slug={slug} items={data?.faq} title="FAQ" />
     </>
   )
 }

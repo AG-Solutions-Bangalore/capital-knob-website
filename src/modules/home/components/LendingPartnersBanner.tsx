@@ -124,13 +124,13 @@ export function LendingPartnersBanner() {
       const name = clientName(c)
       const src = clientImage(c, base, noImage)
       return (
-        <div key={`live-${name}-${idx}`} title={name} className="flex shrink-0 items-center px-6 md:px-8">
+        <div key={`live-${name}-${idx}`} title={name} className="flex shrink-0 items-center px-4 md:px-8">
           {src ? (
             <img
               src={src}
               alt={name}
               title={name}
-              className="max-h-9 w-auto max-w-32 object-contain md:max-h-10"
+              className="h-8 w-auto max-w-[120px] object-contain md:h-10 md:max-w-32"
               loading="lazy"
               decoding="async"
             />
@@ -150,7 +150,7 @@ export function LendingPartnersBanner() {
       <div
         key={`static-${name}`}
         title={name}
-        className="flex shrink-0 items-center px-6 transition-opacity hover:opacity-85 md:px-8"
+        className="flex shrink-0 items-center px-4 transition-opacity hover:opacity-85 md:px-8"
       >
         <StaticBankMark name={name} />
       </div>
@@ -159,35 +159,31 @@ export function LendingPartnersBanner() {
       tiles.push(staticTiles[i % staticTiles.length])
     }
   }
-  // Trailing label — static, outside the marquee so it never scrolls.
-  const moreLabel = (
-    <span className="shrink-0 whitespace-nowrap text-xs font-medium text-muted">
-      And Many More...
-    </span>
-  )
-
   // Marquee pacing: measured track width / px-per-second (slower than the
   // testimonial strip so logos stay readable). Recomputed when tiles change.
   const trackRef = useRef<HTMLDivElement>(null)
   const [duration, setDuration] = useState(30)
   useEffect(() => {
     const width = trackRef.current?.scrollWidth ?? 0
-    if (width > 0) setDuration(width / 80)
+    if (width > 0) setDuration(Math.max(15, width / 80))
   }, [showLive, clients.length])
 
   return (
-    <section className="overflow-hidden border-b border-line bg-white py-5 shadow-xs">
+    <section className="overflow-hidden border-b border-line bg-white py-4 md:py-5 shadow-xs">
       <Container size="4xl">
-        <div className="flex items-center gap-4 md:gap-8">
-          {/* Label */}
-          <div className="shrink-0">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-8">
+          {/* Label + Mobile 'And Many More' in one top row */}
+          <div className="flex items-center justify-between shrink-0 md:justify-start">
             <span className="whitespace-nowrap text-xs font-bold uppercase tracking-wider text-muted md:text-sm">
               Our Lending Partners
             </span>
+            <span className="shrink-0 whitespace-nowrap text-xs font-medium text-muted md:hidden">
+              And Many More...
+            </span>
           </div>
 
-          {/* Logo marquee — two identical tracks, pause on hover */}
-          <div className="relative min-w-0 flex-1 overflow-hidden">
+          {/* Logo marquee — full width on mobile, middle flex-1 on desktop */}
+          <div className="relative min-w-0 w-full flex-1 overflow-hidden">
             <div
               className="ck-marquee-group flex gap-4"
               style={{ ['--ck-duration' as string]: `${duration}s` }}
@@ -211,16 +207,18 @@ export function LendingPartnersBanner() {
             {/* Fade edges */}
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-y-0 left-0 hidden w-16 bg-gradient-to-r from-white to-transparent sm:block"
+              className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-white to-transparent sm:w-16"
             />
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-y-0 right-0 hidden w-16 bg-gradient-to-l from-white to-transparent sm:block"
+              className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white to-transparent sm:w-16"
             />
           </div>
 
-          {/* Static trailing label */}
-          {moreLabel}
+          {/* Desktop trailing label */}
+          <span className="hidden md:inline-block shrink-0 whitespace-nowrap text-xs font-medium text-muted">
+            And Many More...
+          </span>
         </div>
       </Container>
     </section>

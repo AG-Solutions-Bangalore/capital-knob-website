@@ -1,4 +1,6 @@
 Options -MultiViews
+DirectorySlash Off
+DirectoryIndex index.html
 
 # ----------------------------------------------------------------------
 # | MIME Types (Apache mod_mime)                                       |
@@ -32,20 +34,18 @@ Options -MultiViews
     RewriteEngine On
 
     # Canonical HTTPS & Host Enforcement
-    RewriteCond %{HTTPS} !=on [OR]
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+    RewriteRule ^ https://ck.agsdemo.in%{REQUEST_URI} [R=301,L]
+
     RewriteCond %{HTTP_HOST} ^www\.ck\.agsdemo\.in$ [NC]
     RewriteRule ^ https://ck.agsdemo.in%{REQUEST_URI} [R=301,L]
 
-    # Directory Trailing Slash (exclude files and API paths)
-    RewriteCond %{REQUEST_URI} !^/ckapi/ [NC]
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_URI} !/$
-    RewriteCond %{REQUEST_URI} !\.[^/]+$
-    RewriteRule ^(.+)$ /$1/ [R=301,L]
-
     # Serve Pre-rendered Static HTML (0ms response time)
+    # Check if a pre-rendered index.html exists for route (e.g. /contact or /contact/ -> /contact/index.html)
+    RewriteCond %{REQUEST_URI} !^/ckapi/ [NC]
     RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
-    RewriteRule ^(.*)$ /$1/index.html [L]
+    RewriteRule ^(.+?)/?$ /$1/index.html [L]
 
     # SPA Fallback for Unrendered Dynamic Routes
     RewriteCond %{REQUEST_URI} !^/ckapi/ [NC]
