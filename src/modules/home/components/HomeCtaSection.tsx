@@ -193,9 +193,11 @@ export function HomeCtaSection() {
           </div>
         )}
 
-        {/* Stats band with gold icons and dividers */}
+        {/* Stats band with gold icons and dividers.
+            Plain divs (not dl/dt/dd): values render above labels, which
+            violates the description-list content model (dt must precede dd). */}
         <div className="mt-12 border-t border-white/15 pt-8">
-          <dl className="grid grid-cols-2 gap-x-4 gap-y-6 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-6 lg:grid-cols-4">
             {homeStats.map((stat, idx) => (
               <div
                 key={stat.label}
@@ -205,16 +207,16 @@ export function HomeCtaSection() {
                   <StatIcon name={STAT_ICONS[idx % STAT_ICONS.length]} />
                 </span>
                 <div className="text-left">
-                  <dd className="font-display text-xl font-extrabold text-white sm:text-2xl">
+                  <p className="font-display text-xl font-extrabold text-white sm:text-2xl">
                     {stat.value}
-                  </dd>
-                  <dt className="mt-0.5 text-xs font-medium text-slate-300">
+                  </p>
+                  <p className="mt-0.5 text-xs font-medium text-slate-300">
                     {stat.label}
-                  </dt>
+                  </p>
                 </div>
               </div>
             ))}
-          </dl>
+          </div>
         </div>
 
 

@@ -5,7 +5,7 @@ import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
 import { SolutionsMegaPanel, SolutionsMobileLinks } from '@/modules/category/components/CategoryMegaMenu'
 import { useEffect, useId, useRef, useState, type CSSProperties } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { Button } from './Button'
+import { buttonClassNames } from './buttonClasses'
 import { Container } from './Container'
 import { Logo } from './Logo'
 
@@ -224,15 +224,14 @@ export function Header() {
             className="hidden items-center gap-4 lg:flex xl:gap-6"
             onMouseEnter={() => { cancelClose(); setOpenGroup(null); }}
           >
+            {/* Navigation CTA — anchor styled as a button (never nest <button> in <a>) */}
             <Link
               to={ROUTES.contact}
               title={linkTitleFor(ROUTES.contact)}
-              className="group"
+              className={buttonClassNames({ variant: 'navy', size: 'md', className: 'group px-5' })}
             >
-              <Button variant="navy" size="md" className="px-5">
-                <span className="whitespace-nowrap">Get a Callback</span>
-                <ArrowRightIcon className="transition-transform duration-300 group-hover:-rotate-45" />
-              </Button>
+              <span className="whitespace-nowrap">Get a Callback</span>
+              <ArrowRightIcon className="transition-transform duration-300 group-hover:-rotate-45" />
             </Link>
           </div>
 
@@ -332,18 +331,16 @@ export function Header() {
               </ul>
             </nav>
 
-            {/* Sidebar footer: contact CTA */}
+            {/* Sidebar footer: contact CTA — anchor styled as a button */}
             <div className="border-t border-line bg-[#f4f7fa] px-5 py-5">
               <Link
                 to={ROUTES.contact}
                 title={linkTitleFor(ROUTES.contact)}
                 onClick={() => setOpen(false)}
-                className="block"
+                className={buttonClassNames({ variant: 'gold', className: 'w-full' })}
               >
-                <Button variant="gold" className="w-full">
-                  Get a Callback
-                  <ArrowRightIcon />
-                </Button>
+                Get a Callback
+                <ArrowRightIcon />
               </Link>
             </div>
           </aside>

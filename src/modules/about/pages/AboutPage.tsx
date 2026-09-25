@@ -19,28 +19,28 @@ export function AboutPage() {
   return (
     <>
       <AboutHero />
-      <SectionReveal as="section">
+      <SectionReveal>
         <StatsSection />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <OurStorySection />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <VisionMissionSection />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <FounderSection />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <CommitmentSection />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <TestimonialSection slug="about-us" />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <FaqSection slug="about-us" title="FAQ" />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <AboutCta />
       </SectionReveal>
     </>

@@ -68,7 +68,6 @@ export function HomeHero() {
   return (
     <section
       className="relative overflow-hidden bg-navy text-white select-none"
-      role="region"
       aria-roledescription="carousel"
       aria-label="CapitalKnob Financing Services"
       onTouchStart={handleTouchStart}
@@ -281,9 +280,11 @@ export function HomeHero() {
             >
               {/* Slide Tabs — wrap on mobile so every pill is fully
                   visible (no mid-pill cut); single scrollable row on sm+. */}
+              {/* Slide picker — plain buttons (not ARIA tabs: there are no
+                  tabpanels, slides crossfade in place) */}
               <div
                 className="flex flex-wrap items-center gap-2 py-1 sm:flex-nowrap sm:overflow-x-auto no-scrollbar sm:py-1 sm:pb-1"
-                role="tablist"
+                role="group"
                 aria-label="Financing categories"
               >
                 {heroSlides.map((slide, idx) => {
@@ -292,8 +293,7 @@ export function HomeHero() {
                     <button
                       key={slide.id}
                       type="button"
-                      role="tab"
-                      aria-selected={isActive}
+                      aria-current={isActive ? 'true' : undefined}
                       aria-label={`Switch to ${slide.titleLine1}`}
                       onClick={() => goToSlide(idx)}
                       className={`group overflow-hidden relative shrink-0 flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold ${isActive

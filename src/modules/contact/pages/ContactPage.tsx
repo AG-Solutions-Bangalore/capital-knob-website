@@ -14,16 +14,16 @@ export function ContactPage() {
   return (
     <>
       <ContactHeroSection />
-      <SectionReveal as="section">
+      <SectionReveal>
         <ContactFormSection />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <LocationSection />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <TestimonialSection slug="contact" />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <FaqSection />
       </SectionReveal>
     </>

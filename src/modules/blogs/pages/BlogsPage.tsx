@@ -17,15 +17,15 @@ export function BlogsPage() {
         title="Blogs & Insights"
         subtitle="Financing guides, market perspectives, and practical explainers from our advisory team."
       />
-      <section className="bg-surface py-10 md:py-14">
+      <section aria-label="Blog articles" className="bg-surface py-10 md:py-14">
         <Container size="4xl">
           <BlogList />
         </Container>
       </section>
-      <SectionReveal as="section">
+      <SectionReveal>
         <TestimonialSection slug="blogs" />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <FaqSection slug="blogs" title="FAQ" />
       </SectionReveal>
     </>

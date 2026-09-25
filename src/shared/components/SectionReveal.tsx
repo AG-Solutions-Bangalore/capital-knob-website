@@ -25,7 +25,8 @@ type SectionTag = 'section' | 'div' | 'article' | 'aside' | 'main' | 'header' | 
 
 export interface SectionRevealProps {
   children: ReactNode
-  /** Wrapper element. Defaults to <section>. */
+  /** Wrapper element. Defaults to <div> (pure animation container — inner
+      components render their own semantic landmarks). */
   as?: SectionTag
   /** Optional className applied to the wrapper. */
   className?: string
@@ -47,7 +48,7 @@ export interface SectionRevealProps {
 
 export function SectionReveal({
   children,
-  as = 'section',
+  as = 'div',
   className,
   yOffset = 16,
   blur = 12,

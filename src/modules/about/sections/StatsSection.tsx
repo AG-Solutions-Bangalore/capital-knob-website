@@ -12,7 +12,7 @@ import { aboutQuote, aboutStats } from '../constants'
 
 export function StatsSection() {
   return (
-    <section className="border-b border-line bg-[#f1f6fc] py-8 md:py-10">
+    <section aria-label="CapitalKnob key statistics" className="border-b border-line bg-[#f1f6fc] py-8 md:py-10">
       <Container size="4xl">
         <div className="grid items-center gap-8 lg:grid-cols-12">
           {/* Stats grid: 2x2 vertical cards on mobile (<sm) to prevent number/text clipping, 4-up inline on desktop */}

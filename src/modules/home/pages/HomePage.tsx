@@ -56,22 +56,22 @@ export function HomePage() {
 
       <Suspense fallback={null}>
         {/* 2. Lending Partners Bar */}
-        <SectionReveal as="section">
+        <SectionReveal>
           <LendingPartnersBanner />
         </SectionReveal>
 
         {/* 3. Solutions for Every Capital Need with Nanao Banna imagery */}
-        <SectionReveal as="section">
+        <SectionReveal>
           <HomeSolutionsSection />
         </SectionReveal>
 
         {/* 4. Why Choose CapitalKnob? Benefit Grid */}
-        <SectionReveal as="section">
+        <SectionReveal>
           <HomeWhyChooseSection />
         </SectionReveal>
 
         {/* 5. Our Simple 5-Step Approach */}
-        <SectionReveal as="section">
+        <SectionReveal>
           <HomeStepsSection />
         </SectionReveal>
 
@@ -82,12 +82,12 @@ export function HomePage() {
         <HomeFrontBlogSection />
 
         {/* 8. Frequently Asked Questions */}
-        <SectionReveal as="section">
+        <SectionReveal>
           <FaqSection slug="home" title="FAQ" />
         </SectionReveal>
 
         {/* 9. High-Rise Dusk Banner, Testimonial & Social Proof Metrics */}
-        <SectionReveal as="section">
+        <SectionReveal>
           <HomeCtaSection />
         </SectionReveal>
       </Suspense>

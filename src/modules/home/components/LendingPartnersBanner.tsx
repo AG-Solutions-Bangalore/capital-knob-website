@@ -169,7 +169,7 @@ export function LendingPartnersBanner() {
   }, [showLive, clients.length])
 
   return (
-    <section className="overflow-hidden border-b border-line bg-white py-4 md:py-5 shadow-xs">
+    <section aria-label="Our Lending Partners" className="overflow-hidden border-b border-line bg-white py-4 md:py-5 shadow-xs">
       <Container size="4xl">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-8">
           {/* Label + Mobile 'And Many More' in one top row */}
@@ -190,16 +190,16 @@ export function LendingPartnersBanner() {
             >
               <div ref={trackRef} className="ck-marquee-track flex shrink-0 items-center gap-4">
                 {tiles.map((t, i) => (
-                  <span key={`first-${i}`} className="flex shrink-0 items-center">
+                  <div key={`first-${i}`} className="flex shrink-0 items-center">
                     {t}
-                  </span>
+                  </div>
                 ))}
               </div>
               <div className="ck-marquee-track flex shrink-0 items-center gap-4" aria-hidden="true">
                 {tiles.map((t, i) => (
-                  <span key={`second-${i}`} className="flex shrink-0 items-center">
+                  <div key={`second-${i}`} className="flex shrink-0 items-center">
                     {t}
-                  </span>
+                  </div>
                 ))}
               </div>
             </div>

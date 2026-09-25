@@ -105,7 +105,7 @@ export function ServiceDetailPage({ categorySlug }: { categorySlug?: string } = 
 
   if (isPending) {
     return (
-      <section className="bg-surface py-16">
+      <section aria-label="Loading service" className="bg-surface py-16">
         <Container size="4xl">
           <div role="status" aria-label="Loading service" className="animate-pulse">
             <div className="h-8 w-2/3 rounded bg-line-soft" />
@@ -262,16 +262,16 @@ export function ServiceDetailPage({ categorySlug }: { categorySlug?: string } = 
       </section>
 
       {/* Fixed shared sections — identical on every service page */}
-      <SectionReveal as="section">
+      <SectionReveal>
         <WhyChooseSection />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <StepsSection />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <TestimonialSection slug={decoded} />
       </SectionReveal>
-      <SectionReveal as="section">
+      <SectionReveal>
         <FaqSection slug={decoded} title="FAQ" />
       </SectionReveal>
 

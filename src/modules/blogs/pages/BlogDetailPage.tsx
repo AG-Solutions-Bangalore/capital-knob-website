@@ -23,7 +23,8 @@ export function BlogDetailPage() {
 
   return (
     <>
-      <section className="bg-navy py-6 text-white md:py-8">
+      {/* Breadcrumb band — plain div (the inner <nav> is the landmark) */}
+      <div className="bg-navy py-6 text-white md:py-8">
         <Container size="4xl">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-medium text-white/70">
@@ -56,7 +57,7 @@ export function BlogDetailPage() {
             </Link>
           </div>
         </Container>
-      </section>
+      </div>
       <section className="bg-surface py-10 md:py-14">
         <Container size="4xl">
           <BlogDetailCard slug={slug} />

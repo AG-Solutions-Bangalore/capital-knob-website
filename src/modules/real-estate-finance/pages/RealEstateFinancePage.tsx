@@ -13,7 +13,7 @@ export function RealEstateFinancePage() {
         title={realEstateFinanceCopy.hero.title}
         subtitle={realEstateFinanceCopy.hero.description}
       />
-      <SectionReveal as="section" className="py-16">
+      <SectionReveal className="py-16">
         <Container size="4xl">
           <p className="text-center text-muted">Real Estate Finance content coming up.</p>
         </Container>

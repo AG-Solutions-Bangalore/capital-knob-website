@@ -67,7 +67,7 @@ export function DisclaimerPage() {
         subtitle="The information, materials, products, services, articles, reports, calculators, illustrations, and content available on this website are provided by CapitalKnob Investment & Financial Advisors Private Limited for general informational, educational, business facilitation, and capital advisory purposes only."
       />
 
-      <SectionReveal as="section">
+      <SectionReveal>
         <Container size="md" className="py-14 md:py-20">
           <div className="space-y-10">
             {sections.map((s) => (
