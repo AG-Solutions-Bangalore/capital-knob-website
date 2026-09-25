@@ -17,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 
 const SITE_ORIGIN = 'https://ck.agsdemo.in';
 const API_BASE_URL =
-  process.env.VITE_API_BASE_URL ?? 'https://agsdemo.in/ckapi/public/api';
+  process.env.VITE_API_BASE_URL ?? 'http://capitalknob.com/crmapi/public/api';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

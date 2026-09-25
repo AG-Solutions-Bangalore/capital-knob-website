@@ -14,7 +14,6 @@ import { Suspense, lazy, useState } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import { ROUTES, servicePath } from '@/app/routes'
 import { Container } from '@/shared/components/Container'
-import { SectionReveal } from '@/shared/components/SectionReveal'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
 import { ServiceCard } from '../components/ServiceCard'
@@ -262,18 +261,18 @@ export function ServiceDetailPage({ categorySlug }: { categorySlug?: string } = 
       </section>
 
       {/* Fixed shared sections — identical on every service page */}
-      <SectionReveal>
+      
         <WhyChooseSection />
-      </SectionReveal>
-      <SectionReveal>
+      
+      
         <StepsSection />
-      </SectionReveal>
-      <SectionReveal>
+      
+      
         <TestimonialSection slug={decoded} />
-      </SectionReveal>
-      <SectionReveal>
+      
+      
         <FaqSection slug={decoded} title="FAQ" />
-      </SectionReveal>
+      
 
       {hasOpened && (
         <Suspense fallback={null}>

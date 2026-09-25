@@ -5,9 +5,16 @@
 
 declare const process: { env: Record<string, string | undefined> } | undefined;
 
+import { env } from '@/shared/lib/env';
+
+// Single source of truth for the API host: the SSG pre-fetcher, the browser
+// cache warmer below, AND the runtime React Query hooks (via
+// `@/shared/lib/axios` → `env.apiBaseUrl`) must all hit the same base. Two
+// different hosts mean the prerendered HTML and the client's first render
+// disagree → React hydration #418 → full client re-render.
 const API_BASE_URL =
   (typeof process !== 'undefined' && process?.env?.VITE_API_BASE_URL) ||
-  'https://agsdemo.in/ckapi/public/api';
+  env.apiBaseUrl;
 
 interface CategoryData {
   category_slug?: string;
@@ -98,6 +105,8 @@ let rawBlogsResponse: unknown = null;
 let rawFrontBlogsResponse: unknown = null;
 let rawHomeFaqResponse: unknown = null;
 let rawHomeTestimonialsResponse: unknown = null;
+let rawClientsResponse: unknown = null;
+let rawCompanyResponse: unknown = null;
 
 let homeFaqs: FaqItemData[] = [];
 let homeTestimonials: TestimonialItemData[] = [];
@@ -191,10 +200,11 @@ export async function loadDynamicData(): Promise<void> {
         }
       }
 
-      // 2. Server-only SSG pre-hydration (home & category FAQs / testimonials).
-      // In the browser, each page component fetches its own slug on demand via React Query.
+      // 2. Server-only SSG pre-hydration (home & category FAQs / testimonials,
+      // clients marquee, company profile). In the browser, each page component
+      // fetches its own slug on demand via React Query.
       if (isServer) {
-        const [homeFaqRes, homeTestimonialsRes] = await Promise.all([
+        const [homeFaqRes, homeTestimonialsRes, clientsRes, companyRes] = await Promise.all([
           fetch(`${API_BASE_URL}/getFAQBySlug/home`, { signal: AbortSignal.timeout(15000) })
             .then((r) => r.json())
             .catch((err) => {
@@ -207,10 +217,24 @@ export async function loadDynamicData(): Promise<void> {
               console.warn('⚠️ [SSG] Failed to fetch /getTestimonial/home:', err.message);
               return { data: [] };
             }),
+          fetch(`${API_BASE_URL}/getClient`, { signal: AbortSignal.timeout(15000) })
+            .then((r) => r.json())
+            .catch((err) => {
+              console.warn('⚠️ [SSG] Failed to fetch /getClient:', err.message);
+              return { data: [] };
+            }),
+          fetch(`${API_BASE_URL}/getCompany`, { signal: AbortSignal.timeout(15000) })
+            .then((r) => r.json())
+            .catch((err) => {
+              console.warn('⚠️ [SSG] Failed to fetch /getCompany:', err.message);
+              return { data: null };
+            }),
         ]);
 
         rawHomeFaqResponse = homeFaqRes;
         rawHomeTestimonialsResponse = homeTestimonialsRes;
+        rawClientsResponse = clientsRes;
+        rawCompanyResponse = companyRes;
         homeFaqs = Array.isArray(homeFaqRes?.data) ? homeFaqRes.data : [];
         homeTestimonials = Array.isArray(homeTestimonialsRes?.data) ? homeTestimonialsRes.data : [];
         testimonialsBySlug.set('home', homeTestimonials);
@@ -301,6 +325,14 @@ export function getCachedHomeFaqResponse() {
 
 export function getCachedHomeTestimonialsResponse() {
   return rawHomeTestimonialsResponse;
+}
+
+export function getCachedClientsResponse() {
+  return rawClientsResponse;
+}
+
+export function getCachedCompanyResponse() {
+  return rawCompanyResponse;
 }
 
 export function getHomeFaqs(): FaqItemData[] {

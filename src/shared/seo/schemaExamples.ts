@@ -3,6 +3,7 @@
  * Type-safe Schema.org factory functions providing Rich Results compliant JSON-LD structures.
  */
 import type { Graph, Thing } from 'schema-dts';
+import { ACTIVE_BLOG_IMAGE_BASE_URL } from '@/lib/images';
 import { SITE_EMAIL, SITE_LOGO, SITE_NAME, SITE_ORIGIN, SITE_PHONE, getCanonicalUrl } from './site';
 
 /**
@@ -231,7 +232,7 @@ export function createBlogPostingSchema(blog: {
   const description =
     blog.blog_meta_description || blog.blog_short_description || blog.blog_description || title;
   const image = blog.blog_banner_image
-    ? `https://agsdemo.in/ckapi/public/assets/images/blog_images/${blog.blog_banner_image}`
+    ? `${ACTIVE_BLOG_IMAGE_BASE_URL}/${blog.blog_banner_image}`
     : SITE_LOGO;
 
   return {

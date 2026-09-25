@@ -3,7 +3,7 @@
  * Static site generator worker using Web Standard renderToReadableStream with React Query pre-hydration.
  */
 import React from 'react';
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 import { getCanonicalUrl, SITE_LOGO, SITE_NAME } from '@/shared/seo/site';
 import { getSeoForRoute, ROUTE_SEO } from '@/shared/seo/seoEngine';
 import { createCompositeGraph } from '@/shared/seo/schemaExamples';
@@ -11,6 +11,8 @@ import {
   getAllDynamicRouteUrls,
   getCachedBlogsResponse,
   getCachedCategoriesResponse,
+  getCachedClientsResponse,
+  getCachedCompanyResponse,
   getCachedFrontBlogsResponse,
   getCachedHomeFaqResponse,
   getCachedHomeTestimonialsResponse,
@@ -47,36 +49,60 @@ export async function prerender(data: { url: string }) {
     },
   });
 
+  // Seed ONLY non-empty responses. An empty cache entry would serialize into
+  // the HTML and pin the client to the empty state (fresh timestamp → no
+  // refetch); leaving the key absent lets the client fetch normally, and its
+  // pending UI matches the SSR pending UI → clean hydration either way.
+  const hasRows = (res: unknown): res is { data: unknown[] } =>
+    !!res &&
+    typeof res === 'object' &&
+    Array.isArray((res as { data?: unknown }).data) &&
+    (res as { data: unknown[] }).data.length > 0;
+  const hasDatum = (res: unknown): res is { data: Record<string, unknown> } =>
+    !!res &&
+    typeof res === 'object' &&
+    (res as { data?: unknown }).data !== null &&
+    typeof (res as { data?: unknown }).data === 'object' &&
+    Object.keys((res as { data: Record<string, unknown> }).data).length > 0;
+
   // Pre-hydrate categories
   const categoriesRes = getCachedCategoriesResponse();
-  if (categoriesRes) {
+  if (hasRows(categoriesRes)) {
     queryClient.setQueryData(['website', 'categories'], categoriesRes);
   }
 
-  // Pre-hydrate blogs list
+  // Pre-hydrate blogs list only on /blogs routes
   const blogsRes = getCachedBlogsResponse();
-  if (blogsRes) {
+  if (hasRows(blogsRes) && (cleanPath === '/blogs' || cleanPath.startsWith('/blogs/'))) {
     queryClient.setQueryData(['website', 'blogs', 'list'], blogsRes);
-    queryClient.setQueryData(['website', 'blogs', 'featured'], blogsRes);
   }
 
   const frontBlogsRes = getCachedFrontBlogsResponse();
-  if (frontBlogsRes) {
+  if (hasRows(frontBlogsRes)) {
     queryClient.setQueryData(['website', 'blogs', 'front'], frontBlogsRes);
-  } else if (blogsRes) {
-    queryClient.setQueryData(['website', 'blogs', 'front'], blogsRes);
   }
 
   // Pre-hydrate home FAQs
   const homeFaqRes = getCachedHomeFaqResponse();
-  if (homeFaqRes) {
+  if (hasRows(homeFaqRes)) {
     queryClient.setQueryData(['website', 'faq', 'home'], homeFaqRes);
   }
 
   // Pre-hydrate home testimonials
   const homeTestimonialsRes = getCachedHomeTestimonialsResponse();
-  if (homeTestimonialsRes) {
+  if (hasRows(homeTestimonialsRes)) {
     queryClient.setQueryData(['website', 'testimonials', 'home'], homeTestimonialsRes);
+  }
+
+  // Pre-hydrate clients marquee + company profile (Footer / partners strip
+  // render these on first paint — without cache entries they mismatch SSR).
+  const clientsRes = getCachedClientsResponse();
+  if (hasRows(clientsRes)) {
+    queryClient.setQueryData(['website', 'clients'], clientsRes);
+  }
+  const companyRes = getCachedCompanyResponse();
+  if (hasDatum(companyRes)) {
+    queryClient.setQueryData(['website', 'company'], companyRes);
   }
 
   // Pre-hydrate single blog if matching /blogs/:slug
@@ -117,7 +143,19 @@ export async function prerender(data: { url: string }) {
   // Every tag carries data-rh="true" so react-helmet-async adopts (not
   // duplicates) them on hydration — without it, SPA navigation appends a
   // second description/canonical set and crawlers/tools read the stale copy.
+  //
+  // The dehydrated React Query cache travels the same way: the client
+  // hydrates its QueryClient from `#react-query-state` BEFORE hydrateRoot,
+  // so first render reuses SSR data instead of flashing pending UI — and,
+  // critically, produces DOM identical to the SSR HTML (no hydration #418).
+  // `<` is unicode-escaped so inline HTML in blog/testimonial bodies can
+  // never break out of the script element.
+  const dehydratedState = JSON.stringify(dehydrate(queryClient)).replace(
+    /</g,
+    '\\u003c',
+  );
   const elements = new Set<Record<string, unknown>>([
+    { type: 'script', props: { id: 'react-query-state', type: 'application/json', 'data-rh': 'true' }, children: dehydratedState },
     { type: 'meta', props: { name: 'description', content: seo.description, 'data-rh': 'true' } },
     { type: 'meta', props: { name: 'author', content: SITE_NAME, 'data-rh': 'true' } },
     { type: 'meta', props: { name: 'publisher', content: SITE_NAME, 'data-rh': 'true' } },

@@ -130,6 +130,8 @@ export function LendingPartnersBanner() {
               src={src}
               alt={name}
               title={name}
+              width={120}
+              height={40}
               className="h-8 w-auto max-w-[120px] object-contain md:h-10 md:max-w-32"
               loading="lazy"
               decoding="async"
