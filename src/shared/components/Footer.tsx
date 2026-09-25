@@ -42,9 +42,9 @@ const advisoryLinks = [
 ]
 
 const socialLinks = [
-  { label: 'LinkedIn', href: '#', icon: <LinkedInIcon /> },
-  { label: 'Instagram', href: '#', icon: <InstagramIcon /> },
-  { label: 'YouTube', href: '#', icon: <YouTubeIcon /> },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/capitalknob', icon: <LinkedInIcon /> },
+  { label: 'Facebook', href: 'https://www.facebook.com/capitalknob', icon: <FacebookIcon /> },
+  { label: 'YouTube', href: 'https://www.youtube.com/channel/UCAO3v7__wS5S1HtvaqBduPw', icon: <YouTubeIcon /> },
 ]
 
 interface FooterProps {
@@ -320,30 +320,42 @@ function LinkedInIcon() {
   )
 }
 
-function InstagramIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden>
-      <defs>
-        <linearGradient id="ig-gradient" x1="0" y1="1" x2="1" y2="0">
-          <stop offset="0%" stopColor="#FEDA75" />
-          <stop offset="35%" stopColor="#FA7E1E" />
-          <stop offset="65%" stopColor="#D62976" />
-          <stop offset="100%" stopColor="#962FBF" />
-        </linearGradient>
-      </defs>
-      <rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="url(#ig-gradient)" />
-      <rect x="6" y="6" width="12" height="12" rx="3.5" fill="none" stroke="#FFFFFF" strokeWidth="1.8" />
-      <circle cx="12" cy="12" r="2.8" fill="none" stroke="#FFFFFF" strokeWidth="1.8" />
-      <circle cx="16.4" cy="7.6" r="1.3" fill="#FFFFFF" />
-    </svg>
-  )
-}
+// function InstagramIcon() {
+//   return (
+//     <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden>
+//       <defs>
+//         <linearGradient id="ig-gradient" x1="0" y1="1" x2="1" y2="0">
+//           <stop offset="0%" stopColor="#FEDA75" />
+//           <stop offset="35%" stopColor="#FA7E1E" />
+//           <stop offset="65%" stopColor="#D62976" />
+//           <stop offset="100%" stopColor="#962FBF" />
+//         </linearGradient>
+//       </defs>
+//       <rect x="1.5" y="1.5" width="21" height="21" rx="6" fill="url(#ig-gradient)" />
+//       <rect x="6" y="6" width="12" height="12" rx="3.5" fill="none" stroke="#FFFFFF" strokeWidth="1.8" />
+//       <circle cx="12" cy="12" r="2.8" fill="none" stroke="#FFFFFF" strokeWidth="1.8" />
+//       <circle cx="16.4" cy="7.6" r="1.3" fill="#FFFFFF" />
+//     </svg>
+//   )
+// }
 
 function YouTubeIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden>
       <rect x="1" y="5" width="22" height="14" rx="4" fill="#FF0000" />
       <path d="M10.25 9.25v5.5l4.75-2.75-4.75-2.75z" fill="#FFFFFF" />
+    </svg>
+  )
+}
+
+function FacebookIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden>
+      <rect width="24" height="24" rx="5" fill="#1877F2" />
+      <path
+        fill="#FFFFFF"
+        d="M15.4 12l.5-3.3h-3.2v-2.1c0-.9.3-1.5 1.5-1.5h1.6V2.2c-.3 0-1.2-.1-2.4-.1-2.4 0-4 1.4-4 4.1V8.7H6.7V12h2.7v8h3.4v-8h2.6z"
+      />
     </svg>
   )
 }
