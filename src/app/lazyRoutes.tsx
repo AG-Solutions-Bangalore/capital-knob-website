@@ -3,14 +3,9 @@ import { lazy } from 'react'
 export const HomePage = lazy(() =>
   import('@/modules/home/pages/HomePage').then((m) => ({ default: m.HomePage })),
 )
-export const SolutionsPage = lazy(() =>
-  import('@/modules/solutions/pages/SolutionsPage').then((m) => ({
-    default: m.SolutionsPage,
-  })),
-)
-export const HomeFinancePage = lazy(() =>
-  import('@/modules/home-finance/pages/HomeFinancePage').then((m) => ({
-    default: m.HomeFinancePage,
+export const ServiceDetailPage = lazy(() =>
+  import('@/modules/service/pages/ServiceDetailPage').then((m) => ({
+    default: m.ServiceDetailPage,
   })),
 )
 export const BusinessFinancePage = lazy(() =>
@@ -23,11 +18,6 @@ export const RealEstateFinancePage = lazy(() =>
     (m) => ({ default: m.RealEstateFinancePage }),
   ),
 )
-export const PrivateCreditPage = lazy(() =>
-  import('@/modules/private-credit/pages/PrivateCreditPage').then((m) => ({
-    default: m.PrivateCreditPage,
-  })),
-)
 export const AboutPage = lazy(() =>
   import('@/modules/about/pages/AboutPage').then((m) => ({ default: m.AboutPage })),
 )
@@ -36,8 +26,28 @@ export const ContactPage = lazy(() =>
     default: m.ContactPage,
   })),
 )
+export const BlogsPage = lazy(() =>
+  import('@/modules/blogs/pages/BlogsPage').then((m) => ({
+    default: m.BlogsPage,
+  })),
+)
+export const BlogDetailPage = lazy(() =>
+  import('@/modules/blogs/pages/BlogDetailPage').then((m) => ({
+    default: m.BlogDetailPage,
+  })),
+)
 export const NotFoundPage = lazy(() =>
   import('@/shared/components/NotFoundPage').then((m) => ({
     default: m.NotFoundPage,
+  })),
+)
+export const DisclaimerPage = lazy(() =>
+  import('@/modules/disclaimer/pages/DisclaimerPage').then((m) => ({
+    default: m.DisclaimerPage,
+  })),
+)
+export const PrivacyPolicyPage = lazy(() =>
+  import('@/modules/privacy/pages/PrivacyPolicyPage').then((m) => ({
+    default: m.PrivacyPolicyPage,
   })),
 )

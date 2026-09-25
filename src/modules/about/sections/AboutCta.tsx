@@ -25,7 +25,7 @@ export function AboutCta() {
           <Link
             to={aboutCta.ctaHref}
             title={linkTitleFor(aboutCta.ctaHref)}
-            className="inline-flex shrink-0 items-center gap-2 rounded-button bg-gold px-7 py-3.5 text-sm font-bold text-navy shadow-gold transition-colors hover:bg-gold-hover"
+            className="inline-flex shrink-0 items-center gap-2 rounded-button bg-gold px-7 py-3.5 text-sm font-bold text-white shadow-gold transition-colors hover:bg-gold-hover"
           >
             {aboutCta.ctaLabel}
             <svg

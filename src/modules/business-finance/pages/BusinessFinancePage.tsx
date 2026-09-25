@@ -1,12 +1,10 @@
 import { PageHero } from '@/shared/components/PageHero'
 import { Container } from '@/shared/components/Container'
 import { SectionReveal } from '@/shared/components/SectionReveal'
-import { usePageSeo } from '@/shared/seo/usePageSeo'
+import { FaqSection } from '@/modules/faq'
 import { businessFinanceCopy } from '../constants'
 
 export function BusinessFinancePage() {
-  usePageSeo('businessFinance')
-
   return (
     <>
       <PageHero
@@ -19,6 +17,7 @@ export function BusinessFinancePage() {
           <p className="text-center text-muted">Business Finance content coming up.</p>
         </Container>
       </SectionReveal>
+      <FaqSection slug="business-finance" title="Business Finance FAQs" />
     </>
   )
 }

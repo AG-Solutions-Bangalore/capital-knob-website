@@ -3,7 +3,7 @@ export const businessFinanceCopy = {
     eyebrow: 'Business Finance',
     title: 'Capital That Powers Your Business',
     description:
-      'From working capital to expansion, equipment finance to refinancing — flexible solutions for every stage of growth.',
+      'From working capital to expansion, equipment finance to refinancing — flexible services for every stage of growth.',
   },
   offers: [
     'Working Capital Finance',

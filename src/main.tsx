@@ -1,13 +1,31 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { AppProviders } from '@/app/providers/AppProviders'
-import './index.css'
-import App from './App.tsx'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { HelmetProvider } from 'react-helmet-async';
+import { AppProviders } from '@/app/providers/AppProviders';
+import App from '@/App';
+import '@/index.css';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <AppProviders>
-      <App />
-    </AppProviders>
-  </StrictMode>,
-)
+const containerElement = document.getElementById('root') as HTMLElement;
+
+if (containerElement && containerElement.hasChildNodes()) {
+  ReactDOM.hydrateRoot(
+    containerElement,
+    <React.StrictMode>
+      <HelmetProvider>
+        <AppProviders>
+          <App />
+        </AppProviders>
+      </HelmetProvider>
+    </React.StrictMode>,
+  );
+} else if (containerElement) {
+  ReactDOM.createRoot(containerElement).render(
+    <React.StrictMode>
+      <HelmetProvider>
+        <AppProviders>
+          <App />
+        </AppProviders>
+      </HelmetProvider>
+    </React.StrictMode>,
+  );
+}

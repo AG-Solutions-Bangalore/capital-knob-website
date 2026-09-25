@@ -70,7 +70,7 @@ export function HomeHero() {
       className="relative overflow-hidden bg-navy text-white select-none"
       role="region"
       aria-roledescription="carousel"
-      aria-label="CapitalKnob Financing Solutions"
+      aria-label="CapitalKnob Financing Services"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -86,13 +86,12 @@ export function HomeHero() {
           return (
             <div
               key={slide.id}
-              className={`absolute inset-0 transition-all duration-1000 ease-out ${
-                isActive
+              className={`absolute inset-0 transition-all duration-1000 ease-out ${isActive
                   ? 'opacity-100 translate-x-0 scale-100 z-10'
                   : isPrev
                     ? 'opacity-0 -translate-x-12 scale-105 z-0'
                     : 'opacity-0 translate-x-12 scale-105 z-0'
-              }`}
+                }`}
             >
               {isLcp ? (
                 <img
@@ -150,21 +149,18 @@ export function HomeHero() {
                     key={slide.id}
                     aria-hidden={!isActive}
                     inert={!isActive}
-                    className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                      isActive
+                    className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isActive
                         ? 'relative opacity-100 translate-x-0 pointer-events-auto z-10'
-                        : `absolute inset-0 opacity-0 pointer-events-none z-0 ${
-                            isNext ? '-translate-x-10' : 'translate-x-10'
-                          }`
-                    }`}
+                        : `absolute inset-0 opacity-0 pointer-events-none z-0 ${isNext ? '-translate-x-10' : 'translate-x-10'
+                        }`
+                      }`}
                   >
                     {/* Eyebrow */}
                     <div
-                      className={`transition-all duration-500 delay-100 ${
-                        isActive
+                      className={`transition-all duration-500 delay-100 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-2'
-                      }`}
+                        }`}
                     >
                       <p className="text-xs font-bold uppercase tracking-[0.22em] text-slate-300 sm:text-sm">
                         {slide.eyebrow}
@@ -173,11 +169,10 @@ export function HomeHero() {
 
                     {/* Handwritten cursive script accent */}
                     <div
-                      className={`relative mt-2 inline-block transition-all duration-500 delay-150 ${
-                        isActive
+                      className={`relative mt-2 inline-block transition-all duration-500 delay-150 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-2'
-                      }`}
+                        }`}
                     >
                       <span className="font-script text-2xl font-bold tracking-wide text-gold sm:text-3xl lg:text-4xl">
                         {slide.handwrittenScript}
@@ -197,11 +192,10 @@ export function HomeHero() {
 
                     {/* Main Headline */}
                     <div
-                      className={`transition-all duration-600 delay-200 ${
-                        isActive
+                      className={`transition-all duration-600 delay-200 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-3'
-                      }`}
+                        }`}
                     >
                       <h1 className="mt-4 font-display text-3xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl min-h-[4.5rem] sm:min-h-[5.5rem] md:min-h-[7rem]">
                         {slide.titleLine1} <br className="hidden sm:inline" />
@@ -211,11 +205,10 @@ export function HomeHero() {
 
                     {/* Tagline */}
                     <div
-                      className={`transition-all duration-500 delay-250 ${
-                        isActive
+                      className={`transition-all duration-500 delay-250 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-2'
-                      }`}
+                        }`}
                     >
                       <p className="mt-4 text-base font-bold text-gold sm:text-lg lg:text-xl">
                         {slide.tagline}
@@ -224,11 +217,10 @@ export function HomeHero() {
 
                     {/* Subcopy */}
                     <div
-                      className={`transition-all duration-500 delay-300 ${
-                        isActive
+                      className={`transition-all duration-500 delay-300 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-2'
-                      }`}
+                        }`}
                     >
                       <p className="mt-3 max-w-xl text-xs sm:text-sm leading-relaxed text-slate-300 md:text-base">
                         {slide.description}
@@ -237,11 +229,10 @@ export function HomeHero() {
 
                     {/* CTA row */}
                     <div
-                      className={`mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 transition-all duration-500 delay-350 ${
-                        isActive
+                      className={`mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 transition-all duration-500 delay-350 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-2'
-                      }`}
+                        }`}
                       onMouseEnter={() => setIsPaused(true)}
                       onMouseLeave={() => setIsPaused(false)}
                     >
@@ -249,7 +240,7 @@ export function HomeHero() {
                         href={slide.primaryCta.href}
                         title={linkTitleFor(slide.primaryCta.href)}
                         tabIndex={isActive ? 0 : -1}
-                        className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-ink shadow-gold transition-all duration-200 hover:bg-gold-hover hover:scale-[1.02] active:scale-[0.98]"
+                        className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-white shadow-gold transition-all duration-200 hover:bg-gold-hover hover:scale-[1.02] active:scale-[0.98]"
                       >
                         <span>{slide.primaryCta.label}</span>
                         <svg
@@ -288,9 +279,10 @@ export function HomeHero() {
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
             >
-              {/* Slide Tabs */}
+              {/* Slide Tabs — wrap on mobile so every pill is fully
+                  visible (no mid-pill cut); single scrollable row on sm+. */}
               <div
-                className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 pb-2 sm:pb-1"
+                className="flex flex-wrap items-center gap-2 py-1 sm:flex-nowrap sm:overflow-x-auto no-scrollbar sm:py-1 sm:pb-1"
                 role="tablist"
                 aria-label="Financing categories"
               >
@@ -304,16 +296,15 @@ export function HomeHero() {
                       aria-selected={isActive}
                       aria-label={`Switch to ${slide.titleLine1}`}
                       onClick={() => goToSlide(idx)}
-                      className={`group overflow-hidden relative shrink-0 flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold ${
-                        isActive
+                      className={`group overflow-hidden relative shrink-0 flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold ${isActive
                           ? 'bg-white/15 text-gold border border-gold/40 shadow-sm'
                           : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white'
-                      }`}
+                        }`}
                     >
-                     
+
                       <span>{slide.titleLine1.split('&')[0].trim()}</span>
 
-                      
+
                     </button>
                   )
                 })}

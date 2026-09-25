@@ -3,24 +3,6 @@ import { IMAGE_BASE_URL } from "@/lib/images";
  * Contact Us module data and copy.
  */
 
-/**
- * Product label sent as `enquiryProduct` to the enquiry API. Keeps the
- * wire value in one place so it can be tweaked without hunting through
- * the form component.
- */
-export const ENQUIRY_PRODUCT = 'Website Enquiry'
-
-/**
- * Static UTM defaults. In a real campaign we'd read these from the URL
- * (`?utm_source=...`) or from a global analytics helper; for now they
- * mirror the payload shape the API expects.
- */
-export const ENQUIRY_UTM = {
-  utm_medium: 'website',
-  utm_source: 'google',
-  utm_campaign: 'test',
-} as const
-
 export const contactCopy = {
   hero: {
     eyebrow: 'CONTACT US',
@@ -47,26 +29,25 @@ export const contactCopy = {
     description: 'You can also reach us through the following channels.',
     phone: {
       label: 'Call Us',
-      number: '+91 98765 43210',
+      number: '+91 99869 00144',
       hours: 'Mon – Sat | 9:30 AM – 6:30 PM',
-      href: 'tel:+919876543210',
+      href: 'tel:+919986900144',
     },
     email: {
       label: 'Email Us',
-      address: 'hello@capitalknob.com',
+      address: 'advisory@capitalknob.com',
       note: 'We typically respond within 24 hours',
-      href: 'mailto:hello@capitalknob.com',
+      href: 'mailto:advisory@capitalknob.com',
     },
     office: {
       label: 'Visit Our Office',
       name: 'CapitalKnob',
       lines: [
-        'Prestige Tech Park, 5th Floor',
-        'Outer Ring Road, Marathahalli',
-        'Bengaluru, Karnataka – 560037',
+        'No. 8, 1st Floor, 24th Main, 5th Phase',
+        'JP Nagar, Bengaluru, Karnataka – 560078',
         'India',
       ],
-      mapsUrl: 'https://maps.google.com/?q=Prestige+Tech+Park,+Marathahalli,+Bengaluru',
+      mapsUrl: 'https://maps.google.com/?q=No.+8,+1st+Floor,+24th+Main,+5th+Phase,+JP+Nagar,+Bengaluru+560078',
     },
   },
   location: {
@@ -76,7 +57,7 @@ export const contactCopy = {
       "Prefer a face-to-face conversation? We'd be happy to meet you at our office.",
     buttonText: 'Get Directions',
     directionsUrl:
-      'https://maps.google.com/?q=Prestige+Tech+Park,+Marathahalli,+Bengaluru',
+      'https://maps.google.com/?q=No.+8,+1st+Floor,+24th+Main,+5th+Phase,+JP+Nagar,+Bengaluru+560078',
   },
   faq: {
     eyebrow: 'STILL HAVE QUESTIONS?',

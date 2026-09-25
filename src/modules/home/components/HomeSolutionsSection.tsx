@@ -2,10 +2,12 @@ import { Suspense, lazy, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Container } from '@/shared/components/Container'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
-import { homeSolutionsTabs, individualSolutions } from '../constants'
+import { individualSolutions } from '../constants'
+import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
+import { servicePath } from '@/app/routes'
 
 const EnquiryModal = lazy(() =>
-  import('@/modules/solutions/components/EnquiryModal').then((m) => ({
+  import('@/modules/service/components/EnquiryModal').then((m) => ({
     default: m.EnquiryModal,
   })),
 )
@@ -69,7 +71,6 @@ function ServiceIcon({ name }: { name: string }) {
 }
 
 export function HomeSolutionsSection() {
-  const [activeTab, setActiveTab] = useState('individuals')
   // Enquiry popup state — the gold arrow opens the modal with this card's
   // title pre-filled in the Subject field (same modal as Solutions page).
   const [enquirySubject, setEnquirySubject] = useState<string | null>(null)
@@ -80,74 +81,71 @@ export function HomeSolutionsSection() {
     setEnquirySubject(title)
   }
 
+  // Live categories (GET /getCategory) rendered in the SAME old card style.
+  // Falls back to the static `individualSolutions` while loading, on error,
+  // or when the backend has no rows — old look never breaks.
+  const { data: categoryData } = useCategoryQuery()
+  const liveCats = (categoryData?.data ?? []).filter((c) => c.category_name)
+  const categoryImageBase =
+    categoryData?.image_url?.find((e) => e.image_for === 'Category')?.image_url ?? ''
+  const noImageSrc =
+    categoryData?.image_url?.find((e) => e.image_for === 'No Image')?.image_url ?? null
+  const liveCards =
+    liveCats.length > 0
+      ? liveCats.map((cat, idx) => {
+        const fallback = individualSolutions[idx % individualSolutions.length]
+        const slug = (cat.category_slug ?? '').toLowerCase()
+        const icon = slug.includes('home')
+          ? 'home'
+          : slug.includes('business') || slug.includes('growth') || slug.includes('capital')
+            ? 'stack'
+            : slug.includes('real-estate') || slug.includes('distressed')
+              ? 'crane'
+              : slug.includes('private') || slug.includes('ipo')
+                ? 'document'
+                : slug.includes('export') || slug.includes('import') || slug.includes('trade')
+                  ? 'refresh'
+                  : 'tools'
+        return {
+          id: `live-${cat.category_slug ?? idx}`,
+          title: cat.category_name ?? fallback.title,
+          description: cat.category_description ?? fallback.description,
+          // Dynamic image path: live banner when uploaded, else the
+          // backend No Image placeholder. `fallback` only supplies the
+          // icon mapping below — never a hardcoded image.
+          imageSrc: cat.category_banner_image?.trim()
+            ? `${categoryImageBase}${cat.category_banner_image.trim()}`
+            : (noImageSrc ?? fallback.imageSrc),
+          imageTitle: cat.category_name ?? fallback.imageTitle,
+            icon,
+            href: servicePath(cat.category_slug ?? ''),
+        } as const
+      })
+      : null
+  const cards = liveCards ?? individualSolutions
+
   return (
     <section className="bg-white py-16 md:py-20">
       <Container size="4xl">
         {/* Section Header */}
-        <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-          <div>
-            <h2 className="font-display text-3xl font-extrabold text-ink sm:text-4xl">
-              Solutions for <br className="hidden sm:inline" />
-              Every Capital Need
-            </h2>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
-              From buying your first home to growing your business, CapitalKnob
-              helps you explore the right financing options based on your goals.
-            </p>
-          </div>
-
-          {/* Right Tabs & Explore Button */}
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center lg:gap-6">
-            {/* Tabs */}
-            <div className="flex items-center gap-6 overflow-x-auto no-scrollbar border-b border-slate-200 pb-2 sm:border-none sm:pb-0">
-              {homeSolutionsTabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`relative shrink-0 pb-2 text-sm font-medium transition-colors ${
-                    activeTab === tab.id
-                      ? 'font-bold text-ink after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-navy'
-                      : 'text-muted hover:text-ink'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Explore All CTA */}
-            <Link
-              to="/solutions"
-              title={linkTitleFor('/solutions')}
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink shadow-2xs transition-colors hover:border-navy hover:text-navy active:bg-line-soft"
-            >
-              <span>Explore All Solutions</span>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </Link>
-          </div>
+        <div className="max-w-2xl">
+          <h2 className="font-display text-3xl font-extrabold text-ink sm:text-4xl">
+            Services for <br className="hidden sm:inline" />
+            Every Capital Need
+          </h2>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
+            From buying your first home to growing your business, CapitalKnob
+            helps you explore the right financing options based on your goals.
+          </p>
         </div>
 
-        {/* 5 Cards Grid — shows the first 5 individual solutions.
-            "Know More" navigates to the Solutions page and highlights the
-            card; the circular arrow button opens the enquiry popup with
+        {/* All live services — 3 per row.
+            "Know More" opens the service's own live detail page; the
+            circular arrow button opens the enquiry popup with
             the Subject pre-filled. The button sits as a sibling of the
             <Link> (never nested inside it) for valid HTML. */}
-        <div className="mt-8 sm:mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-          {individualSolutions.slice(0, 5).map((card) => (
+        <div className="mt-8 sm:mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {cards.map((card) => (
             <div
               key={card.id}
               className="group relative flex flex-col overflow-hidden rounded-xl border border-line bg-white transition-all duration-200 hover:-translate-y-1 hover:border-gold/50 hover:shadow-lg"

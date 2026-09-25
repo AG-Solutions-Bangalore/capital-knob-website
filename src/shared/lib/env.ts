@@ -13,7 +13,7 @@ export const env = {
    */
   apiBaseUrl:
     (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
-    'https://agsdemo.in/ck/api',
+    'https://agsdemo.in/ckapi/public/api',
 
   /** Secret key for authenticating API requests. */
   secretKey: import.meta.env.VITE_SECRET_KEY as string | undefined,

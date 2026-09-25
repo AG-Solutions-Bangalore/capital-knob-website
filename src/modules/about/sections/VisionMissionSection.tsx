@@ -133,7 +133,7 @@ export function VisionMissionSection() {
 
           {/* Right: highlight card with mountain sunrise image */}
           <div className="lg:col-span-4">
-            <div className="relative h-full min-h-[340px] overflow-hidden rounded-card border border-line bg-navy text-white shadow-card md:min-h-[420px]">
+            <div className="relative h-full min-h-[220px] overflow-hidden rounded-card border border-line bg-navy text-white shadow-card">
               <img
                 src={visionMissionValues.highlight.image}
                 alt="Person standing on a mountain peak looking at sunrise"
@@ -144,14 +144,14 @@ export function VisionMissionSection() {
               {/* Soft dark vignette on top for text contrast */}
               <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-navy/80 via-navy/30 to-navy/70" />
 
-              <div className="relative flex h-full flex-col justify-start p-7 md:p-8">
+              <div className="relative flex h-full flex-col justify-start p-6 md:p-7">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/90">
                   {visionMissionValues.highlight.eyebrow}
                 </p>
                 <h3 className="mt-2 font-serif text-2xl font-bold leading-tight uppercase tracking-wider text-white md:text-3xl">
                   {visionMissionValues.highlight.title}
                 </h3>
-                <div className="mt-4 h-1 w-10 bg-gold" />
+                <div className="mt-3 h-1 w-10 bg-gold" />
               </div>
             </div>
           </div>

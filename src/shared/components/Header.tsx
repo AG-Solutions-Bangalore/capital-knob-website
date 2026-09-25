@@ -1,6 +1,8 @@
-import { ROUTES, type RoutePath } from '@/app/routes'
+import { ROUTES, servicePath, type RoutePath } from '@/app/routes'
 import { cn } from '@/shared/lib/cn'
-import { linkTitleFor } from '@/shared/seo/linkTitles'
+import { linkTitleFor, linkTitleForPage } from '@/shared/seo/linkTitles'
+import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
+import { SolutionsMegaPanel, SolutionsMobileLinks } from '@/modules/category/components/CategoryMegaMenu'
 import { useEffect, useId, useRef, useState, type CSSProperties } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { Button } from './Button'
@@ -37,6 +39,8 @@ interface NavGroupEntry {
   to: RoutePath
   title: string
   children: NavChildLink[]
+  /** When true, the desktop dropdown renders the live mega-menu panel. */
+  mega?: boolean
 }
 
 type NavEntry = NavLinkEntry | NavGroupEntry
@@ -53,35 +57,42 @@ const navEntries: NavEntry[] = [
   },
   {
     kind: 'group',
-    label: 'Solutions',
-    to: ROUTES.solutions,
-    title: 'Explore CapitalKnob Solutions',
+    label: 'Services',
+    to: ROUTES.home,
+    title: 'Explore all services on Home',
+    mega: true,
     children: [
       {
         kind: 'link',
         label: 'Home Finance',
-        to: `${ROUTES.solutions}#home-loans`,
-        title: 'Home Finance Solutions – CapitalKnob',
+        to: servicePath('home-finance'),
+        title: 'Home Finance Services',
       },
       {
         kind: 'link',
         label: 'Business Finance',
-        to: `${ROUTES.solutions}#working-capital`,
-        title: 'Business Finance Solutions – CapitalKnob',
+        to: servicePath('business-loan'),
+        title: 'Business Loan Services',
       },
       {
         kind: 'link',
         label: 'Real Estate Finance',
-        to: `${ROUTES.solutions}#real-estate`,
-        title: 'Real Estate Finance Solutions – CapitalKnob',
+        to: servicePath('real-estate-project-finance'),
+        title: 'Real Estate Project Finance',
       },
       {
         kind: 'link',
         label: 'Private Credit',
-        to: `${ROUTES.solutions}#private-credit`,
-        title: 'Private Credit Solutions – CapitalKnob',
+        to: servicePath('private-credit'),
+        title: 'Private Credit Services – CapitalKnob',
       },
     ],
+  },
+  {
+    kind: 'link',
+    label: 'Blogs',
+    to: ROUTES.blogs,
+    title: 'Blogs & Insights – CapitalKnob',
   },
   {
     kind: 'link',
@@ -94,19 +105,18 @@ const navEntries: NavEntry[] = [
 export function Header() {
   const [open, setOpen] = useState(false)
   const [openGroup, setOpenGroup] = useState<string | null>(null)
-  const [mobileExpandedGroup, setMobileExpandedGroup] = useState<string | null>(
-    null,
-  )
+  const [mobileExpandedGroup, setMobileExpandedGroup] = useState<string | null>(null)
   const location = useLocation()
   const [prevPathname, setPrevPathname] = useState(location.pathname)
 
-  // Close the sidebar and dropdown menus on every route change.
+  // Close dropdown menus and mobile sidebar on every route change.
   if (prevPathname !== location.pathname) {
     setPrevPathname(location.pathname)
     setOpen(false)
     setOpenGroup(null)
     setMobileExpandedGroup(null)
   }
+
 
   // Close-delay timer keeps the panel open while the user moves the cursor
   // from the trigger to the dropdown body.
@@ -150,7 +160,7 @@ export function Header() {
 
   const scheduleClose = () => {
     if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
-    closeTimerRef.current = window.setTimeout(() => setOpenGroup(null), 120)
+    closeTimerRef.current = window.setTimeout(() => setOpenGroup(null), 200)
   }
   const cancelClose = () => {
     if (closeTimerRef.current) {
@@ -159,21 +169,41 @@ export function Header() {
     }
   }
 
+  // Close dropdown on main window scroll
+  useEffect(() => {
+    if (!openGroup) return
+    const onScroll = () => {
+      cancelClose()
+      setOpenGroup(null)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [openGroup])
+
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-white text-ink shadow-soft">
+    <header
+      className="sticky top-0 z-40 border-b border-line bg-white text-ink shadow-soft"
+      onMouseLeave={scheduleClose}
+    >
       <Container size="4xl">
         <div className="flex h-20 items-center justify-between gap-4 lg:gap-6">
           {/* Logo */}
-          <Logo variant="dark" />
+          <div onMouseEnter={() => { cancelClose(); setOpenGroup(null); }}>
+            <Logo variant="dark" />
+          </div>
 
           {/* Desktop nav */}
-          <nav className="hidden lg:flex">
-            <ul className="flex items-center gap-4 xl:gap-8 text-[13px] xl:text-sm font-medium text-ink-soft">
+          <nav className="hidden lg:flex h-full">
+            <ul className="flex h-full items-center gap-4 xl:gap-8 text-[13px] xl:text-sm font-medium text-ink-soft">
               {navEntries.map((entry) =>
                 entry.kind === 'link' ? (
                   <DesktopTopLink
                     key={`link-${entry.label}`}
                     entry={entry}
+                    onHover={() => {
+                      cancelClose()
+                      setOpenGroup(null)
+                    }}
                   />
                 ) : (
                   <DesktopDropdown
@@ -190,7 +220,10 @@ export function Header() {
           </nav>
 
           {/* Right cluster */}
-          <div className="hidden items-center gap-4 lg:flex xl:gap-6">
+          <div
+            className="hidden items-center gap-4 lg:flex xl:gap-6"
+            onMouseEnter={() => { cancelClose(); setOpenGroup(null); }}
+          >
             <Link
               to={ROUTES.contact}
               title={linkTitleFor(ROUTES.contact)}
@@ -322,16 +355,22 @@ export function Header() {
 
 /* -------------------- Desktop subcomponents -------------------- */
 
-function DesktopTopLink({ entry }: { entry: NavLinkEntry }) {
+function DesktopTopLink({
+  entry,
+  onHover,
+}: {
+  entry: NavLinkEntry
+  onHover: () => void
+}) {
   return (
-    <li className="relative">
+    <li className="relative flex h-full items-center" onMouseEnter={onHover}>
       <NavLink
         to={entry.to}
         title={entry.title}
         end={entry.to === ROUTES.home}
         className={({ isActive }) =>
           cn(
-            'relative whitespace-nowrap py-2 my-3 transition-colors hover:text-navy',
+            'relative whitespace-nowrap py-2 transition-colors hover:text-navy',
             isActive
               ? 'font-semibold text-navy after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-navy'
               : 'text-ink-soft',
@@ -360,14 +399,45 @@ function DesktopDropdown({
   const isOpen = openGroup === entry.label
   const panelId = useId()
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const itemRef = useRef<HTMLLIElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
 
-  // Mark this group as active when user is on the Solutions route, regardless
-  // of whether the dropdown is open.
-  const isOnGroupRoute = useOnRoute(entry.to)
+  // Mark this group as active when user is on any service page (a static
+  // child link or a live `/{slug}` detail page) — never on `/` itself.
+  const isOnGroupRoute = useOnServicesRoute(entry.children)
+
+  // Close on click outside
+  useEffect(() => {
+    if (!isOpen) return
+    function onPointerDown(e: PointerEvent) {
+      const target = e.target as Node
+      if (
+        itemRef.current &&
+        !itemRef.current.contains(target) &&
+        panelRef.current &&
+        !panelRef.current.contains(target)
+      ) {
+        cancelClose()
+        setOpenGroup(null)
+      }
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => document.removeEventListener('pointerdown', onPointerDown)
+  }, [isOpen, setOpenGroup, cancelClose])
+
+  // Live categories power the mega panel. Fires once per load (cached
+  // 30 min) and doubles as a cache warmer for the Solutions page. While
+  // loading we still show the mega panel (it has its own skeleton); the
+  // static list below is only a fallback for error/empty.
+  const { data: liveCategories, isPending: livePending } = useCategoryQuery()
+  const showMega =
+    !!entry.mega &&
+    (livePending || (liveCategories?.data.length ?? 0) > 0)
 
   return (
     <li
-      className="relative"
+      ref={itemRef}
+      className="relative flex h-full items-center"
       onMouseEnter={() => {
         cancelClose()
         setOpenGroup(entry.label)
@@ -381,9 +451,12 @@ function DesktopDropdown({
         aria-expanded={isOpen}
         aria-controls={panelId}
         onClick={() => setOpenGroup(isOpen ? null : entry.label)}
-        onFocus={() => setOpenGroup(entry.label)}
+        onFocus={() => {
+          cancelClose()
+          setOpenGroup(entry.label)
+        }}
         className={cn(
-          'relative flex items-center gap-1 whitespace-nowrap py-2 my-4 transition-colors hover:text-navy',
+          'relative flex items-center gap-1 whitespace-nowrap py-2 transition-colors hover:text-navy',
           isOpen || isOnGroupRoute
             ? 'font-semibold text-navy'
             : 'text-ink-soft',
@@ -404,39 +477,65 @@ function DesktopDropdown({
         />
       </button>
 
-      {isOpen && (
+      {isOpen && showMega ? (
         <div
           id={panelId}
           role="menu"
-          // `left-1/2 -translate-x-1/2` centers the panel under the trigger
-          // so the dropdown reads as "belonging to" the Solutions label,
-          // rather than being anchored to its left edge.
-          className="absolute left-1/2 top-full z-50 mt-2 min-w-60 -translate-x-1/2 rounded-button border border-line bg-white p-1.5 shadow-card animate-dropdown-in"
-          onMouseEnter={cancelClose}
-          onMouseLeave={scheduleClose}
+          className="fixed inset-x-0 top-20 z-50 pointer-events-none pt-2"
         >
-          <ul className="flex gap-2 flex-col">
-            {entry.children.map((child) => (
-              <SolutionChildItem
-                key={`${entry.label}-${child.label}`}
-                child={child}
-                variant="desktop"
-                onNavigate={() => setOpenGroup(null)}
-              />
-            ))}
-          </ul>
+          <div
+            ref={panelRef}
+            data-lenis-prevent
+            className="pointer-events-auto relative mx-auto max-h-[calc(100dvh-5.5rem)] w-[min(1380px,96vw)] overflow-y-auto rounded-2xl border border-line bg-white p-6 shadow-2xl animate-dropdown-in lg:p-7 before:absolute before:-top-3 before:inset-x-0 before:h-3 before:content-['']"
+            onMouseEnter={cancelClose}
+            onMouseLeave={scheduleClose}
+          >
+            <SolutionsMegaPanel onNavigate={() => setOpenGroup(null)} />
+          </div>
         </div>
+      ) : (
+        isOpen && (
+          <div
+            ref={panelRef}
+            id={panelId}
+            role="menu"
+            // `left-1/2 -translate-x-1/2` centers the panel under the trigger
+            // pt-2 provides seamless hover bridge between button and dropdown
+            className="absolute left-1/2 top-full z-50 pt-2 -translate-x-1/2"
+            onMouseEnter={cancelClose}
+            onMouseLeave={scheduleClose}
+          >
+            <div className="min-w-60 rounded-button border border-line bg-white p-1.5 shadow-card animate-dropdown-in">
+              <ul className="flex gap-2 flex-col">
+                {entry.children.map((child) => (
+                  <SolutionChildItem
+                    key={`${entry.label}-${child.label}`}
+                    child={child}
+                    variant="desktop"
+                    onNavigate={() => setOpenGroup(null)}
+                  />
+                ))}
+              </ul>
+            </div>
+          </div>
+        )
       )}
     </li>
   )
 }
 
-/** Returns true when the current pathname matches `to` (or starts with it
- *  for non-home paths). Used to keep the dropdown trigger styled as active. */
-function useOnRoute(to: RoutePath): boolean {
+/**
+ * Returns true when the user is on any service page: a static child link
+ * or a live service-detail page (`/{category-slug}`). The Services group
+ * has no page of its own, so it highlights from its destinations instead —
+ * never from `/` (that would light up alongside Home).
+ */
+function useOnServicesRoute(children: NavChildLink[]): boolean {
   const { pathname } = useLocation()
-  if (to === ROUTES.home) return pathname === '/'
-  return pathname === to || pathname.startsWith(`${to}/`)
+  const { data } = useCategoryQuery()
+  if (children.some((c) => pathname === c.to)) return true
+  const slugs = data?.data ?? []
+  return slugs.some((c) => c.category_slug && pathname === `/${c.category_slug}`)
 }
 
 /**
@@ -463,7 +562,7 @@ function SolutionChildItem({
     <li role={desktop ? 'none' : undefined}>
       <Link
         to={child.to}
-        title={child.title}
+        title={linkTitleForPage(child.to, pathname) ?? child.title}
         role={desktop ? 'menuitem' : undefined}
         onClick={onNavigate}
         aria-current={isActive ? 'true' : undefined}
@@ -504,7 +603,9 @@ function MobileGroup({
   onToggle: () => void
   onPick: () => void
 }) {
-  const isOnGroupRoute = useOnRoute(entry.to)
+  const isOnGroupRoute = useOnServicesRoute(entry.children)
+  const { data: liveCategories } = useCategoryQuery()
+  const hasLiveCategories = !!entry.mega && (liveCategories?.data.length ?? 0) > 0
 
   return (
     <div>
@@ -531,21 +632,25 @@ function MobileGroup({
       </button>
 
       {expanded && (
-        <ul
+        <div
           id={SOLUTIONS_GROUP_ID}
           className="overflow-hidden pl-2 animate-fade-in"
         >
           <div className="ml-3 mt-1 flex flex-col gap-1 border-l border-line pl-3">
-            {entry.children.map((child) => (
-              <SolutionChildItem
-                key={`${entry.label}-m-${child.label}`}
-                child={child}
-                variant="mobile"
-                onNavigate={onPick}
-              />
-            ))}
+            {hasLiveCategories ? (
+              <SolutionsMobileLinks onPick={onPick} />
+            ) : (
+              entry.children.map((child) => (
+                <SolutionChildItem
+                  key={`${entry.label}-m-${child.label}`}
+                  child={child}
+                  variant="mobile"
+                  onNavigate={onPick}
+                />
+              ))
+            )}
           </div>
-        </ul>
+        </div>
       )}
     </div>
   )

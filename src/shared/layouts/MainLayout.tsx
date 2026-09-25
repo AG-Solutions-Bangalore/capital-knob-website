@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom'
 import { Footer } from '@/shared/components/Footer'
 import { Header } from '@/shared/components/Header'
 import { DeferredSmoothScroll } from '@/shared/components/DeferredSmoothScroll'
+import { ScrollToTopButton } from '@/shared/components/ScrollToTopButton'
 
 export function MainLayout() {
   return (
@@ -12,6 +13,7 @@ export function MainLayout() {
           <Outlet />
         </main>
         <Footer />
+        <ScrollToTopButton />
       </div>
     </DeferredSmoothScroll>
   )

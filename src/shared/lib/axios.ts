@@ -7,7 +7,7 @@
  *
  * Usage:
  *   import { api } from '@/shared/lib/axios'
- *   const { data } = await api.post<MyResponse>('/enquiry.php', payload)
+ *   const { data } = await api.get<MyResponse>('/getSitemap')
  */
 
 import axios, {

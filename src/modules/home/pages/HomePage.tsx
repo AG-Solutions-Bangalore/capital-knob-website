@@ -4,7 +4,6 @@
  */
 
 import { Suspense, lazy } from 'react'
-import { usePageSeo } from '@/shared/seo/usePageSeo'
 import { SectionReveal } from '@/shared/components/SectionReveal'
 import { HomeHero } from '../components/HomeHero'
 
@@ -33,10 +32,18 @@ const HomeCtaSection = lazy(() =>
     default: m.HomeCtaSection,
   })),
 )
+const HomeBlogSection = lazy(() =>
+  import('../components/HomeBlogSection').then((m) => ({
+    default: m.HomeBlogSection,
+  })),
+)
+const FaqSection = lazy(() =>
+  import('@/modules/faq').then((m) => ({
+    default: m.FaqSection,
+  })),
+)
 
 export function HomePage() {
-  usePageSeo('home')
-
   return (
     <div className="flex flex-col bg-page">
       {/* 1. Hero with modern luxury villa visual & live EMI Calculator */}
@@ -63,7 +70,17 @@ export function HomePage() {
           <HomeStepsSection />
         </SectionReveal>
 
-        {/* 6. High-Rise Dusk Banner, Testimonial & Social Proof Metrics */}
+        {/* 6. Latest Insights & Blogs */}
+        <SectionReveal as="section">
+          <HomeBlogSection />
+        </SectionReveal>
+
+        {/* 7. Frequently Asked Questions */}
+        <SectionReveal as="section">
+          <FaqSection slug="home" />
+        </SectionReveal>
+
+        {/* 8. High-Rise Dusk Banner, Testimonial & Social Proof Metrics */}
         <SectionReveal as="section">
           <HomeCtaSection />
         </SectionReveal>

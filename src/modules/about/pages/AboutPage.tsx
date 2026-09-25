@@ -4,7 +4,6 @@
  * layout, and imagery stay easy to evolve.
  */
 
-import { usePageSeo } from '@/shared/seo/usePageSeo'
 import { SectionReveal } from '@/shared/components/SectionReveal'
 import { AboutHero } from '../sections/AboutHero'
 import { StatsSection } from '../sections/StatsSection'
@@ -13,10 +12,9 @@ import { VisionMissionSection } from '../sections/VisionMissionSection'
 import { FounderSection } from '../sections/FounderSection'
 import { CommitmentSection } from '../sections/CommitmentSection'
 import { AboutCta } from '../sections/AboutCta'
+import { FaqSection } from '@/modules/faq'
 
 export function AboutPage() {
-  usePageSeo('about')
-
   return (
     <>
       <AboutHero />
@@ -34,6 +32,9 @@ export function AboutPage() {
       </SectionReveal>
       <SectionReveal as="section">
         <CommitmentSection />
+      </SectionReveal>
+      <SectionReveal as="section">
+        <FaqSection slug="about-us" />
       </SectionReveal>
       <SectionReveal as="section">
         <AboutCta />

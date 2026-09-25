@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { ROUTES } from '@/app/routes'
 import { cn } from '@/shared/lib/cn'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
+import { useCompanyQuery } from '@/modules/company/hooks/useCompanyQuery'
 
 interface LogoProps {
   /**
@@ -28,6 +29,14 @@ const LOGO_DIMS = {
 export function Logo({ variant = 'light', layout = 'horizontal', className }: LogoProps) {
   void variant
 
+  // Dynamic logo: live `company_logo` against the API `Company` base when
+  // uploaded, else the bundled static logo. Path always comes from the API.
+  const { data } = useCompanyQuery()
+  const liveFile = data?.data.company_logo?.trim()
+  const liveBase =
+    data?.image_url?.find((e) => e.image_for === 'Company')?.image_url ?? ''
+  const liveSrc = liveFile ? `${liveBase}${liveFile}` : null
+
   return (
     <Link
       to={ROUTES.home}
@@ -35,7 +44,7 @@ export function Logo({ variant = 'light', layout = 'horizontal', className }: Lo
       className={cn('inline-flex leading-none', className)}
     >
       <img
-        src={LOGO_SRC[layout]}
+        src={liveSrc ?? LOGO_SRC[layout]}
         width={LOGO_DIMS[layout].width}
         height={LOGO_DIMS[layout].height}
         alt="CapitalKnob – Loan and Investment"

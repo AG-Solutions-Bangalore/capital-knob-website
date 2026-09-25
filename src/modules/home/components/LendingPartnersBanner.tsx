@@ -1,101 +1,226 @@
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Container } from '@/shared/components/Container'
+import { useClientsQuery } from '@/modules/client/hooks/useClientQuery'
+
+function clientName(c: { client_name?: string | null; clients_name?: string | null }): string {
+  return c.clients_name?.trim() || c.client_name?.trim() || 'Lending Partner'
+}
+
+function clientImage(
+  c: { client_image?: string | null; clients_image?: string | null },
+  base: string,
+  noImage: string | null,
+): string | null {
+  const file = (c.clients_image || c.client_image)?.trim()
+  if (file) return `${base}${file}`
+  return noImage
+}
+
+/** Static bank marks — loading / error / empty fallback so the strip never looks broken. */
+function StaticBankMark({ name }: { name: string }) {
+  switch (name) {
+    case 'HDFC Bank':
+      return (
+        <div className="flex h-6 items-center bg-[#004c8f] px-2 py-0.5 text-[11px] font-black tracking-tighter text-white">
+          <span className="mr-1 inline-block h-3 w-3 bg-[#ed232a]" />
+          HDFC BANK
+        </div>
+      )
+    case 'ICICI Bank':
+      return (
+        <div className="flex items-center">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#f37021] text-[10px] font-black text-white">
+            i
+          </span>
+          <span className="ml-1 text-xs font-black tracking-tight text-[#a61d24]">
+            ICICI Bank
+          </span>
+        </div>
+      )
+    case 'State Bank of India':
+      return (
+        <div className="flex items-center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-[#280071]" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" fill="#00a5ec" />
+            <circle cx="12" cy="10" r="3.5" fill="white" />
+            <rect x="10.5" y="10" width="3" height="8" fill="white" />
+          </svg>
+          <span className="ml-1 text-xs font-black tracking-wide text-[#280071]">
+            SBI
+          </span>
+        </div>
+      )
+    case 'Axis Bank':
+      return (
+        <div className="flex items-center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#97144d" aria-hidden="true">
+            <polygon points="12,2 22,22 14,22 10,14 14,14 10,6" />
+          </svg>
+          <span className="ml-1 text-xs font-black tracking-tight text-[#97144d]">
+            AXIS BANK
+          </span>
+        </div>
+      )
+    case 'Kotak Mahindra Bank':
+      return (
+        <div className="flex items-center">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#ed1c24] text-[10px] font-black text-white">
+            cc
+          </span>
+          <span className="ml-1 text-xs font-black tracking-tight text-[#003366]">
+            kotak
+          </span>
+        </div>
+      )
+    case 'IndusInd Bank':
+      return (
+        <span className="text-xs font-black tracking-tight text-[#982229]">
+          IndusInd Bank
+        </span>
+      )
+    default:
+      return (
+        <div className="flex items-center">
+          <span className="flex h-5 w-5 items-center justify-center rounded-sm bg-[#f26522] text-[9px] font-black text-white">
+            BOB
+          </span>
+          <span className="ml-1 text-[11px] font-black tracking-tight text-[#333333]">
+            BANK OF BARODA
+          </span>
+        </div>
+      )
+  }
+}
+
+const STATIC_BANKS = [
+  'Axis Bank',
+  'Bank of Baroda',
+  'HDFC Bank',
+  'ICICI Bank',
+  'IndusInd Bank',
+  'Kotak Mahindra Bank',
+  'State Bank of India',
+]
+
+/** Minimum tiles per track so the loop always looks full and seamless. */
+const MIN_TILES = 10
 
 export function LendingPartnersBanner() {
+  // Live lending partners (GET /getClient) with fully dynamic paths.
+  // Logos scroll in an infinite marquee; the static bank set scrolls
+  // the same way as the loading / error / empty fallback.
+  const { data, isPending, isError } = useClientsQuery()
+  const clients = data?.data ?? []
+  const base =
+    data?.image_url?.find((e) => e.image_for === 'Client')?.image_url ?? ''
+  const noImage =
+    data?.image_url?.find((e) => e.image_for === 'No Image')?.image_url ?? null
+  const showLive = !isPending && !isError && clients.length > 0
+
+  // Build the tile list, cycling to MIN_TILES so narrow sets still loop.
+  const tiles: ReactNode[] = []
+  if (showLive) {
+    const liveTiles = clients.map((c, idx) => {
+      const name = clientName(c)
+      const src = clientImage(c, base, noImage)
+      return (
+        <div key={`live-${name}-${idx}`} title={name} className="flex shrink-0 items-center px-6 md:px-8">
+          {src ? (
+            <img
+              src={src}
+              alt={name}
+              title={name}
+              className="max-h-9 w-auto max-w-32 object-contain md:max-h-10"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <span className="whitespace-nowrap text-xs font-black tracking-tight text-navy">
+              {name}
+            </span>
+          )}
+        </div>
+      )
+    })
+    for (let i = 0; tiles.length < MIN_TILES; i++) {
+      tiles.push(liveTiles[i % liveTiles.length])
+    }
+  } else {
+    const staticTiles = STATIC_BANKS.map((name) => (
+      <div
+        key={`static-${name}`}
+        title={name}
+        className="flex shrink-0 items-center px-6 transition-opacity hover:opacity-85 md:px-8"
+      >
+        <StaticBankMark name={name} />
+      </div>
+    ))
+    for (let i = 0; tiles.length < MIN_TILES; i++) {
+      tiles.push(staticTiles[i % staticTiles.length])
+    }
+  }
+  // Trailing label — static, outside the marquee so it never scrolls.
+  const moreLabel = (
+    <span className="shrink-0 whitespace-nowrap text-xs font-medium text-muted">
+      And Many More...
+    </span>
+  )
+
+  // Marquee pacing: measured track width / px-per-second (slower than the
+  // testimonial strip so logos stay readable). Recomputed when tiles change.
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [duration, setDuration] = useState(30)
+  useEffect(() => {
+    const width = trackRef.current?.scrollWidth ?? 0
+    if (width > 0) setDuration(width / 80)
+  }, [showLive, clients.length])
+
   return (
-    <section className="border-b border-line bg-white py-5 shadow-xs">
+    <section className="overflow-hidden border-b border-line bg-white py-5 shadow-xs">
       <Container size="4xl">
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-8">
+        <div className="flex items-center gap-4 md:gap-8">
           {/* Label */}
           <div className="shrink-0">
-            <span className="text-xs font-bold uppercase tracking-wider text-muted md:text-sm">
+            <span className="whitespace-nowrap text-xs font-bold uppercase tracking-wider text-muted md:text-sm">
               Our Lending Partners
             </span>
           </div>
 
-          {/* Bank Logos Strip */}
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3.5 sm:gap-8 md:justify-between lg:flex-1">
-            {/* HDFC Bank */}
-            <div className="flex items-center gap-1.5 transition-opacity hover:opacity-85" title="HDFC Bank">
-              <div className="flex h-6 items-center bg-[#004c8f] px-2 py-0.5 text-[11px] font-black tracking-tighter text-white">
-                <span className="mr-1 inline-block h-3 w-3 bg-[#ed232a]" />
-                HDFC BANK
+          {/* Logo marquee — two identical tracks, pause on hover */}
+          <div className="relative min-w-0 flex-1 overflow-hidden">
+            <div
+              className="ck-marquee-group flex gap-4"
+              style={{ ['--ck-duration' as string]: `${duration}s` }}
+            >
+              <div ref={trackRef} className="ck-marquee-track flex shrink-0 items-center gap-4">
+                {tiles.map((t, i) => (
+                  <span key={`first-${i}`} className="flex shrink-0 items-center">
+                    {t}
+                  </span>
+                ))}
+              </div>
+              <div className="ck-marquee-track flex shrink-0 items-center gap-4" aria-hidden="true">
+                {tiles.map((t, i) => (
+                  <span key={`second-${i}`} className="flex shrink-0 items-center">
+                    {t}
+                  </span>
+                ))}
               </div>
             </div>
 
-            {/* ICICI Bank */}
-            <div className="flex items-center gap-1.5 transition-opacity hover:opacity-85" title="ICICI Bank">
-              <div className="flex items-center">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#f37021] text-[10px] font-black text-white">
-                  i
-                </span>
-                <span className="ml-1 text-xs font-black tracking-tight text-[#a61d24]">
-                  ICICI Bank
-                </span>
-              </div>
-            </div>
-
-            {/* State Bank of India (SBI) */}
-            <div className="flex items-center gap-1.5 transition-opacity hover:opacity-85" title="State Bank of India">
-              <div className="flex items-center">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-[#280071]" aria-hidden="true">
-                  <circle cx="12" cy="12" r="10" fill="#00a5ec" />
-                  <circle cx="12" cy="10" r="3.5" fill="white" />
-                  <rect x="10.5" y="10" width="3" height="8" fill="white" />
-                </svg>
-                <span className="ml-1 text-xs font-black tracking-wide text-[#280071]">
-                  SBI
-                </span>
-              </div>
-            </div>
-
-            {/* Axis Bank */}
-            <div className="flex items-center gap-1.5 transition-opacity hover:opacity-85" title="Axis Bank">
-              <div className="flex items-center">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#97144d" aria-hidden="true">
-                  <polygon points="12,2 22,22 14,22 10,14 14,14 10,6" />
-                </svg>
-                <span className="ml-1 text-xs font-black tracking-tight text-[#97144d]">
-                  AXIS BANK
-                </span>
-              </div>
-            </div>
-
-            {/* Kotak Mahindra Bank */}
-            <div className="flex items-center gap-1.5 transition-opacity hover:opacity-85" title="Kotak Mahindra Bank">
-              <div className="flex items-center">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#ed1c24] text-[10px] font-black text-white">
-                  cc
-                </span>
-                <span className="ml-1 text-xs font-black tracking-tight text-[#003366]">
-                  kotak
-                </span>
-              </div>
-            </div>
-
-            {/* IndusInd Bank */}
-            <div className="flex items-center gap-1.5 transition-opacity hover:opacity-85" title="IndusInd Bank">
-              <span className="text-xs font-black tracking-tight text-[#982229]">
-                IndusInd Bank
-              </span>
-            </div>
-
-            {/* Bank of Baroda */}
-            <div className="flex items-center gap-1.5 transition-opacity hover:opacity-85" title="Bank of Baroda">
-              <div className="flex items-center">
-                <span className="flex h-5 w-5 items-center justify-center rounded-sm bg-[#f26522] text-[9px] font-black text-white">
-                  BOB
-                </span>
-                <span className="ml-1 text-[11px] font-black tracking-tight text-[#333333]">
-                  BANK OF BARODA
-                </span>
-              </div>
-            </div>
-
-            {/* And Many More */}
-            <span className="text-xs font-medium text-muted">
-              And Many More...
-            </span>
+            {/* Fade edges */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 left-0 hidden w-16 bg-gradient-to-r from-white to-transparent sm:block"
+            />
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 right-0 hidden w-16 bg-gradient-to-l from-white to-transparent sm:block"
+            />
           </div>
+
+          {/* Static trailing label */}
+          {moreLabel}
         </div>
       </Container>
     </section>

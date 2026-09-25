@@ -3,9 +3,33 @@ import babel from '@rolldown/plugin-babel'
 import { defineConfig, type Plugin } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import compression from 'vite-plugin-compression'
+import { vitePrerenderPlugin } from 'vite-prerender-plugin'
+import { MessagePort } from 'node:worker_threads'
 import path from 'node:path'
 import fs from 'node:fs'
 import zlib from 'node:zlib'
+
+// CRITICAL EVENT-LOOP UNBLOCK FIX:
+// React 18/19 scheduler keeps a Node MessagePort open, causing Vite SSG builds to hang indefinitely.
+if (MessagePort && MessagePort.prototype) {
+  const origOn = Object.getOwnPropertyDescriptor(MessagePort.prototype, 'onmessage')
+  if (origOn && origOn.set) {
+    Object.defineProperty(MessagePort.prototype, 'onmessage', {
+      set(fn) {
+        origOn.set!.call(this, fn)
+        const port = this as MessagePort & { unref?: () => void }
+        if (fn && typeof port.unref === 'function') {
+          port.unref()
+        }
+      },
+      get() {
+        return origOn.get?.call(this)
+      },
+      configurable: true,
+      enumerable: true,
+    })
+  }
+}
 
 // vite-plugin-compression keeps a module-level mtime cache, so the second
 // instance (brotli) sees every file as already compressed and emits nothing.
@@ -86,6 +110,10 @@ export default defineConfig({
     react(),
     tailwindcss(),
     babel({ presets: [reactCompilerPreset()] }),
+    vitePrerenderPlugin({
+      prerenderScript: path.resolve(import.meta.dirname, 'src/prerender.tsx'),
+      renderTarget: '#root',
+    }),
     // @ts-expect-error — vite-plugin-compression CJS/ESM interop under nodenext
     compression({
       algorithm: 'gzip',
