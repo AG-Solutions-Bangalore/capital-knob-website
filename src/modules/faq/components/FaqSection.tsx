@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Container } from '@/shared/components/Container'
 import { useFaqBySlugQuery } from '../hooks/useFaqQuery'
@@ -9,6 +9,12 @@ import type { FaqItem } from '../api/faq.types'
 export interface FaqSectionProps {
   /** Page or category slug to fetch FAQs for, e.g. 'home', 'contact', 'about-us', 'blogs', or service slugs. */
   slug?: string
+  /**
+   * Fallback slug fetched when both `items` and the primary `slug` FAQs are
+   * empty (e.g. blog detail pages fall back to the shared `'blogs'` FAQs).
+   * Ignored when it matches `slug`.
+   */
+  fallbackSlug?: string
   /** Direct FAQ items from parent response (e.g. blog.faq) */
   items?: FaqItem[]
   /** Section title override. Defaults to first live item's `faq_heading`, or "Frequently Asked Questions". */
@@ -21,17 +27,31 @@ export interface FaqSectionProps {
 
 export function FaqSection({
   slug,
+  fallbackSlug,
   items: directItems,
   title,
   eyebrow = 'STILL HAVE QUESTIONS?',
   className = 'bg-brand-blue-soft/30 py-16 lg:py-20',
 }: FaqSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const [lastSlug, setLastSlug] = useState(slug)
   const prefersReducedMotion = useReducedMotion()
 
   const { data: liveFaq } = useFaqBySlugQuery(slug)
+  const effectiveFallback = fallbackSlug && fallbackSlug !== slug ? fallbackSlug : undefined
+  const { data: fallbackFaq } = useFaqBySlugQuery(effectiveFallback)
 
-  const rawList = directItems && directItems.length > 0 ? directItems : (liveFaq?.data ?? [])
+  // Reset the open accordion when navigating between slugs (render-phase
+  // adjustment — the documented alternative to setState inside an effect).
+  if (lastSlug !== slug) {
+    setLastSlug(slug)
+    setOpenIndex(null)
+  }
+
+  const rawList =
+    directItems && directItems.length > 0
+      ? directItems
+      : (liveFaq?.data?.length ? liveFaq.data : (fallbackFaq?.data ?? []))
 
   const items = rawList
     .map((item) => {
@@ -77,10 +97,22 @@ export function FaqSection({
             const isOpen = openIndex === index
             const questionId = `faq-${slug}-question-${index}`
             const answerId = `faq-${slug}-answer-${index}`
+            // Show each distinct `faq_heading` from the API as a group label,
+            // except when it duplicates the section title resolved above.
+            const prevHeading = index > 0 ? items[index - 1].heading : null
+            const showGroupHeading =
+              !!item.heading &&
+              item.heading !== resolvedTitle &&
+              item.heading !== prevHeading
 
             return (
+              <Fragment key={`${item.question}-${index}`}>
+                {showGroupHeading && (
+                  <h3 className="px-1 pt-5 font-display text-base font-bold text-navy first:pt-0 md:text-lg">
+                    {item.heading}
+                  </h3>
+                )}
               <div
-                key={`${item.question}-${index}`}
                 className={`overflow-hidden rounded-xl border bg-white transition-all duration-300 ${isOpen
                     ? 'border-gold/50 shadow-md ring-1 ring-gold/20'
                     : 'border-line shadow-soft hover:border-gold/30 hover:shadow-md'
@@ -183,6 +215,7 @@ export function FaqSection({
                   )}
                 </AnimatePresence>
               </div>
+              </Fragment>
             )
           })}
         </div>

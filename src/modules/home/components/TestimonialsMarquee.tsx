@@ -34,6 +34,13 @@ interface TestimonialsMarqueeProps {
   showButton?: boolean
   buttonText?: string
   buttonLink?: string
+  /**
+   * Color tone — `'dark'` (default) for navy backgrounds, `'light'` for
+   * light sections (edge fades + header text adapt, animation unchanged).
+   */
+  tone?: 'dark' | 'light'
+  /** Hide the built-in title/description header (parent renders its own). */
+  hideHeader?: boolean
 }
 
 export function TestimonialsMarquee({
@@ -46,6 +53,8 @@ export function TestimonialsMarquee({
   showButton = false,
   buttonText = 'View All Success Stories',
   buttonLink = '#',
+  tone = 'dark',
+  hideHeader = false,
 }: TestimonialsMarqueeProps) {
   const marqueeRef = useRef<HTMLDivElement>(null)
   const [duration, setDuration] = useState(40)
@@ -59,20 +68,23 @@ export function TestimonialsMarquee({
   if (!testimonials || testimonials.length === 0) return null
 
   const cardClass = cn('h-[200px] w-[300px] sm:h-[210px] sm:w-[340px] md:h-[220px] md:w-[360px]', cardClassName)
+  const isLight = tone === 'light'
 
   return (
     <div className={cn('flex flex-col items-center gap-4 text-center sm:gap-6', className)}>
+      {!hideHeader && (
       <div className="px-4">
-        <h3 className="text-xl font-bold text-white sm:text-2xl md:text-3xl">
+        <h3 className={cn('text-xl font-bold sm:text-2xl md:text-3xl', isLight ? 'text-navy' : 'text-white')}>
           {title}
         </h3>
         {description ? (
-          <p className="mx-auto mt-2 max-w-2xl text-sm text-white/80">
+          <p className={cn('mx-auto mt-2 max-w-2xl text-sm', isLight ? 'text-muted' : 'text-white/80')}>
             {description}
           </p>
         ) : null}
         <span aria-hidden="true" className="mx-auto mt-3 block h-0.5 w-16 bg-gold" />
       </div>
+      )}
 
       <div className="relative flex w-full overflow-hidden">
         <div
@@ -115,11 +127,17 @@ export function TestimonialsMarquee({
         {/* Fade edges */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 hidden w-32 bg-gradient-to-r from-navy to-transparent md:block"
+          className={cn(
+            'pointer-events-none absolute inset-y-0 left-0 hidden w-32 bg-gradient-to-r to-transparent md:block',
+            isLight ? 'from-surface' : 'from-navy',
+          )}
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 hidden w-32 bg-gradient-to-l from-navy to-transparent md:block"
+          className={cn(
+            'pointer-events-none absolute inset-y-0 right-0 hidden w-32 bg-gradient-to-l to-transparent md:block',
+            isLight ? 'from-surface' : 'from-navy',
+          )}
         />
       </div>
 

@@ -1,9 +1,15 @@
-
 import { Link } from 'react-router-dom'
 import { blogPath } from '@/app/routes'
 import { blogLinkTitle } from '@/shared/seo/linkTitles'
-import { useBlogBySlugQuery } from '../hooks/useBlogsQueries'
-import { FaqSection } from '@/modules/faq'
+import {
+  useBlogBySlugQuery,
+  useBlogsQuery,
+  useFeaturedBlogsQuery,
+  useFrontBlogsQuery,
+} from '../hooks/useBlogsQueries'
+import type { Blog } from '../api/blogs.types'
+import type { ImageUrlEntry } from '@/modules/company/api/company.types'
+import { BlogCarousel } from './BlogCarousel'
 
 function formatBlogDate(dateStr: string | null | undefined): string | null {
   if (!dateStr) return null
@@ -26,13 +32,79 @@ const BLOG_DETAIL_IMAGE_TITLES: Record<string, string> = {
   demoblogs123: 'CapitalKnob Financial Insights and Blogs',
 }
 
+function slugOf(blog: Blog): string {
+  return blog.blog_slug || String(blog.id || '')
+}
+
+/** Merge image_url bases so cards resolve even when rows come from different endpoints. */
+function mergeBases(...lists: (ImageUrlEntry[] | undefined)[]): ImageUrlEntry[] {
+  const seen = new Set<string>()
+  const out: ImageUrlEntry[] = []
+  for (const list of lists) {
+    for (const entry of list ?? []) {
+      const key = entry.image_for ?? JSON.stringify(entry)
+      if (seen.has(key)) continue
+      seen.add(key)
+      out.push(entry)
+    }
+  }
+  return out
+}
+
+function CarouselSkeleton() {
+  return (
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
+      {[0, 1, 2].map((i) => (
+        <div
+          key={i}
+          className="animate-pulse rounded-2xl border border-line bg-white p-5 shadow-soft"
+        >
+          <div className="h-44 rounded-xl bg-line-soft" />
+          <div className="mt-4 h-5 w-3/4 rounded bg-line-soft" />
+          <div className="mt-2 h-4 w-1/2 rounded bg-line-soft" />
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function BlogDetailCard({ slug }: { slug: string }) {
   const { data, isPending, isError } = useBlogBySlugQuery(slug || undefined)
+  const { data: featuredData, isPending: isFeaturedPending } = useFeaturedBlogsQuery()
+  const { data: frontData, isPending: isFrontPending } = useFrontBlogsQuery()
+  const { data: listData, isPending: isListPending } = useBlogsQuery()
 
   const blog = data?.data
-  const featured = data?.featured ?? []
 
+  // ---- Carousel 1: Featured Articles (GET /getFeaturedBlogs, fallback to slug `featured`) ----
+  const slugFeatured = data?.featured ?? []
+  const apiFeatured = featuredData?.data ?? []
+  const featuredSource = apiFeatured.length > 0 ? apiFeatured : slugFeatured
+  const featuredBlogs = featuredSource.filter((b) => slugOf(b) !== slug)
 
+  // ---- Carousel 2: Other Blogs (GET /getFrontBlogs, fallback to GET /getBlogs) ----
+  const apiFront = frontData?.data ?? []
+  const apiList = listData?.data ?? []
+  const combinedOthers = [...apiFront, ...apiList]
+  const seenOther = new Set<string>()
+  const featuredSlugs = new Set(featuredBlogs.map(slugOf))
+  const otherBlogs: Blog[] = []
+  for (const b of combinedOthers) {
+    const key = slugOf(b)
+    if (!key || key === slug || featuredSlugs.has(key) || seenOther.has(key)) continue
+    seenOther.add(key)
+    otherBlogs.push(b)
+  }
+
+  const carouselBase = mergeBases(
+    data?.image_url,
+    featuredData?.image_url,
+    frontData?.image_url,
+    listData?.image_url,
+  )
+
+  const carouselsPending =
+    isFeaturedPending || isFrontPending || isListPending
 
   if (isPending) {
     return (
@@ -212,49 +284,73 @@ export function BlogDetailCard({ slug }: { slug: string }) {
         </div>
       </article>
 
-      {/* Featured / Related Blogs (from API data.featured) */}
-      {featured.length > 0 && (
-        <section className="mt-12">
+      {/* Carousel 1 — Featured Articles (same card design everywhere) */}
+      {carouselsPending && featuredBlogs.length === 0 && otherBlogs.length === 0 ? (
+        <section className="mt-12" aria-label="Loading related articles">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="font-display text-xl font-bold text-navy sm:text-2xl">
-              Featured Articles
-            </h2>
-            <Link to="/blogs" className="text-xs font-bold text-gold hover:text-gold-hover">
+            <div className="h-7 w-48 animate-pulse rounded bg-line-soft" />
+          </div>
+          <CarouselSkeleton />
+        </section>
+      ) : null}
+
+      {featuredBlogs.length > 0 && (
+        <section className="mt-12" aria-label="Featured articles">
+          <div className="mb-6 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
+                KEEP READING
+              </p>
+              <h2 className="mt-2 font-display text-xl font-bold text-navy sm:text-2xl">
+                Featured Articles
+              </h2>
+              <div className="mt-3 h-1 w-12 bg-gold" aria-hidden="true" />
+            </div>
+            <Link to="/blogs" className="shrink-0 text-xs font-bold text-gold hover:text-gold-hover">
               View all &rarr;
             </Link>
           </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((f) => (
-              <Link
-                key={f.id ?? f.blog_slug}
-                to={blogPath(f.blog_slug || String(f.id))}
-                title={blogLinkTitle(f.blog_slug || String(f.id), f.blog_title)}
-                className="group flex flex-col overflow-hidden rounded-xl border border-line/80 bg-white shadow-soft transition-all hover:-translate-y-1 hover:border-gold/40 hover:shadow-card"
-              >
-                <div className="p-5">
-                  {f.categories && (
-                    <span className="text-[11px] font-bold uppercase text-gold">
-                      {f.categories}
-                    </span>
-                  )}
-                  <h3 className="mt-1.5 font-display text-base font-bold text-navy group-hover:text-brand-blue">
-                    {f.blog_title}
-                  </h3>
-                  {f.blog_short_description && (
-                    <p className="mt-1.5 line-clamp-2 text-xs text-muted">
-                      {f.blog_short_description}
-                    </p>
-                  )}
-                </div>
-              </Link>
-            ))}
-          </div>
+          <BlogCarousel
+            key={`featured-${slug}`}
+            blogs={featuredBlogs}
+            base={carouselBase}
+            ariaLabel="Featured articles"
+          />
         </section>
       )}
 
-      {/* Blog FAQ section if present */}
-      <FaqSection slug={slug} items={data?.faq} />
+      {/* Carousel 2 — Other Blogs */}
+      {otherBlogs.length > 0 && (
+        <section
+          className={featuredBlogs.length > 0 ? 'mt-12 border-t border-line/60 pt-10' : 'mt-12'}
+          aria-label="Other blogs"
+        >
+          <div className="mb-6 flex flex-col items-start justify-between gap-3 md:flex-row md:items-end">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
+                KEEP EXPLORING
+              </p>
+              <h2 className="mt-2 font-display text-xl font-bold text-navy sm:text-2xl">
+                Other Blogs
+              </h2>
+              <div className="mt-3 h-1 w-12 bg-gold" aria-hidden="true" />
+            </div>
+            <p className="max-w-md text-sm leading-relaxed text-slate-500">
+              More guides and perspectives from our advisory team.
+            </p>
+          </div>
+          <BlogCarousel
+            key={`other-${slug}`}
+            blogs={otherBlogs}
+            base={carouselBase}
+            ariaLabel="Other blogs"
+          />
+        </section>
+      )}
+
+      {/* NOTE: FAQ renders as a full-width sibling in BlogDetailPage
+          (not nested here) so it spans the viewport like every other
+          page section. No testimonial section on the details page. */}
     </div>
   )
 }
-
