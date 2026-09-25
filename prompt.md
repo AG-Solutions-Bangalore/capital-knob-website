@@ -10,7 +10,7 @@
 - Work **ONLY on the VV Studio project**. Do not touch any other project.
 - Before writing any code, **inspect** the VV codebase: blog listing page, blog details page, blog components, existing carousel components, FAQ component/section, testimonial/review components, API service functions and hooks, response types/interfaces, page params (slugs), and existing conditional rendering.
 - **Reuse** existing VV components, API methods, hooks, styling tokens, and design patterns. Do not create duplicate API logic if an existing service/hook can be reused.
-- **Do NOT hardcode**: blog data, FAQ data, testimonials, headings/titles (except the two fixed titles named below), API IDs, or page-specific content. Everything must be API + slug-param driven.
+- **Do NOT hardcode**: blog data, FAQ data, testimonials, headings/titles (except the one fixed `FAQ` title named below), API IDs, or page-specific content. Everything must be API + slug-param driven.
 - If FAQ or testimonial data is missing/null/empty for a slug, the section must **gracefully render nothing** — never broken UI.
 
 ---
@@ -61,7 +61,7 @@ GET /getBlogsBySlug/{slug}  →  `faq` array
   - heading ← `faq_heading` (trimmed, nullable)
   - sort ← numeric `faq_sort` (string `"1"` must parse to `1`)
 - Drop rows with empty question or answer; sort ascending by `faq_sort`; render nothing when the final list is empty.
-- **Fixed section title on blog pages:** pass `title="Blog FAQ"` on BOTH the blog listing page (`slug="blogs"`) and the blog details page. (Other pages keep their own titles / API-driven default of first `faq_heading`.)
+- **Fixed section title on blog pages:** pass `title="FAQ"` on BOTH the blog listing page (`slug="blogs"`) and the blog details page. (Other pages keep their own titles / API-driven default of first `faq_heading`.)
 - **Heading groups:** every distinct API `faq_heading` renders as a sub-heading label above its related Q&A, except when it duplicates the section title, and repeated consecutive headings show the label only once. Net effect: first heading + its Q&A, then second heading + its Q&A inside it, etc.
 - Accordion open/close with a single open index; **reset open state when the slug changes** (use render-phase slug comparison, not `setState` in `useEffect`, to satisfy lint).
 - Real API shapes you must handle (verified live — do not "fix" the API, handle these keys):
@@ -90,9 +90,8 @@ GET /getBlogsBySlug/{slug}  →  `faq` array
   - Usability filter (same rule as schema/homepage): keep rows with **non-empty client name AND non-empty description** (strip HTML before checking); render nothing when empty.
   - Mapping: name ← `testimonial_client_name`, detail ← `testimonial_description`, rating ← numeric `testimonial_rating` clamped 1–5 (default 5), footer ← `"Verified Client · 25 SEP 2026"` from `testimonial_created_date` (`YYYY-MM-DD` → `DD MON YYYY`, no timezone tricks).
   - Feed rows into the reused infinite marquee in **light tone with hidden header**; cycle rows to fill a minimum strip (e.g. 8 cards) so the loop stays seamless even with 1 backend row.
-- Wire it up:
-  - Blog listing page → `<TestimonialSection slug="blogs" />`
-  - Blog details page → `<TestimonialSection slug={blogSlug} fallbackSlug="blogs" />`
+- Wire it up — blog listing page ONLY → `<TestimonialSection slug="blogs" />`.
+  Do NOT render any testimonial section on the blog details page (explicit product decision, even though fallback data exists).
 - Verified live shape to handle:
   ```json
   // GET /getTestimonial/blogs
@@ -107,7 +106,7 @@ GET /getBlogsBySlug/{slug}  →  `faq` array
 ## 4. Full-width placement (important layout rule)
 
 - Testimonial + FAQ sections must render as **full-width top-level page siblings** (own `<section>` + site `Container` inside), **never nested inside the article/content container** — nesting double-constrains padding and squeezes carousels/bands.
-- Reference band: FAQ eyebrow `STILL HAVE QUESTIONS?` + `Blog FAQ` title + gold underline, full band width with standard site container padding.
+- Reference band: FAQ eyebrow `STILL HAVE QUESTIONS?` + `FAQ` title + gold underline, full band width with standard site container padding.
 - For the testimonial loop: header grid-aligned in the container, marquee track **full-bleed edge-to-edge** below it (same as the homepage loop).
 - On the details page, the detail query needed for direct FAQ `items` must reuse the **same React Query key** as the article component (cached — no extra network request).
 
@@ -119,8 +118,8 @@ GET /getBlogsBySlug/{slug}  →  `faq` array
 - [ ] Article content + heading load correctly; prev/next article nav works.
 - [ ] Featured carousel displays (same card design); current blog never appears in it.
 - [ ] Other Blogs carousel displays after it (hidden gracefully if no remaining blogs).
-- [ ] `Blog FAQ` title fixed; Q&A displayed; second API heading (`T2`-style) shows with its related Q&A grouped under it.
-- [ ] Testimonials infinite loop displays when slug/fallback data exists; hidden when both empty.
+- [ ] `FAQ` title fixed; Q&A displayed; second API heading (`T2`-style) shows with its related Q&A grouped under it.
+- [ ] NO testimonial section on the details page (listing page keeps the loop).
 - [ ] Desktop + tablet + mobile layouts correct; full-width bands, no squeezed sections.
 - [ ] No console errors, no API errors, lint clean, production build passes.
 
