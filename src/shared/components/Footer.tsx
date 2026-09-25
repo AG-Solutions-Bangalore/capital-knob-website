@@ -147,6 +147,8 @@ export function Footer({ variant = 'light' }: FooterProps) {
                   href={s.href}
                   title={t(s.href)}
                   aria-label={s.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border transition-all ${isDark
                     ? 'border-white/15 bg-white/5 text-white/80 hover:border-gold hover:text-gold'
                     : 'border-line bg-line-soft text-muted hover:border-navy hover:text-navy'
