@@ -11,7 +11,7 @@ import { Container } from '@/shared/components/Container'
 
 const LAST_UPDATED = 'September 2026'
 const CONTACT_EMAIL = 'capitalknobil@gmail.com'
-const GRIEVANCE_OFFICER = 'R Gautam'
+const GRIEVANCE_OFFICER = 'R Ramashankar Gautam'
 // TODO: replace with the registered-office address if different.
 const REGISTERED_OFFICE_ADDRESS =
   'Prestige Tech Park, 5th Floor, Outer Ring Road, Marathahalli, Bengaluru, Karnataka 560037'

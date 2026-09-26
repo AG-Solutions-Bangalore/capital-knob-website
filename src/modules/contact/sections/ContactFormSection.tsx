@@ -13,7 +13,7 @@ interface FormState {
   fullName: string
   phone: string
   email: string
-  subject: string
+  service: string
   message: string
 }
 
@@ -21,13 +21,13 @@ const INITIAL_FORM: FormState = {
   fullName: '',
   phone: '',
   email: '',
-  subject: '',
+  service: '',
   message: '',
 }
 
 export function ContactFormSection() {
   const { form } = contactCopy
-  const subjects = form.subjects
+  const services = form.services
   const [values, setValues] = useState<FormState>(INITIAL_FORM)
   const [errors, setErrors] = useState<Partial<FormState>>({})
   const [serverError, setServerError] = useState<string | null>(null)
@@ -58,8 +58,8 @@ export function ContactFormSection() {
       errs.email = 'Please enter a valid email address.'
     }
 
-    if (!values.subject) {
-      errs.subject = 'Please select a subject.'
+    if (!values.service) {
+      errs.service = 'Please select a service.'
     }
 
     if (!values.message.trim()) {
@@ -83,7 +83,7 @@ export function ContactFormSection() {
       enquiryFullName: values.fullName.trim(),
       enquiryEmail: values.email.trim(),
       enquiryMobile: values.phone.replace(/\D/g, ''),
-      enquiryService: values.subject,
+      enquiryService: values.service,
       enquiryMessage: values.message.trim(),
       enquiryFrom: getEnquiryFrom(ENQUIRY_FROM_CONTACT),
       ...getUtmParams(),
@@ -262,32 +262,32 @@ export function ContactFormSection() {
                     )}
                   </div>
 
-                  {/* Subject Dropdown */}
+                  {/* Service Dropdown */}
                   <div>
                     <label
-                      htmlFor="subject"
+                      htmlFor="service"
                       className="block text-xs font-semibold text-ink"
                     >
-                      Subject <span className="text-rose-500">*</span>
+                      Service <span className="text-rose-500">*</span>
                     </label>
                     <div className="relative mt-2">
                       <select
-                        id="subject"
-                        value={values.subject}
+                        id="service"
+                        value={values.service}
                         onChange={(e) => {
-                          setValues({ ...values, subject: e.target.value })
-                          if (errors.subject) setErrors({ ...errors, subject: undefined })
+                          setValues({ ...values, service: e.target.value })
+                          if (errors.service) setErrors({ ...errors, service: undefined })
                         }}
-                        className={`h-11 w-full appearance-none rounded-lg border bg-white px-3.5 pr-8 text-sm text-ink transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${!values.subject ? 'text-muted/70' : 'text-ink'
-                          } ${errors.subject ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-200' : 'border-line'
+                        className={`h-11 w-full appearance-none rounded-lg border bg-white px-3.5 pr-8 text-sm text-ink transition-colors focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 ${!values.service ? 'text-muted/70' : 'text-ink'
+                          } ${errors.service ? 'border-rose-400 focus:border-rose-500 focus:ring-rose-200' : 'border-line'
                           }`}
                       >
                         <option value="" disabled>
-                          Select a subject
+                          Select a service
                         </option>
-                        {subjects.map((sub) => (
-                          <option key={sub} value={sub} className="text-ink">
-                            {sub}
+                        {services.map((svc) => (
+                          <option key={svc} value={svc} className="text-ink">
+                            {svc}
                           </option>
                         ))}
                       </select>
@@ -306,8 +306,8 @@ export function ContactFormSection() {
                         </svg>
                       </div>
                     </div>
-                    {errors.subject && (
-                      <p className="mt-1 text-xs text-rose-500">{errors.subject}</p>
+                    {errors.service && (
+                      <p className="mt-1 text-xs text-rose-500">{errors.service}</p>
                     )}
                   </div>
                 </div>
