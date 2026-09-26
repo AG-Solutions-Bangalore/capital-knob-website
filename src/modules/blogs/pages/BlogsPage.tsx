@@ -4,7 +4,6 @@
 
 import { Container } from '@/shared/components/Container'
 import { PageHero } from '@/shared/components/PageHero'
-import { SectionReveal } from '@/shared/components/SectionReveal'
 import { FaqSection } from '@/modules/faq'
 import { TestimonialSection } from '@/modules/testimonial/components/TestimonialSection'
 import { BlogList } from '../components/BlogList'
@@ -17,17 +16,17 @@ export function BlogsPage() {
         title="Blogs & Insights"
         subtitle="Financing guides, market perspectives, and practical explainers from our advisory team."
       />
-      <section className="bg-surface py-10 md:py-14">
+      <section aria-label="Blog articles" className="bg-surface py-10 md:py-14">
         <Container size="4xl">
           <BlogList />
         </Container>
       </section>
-      <SectionReveal as="section">
+      
         <TestimonialSection slug="blogs" />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <FaqSection slug="blogs" title="FAQ" />
-      </SectionReveal>
+      
     </>
   )
 }

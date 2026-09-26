@@ -111,9 +111,9 @@ export const visionMissionValues = {
    FOUNDER MESSAGE
    ----------------------------------------------------------------------------- */
 export const founder = {
-  name: 'Goutham',
+  name: 'Ramashankar Gautam',
   role: 'Founder & CEO, CapitalKnob',
-  /* Local high-fidelity visual asset — executive portrait of Goutham */
+  /* Local high-fidelity visual asset — executive portrait of Ramashankar Gautam */
   image: `${IMAGE_BASE_URL}/about/founder-rohan.webp`,
   message: [
     'I started CapitalKnob with a clear purpose — to make capital accessible, simple and aligned with people’s real goals.',

@@ -5,7 +5,6 @@
 
 import { PageHero } from '@/shared/components/PageHero'
 import { Container } from '@/shared/components/Container'
-import { SectionReveal } from '@/shared/components/SectionReveal'
 
 const sections = [
   {
@@ -67,7 +66,7 @@ export function DisclaimerPage() {
         subtitle="The information, materials, products, services, articles, reports, calculators, illustrations, and content available on this website are provided by CapitalKnob Investment & Financial Advisors Private Limited for general informational, educational, business facilitation, and capital advisory purposes only."
       />
 
-      <SectionReveal as="section">
+      
         <Container size="md" className="py-14 md:py-20">
           <div className="space-y-10">
             {sections.map((s) => (
@@ -93,7 +92,7 @@ export function DisclaimerPage() {
             without prior notice.
           </p>
         </Container>
-      </SectionReveal>
+      
     </>
   )
 }

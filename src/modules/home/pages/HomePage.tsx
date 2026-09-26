@@ -1,52 +1,11 @@
-/**
- * HomePage — Hero eager; EVERY below-fold section lazy inside one Suspense
- * so the initial bundle stays lean and first paint is instant.
- */
-
-import { Suspense, lazy } from 'react'
-import { SectionReveal } from '@/shared/components/SectionReveal'
 import { HomeHero } from '../components/HomeHero'
-
-const LendingPartnersBanner = lazy(() =>
-  import('../components/LendingPartnersBanner').then((m) => ({
-    default: m.LendingPartnersBanner,
-  })),
-)
-const HomeSolutionsSection = lazy(() =>
-  import('../components/HomeSolutionsSection').then((m) => ({
-    default: m.HomeSolutionsSection,
-  })),
-)
-const HomeWhyChooseSection = lazy(() =>
-  import('../components/HomeWhyChooseSection').then((m) => ({
-    default: m.HomeWhyChooseSection,
-  })),
-)
-const HomeStepsSection = lazy(() =>
-  import('../components/HomeStepsSection').then((m) => ({
-    default: m.HomeStepsSection,
-  })),
-)
-const HomeCtaSection = lazy(() =>
-  import('../components/HomeCtaSection').then((m) => ({
-    default: m.HomeCtaSection,
-  })),
-)
-const HomeFeaturedBlogSection = lazy(() =>
-  import('../components/HomeBlogSection').then((m) => ({
-    default: m.HomeFeaturedBlogSection,
-  })),
-)
-const HomeFrontBlogSection = lazy(() =>
-  import('../components/HomeBlogSection').then((m) => ({
-    default: m.HomeFrontBlogSection,
-  })),
-)
-const FaqSection = lazy(() =>
-  import('@/modules/faq').then((m) => ({
-    default: m.FaqSection,
-  })),
-)
+import { LendingPartnersBanner } from '../components/LendingPartnersBanner'
+import { HomeSolutionsSection } from '../components/HomeSolutionsSection'
+import { HomeWhyChooseSection } from '../components/HomeWhyChooseSection'
+import { HomeStepsSection } from '../components/HomeStepsSection'
+import { HomeCtaSection } from '../components/HomeCtaSection'
+import { HomeFeaturedBlogSection, HomeFrontBlogSection } from '../components/HomeBlogSection'
+import { FaqSection } from '@/modules/faq'
 
 export function HomePage() {
   return (
@@ -54,43 +13,29 @@ export function HomePage() {
       {/* 1. Hero with modern luxury villa visual & live EMI Calculator */}
       <HomeHero />
 
-      <Suspense fallback={null}>
-        {/* 2. Lending Partners Bar */}
-        <SectionReveal as="section">
-          <LendingPartnersBanner />
-        </SectionReveal>
+      {/* 2. Lending Partners Bar */}
+      <LendingPartnersBanner />
 
-        {/* 3. Solutions for Every Capital Need with Nanao Banna imagery */}
-        <SectionReveal as="section">
-          <HomeSolutionsSection />
-        </SectionReveal>
+      {/* 3. Solutions for Every Capital Need with Nanao Banna imagery */}
+      <HomeSolutionsSection />
 
-        {/* 4. Why Choose CapitalKnob? Benefit Grid */}
-        <SectionReveal as="section">
-          <HomeWhyChooseSection />
-        </SectionReveal>
+      {/* 4. Why Choose CapitalKnob? Benefit Grid */}
+      <HomeWhyChooseSection />
 
-        {/* 5. Our Simple 5-Step Approach */}
-        <SectionReveal as="section">
-          <HomeStepsSection />
-        </SectionReveal>
+      {/* 5. Our Simple 5-Step Approach */}
+      <HomeStepsSection />
 
-        {/* 6. Featured Blogs (strictly rendered if GET /getFeaturedBlogs returns data) */}
-        <HomeFeaturedBlogSection />
+      {/* 6. Featured Blogs (strictly rendered if GET /getFeaturedBlogs returns data) */}
+      <HomeFeaturedBlogSection />
 
-        {/* 7. Front Blogs (strictly rendered if GET /getFrontBlogs returns data) */}
-        <HomeFrontBlogSection />
+      {/* 7. Front Blogs (strictly rendered if GET /getFrontBlogs returns data) */}
+      <HomeFrontBlogSection />
 
-        {/* 8. Frequently Asked Questions */}
-        <SectionReveal as="section">
-          <FaqSection slug="home" title="FAQ" />
-        </SectionReveal>
+      {/* 8. Frequently Asked Questions */}
+      <FaqSection slug="home" title="FAQ" />
 
-        {/* 9. High-Rise Dusk Banner, Testimonial & Social Proof Metrics */}
-        <SectionReveal as="section">
-          <HomeCtaSection />
-        </SectionReveal>
-      </Suspense>
+      {/* 9. High-Rise Dusk Banner, Testimonial & Social Proof Metrics */}
+      <HomeCtaSection />
     </div>
   )
 }

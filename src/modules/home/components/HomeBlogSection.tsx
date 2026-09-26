@@ -9,7 +9,6 @@
 
 import { Link } from 'react-router-dom'
 import { Container } from '@/shared/components/Container'
-import { SectionReveal } from '@/shared/components/SectionReveal'
 import { ROUTES } from '@/app/routes'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import {
@@ -31,8 +30,7 @@ export function HomeFeaturedBlogSection() {
   }
 
   return (
-    <SectionReveal as="div">
-      <section className="bg-surface py-16 lg:py-24 border-t border-line/60">
+          <section className="bg-surface py-16 lg:py-24 border-t border-line/60">
         <Container size="4xl">
           <div className="mb-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
             <div>
@@ -75,8 +73,7 @@ export function HomeFeaturedBlogSection() {
           />
         </Container>
       </section>
-    </SectionReveal>
-  )
+      )
 }
 
 /** Front Blogs Section — strictly powered by GET /getFrontBlogs (hidden if no data) */
@@ -92,8 +89,7 @@ export function HomeFrontBlogSection() {
   }
 
   return (
-    <SectionReveal as="div">
-      <section className="bg-white py-16 lg:py-24 border-t border-line/60">
+          <section className="bg-white py-16 lg:py-24 border-t border-line/60">
         <Container size="4xl">
           <div className="mb-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
             <div>
@@ -136,8 +132,7 @@ export function HomeFrontBlogSection() {
           />
         </Container>
       </section>
-    </SectionReveal>
-  )
+      )
 }
 
 /** Default export renders both conditionally */

@@ -4,7 +4,6 @@
  * layout, and imagery stay easy to evolve.
  */
 
-import { SectionReveal } from '@/shared/components/SectionReveal'
 import { AboutHero } from '../sections/AboutHero'
 import { StatsSection } from '../sections/StatsSection'
 import { OurStorySection } from '../sections/OurStorySection'
@@ -19,30 +18,30 @@ export function AboutPage() {
   return (
     <>
       <AboutHero />
-      <SectionReveal as="section">
+      
         <StatsSection />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <OurStorySection />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <VisionMissionSection />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <FounderSection />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <CommitmentSection />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <TestimonialSection slug="about-us" />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <FaqSection slug="about-us" title="FAQ" />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <AboutCta />
-      </SectionReveal>
+      
     </>
   )
 }

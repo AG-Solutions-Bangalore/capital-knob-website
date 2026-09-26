@@ -74,30 +74,34 @@ function brotliFallback(): Plugin {
 // lucide-react|@radix-ui|radix-ui → "ui-vendor",
 // plus router/query/helmet/react/themes splits.
 function manualChunks(id: string) {
+  const nid = id.replace(/\\/g, '/')
+  if (nid.endsWith('/react/jsx-runtime.js')) return 'jsx'
+  if (nid.includes('react-jsx-runtime.production')) return 'jsx'
+  if (nid.includes('compiler-runtime')) return 'react'
   if (
-    id.includes('framer-motion') ||
-    id.includes('motion-dom') ||
-    id.includes('motion-utils') ||
-    id.includes('/motion/')
+    nid.includes('framer-motion') ||
+    nid.includes('motion-dom') ||
+    nid.includes('motion-utils') ||
+    nid.includes('/motion/')
   ) {
     return 'motion'
   }
-  if (id.includes('node_modules/lenis') || id.includes('/lenis/')) return 'lenis'
+  if (nid.includes('node_modules/lenis') || nid.includes('/lenis/')) return 'lenis'
   if (
-    id.includes('lucide-react') ||
-    id.includes('@radix-ui') ||
-    id.includes('radix-ui')
+    nid.includes('lucide-react') ||
+    nid.includes('@radix-ui') ||
+    nid.includes('radix-ui')
   ) {
     return 'ui-vendor'
   }
-  if (id.includes('react-router')) return 'router'
-  if (id.includes('@tanstack/react-query')) return 'query'
-  if (id.includes('react-helmet')) return 'helmet'
-  if (id.includes('next-themes')) return 'themes'
+  if (nid.includes('react-router')) return 'router'
+  if (nid.includes('@tanstack/react-query')) return 'query'
+  if (nid.includes('react-helmet')) return 'helmet'
+  if (nid.includes('next-themes')) return 'themes'
   if (
-    id.includes('node_modules/react/') ||
-    id.includes('node_modules/react-dom/') ||
-    id.includes('node_modules/scheduler/')
+    nid.includes('node_modules/react/') ||
+    nid.includes('node_modules/react-dom/') ||
+    nid.includes('node_modules/scheduler/')
   ) {
     return 'react'
   }
@@ -141,6 +145,7 @@ export default defineConfig({
     assetsInlineLimit: 4096,
     chunkSizeWarningLimit: 500,
     reportCompressedSize: false,
+    modulePreload: false,
     rollupOptions: {
       output: {
         manualChunks,

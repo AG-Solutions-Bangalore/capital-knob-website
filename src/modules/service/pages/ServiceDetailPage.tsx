@@ -14,7 +14,6 @@ import { Suspense, lazy, useState } from 'react'
 import { Link, useParams, useLocation } from 'react-router-dom'
 import { ROUTES, servicePath } from '@/app/routes'
 import { Container } from '@/shared/components/Container'
-import { SectionReveal } from '@/shared/components/SectionReveal'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
 import { ServiceCard } from '../components/ServiceCard'
@@ -105,7 +104,7 @@ export function ServiceDetailPage({ categorySlug }: { categorySlug?: string } = 
 
   if (isPending) {
     return (
-      <section className="bg-surface py-16">
+      <section aria-label="Loading service" className="bg-surface py-16">
         <Container size="4xl">
           <div role="status" aria-label="Loading service" className="animate-pulse">
             <div className="h-8 w-2/3 rounded bg-line-soft" />
@@ -262,18 +261,18 @@ export function ServiceDetailPage({ categorySlug }: { categorySlug?: string } = 
       </section>
 
       {/* Fixed shared sections — identical on every service page */}
-      <SectionReveal as="section">
+      
         <WhyChooseSection />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <StepsSection />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <TestimonialSection slug={decoded} />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <FaqSection slug={decoded} title="FAQ" />
-      </SectionReveal>
+      
 
       {hasOpened && (
         <Suspense fallback={null}>

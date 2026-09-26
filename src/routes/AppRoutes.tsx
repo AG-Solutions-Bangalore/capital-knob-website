@@ -1,3 +1,4 @@
+import { HomePage } from '@/modules/home/pages/HomePage';
 /**
  * @file src/routes/AppRoutes.tsx
  * Decoupled route table wrapped in PageSEO for bulletproof metadata and SSR pre-rendering.
@@ -20,7 +21,6 @@ import {
   BusinessFinancePage,
   ContactPage,
   DisclaimerPage,
-  HomePage,
   NotFoundPage,
   PrivacyPolicyPage,
   RealEstateFinancePage,
@@ -45,23 +45,21 @@ function TrailingSlashNormalizer() {
   return null;
 }
 
-function PageSEO({ path, children }: { path?: string; children: React.ReactNode }) {
+function PageSEO({ path, children, suspense = true }: { path?: string; children: React.ReactNode; suspense?: boolean }) {
   const location = useLocation();
-  // The SSG category/blog maps are empty on first SPA paint. Warm them once
-  // and re-render when ready so dynamic routes upgrade from generic SEO to
-  // full API-driven meta + schemas instead of sticking on cold-cache output.
-  // Third arg = server snapshot (required by React during SSG prerendering).
   useSyncExternalStore(subscribeDynamicData, getDynamicDataVersion, getDynamicDataVersion);
   useEffect(() => {
-    ensureDynamicData().catch(() => {
-      // Warmer never rejects (errors are swallowed internally) — belt & braces.
-    });
+    ensureDynamicData().catch(() => {});
   }, []);
   const currentPath = path || location.pathname;
   const seo = getSeoForRoute(currentPath);
   return (
     <SEOPageLayout seo={seo} structuredSchemas={seo.schemas}>
-      <Suspense fallback={null}>{children}</Suspense>
+      {suspense ? (
+        <Suspense fallback={<div className="min-h-screen bg-navy" aria-hidden="true" />}>{children}</Suspense>
+      ) : (
+        children
+      )}
     </SEOPageLayout>
   );
 }
@@ -79,7 +77,7 @@ export default function AppRoutes({
         <Route
           path="/"
           element={
-            <PageSEO path="/">
+            <PageSEO path="/" suspense={false}>
               <HomePage />
             </PageSEO>
           }

@@ -14,7 +14,7 @@
  * footer.
  */
 
-import { useState, type KeyboardEvent } from 'react'
+import { useState } from 'react'
 import type { ServiceCard as ServiceCardData } from '../constants'
 import { iconRegistry } from './icons'
 import { Illustration } from './illustrations'
@@ -112,25 +112,18 @@ const baseCardClasses =
   'group relative flex flex-col overflow-hidden rounded-card border bg-surface transition-all duration-200 scroll-mt-28 cursor-pointer'
 
 /**
- * Keyboard + click-to-enquire wiring shared by both card variants. The
- * whole card behaves as one large button that opens the enquiry popup.
+ * Click-to-enquire wiring shared by both card variants. The card root is a
+ * plain <div> (NOT role="button"): putting role="button" on the root would
+ * make the inner <h3> and the gold arrow <button> invalid descendants of a
+ * button. Keyboard / screen-reader users operate the labeled gold arrow
+ * <button>; mouse/touch users can also click anywhere on the card, which
+ * opens the same enquiry popup. Visuals and behavior are unchanged.
  */
 function useEnquireCard(title: string, onEnquire?: (title: string) => void) {
   const open = () => onEnquire?.(title)
 
-  function onKeyDown(e: KeyboardEvent) {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      open()
-    }
-  }
-
   return {
-    role: 'button' as const,
-    tabIndex: 0,
-    'aria-label': `Enquire about ${title}`,
     onClick: open,
-    onKeyDown,
   }
 }
 

@@ -16,10 +16,13 @@
  * Imperative access goes through `@/lib/lenisInstance` (zero lenis code).
  */
 
-import { ReactLenis } from 'lenis/react'
-import { useEffect, useState, type ReactNode } from 'react'
+import { Suspense, lazy, useEffect, useState, type ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 import { getLenisInstance, setLenisInstance } from '@/lib/lenisInstance'
+
+const LazyReactLenis = lazy(() =>
+  import('lenis/react').then((m) => ({ default: m.ReactLenis })),
+)
 
 interface SmoothScrollProviderProps {
   children: ReactNode
@@ -124,8 +127,9 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
   }
 
   return (
-    <ReactLenis
-      root
+    <Suspense fallback={<><ScrollToTopOnRouteChange />{children}</>}>
+      <LazyReactLenis
+        root
       ref={(instance: unknown) => {
         // ReactLenis forwards the Lenis instance (or an object holding it).
         // Accept anything with a `scrollTo` function; otherwise clear.
@@ -163,7 +167,8 @@ export function SmoothScrollProvider({ children }: SmoothScrollProviderProps) {
     >
       <ScrollToTopOnRouteChange />
       {children}
-    </ReactLenis>
+    </LazyReactLenis>
+    </Suspense>
   )
 }
 

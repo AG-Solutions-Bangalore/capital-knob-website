@@ -52,9 +52,7 @@ export function LocationSection() {
               <iframe
                 title="CapitalKnob Office Location at JP Nagar, Bengaluru"
                 src="https://maps.google.com/maps?q=No.+8,+1st+Floor,+24th+Main,+5th+Phase,+JP+Nagar,+Bengaluru,+Karnataka+560078&t=&z=15&ie=UTF8&iwloc=&output=embed"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
+                style={{ border: 0, width: '100%', height: '100%' }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

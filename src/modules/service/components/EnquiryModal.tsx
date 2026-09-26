@@ -15,7 +15,6 @@
 
 import { useEffect, useState, type FormEvent } from 'react'
 import { createPortal } from 'react-dom'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { getFriendlyApiErrorMessage } from '@/shared/lib/apiErrors'
 import { getEnquiryFrom, getUtmParams } from '@/shared/lib/utm'
 import { isValidEmail, isValidIndianMobile } from '@/shared/lib/validation'
@@ -47,7 +46,6 @@ const INITIAL_FORM: FormState = {
 
 export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
   const isOpen = subject !== null
-  const prefersReducedMotion = useReducedMotion()
 
   // Seed from the prop: callers mount the modal lazily on first open, at
   // which point `subject` is already set — without this, `values.subject`
@@ -170,35 +168,25 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
     enquiryMutation.reset()
   }
 
-  if (typeof document === 'undefined') return null
+  if (typeof document === 'undefined' || !isOpen) return null
 
   return createPortal(
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          key="enquiry-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
-            className="fixed inset-0 z-[100] flex items-end justify-center overflow-hidden bg-navy-deep/70 p-2 backdrop-blur-sm sm:items-center sm:p-4"
-          onClick={onClose}
-          role="presentation"
-        >
-          <motion.div
-            key="enquiry-panel"
-            initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 24, scale: prefersReducedMotion ? 1 : 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: prefersReducedMotion ? 0 : 24, scale: prefersReducedMotion ? 1 : 0.97 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.25, ease: [0.16, 1, 0.3, 1] }}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="enquiry-modal-title"
-            onClick={(e) => e.stopPropagation()}
-            className="relative flex max-h-[calc(100dvh-1rem)] w-full max-w-xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-card sm:max-h-[calc(100dvh-2rem)] sm:rounded-2xl"
-          >
-            {/* Header — compact so the whole dialog fits the viewport */}
-            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-line bg-surface px-5 py-3 sm:px-6 sm:py-3.5">
+    <div
+      key="enquiry-overlay"
+      className="fixed inset-0 z-[100] flex items-end justify-center overflow-hidden bg-navy-deep/70 p-2 backdrop-blur-sm sm:items-center sm:p-4 transition-opacity duration-200"
+      onClick={onClose}
+      role="presentation"
+    >
+      <div
+        key="enquiry-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="enquiry-modal-title"
+        onClick={(e) => e.stopPropagation()}
+        className="relative flex max-h-[calc(100dvh-1rem)] w-full max-w-xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-card sm:max-h-[calc(100dvh-2rem)] sm:rounded-2xl transition-all duration-200"
+      >
+        {/* Header — compact so the whole dialog fits the viewport */}
+        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-line bg-surface px-5 py-3 sm:px-6 sm:py-3.5">
               <div>
                 <p className="font-display text-[11px] font-semibold uppercase tracking-wider text-gold">
                   Enquire Now
@@ -486,10 +474,8 @@ export function EnquiryModal({ subject, onClose }: EnquiryModalProps) {
                 </form>
               )}
             </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>,
-    document.body,
-  )
-}
+          </div>
+        </div>,
+        document.body,
+      )
+    }

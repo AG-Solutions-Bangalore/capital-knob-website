@@ -15,7 +15,7 @@ export const contactCopy = {
   form: {
     title: 'Send Us a Message',
     description: 'Fill in the details below and our team will get back to you shortly.',
-    subjects: [
+    services: [
       'Home Loans & Financing',
       'Home Loan Balance Transfer',
       'Working Capital & Business Loans',

@@ -3,7 +3,6 @@
  * LocationSection, and FaqSection.
  */
 
-import { SectionReveal } from '@/shared/components/SectionReveal'
 import { ContactHeroSection } from '../sections/ContactHeroSection'
 import { ContactFormSection } from '../sections/ContactFormSection'
 import { LocationSection } from '../sections/LocationSection'
@@ -14,18 +13,18 @@ export function ContactPage() {
   return (
     <>
       <ContactHeroSection />
-      <SectionReveal as="section">
+      
         <ContactFormSection />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <LocationSection />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <TestimonialSection slug="contact" />
-      </SectionReveal>
-      <SectionReveal as="section">
+      
+      
         <FaqSection />
-      </SectionReveal>
+      
     </>
   )
 }

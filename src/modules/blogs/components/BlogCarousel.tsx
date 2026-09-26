@@ -129,17 +129,17 @@ export function BlogCarousel({
 
       {showControls && (
         <div className="mt-6 flex items-center justify-between gap-4">
+          {/* Slide picker — plain buttons (not ARIA tabs: no tabpanels exist) */}
           <div
             className="flex items-center gap-2"
-            role="tablist"
+            role="group"
             aria-label={`Choose ${ariaLabel}`}
           >
             {blogs.map((blog, i) => (
               <button
                 key={`dot-${blogKey(blog, i)}`}
                 type="button"
-                role="tab"
-                aria-selected={i === activeIndex}
+                aria-current={i === activeIndex ? 'true' : undefined}
                 aria-label={`Go to article ${i + 1}`}
                 onClick={() => scrollToIndex(i)}
                 className={`h-2 rounded-full transition-all duration-300 ${

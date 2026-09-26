@@ -1,5 +1,4 @@
 import { Fragment, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Container } from '@/shared/components/Container'
 import { useFaqBySlugQuery } from '../hooks/useFaqQuery'
 
@@ -35,7 +34,6 @@ export function FaqSection({
 }: FaqSectionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
   const [lastSlug, setLastSlug] = useState(slug)
-  const prefersReducedMotion = useReducedMotion()
 
   const { data: liveFaq } = useFaqBySlugQuery(slug)
   const effectiveFallback = fallbackSlug && fallbackSlug !== slug ? fallbackSlug : undefined
@@ -132,18 +130,12 @@ export function FaqSection({
                   >
                     {item.question}
                   </span>
-                  <motion.span
-                    animate={{
-                      rotate: isOpen ? 45 : 0,
-                      backgroundColor: isOpen ? '#0b1d3a' : '#f1f5f9',
-                      color: isOpen ? '#c9a961' : '#0b1d3a',
-                    }}
-                    transition={{
-                      type: 'spring',
-                      stiffness: prefersReducedMotion ? 1000 : 320,
-                      damping: prefersReducedMotion ? 100 : 25,
-                    }}
-                    className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full shadow-xs"
+                  <span
+                    className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full shadow-xs transition-all duration-300 ${
+                      isOpen
+                        ? 'rotate-45 bg-[#0b1d3a] text-[#c9a961]'
+                        : 'rotate-0 bg-[#f1f5f9] text-[#0b1d3a]'
+                    }`}
                     aria-hidden="true"
                   >
                     <svg
@@ -160,60 +152,23 @@ export function FaqSection({
                       <line x1="12" y1="5" x2="12" y2="19" />
                       <line x1="5" y1="12" x2="19" y2="12" />
                     </svg>
-                  </motion.span>
+                  </span>
                 </button>
 
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      id={answerId}
-                      role="region"
-                      aria-labelledby={questionId}
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{
-                        height: 'auto',
-                        opacity: 1,
-                        transition: {
-                          height: {
-                            duration: prefersReducedMotion ? 0 : 0.35,
-                            ease: [0.16, 1, 0.3, 1],
-                          },
-                          opacity: {
-                            duration: prefersReducedMotion ? 0 : 0.25,
-                            delay: prefersReducedMotion ? 0 : 0.05,
-                          },
-                        },
-                      }}
-                      exit={{
-                        height: 0,
-                        opacity: 0,
-                        transition: {
-                          height: {
-                            duration: prefersReducedMotion ? 0 : 0.25,
-                            ease: [0.16, 1, 0.3, 1],
-                          },
-                          opacity: {
-                            duration: prefersReducedMotion ? 0 : 0.15,
-                          },
-                        },
-                      }}
-                      className="overflow-hidden"
-                    >
-                      <motion.div
-                        initial={{ y: prefersReducedMotion ? 0 : -8 }}
-                        animate={{ y: 0 }}
-                        exit={{ y: prefersReducedMotion ? 0 : -4 }}
-                        transition={{
-                          duration: prefersReducedMotion ? 0 : 0.25,
-                          ease: 'easeOut',
-                        }}
-                        className="border-t border-line/60 px-5 pb-5 pt-3.5 text-sm leading-relaxed text-muted md:text-base"
-                      >
-                        {item.answer}
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <div
+                  id={answerId}
+                  role="region"
+                  aria-labelledby={questionId}
+                  className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
+                    isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="border-t border-line/60 px-5 pb-5 pt-3.5 text-sm leading-relaxed text-muted md:text-base">
+                      {item.answer}
+                    </div>
+                  </div>
+                </div>
               </div>
               </Fragment>
             )

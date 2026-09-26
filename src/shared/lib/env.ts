@@ -13,6 +13,10 @@ export const env = {
    */
   apiBaseUrl:
     (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
+    // Single source of truth for the API host (see `@/shared/seo/dynamicData`).
+    // NOTE: plain http. If the production site is served over https, browsers
+    // block these calls as mixed content — set VITE_API_BASE_URL to an https
+    // endpoint (or same-origin proxy) in the production `.env` instead.
     'http://capitalknob.com/crmapi/public/api',
 
   /** Secret key for authenticating API requests. */

@@ -14,6 +14,63 @@ DirectoryIndex index.html
     AddType font/woff2 .woff2
     AddType font/woff .woff
     AddType image/webp .webp
+    # Pre-compressed variants emitted by vite-plugin-compression:
+    # AddEncoding keeps the underlying MIME (from .js/.css/…) while
+    # advertising the content coding — no manual Content-Encoding needed.
+    AddEncoding br .br
+    AddEncoding gzip .gz
+</IfModule>
+
+# ----------------------------------------------------------------------
+# | Pre-compressed Assets (brotli preferred, gzip fallback)            |
+# ----------------------------------------------------------------------
+# MUST come before the SPA fallback below so `/assets/*.js` resolves to
+# its `.br`/`.gz` twin instead of falling through to index.html.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Brotli (smallest) — only for types the build actually compresses.
+    RewriteCond %{HTTP:Accept-Encoding} br
+    RewriteCond %{REQUEST_URI} !^/ckapi/ [NC]
+    RewriteCond %{REQUEST_URI} !^/crmapi/ [NC]
+    RewriteCond %{REQUEST_FILENAME} \.(js|mjs|css|html|json)$
+    RewriteCond %{REQUEST_FILENAME}\.br -f
+    RewriteRule ^(.+)$ $1.br [L]
+
+    # Gzip fallback for clients without brotli.
+    RewriteCond %{HTTP:Accept-Encoding} gzip
+    RewriteCond %{REQUEST_URI} !^/ckapi/ [NC]
+    RewriteCond %{REQUEST_URI} !^/crmapi/ [NC]
+    RewriteCond %{REQUEST_FILENAME} \.(js|mjs|css|html|json)$
+    RewriteCond %{REQUEST_FILENAME}\.gz -f
+    RewriteRule ^(.+)$ $1.gz [L]
+</IfModule>
+
+# Never double-compress an already-encoded response; tell caches the
+# bytes vary by Accept-Encoding.
+<IfModule mod_headers.c>
+    Header append Vary Accept-Encoding
+</IfModule>
+<IfModule mod_deflate.c>
+    SetEnvIfNoCase Request_URI \.br$ no-gzip
+    SetEnvIfNoCase Request_URI \.gz$ no-gzip
+    # Fallback for responses with no pre-compressed twin.
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+# ----------------------------------------------------------------------
+# | Long Cache TTL for Static Assets (Lighthouse cache-TTL audit)      |
+# ----------------------------------------------------------------------
+<IfModule mod_headers.c>
+    # Vite content-hashed bundles: /assets/name-HASH.js — immutable 1 year.
+    # Optional `.br`/`.gz` suffix tolerated (post-rewrite basename).
+    <FilesMatch "\.[A-Za-z0-9_-]{8}\.(js|mjs|css)(\.(br|gz))?$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    # Unhashed images/fonts (logo, hero variants, favicons): 30 days.
+    <FilesMatch "\.(webp|png|jpe?g|gif|svg|ico|woff2?|ttf|eot)(\.(br|gz))?$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
 </IfModule>
 
 # ----------------------------------------------------------------------
@@ -36,19 +93,23 @@ DirectoryIndex index.html
     # Canonical HTTPS & Host Enforcement
     RewriteCond %{HTTPS} !=on
     RewriteCond %{HTTP:X-Forwarded-Proto} !=https
-    RewriteRule ^ https://ck.agsdemo.in%{REQUEST_URI} [R=301,L]
+    RewriteRule ^ https://capitalknob.com%{REQUEST_URI} [R=301,L]
 
-    RewriteCond %{HTTP_HOST} ^www\.ck\.agsdemo\.in$ [NC]
-    RewriteRule ^ https://ck.agsdemo.in%{REQUEST_URI} [R=301,L]
+    RewriteCond %{HTTP_HOST} ^www\.capitalknob\.com$ [NC]
+    RewriteRule ^ https://capitalknob.com%{REQUEST_URI} [R=301,L]
 
     # Serve Pre-rendered Static HTML (0ms response time)
     # Check if a pre-rendered index.html exists for route (e.g. /contact or /contact/ -> /contact/index.html)
+    # /ckapi/ (legacy) and /crmapi/ (current) are backend paths — never serve
+    # them the SPA shell, whether or not the API shares this server.
     RewriteCond %{REQUEST_URI} !^/ckapi/ [NC]
+    RewriteCond %{REQUEST_URI} !^/crmapi/ [NC]
     RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
     RewriteRule ^(.+?)/?$ /$1/index.html [L]
 
     # SPA Fallback for Unrendered Dynamic Routes
     RewriteCond %{REQUEST_URI} !^/ckapi/ [NC]
+    RewriteCond %{REQUEST_URI} !^/crmapi/ [NC]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule . /index.html [L]
