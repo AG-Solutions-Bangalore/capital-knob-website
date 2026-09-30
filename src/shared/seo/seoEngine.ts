@@ -427,6 +427,35 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
       ),
     ],
   },
+  '/distressed-assets-and-special-situations': {
+    title: 'Distressed Assets & Special Situations Services | CapitalKnob',
+    description:
+      'CapitalKnob provides distressed assets and special situations services in India, offering flexible capital solutions for complex financial and business needs.',
+    keywords:
+      'distressed assets, special situations, distressed assets services India, special situations capital',
+    canonicalPath: '/distressed-assets-and-special-situations',
+    schemas: [
+      organizationSchema,
+      createWebPageSchema(
+        '/distressed-assets-and-special-situations',
+        'Distressed Assets & Special Situations Services | CapitalKnob',
+        'CapitalKnob provides distressed assets and special situations services in India, offering flexible capital solutions for complex financial and business needs.',
+      ),
+      createServiceSchema({
+        name: 'Distressed Assets & Special Situations Services',
+        description:
+          'CapitalKnob provides distressed assets and special situations services in India, offering flexible capital solutions for complex financial and business needs.',
+        path: '/distressed-assets-and-special-situations',
+      }),
+      createBreadcrumbSchema(
+        [
+          { name: 'Home', path: '/' },
+          { name: 'Distressed Assets & Special Situations', path: '/distressed-assets-and-special-situations' },
+        ],
+        '/distressed-assets-and-special-situations',
+      ),
+    ],
+  },
   '/disclaimer': {
     title: 'Disclaimer | CapitalKnob Investment & Financial Advisors',
     description:
