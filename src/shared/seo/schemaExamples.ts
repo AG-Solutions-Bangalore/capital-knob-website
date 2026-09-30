@@ -54,24 +54,14 @@ export const organizationSchema: Thing = {
     opens: '09:30',
     closes: '18:30',
   },
-  contactPoint: [
-    {
-      '@type': 'ContactPoint',
-      telephone: SITE_PHONE,
-      email: SITE_EMAIL,
-      contactType: 'sales',
-      areaServed: 'IN',
-      availableLanguage: ['en', 'hi'],
-    },
-    {
-      '@type': 'ContactPoint',
-      telephone: SITE_PHONE,
-      email: SITE_EMAIL,
-      contactType: 'customer support',
-      areaServed: 'IN',
-      availableLanguage: ['en', 'hi'],
-    },
-  ],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    telephone: SITE_PHONE,
+    email: SITE_EMAIL,
+    contactType: 'sales',
+    areaServed: 'IN',
+    availableLanguage: ['en', 'hi'],
+  },
 } as Thing;
 
 export function createOrganizationWithReviews(options?: {

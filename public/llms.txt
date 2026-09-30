@@ -5,15 +5,15 @@
 ## Overview
 CapitalKnob is an Indian financial advisory firm providing tailored capital solutions across Business Finance, Home Loans, Real Estate Finance, and Private Credit.
 
-- Website: https://ck.agsdemo.in/
+- Website: https://www.capitalknob.com/
 - Office: Prestige Tech Park, 5th Floor, Outer Ring Road, Marathahalli, Bengaluru, Karnataka 560037
 - Phone: +91 98765 43210
 - Email: hello@capitalknob.com
 
 ## Financial Services
-- [Home Finance](https://ck.agsdemo.in/home-finance): Home loans, balance transfer, renovation loans, loan against property, top-up loans.
-- [Business Finance](https://ck.agsdemo.in/business-finance): Secured business loans, working capital finance, machinery funding, business expansion capital.
-- [Real Estate Finance](https://ck.agsdemo.in/real-estate-finance): Construction finance, property acquisition, land development capital.
-- [Private Credit](https://ck.agsdemo.in/private-credit): Bespoke institutional credit, mezzanine finance, flexible debt solutions.
-- [About Us](https://ck.agsdemo.in/about): Company leadership, vision, and operational values.
-- [Contact](https://ck.agsdemo.in/contact): Advisory booking, direct inquiry form, and office location.
+- [Home Finance](https://www.capitalknob.com/home-finance): Home loans, balance transfer, renovation loans, loan against property, top-up loans.
+- [Business Finance](https://www.capitalknob.com/business-finance): Secured business loans, working capital finance, machinery funding, business expansion capital.
+- [Real Estate Finance](https://www.capitalknob.com/real-estate-finance): Construction finance, property acquisition, land development capital.
+- [Private Credit](https://www.capitalknob.com/private-credit): Bespoke institutional credit, mezzanine finance, flexible debt solutions.
+- [About Us](https://www.capitalknob.com/about-us): Company leadership, vision, and operational values.
+- [Contact](https://www.capitalknob.com/contact): Advisory booking, direct inquiry form, and office location.

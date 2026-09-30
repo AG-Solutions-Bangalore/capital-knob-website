@@ -10,6 +10,7 @@ import { parse } from 'node-html-parser';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const distDir = path.resolve(__dirname, '../dist');
+const CANONICAL_ORIGIN = 'https://www.capitalknob.com';
 
 function findHtmlFiles(dir: string): string[] {
   let files: string[] = [];
@@ -37,8 +38,25 @@ for (const file of htmlFiles) {
   const content = fs.readFileSync(file, 'utf8');
   const root = parse(content);
   const scripts = root.querySelectorAll('script[type="application/ld+json"]');
+  const canonicalLinks = root.querySelectorAll('link[rel="canonical"]');
 
   const relFile = path.relative(distDir, file);
+
+  if (canonicalLinks.length !== 1) {
+    console.error(`❌ [${relFile}] Expected exactly one canonical link; found ${canonicalLinks.length}.`);
+    hasError = true;
+  } else {
+    const canonical = canonicalLinks[0].getAttribute('href') || '';
+    if (!canonical.startsWith(`${CANONICAL_ORIGIN}/`)) {
+      console.error(`❌ [${relFile}] Canonical must use ${CANONICAL_ORIGIN}: ${canonical}`);
+      hasError = true;
+    }
+  }
+
+  if (content.includes('ck.agsdemo.in')) {
+    console.error(`❌ [${relFile}] Contains the retired ck.agsdemo.in hostname.`);
+    hasError = true;
+  }
 
   if (scripts.length === 0) {
     console.error(`❌ [${relFile}] Missing JSON-LD script!`);
@@ -49,6 +67,10 @@ for (const file of htmlFiles) {
   } else {
     try {
       const json = JSON.parse(scripts[0].text);
+      if (scripts[0].text.includes('ck.agsdemo.in')) {
+        console.error(`❌ [${relFile}] JSON-LD contains the retired ck.agsdemo.in hostname.`);
+        hasError = true;
+      }
       if (!json['@context'] || !json['@graph']) {
         console.error(`❌ [${relFile}] Missing @context or @graph!`);
         hasError = true;

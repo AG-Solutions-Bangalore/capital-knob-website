@@ -536,7 +536,7 @@ function createGenericServiceSeo(slug: string, path: string): RouteSeoEntry {
  * These take precedence over `blog_meta_*` values coming from the API,
  * so junk/test meta in the backend (e.g. "demoblogs123", "dxcfvgbh")
  * never reaches crawlers. Canonical stays `/blogs/<slug>` → absolute
- * URL via `SITE_ORIGIN` (https://ck.agsdemo.in), robots INDEX,FOLLOW,
+ * URL via `SITE_ORIGIN` (https://www.capitalknob.com), robots INDEX,FOLLOW,
  * author/publisher CapitalKnob (emitted globally by SEOPageLayout).
  */
 const BLOG_SEO_OVERRIDES: Record<
