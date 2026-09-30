@@ -68,7 +68,7 @@ async function request<T>(path: string, init: RequestInit): Promise<{ data: T }>
     )
   }
 
-  let data: unknown = {}
+  let data: unknown
   try {
     const text = await res.text()
     data = text ? (JSON.parse(text) as unknown) : {}
