@@ -30,15 +30,15 @@
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="dns-prefetch" href="https://capitalknob.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=optional" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=optional" media="print" onload="this.media='all'">
     <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=optional">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=optional">
     </noscript>
 
-    <!-- LCP image preload — responsive local WebP (see public/images/home/).
-      href = most-likely candidate: 360–480px phones at DPR2 pick the 768w
-      variant; imagesrcset covers the rest (desktop 1350px → 1440w). -->
-    <link rel="preload" as="image" type="image/webp" imagesrcset="/images/home/hero_villa-480.webp 480w, /images/home/hero_villa-768.webp 768w, /images/home/hero_villa-1280.webp 1280w, /images/home/hero_villa-1440.webp 1440w, /images/home/hero_villa-1920.webp 1920w" imagesizes="100vw" href="/images/home/hero_villa-768.webp" fetchpriority="high">
+    <!-- LCP image preload — AVIF is ~48% smaller than the existing WebP at
+      the mobile 768w candidate. The `<picture>` in HomeHero retains WebP as
+      a fallback for browsers without AVIF support. -->
+    <link rel="preload" as="image" type="image/avif" imagesrcset="/images/home/hero_villa-480.avif 480w, /images/home/hero_villa-768.avif 768w, /images/home/hero_villa-1280.avif 1280w, /images/home/hero_villa-1440.avif 1440w, /images/home/hero_villa-1920.avif 1920w" imagesizes="(max-width: 768px) 100vw, 50vw" href="/images/home/hero_villa-480.avif" fetchpriority="high">
 
 
   </head>

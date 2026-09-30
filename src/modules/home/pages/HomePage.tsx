@@ -4,7 +4,7 @@ import { HomeSolutionsSection } from '../components/HomeSolutionsSection'
 import { HomeWhyChooseSection } from '../components/HomeWhyChooseSection'
 import { HomeStepsSection } from '../components/HomeStepsSection'
 import { HomeCtaSection } from '../components/HomeCtaSection'
-import { HomeFeaturedBlogSection, HomeFrontBlogSection } from '../components/HomeBlogSection'
+import { HomeFrontBlogSection } from '../components/HomeBlogSection'
 import { FaqSection } from '@/modules/faq'
 
 export function HomePage() {
@@ -25,17 +25,26 @@ export function HomePage() {
       {/* 5. Our Simple 5-Step Approach */}
       <HomeStepsSection />
 
-      {/* 6. Featured Blogs (strictly rendered if GET /getFeaturedBlogs returns data) */}
-      <HomeFeaturedBlogSection />
+      {/* 6. Featured Blogs REMOVED (2026-09-30): GET /getFeaturedBlogs returns
+          0 rows, so the section rendered null on every visit while still
+          firing a wasted API query + shipping BlogCarousel JS. Re-add when
+          the backend has featured rows. (Kept: component + hook intact for
+          BlogDetailCard which consumes the same endpoint.) */}
 
       {/* 7. Front Blogs (strictly rendered if GET /getFrontBlogs returns data) */}
-      <HomeFrontBlogSection />
+      <div className="[content-visibility:auto] [contain-intrinsic-size:auto_800px]">
+        <HomeFrontBlogSection />
+      </div>
 
       {/* 8. Frequently Asked Questions */}
-      <FaqSection slug="home" title="FAQ" />
+      <div className="[content-visibility:auto] [contain-intrinsic-size:auto_600px]">
+        <FaqSection slug="home" title="FAQ" />
+      </div>
 
       {/* 9. High-Rise Dusk Banner, Testimonial & Social Proof Metrics */}
-      <HomeCtaSection />
+      <div className="[content-visibility:auto] [contain-intrinsic-size:auto_700px]">
+        <HomeCtaSection />
+      </div>
     </div>
   )
 }

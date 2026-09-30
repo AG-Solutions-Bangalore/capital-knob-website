@@ -10,6 +10,8 @@ import { EmiCalculator } from './EmiCalculator'
 const LCP_SRC = '/images/home/hero_villa-480.webp'
 const LCP_SRCSET =
   '/images/home/hero_villa-480.webp 480w, /images/home/hero_villa-768.webp 768w, /images/home/hero_villa-1280.webp 1280w, /images/home/hero_villa-1440.webp 1440w, /images/home/hero_villa-1920.webp 1920w'
+const LCP_AVIF_SRCSET =
+  '/images/home/hero_villa-480.avif 480w, /images/home/hero_villa-768.avif 768w, /images/home/hero_villa-1280.avif 1280w, /images/home/hero_villa-1440.avif 1440w, /images/home/hero_villa-1920.avif 1920w'
 // Original asset is 1376×768 — explicit dimensions reserve space (CLS 0).
 const LCP_WIDTH = 1376
 const LCP_HEIGHT = 768
@@ -77,9 +79,6 @@ export function HomeHero() {
       <div className="absolute inset-0 z-0 overflow-hidden bg-navy pointer-events-none">
         {heroSlides.map((slide, index) => {
           const isActive = index === currentSlide
-          const isPrev =
-            currentSlide !== 0 &&
-            (currentSlide - 1 + totalSlides) % totalSlides === index
           const isLcp = index === 0
 
           return (
@@ -91,20 +90,31 @@ export function HomeHero() {
                 }`}
             >
               {isLcp ? (
-                <img
-                  src={LCP_SRC}
-                  srcSet={LCP_SRCSET}
-                  sizes="100vw"
-                  width={LCP_WIDTH}
-                  height={LCP_HEIGHT}
-                  alt={slide.imageAlt}
-                  title={slide.imageTitle}
-                  className="h-full w-full object-cover object-center lg:object-right"
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                />
-              ) : isActive || isPrev ? (
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcSet={LCP_AVIF_SRCSET}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                  <img
+                    src={LCP_SRC}
+                    srcSet={LCP_SRCSET}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    width={LCP_WIDTH}
+                    height={LCP_HEIGHT}
+                    alt={slide.imageAlt}
+                    title={slide.imageTitle}
+                    className="h-full w-full object-cover object-center lg:object-right"
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                  />
+                </picture>
+              ) : isActive ? (
+                // PERF: only the active slide mounts an <img>. Previously the
+                // previous slide pre-mounted too, firing a ~100-200KB remote
+                // fetch on initial load that competed with the LCP image.
+                // Slide change mounts the new image on demand (cached after).
                 <img
                   src={slide.imageSrc}
                   alt={slide.imageAlt}

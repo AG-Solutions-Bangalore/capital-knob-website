@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/fetchCategoryImages.mjs",
     "build": "tsc -b && vite build && node scripts/generateSitemap.mjs",
     "sitemap": "node scripts/generateSitemap.mjs",
     "test:schema": "bun scripts/validateSchemas.ts",

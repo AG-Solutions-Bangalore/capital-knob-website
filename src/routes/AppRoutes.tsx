@@ -41,12 +41,13 @@ if (typeof window !== 'undefined') {
       return;
     }
     // Most likely next from landing: Contact, then About — staggered.
+    // PERF: delayed to 8s/10s so prefetch never competes with LCP (~6s).
     window.setTimeout(() => {
       import('@/modules/contact/pages/ContactPage').catch(() => {});
-    }, 4000);
+    }, 8000);
     window.setTimeout(() => {
       import('@/modules/about/pages/AboutPage').catch(() => {});
-    }, 5500);
+    }, 10000);
   };
   const schedulePreload = () => {
     window.setTimeout(preloadRoutes, 3500);

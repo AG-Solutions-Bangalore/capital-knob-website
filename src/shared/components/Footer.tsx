@@ -94,8 +94,8 @@ export function Footer({ variant = 'light' }: FooterProps) {
     <footer
       className={
         isDark
-          ? 'border-t border-white/10 bg-navy-deep text-white'
-          : 'border-t border-line bg-white text-ink'
+          ? 'border-t border-white/10 bg-navy-deep text-white [content-visibility:auto] [contain-intrinsic-size:auto_500px]'
+          : 'border-t border-line bg-white text-ink [content-visibility:auto] [contain-intrinsic-size:auto_500px]'
       }
     >
       <Container size="4xl" className="py-12 md:py-16">

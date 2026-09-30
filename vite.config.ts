@@ -72,33 +72,41 @@ function brotliFallback(): Plugin {
 // Heavy vendors leave the critical path via manualChunks:
 // motion|framer-motion → "motion", lenis → "lenis",
 // lucide-react|@radix-ui|radix-ui → "ui-vendor",
-// prerender dependencies → "prerender-*",
-// plus router/query/helmet/react/themes splits.
+// plus router/query/helmet splits.
+//
+// PERF FIX (Lighthouse 65→90+): react / react-dom / scheduler / jsx-runtime /
+// prerender worker MUST NOT have manualChunks rules. The prerender worker
+// (src/prerender.tsx) shares modules (scheduler, react internals,
+// dynamicData, AppRoutes) with the browser graph — ANY manual rule covering
+// either side drags shared code into the wrong chunk and the browser ends up
+// importing 200-460KB of SSR-only JS. Let Rolldown split automatically;
+// only pure client-side vendors get manual chunks below.
 function manualChunks(id: string) {
   const nid = id.replace(/\\/g, '/')
-  if (nid.endsWith('/react/jsx-runtime.js')) return 'jsx'
-  if (nid.includes('react-jsx-runtime.production')) return 'jsx'
-  if (nid.includes('compiler-runtime')) return 'react'
 
-  // Isolate prerender-only dependencies so they NEVER leak into client chunks
-  if (
-    nid.includes('react-dom/server') ||
-    nid.includes('react-dom-server') ||
-    nid.includes('react-dom/cjs/react-dom-server') ||
-    nid.includes('react-dom/server.browser') ||
-    nid.includes('react-dom/server.node')
-  ) {
-    return 'prerender-server'
-  }
-  if (
-    nid.includes('node-html-parser') ||
-    nid.includes('/he/') ||
-    nid.includes('vite-prerender-plugin')
-  ) {
-    return 'prerender-parse'
-  }
+  // Skip the build-time prerender worker entirely — it is bundled by
+  // vite-prerender-plugin, never loaded in the browser.
   if (nid.includes('/src/prerender.')) {
-    return 'prerender-entry'
+    return undefined
+  }
+
+  // PERF: split React client runtime into its own cached chunk, EXCLUDING
+  // any file with "server" in the path (react-dom/server* is SSR-only and
+  // lives in the async server.browser chunk). Without the exclusion the
+  // browser `react` chunk swallows +200KB of SSR code; without this rule at
+  // all React inlines into `index` (205KB) and blocks FCP on parse.
+  const lower = nid.toLowerCase()
+  if (lower.includes('server')) {
+    return undefined
+  }
+  if (
+    nid.includes('node_modules/react/') ||
+    nid.includes('node_modules/react-dom/') ||
+    nid.includes('node_modules/scheduler/') ||
+    nid.includes('react-jsx-runtime') ||
+    nid.includes('compiler-runtime')
+  ) {
+    return 'react'
   }
 
   if (
@@ -123,13 +131,6 @@ function manualChunks(id: string) {
   if (nid.includes('dynamicData')) return 'dynamic-data'
   if (nid.includes('react-helmet')) return 'helmet'
   if (nid.includes('next-themes')) return 'themes'
-  if (
-    nid.includes('node_modules/react/') ||
-    nid.includes('node_modules/react-dom/') ||
-    nid.includes('node_modules/scheduler/')
-  ) {
-    return 'react'
-  }
   return undefined
 }
 
@@ -170,7 +171,11 @@ export default defineConfig({
     assetsInlineLimit: 4096,
     chunkSizeWarningLimit: 500,
     reportCompressedSize: false,
-    modulePreload: false,
+    // PERF: re-enable modulepreload for the critical chain
+    // (index → react/jsx/router/query/AppRoutes). `false` forced a
+    // waterfall: browser discovered each chunk only after parsing the
+    // previous one, delaying LCP by ~1s.
+    modulePreload: true,
     rollupOptions: {
       output: {
         manualChunks,
