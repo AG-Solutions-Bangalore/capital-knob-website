@@ -142,18 +142,22 @@ export function BlogCarousel({
                 aria-current={i === activeIndex ? 'true' : undefined}
                 aria-label={`Go to article ${i + 1}`}
                 onClick={() => scrollToIndex(i)}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  i === activeIndex
-                    ? 'w-8 bg-gold'
-                    : 'w-2 bg-line hover:bg-gold/60'
-                }`}
-              />
+                className="group flex min-h-[44px] min-w-[28px] items-center justify-center py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold cursor-pointer"
+              >
+                <span
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    i === activeIndex
+                      ? 'w-8 bg-gold'
+                      : 'w-2 bg-line group-hover:bg-gold/60'
+                  }`}
+                />
+              </button>
             ))}
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="font-mono text-xs font-semibold tracking-wider text-slate-400">
-              <span className="text-gold">
+            <span className="font-mono text-xs font-semibold tracking-wider text-slate-600">
+              <span className="text-[#997328]">
                 {String(activeIndex + 1).padStart(2, '0')}
               </span>
               {' / '}

@@ -119,9 +119,9 @@ export function BlogCard({
           <div>
             {/* Created Date */}
             {date && (
-              <div className="mb-2.5 flex items-center gap-1.5 text-xs font-semibold text-slate-400">
+              <div className="mb-2.5 flex items-center gap-1.5 text-xs font-semibold text-slate-600">
                 <svg
-                  className="h-3.5 w-3.5 text-gold"
+                  className="h-3.5 w-3.5 text-[#997328]"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -144,14 +144,14 @@ export function BlogCard({
 
             {/* Excerpt */}
             {excerpt && (
-              <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-slate-500 sm:text-[13px]">
+              <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-slate-600 sm:text-[13px]">
                 {excerpt}
               </p>
             )}
           </div>
 
           {/* Read Article CTA with animated arrow */}
-          <div className="mt-5 flex items-center gap-1.5 border-t border-slate-100 pt-3 text-xs font-bold text-gold transition-colors duration-200 group-hover:text-gold-hover">
+          <div className="mt-5 flex items-center gap-1.5 border-t border-slate-100 pt-3 text-xs font-bold text-[#997328] transition-colors duration-200 group-hover:text-navy">
             <span>Read Article</span>
             <svg
               className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1"

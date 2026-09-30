@@ -1,21 +1,18 @@
 /**
- * Shared axios instance.
+ * Shared API client (fetch-based).
  *
- * Every feature module should import `api` from here instead of creating its
- * own client. Centralising the client keeps timeout, headers, auth and
- * error-handling behaviour consistent across the app.
+ * Same import path / call shape as before (`api.get<T>(url)`,
+ * `api.post<T>(url, body, { headers })` → `{ data }`, `ApiError` on failure)
+ * so all 8 feature modules keep working untouched — but implemented on
+ * native `fetch` instead of axios, dropping ~50KB raw / ~19KB transfer of
+ * JS from every page (Lighthouse `unused-javascript` top item after the
+ * prerender leak fix).
  *
  * Usage:
  *   import { api } from '@/shared/lib/axios'
  *   const { data } = await api.get<MyResponse>('/getSitemap')
  */
 
-import axios, {
-  AxiosError,
-  type AxiosInstance,
-  type AxiosResponse,
-  type InternalAxiosRequestConfig,
-} from 'axios'
 import { env } from './env'
 
 /** Shape of the standard JSON error returned by our APIs. */
@@ -25,7 +22,7 @@ export interface ApiErrorBody {
   errors?: Record<string, string[]>
 }
 
-/** Normalised error surface — components consume this, not raw axios errors. */
+/** Normalised error surface — components consume this, not raw errors. */
 export class ApiError extends Error {
   readonly status: number | undefined
   readonly body: ApiErrorBody | undefined
@@ -38,54 +35,94 @@ export class ApiError extends Error {
   }
 }
 
-function normalizeError(error: unknown): ApiError {
-  if (error instanceof AxiosError) {
-    const status = error.response?.status
-    const body = error.response?.data as ApiErrorBody | undefined
-    const message =
-      body?.message ??
-      body?.error ??
-      error.message ??
-      'Something went wrong. Please try again.'
-    return new ApiError(message, status, body)
-  }
-
-  if (error instanceof Error) return new ApiError(error.message)
-  return new ApiError('Unknown error')
+interface RequestOptions {
+  headers?: Record<string, string>
 }
 
-export const api: AxiosInstance = axios.create({
-  baseURL: env.apiBaseUrl,
-  timeout: 20_000,
-  headers: {
+function baseHeaders(extra?: Record<string, string>): Record<string, string> {
+  const headers: Record<string, string> = {
     Accept: 'application/json',
-    'Content-Type': 'application/json',
+    ...extra,
+  }
+  if (env.secretKey) {
+    headers.Authorization = env.secretKey
+  }
+  return headers
+}
+
+function normalizeErrorBody(data: unknown): ApiErrorBody | undefined {
+  if (data && typeof data === 'object') return data as ApiErrorBody
+  return undefined
+}
+
+async function request<T>(path: string, init: RequestInit): Promise<{ data: T }> {
+  let res: Response
+  try {
+    res = await fetch(`${env.apiBaseUrl}${path}`, {
+      ...init,
+      signal: AbortSignal.timeout(20_000),
+    })
+  } catch (error) {
+    throw new ApiError(
+      error instanceof Error ? error.message : 'Something went wrong. Please try again.',
+    )
+  }
+
+  let data: unknown = {}
+  try {
+    const text = await res.text()
+    data = text ? (JSON.parse(text) as unknown) : {}
+  } catch {
+    data = {}
+  }
+
+  if (!res.ok) {
+    const body = normalizeErrorBody(data)
+    throw new ApiError(
+      body?.message ?? body?.error ?? `Request failed with status ${res.status}`,
+      res.status,
+      body,
+    )
+  }
+
+  return { data: data as T }
+}
+
+/** Minimal axios-compatible surface used across feature modules. */
+export const api = {
+  get<T>(url: string, options?: RequestOptions): Promise<{ data: T }> {
+    return request<T>(url, {
+      method: 'GET',
+      headers: baseHeaders(options?.headers),
+    })
   },
-})
 
-// --- Request interceptor -----------------------------------------------------
-// Attach auth tokens or tracing headers here when the app grows.
-
-api.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    if (env.secretKey) {
-      config.headers.Authorization = env.secretKey
+  post<T>(url: string, body?: unknown, options?: RequestOptions): Promise<{ data: T }> {
+    const isForm = typeof FormData !== 'undefined' && body instanceof FormData
+    // FormData: let the browser set multipart boundary. Plain objects: JSON.
+    const headers = baseHeaders(options?.headers)
+    if (!isForm && body !== undefined && !headers['Content-Type']) {
+      headers['Content-Type'] = 'application/json'
     }
-
-    if (env.isDev) {
-      console.debug(
-        `[api] ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`,
-      )
+    if (isForm && headers['Content-Type'] === 'multipart/form-data') {
+      // Axios accepted this literal but fetch must NOT send it without a
+      // boundary — the browser generates the correct header itself.
+      delete headers['Content-Type']
     }
-    return config
+    return request<T>(url, {
+      method: 'POST',
+      headers,
+      body: isForm
+        ? (body as FormData)
+        : body === undefined
+          ? undefined
+          : typeof body === 'string'
+            ? body
+            : JSON.stringify(body),
+    })
   },
-  (error) => Promise.reject(normalizeError(error)),
-)
+}
 
-// --- Response interceptor ----------------------------------------------------
-// Unwrap the response, or normalise any error into the shared `ApiError`.
-
-api.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error) => Promise.reject(normalizeError(error)),
-)
+export type AxiosInstance = typeof api
+export type AxiosResponse<T = unknown> = { data: T }
+export type AxiosError = Error

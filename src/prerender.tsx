@@ -13,6 +13,7 @@ import {
   getCachedCategoriesResponse,
   getCachedClientsResponse,
   getCachedCompanyResponse,
+  getCachedFeaturedBlogsResponse,
   getCachedFrontBlogsResponse,
   getCachedHomeFaqResponse,
   getCachedHomeTestimonialsResponse,
@@ -80,6 +81,14 @@ export async function prerender(data: { url: string }) {
   const frontBlogsRes = getCachedFrontBlogsResponse();
   if (hasRows(frontBlogsRes)) {
     queryClient.setQueryData(['website', 'blogs', 'front'], frontBlogsRes);
+  }
+
+  // PERF: seed featured blogs too — homepage renders HomeFeaturedBlogSection
+  // below the fold; without this the client fired GET /getFeaturedBlogs on
+  // every visit after hydration (extra 40KB + TBT before LCP settles).
+  const featuredBlogsRes = getCachedFeaturedBlogsResponse();
+  if (hasRows(featuredBlogsRes)) {
+    queryClient.setQueryData(['website', 'blogs', 'featured'], featuredBlogsRes);
   }
 
   // Pre-hydrate home FAQs

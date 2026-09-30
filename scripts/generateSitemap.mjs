@@ -15,9 +15,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const SITE_ORIGIN = 'https://ck.agsdemo.in';
+const SITE_ORIGIN = 'https://www.capitalknob.com';
 const API_BASE_URL =
-  process.env.VITE_API_BASE_URL ?? 'http://capitalknob.com/crmapi/public/api';
+  process.env.VITE_API_BASE_URL ?? 'https://capitalknob.com/crmapi/public/api';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

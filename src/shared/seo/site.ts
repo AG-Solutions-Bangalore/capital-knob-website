@@ -3,7 +3,8 @@
  * Single source of truth for canonical URLs, domain origin, and site branding.
  */
 export const SITE_NAME = 'CapitalKnob';
-export const SITE_ORIGIN = 'https://ck.agsdemo.in';
+/** The one public hostname used by canonicals, sitemap URLs, and JSON-LD IDs. */
+export const SITE_ORIGIN = 'https://www.capitalknob.com';
 export const SITE_LOGO = `${SITE_ORIGIN}/favicon.png`;
 export const SITE_PHONE = '+91-9876543210';
 export const SITE_EMAIL = 'hello@capitalknob.com';

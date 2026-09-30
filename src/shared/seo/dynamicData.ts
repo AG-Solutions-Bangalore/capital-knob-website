@@ -103,6 +103,7 @@ const dynamicBlogsMap = new Map<string, BlogDetailsResponse>();
 let rawCategoriesResponse: unknown = null;
 let rawBlogsResponse: unknown = null;
 let rawFrontBlogsResponse: unknown = null;
+let rawFeaturedBlogsResponse: unknown = null;
 let rawHomeFaqResponse: unknown = null;
 let rawHomeTestimonialsResponse: unknown = null;
 let rawClientsResponse: unknown = null;
@@ -153,6 +154,18 @@ export function ensureDynamicData(): Promise<void> {
 }
 
 export async function loadDynamicData(): Promise<void> {
+  // PERF: browser must NEVER run the SSG pre-fetcher. The client renders
+  // through React Query hooks (useCategoryQuery, useBlogsQuery, …) which
+  // fetch on demand with proper caching — running these 3+ raw fetches on
+  // every route mount doubles network traffic and delays LCP/TBT.
+  // Server (prerender.tsx) still pre-fetches; browser returns instantly.
+  if (typeof window !== 'undefined') {
+    if (!isLoaded) {
+      isLoaded = true;
+      notifyDynamicDataListeners();
+    }
+    return;
+  }
   if (isLoaded) return;
   if (loadPromise) return loadPromise;
 
@@ -164,7 +177,7 @@ export async function loadDynamicData(): Promise<void> {
       }
 
       // 1. Fetch categories, blogs, and front blogs (needed for metadata maps)
-      const [categoriesRes, blogsRes, frontBlogsRes] = await Promise.all([
+      const [categoriesRes, blogsRes, frontBlogsRes, featuredBlogsRes] = await Promise.all([
         fetch(`${API_BASE_URL}/getCategory`, { signal: AbortSignal.timeout(15000) })
           .then((r) => r.json())
           .catch((err) => {
@@ -183,11 +196,18 @@ export async function loadDynamicData(): Promise<void> {
             if (isServer) console.warn('⚠️ [SSG] Failed to fetch /getFrontBlogs:', err.message);
             return { data: [] };
           }),
+        fetch(`${API_BASE_URL}/getFeaturedBlogs`, { signal: AbortSignal.timeout(15000) })
+          .then((r) => r.json())
+          .catch((err) => {
+            if (isServer) console.warn('⚠️ [SSG] Failed to fetch /getFeaturedBlogs:', err.message);
+            return { data: [] };
+          }),
       ]);
 
       rawCategoriesResponse = categoriesRes;
       rawBlogsResponse = blogsRes;
       rawFrontBlogsResponse = frontBlogsRes;
+      rawFeaturedBlogsResponse = featuredBlogsRes;
       frontBlogs = Array.isArray(frontBlogsRes?.data) ? frontBlogsRes.data : [];
 
       const catList: CategoryData[] = Array.isArray(categoriesRes?.data) ? categoriesRes.data : [];
@@ -317,6 +337,10 @@ export function getCachedBlogsResponse() {
 
 export function getCachedFrontBlogsResponse() {
   return rawFrontBlogsResponse;
+}
+
+export function getCachedFeaturedBlogsResponse() {
+  return rawFeaturedBlogsResponse;
 }
 
 export function getCachedHomeFaqResponse() {

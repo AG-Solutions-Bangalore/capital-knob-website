@@ -427,6 +427,35 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
       ),
     ],
   },
+  '/distressed-assets-and-special-situations': {
+    title: 'Distressed Assets & Special Situations Services | CapitalKnob',
+    description:
+      'CapitalKnob provides distressed assets and special situations services in India, offering flexible capital solutions for complex financial and business needs.',
+    keywords:
+      'distressed assets, special situations, distressed assets services India, special situations capital',
+    canonicalPath: '/distressed-assets-and-special-situations',
+    schemas: [
+      organizationSchema,
+      createWebPageSchema(
+        '/distressed-assets-and-special-situations',
+        'Distressed Assets & Special Situations Services | CapitalKnob',
+        'CapitalKnob provides distressed assets and special situations services in India, offering flexible capital solutions for complex financial and business needs.',
+      ),
+      createServiceSchema({
+        name: 'Distressed Assets & Special Situations Services',
+        description:
+          'CapitalKnob provides distressed assets and special situations services in India, offering flexible capital solutions for complex financial and business needs.',
+        path: '/distressed-assets-and-special-situations',
+      }),
+      createBreadcrumbSchema(
+        [
+          { name: 'Home', path: '/' },
+          { name: 'Distressed Assets & Special Situations', path: '/distressed-assets-and-special-situations' },
+        ],
+        '/distressed-assets-and-special-situations',
+      ),
+    ],
+  },
   '/disclaimer': {
     title: 'Disclaimer | CapitalKnob Investment & Financial Advisors',
     description:
@@ -536,7 +565,7 @@ function createGenericServiceSeo(slug: string, path: string): RouteSeoEntry {
  * These take precedence over `blog_meta_*` values coming from the API,
  * so junk/test meta in the backend (e.g. "demoblogs123", "dxcfvgbh")
  * never reaches crawlers. Canonical stays `/blogs/<slug>` → absolute
- * URL via `SITE_ORIGIN` (https://ck.agsdemo.in), robots INDEX,FOLLOW,
+ * URL via `SITE_ORIGIN` (https://www.capitalknob.com), robots INDEX,FOLLOW,
  * author/publisher CapitalKnob (emitted globally by SEOPageLayout).
  */
 const BLOG_SEO_OVERRIDES: Record<

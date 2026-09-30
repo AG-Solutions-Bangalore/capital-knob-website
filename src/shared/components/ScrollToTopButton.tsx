@@ -7,6 +7,7 @@
  */
 
 import { useEffect, useState } from 'react'
+import { getLenisInstance } from '@/lib/lenisInstance'
 
 export function ScrollToTopButton({ showAfter = 600 }: { showAfter?: number }) {
   const [visible, setVisible] = useState(false)
@@ -21,6 +22,13 @@ export function ScrollToTopButton({ showAfter = 600 }: { showAfter?: number }) {
   }, [showAfter])
 
   const scrollToTop = () => {
+    // Zero-lenis import: read via the singleton so `lenis` never enters the
+    // critical path (verified via Lighthouse bootup-time audit).
+    const lenis = getLenisInstance()
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: false })
+      return
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 

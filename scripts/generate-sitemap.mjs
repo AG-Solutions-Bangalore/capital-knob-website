@@ -20,8 +20,8 @@ const root = path.resolve(here, '..')
 const outFile = path.join(root, 'dist', 'sitemap.xml')
 
 const API_BASE_URL =
-  process.env.VITE_API_BASE_URL ?? 'http://capitalknob.com/crmapi/public/api'
-const SITE_ORIGIN = 'https://ck.agsdemo.in'
+  process.env.VITE_API_BASE_URL ?? 'https://capitalknob.com/crmapi/public/api'
+const SITE_ORIGIN = 'https://www.capitalknob.com'
 
 /** Backend page slug → frontend path. Unmapped slugs have no page → skipped. */
 const SLUG_TO_PATH = {

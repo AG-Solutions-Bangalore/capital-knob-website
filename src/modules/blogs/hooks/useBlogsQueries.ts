@@ -18,10 +18,16 @@ import type {
   BlogListResponse,
 } from '../api/blogs.types'
 
+// PERF: 30min staleTime so SSR-hydrated data never refetches on mount.
+// Without this every homepage visit fired getFrontBlogs/getFeaturedBlogs/
+// getBlogs again after hydration, delaying LCP and burning TBT.
+const BLOG_STALE_TIME = 30 * 60 * 1000
+
 export function useFrontBlogsQuery(): UseQueryResult<BlogListResponse, Error> {
   return useQuery({
     queryKey: ['website', 'blogs', 'front'],
     queryFn: fetchFrontBlogs,
+    staleTime: BLOG_STALE_TIME,
   })
 }
 
@@ -29,6 +35,7 @@ export function useFeaturedBlogsQuery(): UseQueryResult<BlogListResponse, Error>
   return useQuery({
     queryKey: ['website', 'blogs', 'featured'],
     queryFn: fetchFeaturedBlogs,
+    staleTime: BLOG_STALE_TIME,
   })
 }
 
@@ -36,6 +43,7 @@ export function useBlogsQuery(): UseQueryResult<BlogListResponse, Error> {
   return useQuery({
     queryKey: ['website', 'blogs', 'list'],
     queryFn: fetchBlogs,
+    staleTime: BLOG_STALE_TIME,
   })
 }
 

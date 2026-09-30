@@ -10,6 +10,8 @@ import { EmiCalculator } from './EmiCalculator'
 const LCP_SRC = '/images/home/hero_villa-480.webp'
 const LCP_SRCSET =
   '/images/home/hero_villa-480.webp 480w, /images/home/hero_villa-768.webp 768w, /images/home/hero_villa-1280.webp 1280w, /images/home/hero_villa-1440.webp 1440w, /images/home/hero_villa-1920.webp 1920w'
+const LCP_AVIF_SRCSET =
+  '/images/home/hero_villa-480.avif 480w, /images/home/hero_villa-768.avif 768w, /images/home/hero_villa-1280.avif 1280w, /images/home/hero_villa-1440.avif 1440w, /images/home/hero_villa-1920.avif 1920w'
 // Original asset is 1376×768 — explicit dimensions reserve space (CLS 0).
 const LCP_WIDTH = 1376
 const LCP_HEIGHT = 768
@@ -67,7 +69,7 @@ export function HomeHero() {
 
   return (
     <section
-      className="relative overflow-hidden bg-navy text-white select-none"
+      className="relative overflow-hidden bg-navy text-white select-none lg:flex lg:min-h-[calc(100svh-5rem)] lg:items-center"
       aria-roledescription="carousel"
       aria-label="CapitalKnob Financing Services"
       onTouchStart={handleTouchStart}
@@ -77,47 +79,47 @@ export function HomeHero() {
       <div className="absolute inset-0 z-0 overflow-hidden bg-navy pointer-events-none">
         {heroSlides.map((slide, index) => {
           const isActive = index === currentSlide
-          const isPrev =
-            currentSlide !== 0 &&
-            (currentSlide - 1 + totalSlides) % totalSlides === index
           const isLcp = index === 0
 
           return (
             <div
               key={slide.id}
-              className={`absolute inset-0 transition-all duration-1000 ease-out ${isActive
-                  ? 'opacity-100 translate-x-0 scale-100 z-10'
-                  : isPrev
-                    ? 'opacity-0 -translate-x-12 scale-105 z-0'
-                    : 'opacity-0 translate-x-12 scale-105 z-0'
+              className={`absolute inset-0 transition-opacity duration-700 ease-out ${isActive
+                  ? 'opacity-100 z-10'
+                  : 'opacity-0 z-0 pointer-events-none'
                 }`}
             >
               {isLcp ? (
-                <img
-                  src={LCP_SRC}
-                  srcSet={LCP_SRCSET}
-                  sizes="100vw"
-                  width={LCP_WIDTH}
-                  height={LCP_HEIGHT}
-                  alt={slide.imageAlt}
-                  title={slide.imageTitle}
-                  className="h-full w-full object-cover object-center lg:object-right transition-transform duration-[6000ms] ease-linear"
-                  style={{
-                    transform: isActive ? 'scale(1.04)' : 'scale(1)',
-                  }}
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                />
-              ) : isActive || isPrev ? (
+                <picture>
+                  <source
+                    type="image/avif"
+                    srcSet={LCP_AVIF_SRCSET}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                  <img
+                    src={LCP_SRC}
+                    srcSet={LCP_SRCSET}
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    width={LCP_WIDTH}
+                    height={LCP_HEIGHT}
+                    alt={slide.imageAlt}
+                    title={slide.imageTitle}
+                    className="h-full w-full object-cover object-center lg:object-right"
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                  />
+                </picture>
+              ) : isActive ? (
+                // PERF: only the active slide mounts an <img>. Previously the
+                // previous slide pre-mounted too, firing a ~100-200KB remote
+                // fetch on initial load that competed with the LCP image.
+                // Slide change mounts the new image on demand (cached after).
                 <img
                   src={slide.imageSrc}
                   alt={slide.imageAlt}
                   title={slide.imageTitle}
-                  className="h-full w-full object-cover object-center lg:object-right transition-transform duration-[6000ms] ease-linear"
-                  style={{
-                    transform: isActive ? 'scale(1.04)' : 'scale(1)',
-                  }}
+                  className="h-full w-full object-cover object-center lg:object-right"
                   loading="lazy"
                   fetchPriority="low"
                   decoding="async"
@@ -132,13 +134,13 @@ export function HomeHero() {
 
       <Container
         size="4xl"
-        className="relative z-10 py-12 md:py-16 lg:py-20"
+        className="relative z-10 w-full py-6 md:py-8 lg:py-6 xl:py-8"
       >
-        <div className="grid items-center gap-8 md:gap-10 lg:grid-cols-12 lg:gap-12">
+        <div className="grid items-center gap-6 md:gap-8 lg:grid-cols-12 lg:gap-10">
           {/* Left Column — Value proposition & CTAs */}
           <div className="min-w-0 lg:col-span-7 xl:col-span-7">
-            {/* Sliding text content area */}
-            <div className="relative min-h-[440px] xs:min-h-[400px] sm:min-h-[380px] md:min-h-[420px] lg:min-h-[450px]">
+            {/* Sliding text content area — compact so hero fits 100vh with calculator */}
+            <div className="relative min-h-[340px] xs:min-h-[320px] sm:min-h-[300px] md:min-h-[330px] lg:min-h-[360px]">
               {heroSlides.map((slide, index) => {
                 const isActive = index === currentSlide
                 const isNext = direction === 'next'
@@ -168,17 +170,17 @@ export function HomeHero() {
 
                     {/* Handwritten cursive script accent */}
                     <div
-                      className={`relative mt-2 inline-block transition-all duration-500 delay-150 ${isActive
+                      className={`relative mt-1.5 inline-block transition-all duration-500 delay-150 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-2'
                         }`}
                     >
-                      <span className="font-script text-2xl font-bold tracking-wide text-gold sm:text-3xl lg:text-4xl">
+                      <span className="font-script text-xl font-bold tracking-wide text-gold sm:text-2xl lg:text-3xl">
                         {slide.handwrittenScript}
                       </span>
                       <svg
                         viewBox="0 0 220 20"
-                        className="absolute -bottom-2.5 left-0 h-4 w-48 text-gold"
+                        className="absolute -bottom-2 left-0 h-3.5 w-40 text-gold"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2.5"
@@ -196,8 +198,8 @@ export function HomeHero() {
                           : 'opacity-0 translate-y-3'
                         }`}
                     >
-                      <h1 className="mt-4 font-display text-3xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl min-h-[4.5rem] sm:min-h-[5.5rem] md:min-h-[7rem]">
-                        {slide.titleLine1} <br className="hidden sm:inline" />
+                      <h1 className="mt-3 font-display text-[1.7rem] font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-[2.75rem] lg:text-5xl min-h-[3.8rem] sm:min-h-[4.5rem] md:min-h-[5.5rem]">
+                        {slide.titleLine1} <br />
                         <span className="text-white">{slide.titleLine2}</span>
                       </h1>
                     </div>
@@ -209,7 +211,7 @@ export function HomeHero() {
                           : 'opacity-0 translate-y-2'
                         }`}
                     >
-                      <p className="mt-4 text-base font-bold text-gold sm:text-lg lg:text-xl">
+                      <p className="mt-3 text-sm font-bold text-gold sm:text-base lg:text-lg">
                         {slide.tagline}
                       </p>
                     </div>
@@ -221,14 +223,14 @@ export function HomeHero() {
                           : 'opacity-0 translate-y-2'
                         }`}
                     >
-                      <p className="mt-3 max-w-xl text-xs sm:text-sm leading-relaxed text-slate-300 md:text-base">
+                      <p className="mt-2 max-w-xl text-xs sm:text-[13px] leading-relaxed text-slate-300 md:text-sm">
                         {slide.description}
                       </p>
                     </div>
 
                     {/* CTA row */}
                     <div
-                      className={`mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 transition-all duration-500 delay-350 ${isActive
+                      className={`mt-5 sm:mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 transition-all duration-500 delay-350 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-2'
                         }`}
@@ -239,7 +241,7 @@ export function HomeHero() {
                         href={slide.primaryCta.href}
                         title={linkTitleFor(slide.primaryCta.href)}
                         tabIndex={isActive ? 0 : -1}
-                        className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-white shadow-gold transition-all duration-200 hover:bg-gold-hover hover:scale-[1.02] active:scale-[0.98]"
+                        className="inline-flex min-h-[44px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-5 py-2.5 text-[13px] font-bold text-navy shadow-gold transition-all duration-200 hover:bg-gold-hover hover:scale-[1.02] active:scale-[0.98]"
                       >
                         <span>{slide.primaryCta.label}</span>
                         <svg
@@ -262,7 +264,7 @@ export function HomeHero() {
                         href={slide.secondaryCta.href}
                         title={linkTitleFor(slide.secondaryCta.href)}
                         tabIndex={isActive ? 0 : -1}
-                        className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg border border-white/25 bg-navy/60 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/50 hover:bg-navy/80 hover:scale-[1.02] active:scale-[0.98]"
+                        className="inline-flex min-h-[44px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg border border-white/25 bg-navy/60 px-5 py-2.5 text-[13px] font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/50 hover:bg-navy/80 hover:scale-[1.02] active:scale-[0.98]"
                       >
                         <span>{slide.secondaryCta.label}</span>
                       </a>
@@ -274,16 +276,13 @@ export function HomeHero() {
 
             {/* Slider Navigation: Interactive Slide Tabs + Prev/Next Controls */}
             <div
-              className="mt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-t border-white/10 pt-4"
+              className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 border-t border-white/10 pt-3"
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
             >
-              {/* Slide Tabs — wrap on mobile so every pill is fully
-                  visible (no mid-pill cut); single scrollable row on sm+. */}
-              {/* Slide picker — plain buttons (not ARIA tabs: there are no
-                  tabpanels, slides crossfade in place) */}
+              {/* Slide Tabs — single scrollable row on all screens so pills never reflow/wrap */}
               <div
-                className="flex flex-wrap items-center gap-2 py-1 sm:flex-nowrap sm:overflow-x-auto no-scrollbar sm:py-1 sm:pb-1"
+                className="flex items-center gap-2 py-1 overflow-x-auto no-scrollbar"
                 role="group"
                 aria-label="Financing categories"
               >
@@ -301,10 +300,7 @@ export function HomeHero() {
                           : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white'
                         }`}
                     >
-
                       <span>{slide.titleLine1.split('&')[0].trim()}</span>
-
-
                     </button>
                   )
                 })}
@@ -359,56 +355,56 @@ export function HomeHero() {
             </div>
 
             {/* 4 Trust Badges */}
-            <div className="mt-8 grid grid-cols-2 gap-4 border-t border-white/10 pt-6 sm:grid-cols-4 sm:gap-6">
+            <div className="mt-5 grid grid-cols-2 gap-3 border-t border-white/10 pt-4 sm:grid-cols-4 sm:gap-5">
               {/* Badge 1 */}
               <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-white/10 text-gold backdrop-blur-sm">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/10 text-gold backdrop-blur-sm">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10" />
                     <line x1="19" y1="5" x2="5" y2="19" />
                     <circle cx="6.5" cy="6.5" r="2.5" />
                     <circle cx="17.5" cy="17.5" r="2.5" />
                   </svg>
                 </span>
-                <span className="mt-2 text-xs font-medium text-slate-200">
+                <span className="mt-1.5 text-[11px] font-medium text-slate-200">
                   Best Interest<br />Rates
                 </span>
               </div>
 
               {/* Badge 2 */}
               <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-white/10 text-gold backdrop-blur-sm">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/10 text-gold backdrop-blur-sm">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M3 21h18M3 10h18M5 10v11M9 10v11M15 10v11M19 10v11M12 2 2 7h20L12 2z" />
                   </svg>
                 </span>
-                <span className="mt-2 text-xs font-medium text-slate-200">
+                <span className="mt-1.5 text-[11px] font-medium text-slate-200">
                   Multiple<br />Lenders
                 </span>
               </div>
 
               {/* Badge 3 */}
               <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-white/10 text-gold backdrop-blur-sm">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/10 text-gold backdrop-blur-sm">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                     <circle cx="12" cy="7" r="4" />
                   </svg>
                 </span>
-                <span className="mt-2 text-xs font-medium text-slate-200">
+                <span className="mt-1.5 text-[11px] font-medium text-slate-200">
                   Expert<br />Guidance
                 </span>
               </div>
 
               {/* Badge 4 */}
               <div className="flex flex-col items-center text-center sm:items-start sm:text-left">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-white/10 text-gold backdrop-blur-sm">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/25 bg-white/10 text-gold backdrop-blur-sm">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 12a9 9 0 1 1-6.219-8.56" />
                     <polyline points="21 3 21 9 15 9" />
                   </svg>
                 </span>
-                <span className="mt-2 text-xs font-medium text-slate-200">
+                <span className="mt-1.5 text-[11px] font-medium text-slate-200">
                   Hassle-Free<br />Process
                 </span>
               </div>
@@ -416,7 +412,7 @@ export function HomeHero() {
           </div>
 
           {/* Right Column — EMI Calculator */}
-          <div className="flex justify-center md:justify-end lg:col-span-5 xl:col-span-5">
+          <div className="flex w-full justify-center md:justify-end lg:col-span-5 xl:col-span-5">
             <EmiCalculator />
           </div>
         </div>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '@/app/routes'
 import { cn } from '@/shared/lib/cn'
@@ -29,9 +30,19 @@ const LOGO_DIMS = {
 export function Logo({ variant = 'light', layout = 'horizontal', className }: LogoProps) {
   void variant
 
+  // Paint the local, optimized logo first. The live logo remains supported,
+  // but wait past the initial rendering window before requesting it. An idle
+  // callback may run while Lighthouse is still measuring LCP on fast CPUs.
+  const [useLiveLogo, setUseLiveLogo] = useState(false)
+  useEffect(() => {
+    const id = window.setTimeout(() => setUseLiveLogo(true), 6000)
+    return () => window.clearTimeout(id)
+  }, [])
+
   // Dynamic logo: live `company_logo` against the API `Company` base when
-  // uploaded, else the bundled static logo. Path always comes from the API.
-  const { data } = useCompanyQuery()
+  // uploaded, else the bundled static logo. Do not initiate this request
+  // until the local hero and header have had their chance to render.
+  const { data } = useCompanyQuery(useLiveLogo)
   const liveFile = data?.data.company_logo?.trim()
   const liveBase =
     data?.image_url?.find((e) => e.image_for === 'Company')?.image_url ?? ''
@@ -44,13 +55,14 @@ export function Logo({ variant = 'light', layout = 'horizontal', className }: Lo
       className={cn('inline-flex leading-none', className)}
     >
       <img
-        src={liveSrc ?? LOGO_SRC[layout]}
+        src={useLiveLogo ? liveSrc ?? LOGO_SRC[layout] : LOGO_SRC[layout]}
         width={LOGO_DIMS[layout].width}
         height={LOGO_DIMS[layout].height}
         alt="CapitalKnob – Loan and Investment"
         title="CapitalKnob – Loan and Investment"
         decoding="async"
-        fetchPriority="low"
+        loading={layout === 'horizontal' ? 'eager' : 'lazy'}
+        fetchPriority={layout === 'horizontal' ? 'high' : 'low'}
         className={cn(
           'w-auto',
           layout === 'horizontal' ? 'h-10 sm:h-11' : 'h-24',

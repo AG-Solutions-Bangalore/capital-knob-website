@@ -1,4 +1,4 @@
-import { useState, useId } from 'react'
+import { useState, useId, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { ROUTES } from '@/app/routes'
 import { linkTitleFor } from '@/shared/seo/linkTitles'
@@ -37,6 +37,19 @@ export function EmiCalculator() {
     setLoanAmount(Math.min(50000000, Math.max(0, val)))
   }
 
+  const handleRateInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawVal = e.target.value.replace(/[^0-9.]/g, '')
+    const val = rawVal ? parseFloat(rawVal) : 0
+    if (Number.isNaN(val)) return
+    setInterestRate(Math.min(15, Math.max(0, val)))
+  }
+
+  const handleTenureInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawVal = e.target.value.replace(/[^0-9]/g, '')
+    const val = rawVal ? parseInt(rawVal, 10) : 0
+    setTenureYears(Math.min(30, Math.max(0, val)))
+  }
+
   const ctaText =
     loanType === 'home'
       ? 'Apply for Home Loan'
@@ -44,15 +57,31 @@ export function EmiCalculator() {
         ? 'Apply for Home Loan Top-Up'
         : 'Apply for Balance Transfer'
 
+  // Fill % for the premium track (navy fill -> slate remainder, like reference)
+  const amountPct = ((loanAmount - 500000) / (50000000 - 500000)) * 100
+  const ratePct = ((interestRate - 6) / (15 - 6)) * 100
+  const tenurePct = ((tenureYears - 1) / (30 - 1)) * 100
+  const trackStyle = (pct: number): CSSProperties => ({
+    background: `linear-gradient(to right, #0b1d3a ${Math.min(100, Math.max(0, pct))}%, #e2e8f0 ${Math.min(100, Math.max(0, pct))}%)`,
+  })
+
   return (
-    <div className="box-border w-full max-w-[430px] mx-auto rounded-2xl bg-white p-4 shadow-2xl ring-1 ring-slate-900/5 sm:p-5">
+    <div className="box-border w-full max-w-[400px] mx-auto rounded-2xl bg-white px-3.5 py-3 shadow-2xl ring-1 ring-slate-900/5 sm:px-4 sm:py-3.5">
+      {/* Compact slider styling — thin track + navy thumb (matches reference) */}
+      <style>{`
+        .ck-range { -webkit-appearance: none; appearance: none; height: 6px; border-radius: 9999px; outline: none; }
+        .ck-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 9999px; background: #0b1d3a; border: 2px solid #0b1d3a; box-shadow: 0 1px 4px rgba(11,29,58,.35); cursor: pointer; margin-top: 0; }
+        .ck-range::-moz-range-thumb { width: 18px; height: 18px; border-radius: 9999px; background: #0b1d3a; border: 2px solid #0b1d3a; box-shadow: 0 1px 4px rgba(11,29,58,.35); cursor: pointer; }
+        .ck-range::-moz-range-track { height: 6px; border-radius: 9999px; background: transparent; }
+      `}</style>
+
       {/* Title */}
-      <h2 className="font-display text-lg font-bold text-ink sm:text-xl">
+      <h2 className="font-display text-base font-bold text-ink sm:text-lg leading-tight">
         EMI Calculator
       </h2>
 
       {/* Tabs */}
-      <div className="mt-4 flex rounded-lg bg-slate-100 p-1 text-[11px] sm:text-xs font-semibold text-muted">
+      <div className="mt-2 flex rounded-lg bg-slate-100 p-1 text-[11px] sm:text-xs font-semibold text-muted">
         <button
           type="button"
           onClick={() => setLoanType('home')}
@@ -88,110 +117,129 @@ export function EmiCalculator() {
         </button>
       </div>
 
-      {/* Slider 1: Loan Amount */}
-      <div className="mt-5">
-        <div className="flex items-center justify-between text-xs font-semibold text-ink">
-          <label htmlFor={amountId}>Loan Amount</label>
+      {/* Slider 1: Loan Amount — compact card like reference (label + value, divider, slider) */}
+      <div className="mt-2.5 rounded-xl border border-line">
+        <div className="flex items-center justify-between gap-2 px-3 pt-2">
+          <label htmlFor={amountId} className="text-xs font-bold text-navy sm:text-[13px]">
+            Loan Amount
+          </label>
+          <span className="flex items-baseline gap-1 text-base font-extrabold text-navy sm:text-lg leading-none">
+            <span className="text-sm font-bold">₹</span>
+            <input
+              id={amountId}
+              type="text"
+              inputMode="numeric"
+              value={formatIndianCurrency(loanAmount)}
+              onChange={handleAmountInputChange}
+              aria-label="Loan Amount value"
+              className="w-[7.5rem] bg-transparent text-right font-extrabold text-navy outline-none sm:w-32"
+            />
+          </span>
         </div>
-        <div className="flex items-center justify-between rounded-lg border border-line bg-white px-3 py-2 text-sm">
-          <span className="font-semibold text-muted">₹</span>
+        <div className="mx-3 border-b border-line/80" />
+        <div className="px-3 pb-2 pt-1.5">
           <input
-            id={amountId}
-            type="text"
-            value={formatIndianCurrency(loanAmount)}
-            onChange={handleAmountInputChange}
-            className="w-full text-right font-bold text-ink outline-none"
+            type="range"
+            min={500000}
+            max={50000000}
+            step={50000}
+            value={loanAmount}
+            onChange={(e) => setLoanAmount(Number(e.target.value))}
+            style={trackStyle(amountPct)}
+            className="ck-range w-full cursor-pointer"
+            aria-label="Loan Amount Slider"
           />
-        </div>
-        <input
-          type="range"
-          min={500000}
-          max={50000000}
-          step={50000}
-          value={loanAmount}
-          onChange={(e) => setLoanAmount(Number(e.target.value))}
-          className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-slate-200 accent-navy"
-          aria-label="Loan Amount Slider"
-        />
-        <div className="flex justify-between text-[11px] font-medium text-muted">
-          <span>₹5 L</span>
-          <span>₹5 Cr</span>
+          <div className="mt-1 flex justify-between text-[11px] font-medium text-muted">
+            <span>₹5 L</span>
+            <span>₹5 Cr</span>
+          </div>
         </div>
       </div>
 
-      {/* Slider 2: Interest Rate */}
-      <div className="mt-4 space-y-2">
-        <div className="flex items-center justify-between text-xs font-semibold text-ink">
-          <label htmlFor={rateId}>Interest Rate (% p.a.)</label>
+      {/* Slider 2: Interest Rate — same compact card */}
+      <div className="mt-2 rounded-xl border border-line">
+        <div className="flex items-center justify-between gap-2 px-3 pt-2">
+          <label htmlFor={rateId} className="text-xs font-bold text-navy sm:text-[13px]">
+            Interest Rate (% p.a.)
+          </label>
+          <span className="flex items-baseline gap-0.5 text-base font-extrabold text-navy sm:text-lg leading-none">
+            <input
+              id={rateId}
+              type="text"
+              inputMode="decimal"
+              value={String(interestRate)}
+              onChange={handleRateInputChange}
+              aria-label="Interest rate value"
+              className="w-10 bg-transparent text-right font-extrabold text-navy outline-none"
+            />
+            <span className="text-sm font-bold">%</span>
+          </span>
         </div>
-        <div className="flex items-center justify-between rounded-lg border border-line bg-white px-3 py-2 text-sm">
+        <div className="mx-3 border-b border-line/80" />
+        <div className="px-3 pb-2 pt-1.5">
           <input
-            id={rateId}
-            type="number"
-            step="0.1"
-            min="6"
-            max="15"
+            type="range"
+            min={6}
+            max={15}
+            step={0.1}
             value={interestRate}
             onChange={(e) => setInterestRate(Number(e.target.value))}
-            className="w-full text-left font-bold text-ink outline-none"
+            style={trackStyle(ratePct)}
+            className="ck-range w-full cursor-pointer"
+            aria-label="Interest Rate Slider"
           />
-          <span className="font-semibold text-muted">%</span>
-        </div>
-        <input
-          type="range"
-          min={6}
-          max={15}
-          step={0.1}
-          value={interestRate}
-          onChange={(e) => setInterestRate(Number(e.target.value))}
-          className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-slate-200 accent-navy"
-          aria-label="Interest Rate Slider"
-        />
-        <div className="flex justify-between text-[11px] font-medium text-muted">
-          <span>6%</span>
-          <span>15%</span>
+          <div className="mt-1 flex justify-between text-[11px] font-medium text-muted">
+            <span>6%</span>
+            <span>15%</span>
+          </div>
         </div>
       </div>
 
-      {/* Slider 3: Loan Tenure */}
-      <div className="mt-4 space-y-2">
-        <div className="flex items-center justify-between text-xs font-semibold text-ink">
-          <label htmlFor={tenureId}>Loan Tenure (Years)</label>
+      {/* Slider 3: Loan Tenure — same compact card */}
+      <div className="mt-2 rounded-xl border border-line">
+        <div className="flex items-center justify-between gap-2 px-3 pt-2">
+          <label htmlFor={tenureId} className="text-xs font-bold text-navy sm:text-[13px]">
+            Loan Tenure (Years)
+          </label>
+          <span className="flex items-baseline gap-1 text-base font-extrabold text-navy sm:text-lg leading-none">
+            <input
+              id={tenureId}
+              type="text"
+              inputMode="numeric"
+              value={String(tenureYears)}
+              onChange={handleTenureInputChange}
+              aria-label="Loan tenure value"
+              className="w-8 bg-transparent text-right font-extrabold text-navy outline-none"
+            />
+            <span className="text-[11px] font-semibold text-muted">Yrs</span>
+          </span>
         </div>
-        <div className="flex items-center justify-between rounded-lg border border-line bg-white px-3 py-2 text-sm">
+        <div className="mx-3 border-b border-line/80" />
+        <div className="px-3 pb-2 pt-1.5">
           <input
-            id={tenureId}
-            type="number"
-            min="1"
-            max="30"
+            type="range"
+            min={1}
+            max={30}
+            step={1}
             value={tenureYears}
             onChange={(e) => setTenureYears(Number(e.target.value))}
-            className="w-full text-left font-bold text-ink outline-none"
+            style={trackStyle(tenurePct)}
+            className="ck-range w-full cursor-pointer"
+            aria-label="Tenure Slider"
           />
-          <span className="text-xs text-muted">Yrs</span>
-        </div>
-        <input
-          type="range"
-          min={1}
-          max={30}
-          step={1}
-          value={tenureYears}
-          onChange={(e) => setTenureYears(Number(e.target.value))}
-          className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-slate-200 accent-navy"
-          aria-label="Tenure Slider"
-        />
-        <div className="flex justify-between text-[11px] font-medium text-muted">
-          <span>1</span>
-          <span>30</span>
+          <div className="mt-1 flex justify-between text-[11px] font-medium text-muted">
+            <span>1</span>
+            <span>30</span>
+          </div>
         </div>
       </div>
 
       {/* Result Card */}
-      <div className="mt-5 rounded-xl bg-slate-50 p-3.5 sm:p-4">
-        <p className="text-xs font-medium text-muted">Your Estimated EMI</p>
-        <p className="mt-1 font-display text-2xl font-black text-navy sm:text-3xl">
+      <div className="mt-2.5 rounded-xl bg-slate-50 px-3 py-2 sm:py-2.5">
+        <p className="text-[11px] font-medium text-muted leading-none">Your Estimated EMI</p>
+        <p className="mt-1 font-display text-[1.4rem] font-black text-navy sm:text-2xl leading-none">
           ₹ {formatIndianCurrency(emi)}{' '}
-          <span className="text-sm font-semibold text-muted">/ month</span>
+          <span className="text-xs font-semibold text-muted">/ month</span>
         </p>
       </div>
 
@@ -199,7 +247,7 @@ export function EmiCalculator() {
       <Link
         to={ROUTES.contact}
         title={linkTitleFor(ROUTES.contact)}
-        className="mt-4 flex min-h-[48px] w-full items-center justify-center gap-2 rounded-lg bg-navy py-3 text-sm font-bold text-white shadow-sm transition-all hover:bg-navy-soft active:scale-[0.98]"
+        className="mt-2.5 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-navy py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-navy-soft active:scale-[0.98]"
       >
         <span>{ctaText}</span>
         <svg
@@ -219,7 +267,7 @@ export function EmiCalculator() {
       </Link>
 
       {/* Footnote */}
-      <p className="mt-2.5 text-center text-[10.5px] leading-tight text-muted">
+      <p className="mt-1.5 text-center text-[10px] leading-tight text-muted">
         *This is an indicative estimate. Actual EMI may vary as per lender terms.
       </p>
     </div>
