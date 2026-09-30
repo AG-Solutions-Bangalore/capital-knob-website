@@ -34,7 +34,7 @@ export function HomeFeaturedBlogSection() {
         <Container size="4xl">
           <div className="mb-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
+              <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#997328]">
                 FEATURED ARTICLES
               </p>
               <h2 className="mt-3 font-display text-3xl font-extrabold leading-tight text-navy sm:text-4xl">
@@ -93,7 +93,7 @@ export function HomeFrontBlogSection() {
         <Container size="4xl">
           <div className="mb-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">
+              <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#997328]">
                 LATEST ARTICLES &amp; INSIGHTS
               </p>
               <h2 className="mt-3 font-display text-3xl font-extrabold leading-tight text-navy sm:text-4xl">

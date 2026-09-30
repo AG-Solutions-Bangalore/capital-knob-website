@@ -1,12 +1,9 @@
-import { HomePage } from '@/modules/home/pages/HomePage';
-/**
- * @file src/routes/AppRoutes.tsx
- * Decoupled route table wrapped in PageSEO for bulletproof metadata and SSR pre-rendering.
- */
 import React, { Suspense, useEffect, useSyncExternalStore } from 'react';
 import { Route, Routes, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { MainLayout } from '@/shared/layouts/MainLayout';
 import SEOPageLayout from '@/components/SEOPageLayout';
+import { LoadingFallback } from '@/shared/components/LoadingFallback';
+import { RouteErrorBoundary } from '@/shared/components/RouteErrorBoundary';
 import { getSeoForRoute } from '@/shared/seo/seoEngine';
 import {
   ensureDynamicData,
@@ -14,6 +11,7 @@ import {
   subscribeDynamicData,
 } from '@/shared/seo/dynamicData';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { HomePage } from '@/modules/home/pages/HomePage';
 import {
   AboutPage,
   BlogDetailPage,
@@ -26,6 +24,39 @@ import {
   RealEstateFinancePage,
   ServiceDetailPage,
 } from '@/app/lazyRoutes';
+
+// Idle route-preloading: only the 1–2 most likely next routes, staggered,
+// delayed 3.5s+, skipped on Save-Data / 2g/slow-2g. Never 5 at once.
+if (typeof window !== 'undefined') {
+  const preloadRoutes = () => {
+    try {
+      const nav = navigator as Navigator & {
+        connection?: { saveData?: boolean; effectiveType?: string };
+      };
+      const conn = nav.connection;
+      if (conn?.saveData) return;
+      const et = conn?.effectiveType;
+      if (et === 'slow-2g' || et === '2g') return;
+    } catch {
+      return;
+    }
+    // Most likely next from landing: Contact, then About — staggered.
+    window.setTimeout(() => {
+      import('@/modules/contact/pages/ContactPage').catch(() => {});
+    }, 4000);
+    window.setTimeout(() => {
+      import('@/modules/about/pages/AboutPage').catch(() => {});
+    }, 5500);
+  };
+  const schedulePreload = () => {
+    window.setTimeout(preloadRoutes, 3500);
+  };
+  if (typeof window.requestIdleCallback === 'function') {
+    window.requestIdleCallback(schedulePreload, { timeout: 10000 });
+  } else {
+    window.setTimeout(preloadRoutes, 5000);
+  }
+}
 
 /**
  * Forces the address-bar URL to always equal the canonical URL.
@@ -56,9 +87,11 @@ function PageSEO({ path, children, suspense = true }: { path?: string; children:
   return (
     <SEOPageLayout seo={seo} structuredSchemas={seo.schemas}>
       {suspense ? (
-        <Suspense fallback={<div className="min-h-screen bg-navy" aria-hidden="true" />}>{children}</Suspense>
+        <RouteErrorBoundary>
+          <Suspense fallback={<LoadingFallback />}>{children}</Suspense>
+        </RouteErrorBoundary>
       ) : (
-        children
+        <RouteErrorBoundary>{children}</RouteErrorBoundary>
       )}
     </SEOPageLayout>
   );

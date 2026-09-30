@@ -85,11 +85,9 @@ export function HomeHero() {
           return (
             <div
               key={slide.id}
-              className={`absolute inset-0 transition-all duration-1000 ease-out ${isActive
-                  ? 'opacity-100 translate-x-0 scale-100 z-10'
-                  : isPrev
-                    ? 'opacity-0 -translate-x-12 scale-105 z-0'
-                    : 'opacity-0 translate-x-12 scale-105 z-0'
+              className={`absolute inset-0 transition-opacity duration-700 ease-out ${isActive
+                  ? 'opacity-100 z-10'
+                  : 'opacity-0 z-0 pointer-events-none'
                 }`}
             >
               {isLcp ? (
@@ -101,10 +99,7 @@ export function HomeHero() {
                   height={LCP_HEIGHT}
                   alt={slide.imageAlt}
                   title={slide.imageTitle}
-                  className="h-full w-full object-cover object-center lg:object-right transition-transform duration-[6000ms] ease-linear"
-                  style={{
-                    transform: isActive ? 'scale(1.04)' : 'scale(1)',
-                  }}
+                  className="h-full w-full object-cover object-center lg:object-right"
                   loading="eager"
                   fetchPriority="high"
                   decoding="async"
@@ -114,10 +109,7 @@ export function HomeHero() {
                   src={slide.imageSrc}
                   alt={slide.imageAlt}
                   title={slide.imageTitle}
-                  className="h-full w-full object-cover object-center lg:object-right transition-transform duration-[6000ms] ease-linear"
-                  style={{
-                    transform: isActive ? 'scale(1.04)' : 'scale(1)',
-                  }}
+                  className="h-full w-full object-cover object-center lg:object-right"
                   loading="lazy"
                   fetchPriority="low"
                   decoding="async"
@@ -197,7 +189,7 @@ export function HomeHero() {
                         }`}
                     >
                       <h1 className="mt-4 font-display text-3xl font-extrabold leading-[1.12] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl min-h-[4.5rem] sm:min-h-[5.5rem] md:min-h-[7rem]">
-                        {slide.titleLine1} <br className="hidden sm:inline" />
+                        {slide.titleLine1} <br />
                         <span className="text-white">{slide.titleLine2}</span>
                       </h1>
                     </div>
@@ -239,7 +231,7 @@ export function HomeHero() {
                         href={slide.primaryCta.href}
                         title={linkTitleFor(slide.primaryCta.href)}
                         tabIndex={isActive ? 0 : -1}
-                        className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-white shadow-gold transition-all duration-200 hover:bg-gold-hover hover:scale-[1.02] active:scale-[0.98]"
+                        className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-6 py-3 text-sm font-bold text-navy shadow-gold transition-all duration-200 hover:bg-gold-hover hover:scale-[1.02] active:scale-[0.98]"
                       >
                         <span>{slide.primaryCta.label}</span>
                         <svg
@@ -278,12 +270,9 @@ export function HomeHero() {
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
             >
-              {/* Slide Tabs — wrap on mobile so every pill is fully
-                  visible (no mid-pill cut); single scrollable row on sm+. */}
-              {/* Slide picker — plain buttons (not ARIA tabs: there are no
-                  tabpanels, slides crossfade in place) */}
+              {/* Slide Tabs — single scrollable row on all screens so pills never reflow/wrap */}
               <div
-                className="flex flex-wrap items-center gap-2 py-1 sm:flex-nowrap sm:overflow-x-auto no-scrollbar sm:py-1 sm:pb-1"
+                className="flex items-center gap-2 py-1 overflow-x-auto no-scrollbar"
                 role="group"
                 aria-label="Financing categories"
               >
@@ -301,10 +290,7 @@ export function HomeHero() {
                           : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white'
                         }`}
                     >
-
                       <span>{slide.titleLine1.split('&')[0].trim()}</span>
-
-
                     </button>
                   )
                 })}

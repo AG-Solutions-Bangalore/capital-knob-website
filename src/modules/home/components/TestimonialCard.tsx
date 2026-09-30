@@ -42,7 +42,7 @@ export function TestimonialCard({
     >
       {/* Top row: Star Rating + Quote Icon */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1" aria-label={`${stars} out of 5 stars`}>
+        <div className="flex items-center gap-1" role="img" aria-label={`${stars} out of 5 stars`}>
           {[1, 2, 3, 4, 5].map((star) => (
             <svg
               key={star}
@@ -85,6 +85,7 @@ export function TestimonialCard({
               {name}
             </h4>
             <span
+              role="img"
               className="inline-flex shrink-0 items-center text-emerald-600"
               title="Verified Customer"
               aria-label="Verified Customer"

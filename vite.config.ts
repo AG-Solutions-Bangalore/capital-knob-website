@@ -72,12 +72,35 @@ function brotliFallback(): Plugin {
 // Heavy vendors leave the critical path via manualChunks:
 // motion|framer-motion → "motion", lenis → "lenis",
 // lucide-react|@radix-ui|radix-ui → "ui-vendor",
+// prerender dependencies → "prerender-*",
 // plus router/query/helmet/react/themes splits.
 function manualChunks(id: string) {
   const nid = id.replace(/\\/g, '/')
   if (nid.endsWith('/react/jsx-runtime.js')) return 'jsx'
   if (nid.includes('react-jsx-runtime.production')) return 'jsx'
   if (nid.includes('compiler-runtime')) return 'react'
+
+  // Isolate prerender-only dependencies so they NEVER leak into client chunks
+  if (
+    nid.includes('react-dom/server') ||
+    nid.includes('react-dom-server') ||
+    nid.includes('react-dom/cjs/react-dom-server') ||
+    nid.includes('react-dom/server.browser') ||
+    nid.includes('react-dom/server.node')
+  ) {
+    return 'prerender-server'
+  }
+  if (
+    nid.includes('node-html-parser') ||
+    nid.includes('/he/') ||
+    nid.includes('vite-prerender-plugin')
+  ) {
+    return 'prerender-parse'
+  }
+  if (nid.includes('/src/prerender.')) {
+    return 'prerender-entry'
+  }
+
   if (
     nid.includes('framer-motion') ||
     nid.includes('motion-dom') ||
@@ -94,8 +117,10 @@ function manualChunks(id: string) {
   ) {
     return 'ui-vendor'
   }
+  if (nid.includes('axios')) return 'axios'
   if (nid.includes('react-router')) return 'router'
-  if (nid.includes('@tanstack/react-query')) return 'query'
+  if (nid.includes('@tanstack/')) return 'query'
+  if (nid.includes('dynamicData')) return 'dynamic-data'
   if (nid.includes('react-helmet')) return 'helmet'
   if (nid.includes('next-themes')) return 'themes'
   if (

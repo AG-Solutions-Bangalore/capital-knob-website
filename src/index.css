@@ -1,5 +1,8 @@
-@import "lenis/dist/lenis.css";
 @import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
 
 @custom-variant dark (&:where(.dark, .dark *));
 
