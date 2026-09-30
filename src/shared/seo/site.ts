@@ -3,7 +3,7 @@
  * Single source of truth for canonical URLs, domain origin, and site branding.
  */
 export const SITE_NAME = 'CapitalKnob';
-export const SITE_ORIGIN = 'https://ck.agsdemo.in';
+export const SITE_ORIGIN = 'https://capitalknob.com';
 export const SITE_LOGO = `${SITE_ORIGIN}/favicon.png`;
 export const SITE_PHONE = '+91-9876543210';
 export const SITE_EMAIL = 'hello@capitalknob.com';
