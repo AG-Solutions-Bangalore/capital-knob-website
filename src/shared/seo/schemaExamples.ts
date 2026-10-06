@@ -4,7 +4,16 @@
  */
 import type { Graph, Thing } from 'schema-dts';
 import { ACTIVE_BLOG_IMAGE_BASE_URL } from '@/lib/images';
-import { SITE_EMAIL, SITE_LOGO, SITE_NAME, SITE_ORIGIN, SITE_PHONE, getCanonicalUrl } from './site';
+import {
+  SITE_ADDRESS,
+  SITE_EMAIL,
+  SITE_GEO,
+  SITE_LOGO,
+  SITE_NAME,
+  SITE_ORIGIN,
+  SITE_PHONE,
+  getCanonicalUrl,
+} from './site';
 
 /**
  * Normalizes any date string (e.g. "2026-09-23", "2026-01-01", etc.)
@@ -37,16 +46,16 @@ export const organizationSchema: Thing = {
   priceRange: '$$',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'Prestige Tech Park, 5th Floor, Outer Ring Road, Marathahalli',
-    addressLocality: 'Bengaluru',
-    addressRegion: 'Karnataka',
-    postalCode: '560037',
-    addressCountry: 'IN',
+    streetAddress: SITE_ADDRESS.streetAddress,
+    addressLocality: SITE_ADDRESS.addressLocality,
+    addressRegion: SITE_ADDRESS.addressRegion,
+    postalCode: SITE_ADDRESS.postalCode,
+    addressCountry: SITE_ADDRESS.addressCountry,
   },
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: 12.956,
-    longitude: 77.701,
+    latitude: SITE_GEO.latitude,
+    longitude: SITE_GEO.longitude,
   },
   openingHoursSpecification: {
     '@type': 'OpeningHoursSpecification',
@@ -194,11 +203,11 @@ export function createServiceSchema(service: {
     priceRange: '$$',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Prestige Tech Park, 5th Floor, Outer Ring Road, Marathahalli',
-      addressLocality: 'Bengaluru',
-      addressRegion: 'Karnataka',
-      postalCode: '560037',
-      addressCountry: 'IN',
+      streetAddress: SITE_ADDRESS.streetAddress,
+      addressLocality: SITE_ADDRESS.addressLocality,
+      addressRegion: SITE_ADDRESS.addressRegion,
+      postalCode: SITE_ADDRESS.postalCode,
+      addressCountry: SITE_ADDRESS.addressCountry,
     },
     areaServed: 'IN',
   } as Thing;

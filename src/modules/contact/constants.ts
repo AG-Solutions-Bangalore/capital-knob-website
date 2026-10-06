@@ -66,7 +66,7 @@ export const contactCopy = {
       {
         question: 'How soon will I get a response?',
         answer:
-          'Our team typically reviews and responds to all inquiries within 24 hours during business days. For urgent assistance, you can also reach us directly via phone at +91 98765 43210.',
+          'Our team typically reviews and responds to all inquiries within 24 hours during business days. For urgent assistance, you can also reach us directly via phone at +91 99869 00144.',
       },
       {
         question: 'Can I speak to an advisor directly?',

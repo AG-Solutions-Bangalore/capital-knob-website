@@ -68,6 +68,143 @@ function CarouselSkeleton() {
   )
 }
 
+function cleanCell(c: string): string {
+  return c
+    .replace(/&nbsp;/g, ' ')
+    .replace(/\u00a0/g, ' ')
+    .replace(/<[^>]*>/g, '')
+    .trim()
+}
+
+function parseLines(pContent: string): string[][] {
+  return pContent
+    .split(/<br\s*\/?>/i)
+    .map((line) => {
+      const clean = line.replace(/&nbsp;/g, '\u00a0').trim()
+      if (!clean) return null
+      const rawCells = clean.split(/[\u00a0\s]{2,}/)
+      const cells = rawCells.map(cleanCell).filter(Boolean)
+      return cells.length >= 2 ? cells : null
+    })
+    .filter((row): row is string[] => row !== null)
+}
+
+/**
+ * Transforms raw blog HTML:
+ * 1. Converts pseudo-tables (lines separated by <br/> with multiple &nbsp;)
+ *    into clean semantic HTML tables with thead, tbody, and responsive containers.
+ * 2. Normalizes native WYSIWYG <table> elements (strips fixed widths and inline borders,
+ *    wraps in responsive scroll containers).
+ */
+function formatBlogHtml(html: string): string {
+  if (!html) return html
+
+  // 1. Transform consecutive pseudo-table <p> elements
+  const pRegex = /<p[^>]*>([\s\S]*?)<\/p>/gi
+  const matches: Array<{
+    startIndex: number
+    endIndex: number
+    rows: string[][]
+    colCount: number
+  }> = []
+
+  let m: RegExpExecArray | null
+  while ((m = pRegex.exec(html)) !== null) {
+    if ((m[1].match(/&nbsp;\s*&nbsp;/g) || []).length >= 2) {
+      const rows = parseLines(m[1])
+      if (rows.length >= 2) {
+        matches.push({
+          startIndex: m.index,
+          endIndex: m.index + m[0].length,
+          rows,
+          colCount: rows[0].length,
+        })
+      }
+    }
+  }
+
+  // Group adjacent matches with matching column count
+  const groups: Array<typeof matches> = []
+  for (let i = 0; i < matches.length; i++) {
+    const cur = matches[i]
+    if (groups.length === 0) {
+      groups.push([cur])
+    } else {
+      const lastGroup = groups[groups.length - 1]
+      const prev = lastGroup[lastGroup.length - 1]
+      const gap = html.slice(prev.endIndex, cur.startIndex).trim()
+      if (gap === '' && cur.colCount === prev.colCount) {
+        lastGroup.push(cur)
+      } else {
+        groups.push([cur])
+      }
+    }
+  }
+
+  // Replace from last to first so indices remain accurate
+  let result = html
+  for (let g = groups.length - 1; g >= 0; g--) {
+    const group = groups[g]
+    const first = group[0]
+    const last = group[group.length - 1]
+    const allRows = group.flatMap((item) => item.rows)
+
+    const header = allRows[0]
+    const bodyRows = allRows.slice(1)
+
+    const tableHtml = [
+      '<div class="blog-table-container">',
+      '  <table class="blog-table">',
+      '    <thead>',
+      '      <tr>',
+      header.map((h) => `        <th>${h}</th>`).join('\n'),
+      '      </tr>',
+      '    </thead>',
+      '    <tbody>',
+      bodyRows
+        .map((row) => {
+          return (
+            '      <tr>\n' +
+            row
+              .map((cell, idx) => {
+                return idx === 0
+                  ? `        <td class="blog-table-lead">${cell}</td>`
+                  : `        <td>${cell}</td>`
+              })
+              .join('\n') +
+            '\n      </tr>'
+          )
+        })
+        .join('\n'),
+      '    </tbody>',
+      '  </table>',
+      '</div>',
+    ].join('\n')
+
+    result = result.slice(0, first.startIndex) + tableHtml + result.slice(last.endIndex)
+  }
+
+  // 2. Wrap and clean any native <table> elements that aren't already wrapped in blog-table-container
+  result = result.replace(
+    /(<div class="blog-table-container">[\s\S]*?<\/div>)|(<table([\s\S]*?)>([\s\S]*?)<\/table>)/gi,
+    (_match, alreadyWrapped, _tableTag, attrs, content) => {
+      if (alreadyWrapped) return alreadyWrapped
+      const cleanAttrs = (attrs || '')
+        .replace(/\s*style="[^"]*"/gi, '')
+        .replace(/\s*border="[^"]*"/gi, '')
+        .replace(/\s*cellpadding="[^"]*"/gi, '')
+        .replace(/\s*cellspacing="[^"]*"/gi, '')
+        .replace(/\s*align="[^"]*"/gi, '')
+        .replace(/\s*width="[^"]*"/gi, '')
+        .trim()
+
+      return `<div class="blog-table-container"><table class="blog-table" ${cleanAttrs}>${content}</table></div>`
+    },
+  )
+
+  return result
+}
+
 export function BlogDetailCard({ slug }: { slug: string }) {
   const { data, isPending, isError } = useBlogBySlugQuery(slug || undefined)
   const { data: featuredData, isPending: isFeaturedPending } = useFeaturedBlogsQuery()
@@ -151,10 +288,11 @@ export function BlogDetailCard({ slug }: { slug: string }) {
   const category = blog.categories?.trim()
   const author = blog.created_by?.trim()
   const excerpt = blog.blog_short_description?.trim()
-  const htmlBody =
+  const rawHtml =
     blog.blog_description && /<[a-z][\s\S]*>/i.test(blog.blog_description)
       ? blog.blog_description
       : null
+  const htmlBody = rawHtml ? formatBlogHtml(rawHtml) : null
 
   return (
     <div className="space-y-10">
