@@ -75,6 +75,11 @@ async function runOne(url, formFactor, outDir) {
         ? { mobile: true, width: 360, height: 640, deviceScaleFactor: 2, disabled: false }
         : { mobile: false, width: 1350, height: 940, deviceScaleFactor: 1, disabled: false }
 
+    const config =
+      formFactor === 'desktop'
+        ? (await import('lighthouse/core/config/desktop-config.js')).default
+        : undefined
+
     const result = await lighthouse(
       url,
       {
@@ -84,6 +89,7 @@ async function runOne(url, formFactor, outDir) {
         formFactor,
         screenEmulation,
       },
+      config,
     )
 
     // result.report is an ARRAY when output is ["html","json"]: index 0→html, 1→json

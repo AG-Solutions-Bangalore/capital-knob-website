@@ -5,15 +5,15 @@
 ## Overview
 CapitalKnob is an Indian financial advisory firm providing tailored capital solutions across Business Finance, Home Loans, Real Estate Finance, and Private Credit.
 
-- Website: https://www.capitalknob.com/
+- Website: https://capitalknob.com/
 - Office: No. 8, 1st Floor, 24th Main, 5th Phase, JP Nagar, Bengaluru, Karnataka 560078
 - Phone: +91 99869 00144
 - Email: advisory@capitalknob.com
 
 ## Financial Services
-- [Home Finance](https://www.capitalknob.com/home-finance): Home loans, balance transfer, renovation loans, loan against property, top-up loans.
-- [Business Finance](https://www.capitalknob.com/business-finance): Secured business loans, working capital finance, machinery funding, business expansion capital.
-- [Real Estate Finance](https://www.capitalknob.com/real-estate-finance): Construction finance, property acquisition, land development capital.
-- [Private Credit](https://www.capitalknob.com/private-credit): Bespoke institutional credit, mezzanine finance, flexible debt solutions.
-- [About Us](https://www.capitalknob.com/about-us): Company leadership, vision, and operational values.
-- [Contact](https://www.capitalknob.com/contact): Advisory booking, direct inquiry form, and office location.
+- [Home Finance](https://capitalknob.com/home-finance): Home loans, balance transfer, renovation loans, loan against property, top-up loans.
+- [Business Finance](https://capitalknob.com/business-finance): Secured business loans, working capital finance, machinery funding, business expansion capital.
+- [Real Estate Finance](https://capitalknob.com/real-estate-finance): Construction finance, property acquisition, land development capital.
+- [Private Credit](https://capitalknob.com/private-credit): Bespoke institutional credit, mezzanine finance, flexible debt solutions.
+- [About Us](https://capitalknob.com/about-us): Company leadership, vision, and operational values.
+- [Contact](https://capitalknob.com/contact): Advisory booking, direct inquiry form, and office location.

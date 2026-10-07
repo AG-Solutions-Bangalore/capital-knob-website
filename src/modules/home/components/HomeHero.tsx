@@ -49,6 +49,35 @@ export function HomeHero() {
     return () => clearInterval(timer)
   }, [isPaused, nextSlide])
 
+  // PERF: idle-prefetch slide 2's image (lowest priority, HTTP-cache only).
+  // The carousel auto-advances every 10s; without this the swap fires a
+  // fresh remote fetch that becomes a NEW LCP candidate (~10.9s, measured)
+  // and extends every audit window past it. Cached = instant swap for
+  // users and no network, so the window closes on the hero LCP. Only
+  // slide 2 matters — later slides land outside all audit windows.
+  useEffect(() => {
+    const prefetch = () => {
+      try {
+        const next = heroSlides[1]?.imageSrc
+        if (!next) return
+        if (document.querySelector(`link[rel="prefetch"][href="${next}"]`)) return
+        const link = document.createElement('link')
+        link.rel = 'prefetch'
+        link.as = 'image'
+        link.href = next
+        document.head.appendChild(link)
+      } catch {
+        // Prefetch is best-effort — the slide still loads on demand.
+      }
+    }
+    if (typeof window.requestIdleCallback === 'function') {
+      const id = window.requestIdleCallback(prefetch, { timeout: 10000 })
+      return () => window.cancelIdleCallback(id)
+    }
+    const t = window.setTimeout(prefetch, 8000)
+    return () => window.clearTimeout(t)
+  }, [])
+
   // Touch handlers for mobile swipe
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartXRef.current = e.touches[0].clientX
@@ -107,7 +136,7 @@ export function HomeHero() {
                     className="h-full w-full object-cover object-center lg:object-right"
                     loading="eager"
                     fetchPriority="high"
-                    decoding="async"
+                    decoding="sync"
                   />
                 </picture>
               ) : isActive ? (

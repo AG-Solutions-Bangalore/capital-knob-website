@@ -1,0 +1,84 @@
+==================== prod-mobile ====================
+--- total-byte-weight: score=1 val=Total size was 625 KiB
+    tic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7W0Q5n-wU.woff2 total=85311 wasted=None
+    https://capitalknob.com/assets/react-DJXJVAiB.js total=57142 wasted=None
+    https://capitalknob.com/assets/router-sWZrQU3o.js total=55073 wasted=None
+    tic.com/s/caveat/v23/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYT5Mmgo.woff2 total=51102 wasted=None
+    tatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2 total=48464 wasted=None
+    s://capitalknob.com/images/categories/real-estate-project-finance.webp total=32087 wasted=None
+--- unused-javascript: score=0 val=Est savings of 68 KiB
+    https://capitalknob.com/assets/router-sWZrQU3o.js total=55044 wasted=47606
+    https://capitalknob.com/assets/react-DJXJVAiB.js total=57117 wasted=21567
+--- unused-css-rules: score=1 val=
+--- bootup-time: score=1 val=0.3 s
+    https://capitalknob.com/ total=803.6360000000001 wasted=None
+    https://capitalknob.com/assets/react-DJXJVAiB.js total=466.68800000000067 wasted=None
+    Unattributable total=189.2559999999992 wasted=None
+--- cache-insight: score=0
+    [{'url': 'https://capitalknob.com/assets/react-DJXJVAiB.js', 'cacheLifetimeMs': 0, 'totalBytes': 57142, 'wastedBytes': 57142}, {'url': 'https://capitalknob.com/assets/router-sWZrQU3o.js', 'cacheLifetimeMs': 0, 'totalBytes': 55073, 'wastedBytes': 55073}, {'url': 'https://capitalknob.com/assets/AppRoutes-BLhmdFRn.js', 'cacheLifetimeMs': 0, 'totalBytes': 30179, 'wastedBytes': 30179}, {'url': 'https://capitalknob.com/images/home/hero_villa-768.avif', 'cacheLifetimeMs': 0, 'totalBytes': 20183, 'wastedBytes': 20183}, {'url': 'https://capitalknob.com/assets/index-Dqs4bIKy.css', 'cacheLifetimeMs': 0, 'totalBytes': 13142, 'wastedBytes': 13142}, {'url': 'https://capitalknob.com/assets/query-BL6100qL.js', 'cacheLifetimeMs': 0, 'totalBytes': 10163, 'wastedBytes': 10163}, {'url': 'https://capitalknob.c
+--- render-blocking-insight: score=0.5
+    [{'url': 'https://capitalknob.com/assets/index-Dqs4bIKy.css', 'totalBytes': 13142}]
+--- third-parties-insight: score=1
+    [{'entity': 'Google Fonts', 'mainThreadTime': 0, 'transferSize': 227579, 'subItems': {'type': 'subitems', 'items': [{'url': 'https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7W0Q5n-wU.woff2', 'mainThreadTime': 0, 'transferSize': 85311}, {'url': 'https://fonts.gstatic.com/s/caveat/v23/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYT5Mmgo.woff2', 'mainThreadTime': 0, 'transferSize': 51102}, {'url': 'https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2', 'mainThreadTime': 0, 'transferSize': 48464}, {'url': 'https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2', 'mainThreadTime': 0, 'transferSize': 22349}, {'url': 'https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPb94C_k3HqUtEw.woff2', 'mainTh
+--- font-display-insight: score=1
+    [{'key': 'url', 'valueType': 'url', 'label': 'URL'}, {'key': 'wastedMs', 'valueType': 'ms', 'label': 'Est Savings'}]
+--- lcp-breakdown-insight: score=1
+    [{'type': 'table', 'headings': [{'key': 'label', 'valueType': 'text', 'label': 'Subpart'}, {'key': 'duration', 'valueType': 'ms', 'label': 'Duration'}], 'items': [{'subpart': 'timeToFirstByte', 'label': 'Time to first byte', 'duration': 377.417}, {'subpart': 'resourceLoadDelay', 'label': 'Resource load delay', 'duration': 9.308}, {'subpart': 'resourceLoadDuration', 'label': 'Resource load duration', 'duration': 156.109}, {'subpart': 'elementRenderDelay', 'label': 'Element render delay', 'duration': 420.76}]}]
+--- lcp-discovery-insight: score=1
+    [{'type': 'checklist', 'items': {'priorityHinted': {'label': 'fetchpriority=high applied', 'value': True}, 'requestDiscoverable': {'label': 'Request is discoverable in initial document', 'value': True}, 'eagerlyLoaded': {'label': 'LCP resources should not use loading=lazy', 'value': True}}}]
+==================== prod-desktop ====================
+--- total-byte-weight: score=1 val=Total size was 812 KiB
+    tic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7W0Q5n-wU.woff2 total=85850 wasted=None
+    https://capitalknob.com/assets/react-DJXJVAiB.js total=57165 wasted=None
+    https://capitalknob.com/assets/router-sWZrQU3o.js total=55073 wasted=None
+    tic.com/s/caveat/v23/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYT5Mmgo.woff2 total=51212 wasted=None
+    tatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2 total=48568 wasted=None
+    https://capitalknob.com/images/categories/import-finance.webp total=40370 wasted=None
+--- unused-javascript: score=0.5 val=Est savings of 46 KiB
+    https://capitalknob.com/assets/router-sWZrQU3o.js total=55044 wasted=47606
+--- unused-css-rules: score=1 val=
+--- bootup-time: score=1 val=0.6 s
+    https://capitalknob.com/assets/react-DJXJVAiB.js total=773.1759999999996 wasted=None
+    https://capitalknob.com/ total=731.4519999999998 wasted=None
+    https://capitalknob.com/assets/lenis-CKJV1UQr.js total=224.12799999999976 wasted=None
+    Unattributable total=223.57999999999532 wasted=None
+--- cache-insight: score=0
+    [{'url': 'https://capitalknob.com/assets/react-DJXJVAiB.js', 'cacheLifetimeMs': 0, 'totalBytes': 57165, 'wastedBytes': 57165}, {'url': 'https://capitalknob.com/assets/router-sWZrQU3o.js', 'cacheLifetimeMs': 0, 'totalBytes': 55073, 'wastedBytes': 55073}, {'url': 'https://capitalknob.com/assets/AppRoutes-BLhmdFRn.js', 'cacheLifetimeMs': 0, 'totalBytes': 30179, 'wastedBytes': 30179}, {'url': 'https://capitalknob.com/images/home/hero_villa-768.avif', 'cacheLifetimeMs': 0, 'totalBytes': 20160, 'wastedBytes': 20160}, {'url': 'https://capitalknob.com/assets/index-Dqs4bIKy.css', 'cacheLifetimeMs': 0, 'totalBytes': 13142, 'wastedBytes': 13142}, {'url': 'https://capitalknob.com/assets/query-BL6100qL.js', 'cacheLifetimeMs': 0, 'totalBytes': 10140, 'wastedBytes': 10140}, {'url': 'https://capitalknob.c
+--- render-blocking-insight: score=0.5
+    [{'url': 'https://capitalknob.com/assets/index-Dqs4bIKy.css', 'totalBytes': 13142}]
+--- third-parties-insight: score=1
+    [{'entity': 'Google Fonts', 'mainThreadTime': 0, 'transferSize': 228528, 'subItems': {'type': 'subitems', 'items': [{'url': 'https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7W0Q5n-wU.woff2', 'mainThreadTime': 0, 'transferSize': 85850}, {'url': 'https://fonts.gstatic.com/s/caveat/v23/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYT5Mmgo.woff2', 'mainThreadTime': 0, 'transferSize': 51212}, {'url': 'https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2', 'mainThreadTime': 0, 'transferSize': 48568}, {'url': 'https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2', 'mainThreadTime': 0, 'transferSize': 22447}, {'url': 'https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPb94C_k3HqUtEw.woff2', 'mainTh
+--- font-display-insight: score=1
+    [{'key': 'url', 'valueType': 'url', 'label': 'URL'}, {'key': 'wastedMs', 'valueType': 'ms', 'label': 'Est Savings'}]
+--- lcp-breakdown-insight: score=1
+    [{'type': 'table', 'headings': [{'key': 'label', 'valueType': 'text', 'label': 'Subpart'}, {'key': 'duration', 'valueType': 'ms', 'label': 'Duration'}], 'items': [{'subpart': 'timeToFirstByte', 'label': 'Time to first byte', 'duration': 316.91}, {'subpart': 'resourceLoadDelay', 'label': 'Resource load delay', 'duration': 5.897}, {'subpart': 'resourceLoadDuration', 'label': 'Resource load duration', 'duration': 163.289}, {'subpart': 'elementRenderDelay', 'label': 'Element render delay', 'duration': 360.258}]}]
+--- lcp-discovery-insight: score=1
+    [{'type': 'checklist', 'items': {'priorityHinted': {'label': 'fetchpriority=high applied', 'value': True}, 'requestDiscoverable': {'label': 'Request is discoverable in initial document', 'value': True}, 'eagerlyLoaded': {'label': 'LCP resources should not use loading=lazy', 'value': True}}}]
+==================== local-mobile ====================
+--- total-byte-weight: score=1 val=Total size was 669 KiB
+    tic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7W0Q5n-wU.woff2 total=85311 wasted=None
+    http://127.0.0.1:4173/assets/react-DJXJVAiB.js total=66646 wasted=None
+    http://127.0.0.1:4173/assets/router-sWZrQU3o.js total=65084 wasted=None
+    tic.com/s/caveat/v23/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYT5Mmgo.woff2 total=51102 wasted=None
+    tatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2 total=48464 wasted=None
+    http://127.0.0.1:4173/assets/AppRoutes-BLhmdFRn.js total=37705 wasted=None
+--- unused-javascript: score=0 val=Est savings of 79 KiB
+    http://127.0.0.1:4173/assets/router-sWZrQU3o.js total=64724 wasted=55978
+    http://127.0.0.1:4173/assets/react-DJXJVAiB.js total=66291 wasted=24663
+--- unused-css-rules: score=1 val=
+--- bootup-time: score=1 val=0.4 s
+    http://127.0.0.1:4173/ total=852.5759999999999 wasted=None
+    http://127.0.0.1:4173/assets/react-DJXJVAiB.js total=598.6680000000011 wasted=None
+    Unattributable total=206.9199999999967 wasted=None
+--- cache-insight: score=1
+    [{'key': 'url', 'valueType': 'url', 'label': 'Request'}, {'key': 'cacheLifetimeMs', 'valueType': 'ms', 'label': 'Cache TTL', 'displayUnit': 'duration'}, {'key': 'totalBytes', 'valueType': 'bytes', 'label': 'Transfer Size', 'displayUnit': 'kb', 'granularity': 1}]
+--- render-blocking-insight: score=0.5
+    [{'url': 'http://127.0.0.1:4173/assets/index-Dqs4bIKy.css', 'totalBytes': 16886, 'wastedMs': 156}]
+--- third-parties-insight: score=1
+    [{'entity': 'Google Fonts', 'mainThreadTime': 0, 'transferSize': 227579, 'subItems': {'type': 'subitems', 'items': [{'url': 'https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7W0Q5n-wU.woff2', 'mainThreadTime': 0, 'transferSize': 85311}, {'url': 'https://fonts.gstatic.com/s/caveat/v23/WnznHAc5bAfYB2QRah7pcpNvOx-pjRV6eIWpYT5Mmgo.woff2', 'mainThreadTime': 0, 'transferSize': 51102}, {'url': 'https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2', 'mainThreadTime': 0, 'transferSize': 48464}, {'url': 'https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPbF4C_k3HqU.woff2', 'mainThreadTime': 0, 'transferSize': 22349}, {'url': 'https://fonts.gstatic.com/s/spacegrotesk/v22/V8mDoQDjQSkFtoMM3T6r8E7mPb94C_k3HqUtEw.woff2', 'mainTh
+--- font-display-insight: score=1
+    [{'key': 'url', 'valueType': 'url', 'label': 'URL'}, {'key': 'wastedMs', 'valueType': 'ms', 'label': 'Est Savings'}]
+--- lcp-breakdown-insight: score=1
+    [{'type': 'table', 'headings': [{'key': 'label', 'valueType': 'text', 'label': 'Subpart'}, {'key': 'duration', 'valueType': 'ms', 'label': 'Duration'}], 'items': [{'subpart': 'timeToFirstByte', 'label': 'Time to first byte', 'duration': 8.216000244140625}, {'subpart': 'resourceLoadDelay', 'label': 'Resource load delay', 'duration': 12.385999755859375}, {'subpart': 'resourceLoadDuration', 'label': 'Resource load duration', 'duration': 13.333}, {'subpart': 'elementRenderDelay', 'label': 'Element render delay', 'duration': 186.879}]}, {'type': 'node', 'lhId': 'page-3-IMG', 'path': '1,MAIN,0,DIV,0,SECTION,0,DIV,0,DIV,0,PICTURE,1,IMG', 'selector': 'div.absolute > div.absolute > picture > img.h-full', 'boundingRect': {'top': 0, 'bottom': 0, 'left': 0, 'right': 0, 'width': 0, 'height': 0}, 'snipp
+--- lcp-discovery-insight: score=1
+    [{'type': 'checklist', 'items': {'priorityHinted': {'label': 'fetchpriority=high applied', 'value': True}, 'requestDiscoverable': {'label': 'Request is discoverable in initial document', 'value': True}, 'eagerlyLoaded': {'label': 'LCP resources should not use loading=lazy', 'value': True}}}, {'type': 'node', 'lhId': 'page-3-IMG', 'path': '1,MAIN,0,DIV,0,SECTION,0,DIV,0,DIV,0,PICTURE,1,IMG', 'selector': 'div.absolute > div.absolute > picture > img.h-full', 'boundingRect': {'top': 0, 'bottom': 0, 'left': 0, 'right': 0, 'width': 0, 'height': 0}, 'snippet': '<img sizes="(max-width: 768px) 100vw, 50vw" width="1376" height="768" alt="Luxury modern villa at dusk" class="h-full w-full object-cover object-center lg:object-right" loading="eager" fetchpriority="high" decoding="async" srcset="/images/

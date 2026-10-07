@@ -5,11 +5,6 @@ import { linkTitleFor } from '@/shared/seo/linkTitles'
 import { individualSolutions } from '../constants'
 import { useCategoryQuery } from '@/modules/category/hooks/useCategoryQuery'
 import { servicePath } from '@/app/routes'
-// Build-time optimized 640w WebP copies of the remote category banners
-// (scripts/fetchCategoryImages.mjs: ~130KB remote → ~30KB local).
-// Local-first: instant same-origin fetch with immutable caching; any slug
-// missing from the map falls back to the live remote banner.
-import categoryImages from '@/generated/categoryImages.json'
 
 const EnquiryModal = lazy(() =>
   import('@/modules/service/components/EnquiryModal').then((m) => ({
@@ -111,20 +106,18 @@ export function HomeSolutionsSection() {
                 : slug.includes('export') || slug.includes('import') || slug.includes('trade')
                   ? 'refresh'
                   : 'tools'
-        const localBanner =
-          (categoryImages as Record<string, string>)[slug] ?? null
+        // Server-controlled banners (remote originals): the site owner
+        // manages these from the backend CMS — no local copies. Below-fold
+        // imgs are lazy + low-priority inside a content-visibility section,
+        // so they stay out of the LCP window by design.
         return {
           id: `live-${cat.category_slug ?? idx}`,
           title: cat.category_name ?? fallback.title,
           description: cat.category_description ?? fallback.description,
-          // PERF: prefer the build-time 640w local WebP (~30KB) over the
-          // remote original (~130KB, slow host, no cache TTL). Remote stays
-          // as fallback for new slugs not yet optimized.
           imageSrc:
-            localBanner ??
-            (cat.category_banner_image?.trim()
+            cat.category_banner_image?.trim()
               ? `${categoryImageBase}${cat.category_banner_image.trim()}`
-              : (noImageSrc ?? fallback.imageSrc)),
+              : (noImageSrc ?? fallback.imageSrc),
           imageTitle: cat.category_name ?? fallback.imageTitle,
             icon,
             href: servicePath(cat.category_slug ?? ''),

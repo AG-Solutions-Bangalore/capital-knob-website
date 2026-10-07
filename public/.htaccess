@@ -64,11 +64,14 @@ DirectoryIndex index.html
 <IfModule mod_headers.c>
     # Vite content-hashed bundles: /assets/name-HASH.js — immutable 1 year.
     # Optional `.br`/`.gz` suffix tolerated (post-rewrite basename).
-    <FilesMatch "\.[A-Za-z0-9_-]{8}\.(js|mjs|css)(\.(br|gz))?$">
+    # PERF: Vite separates name and hash with a DASH (index-CKEe9uSg.js),
+    # not a dot — `[-.]` matches both so hashed assets actually get cached.
+    <FilesMatch "[-.][A-Za-z0-9_-]{8}\.(js|mjs|css)(\.(br|gz))?$">
         Header set Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>
-    # Unhashed images/fonts (logo, hero variants, favicons): 30 days.
-    <FilesMatch "\.(webp|png|jpe?g|gif|svg|ico|woff2?|ttf|eot)(\.(br|gz))?$">
+    # Unhashed images/fonts (logo, hero variants incl. AVIF, favicons): 30 days.
+    # PERF: avif was missing so hero AVIFs re-downloaded every visit.
+    <FilesMatch "\.(avif|webp|png|jpe?g|gif|svg|ico|woff2?|ttf|eot)(\.(br|gz))?$">
         Header set Cache-Control "public, max-age=2592000"
     </FilesMatch>
 </IfModule>

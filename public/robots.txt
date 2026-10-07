@@ -18,4 +18,4 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://www.capitalknob.com/sitemap.xml
+Sitemap: https://capitalknob.com/sitemap.xml
