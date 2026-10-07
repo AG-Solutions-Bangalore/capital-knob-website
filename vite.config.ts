@@ -69,6 +69,18 @@ function brotliFallback(): Plugin {
   }
 }
 
+function prioritizeCss(): Plugin {
+  return {
+    name: 'prioritize-css',
+    enforce: 'post',
+    transformIndexHtml(html) {
+      const match = html.match(/<link rel="stylesheet"[^>]+>/)
+      if (!match) return html
+      return html.replace(match[0], '').replace(/<head[^>]*>/, `$&${match[0]}`)
+    },
+  }
+}
+
 // Heavy vendors leave the critical path via manualChunks:
 // motion|framer-motion → "motion", lenis → "lenis",
 // lucide-react|@radix-ui|radix-ui → "ui-vendor",
@@ -159,6 +171,7 @@ export default defineConfig({
       deleteOriginFile: false,
     }),
     brotliFallback(),
+    prioritizeCss(),
   ],
   resolve: {
     alias: {
@@ -175,7 +188,23 @@ export default defineConfig({
     // (index → react/jsx/router/query/AppRoutes). `false` forced a
     // waterfall: browser discovered each chunk only after parsing the
     // previous one, delaying LCP by ~1s.
-    modulePreload: true,
+    // PERF: demote non-critical preloads — lenis (loads post-idle via
+    // DeferredSmoothScroll) and vite-prerender-plugin's parse helper
+    // (SSR-worker-only) were fetched High-priority in the LCP window.
+    // PERF 90+: allowlist = LCP/hydration-critical chain only (entry,
+    // react, router, query, AppRoutes, Container, CSS). Below-fold/data
+    // chunks (BlogList, faq, useCategoryQuery, seoEngine, helmet,
+    // dynamic-data, axios, linkTitles, routes) load on demand during
+    // hydration instead of queuing ahead of the hero image on slow nets.
+    modulePreload: {
+      polyfill: true,
+      resolveDependencies: (_filename, deps) =>
+        deps.filter((dep) =>
+          /(^|\/)(index|react|router|query|AppRoutes|Container)-[^/]*\.js$|\.css$/i.test(
+            dep,
+          ),
+        ),
+    },
     rollupOptions: {
       output: {
         manualChunks,

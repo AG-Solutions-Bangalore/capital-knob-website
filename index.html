@@ -3,9 +3,12 @@
   <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <!-- PERF: no separate PNG icon link — browsers fetched BOTH .png (7KB)
+      and .ico (4KB) at High priority pre-LCP. The .ico covers tabs
+      everywhere; apple-touch-icon + OG/JSON-LD PNGs stay untouched. -->
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/src/index.css">
 
     <!-- Trailing-slash normalizer (production): the prerendered build ships
       one folder per route (`/about-us/index.html`), so static hosts serve
@@ -23,16 +26,13 @@
       })();
     </script>
 
-    <!-- Fonts Preconnect & Optimized Loading -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.capitalknob.com" crossorigin>
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link rel="dns-prefetch" href="https://www.capitalknob.com">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=optional" media="print" onload="this.media='all'">
+    <!-- Fonts: self-hosted faces (/fonts/fonts.css + woff2), loaded async via
+      print-swap so no font byte sits in the render-blocking window —
+      display=optional paints fallback text instantly (same as the old
+      Google setup), faces apply when ready and cache for 30 days. -->
+    <link rel="stylesheet" href="/fonts/fonts.css" media="print" onload="this.media='all'">
     <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=optional">
+      <link rel="stylesheet" href="/fonts/fonts.css">
     </noscript>
 
     <!-- LCP image preload — AVIF is ~48% smaller than the existing WebP at

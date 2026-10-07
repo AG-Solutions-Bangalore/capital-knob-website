@@ -4,7 +4,9 @@
  */
 export const SITE_NAME = 'CapitalKnob';
 /** The one public hostname used by canonicals, sitemap URLs, and JSON-LD IDs. */
-export const SITE_ORIGIN = 'https://www.capitalknob.com';
+// PERF/SEO: apex is the serving host (www 301s to apex) — canonicals must
+// match the serving host or every URL looks "canonicalised" to crawlers.
+export const SITE_ORIGIN = 'https://capitalknob.com';
 export const SITE_LOGO = `${SITE_ORIGIN}/favicon.png`;
 export const SITE_PHONE = '+91-9986900144';
 export const SITE_EMAIL = 'advisory@capitalknob.com';

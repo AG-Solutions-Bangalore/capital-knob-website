@@ -1,0 +1,70 @@
+==================== local-mobile ====================
+perf: 86
+  first-contentful-paint: score=0.63 val=2.6 s
+  largest-contentful-paint: score=0.62 val=3.5 s
+  total-blocking-time: score=0.99 val=70 ms
+  cumulative-layout-shift: score=1 val=0
+  speed-index: score=0.97 val=2.6 s
+  server-response-time: score=1 val=Root document took 10 ms
+  uses-long-cache-ttl: MISSING
+  render-blocking-resources: MISSING
+  third-party-summary: MISSING
+  font-display: MISSING
+  LCP-el: 
+  net-reqs: 39
+    127.0.0.1:4173: n=29 bytes=437089
+    fonts.gstatic.com: n=5 bytes=226179
+    capitalknob.com: n=4 bytes=19992
+    fonts.googleapis.com: n=1 bytes=1400
+==================== local-desktop ====================
+perf: 66
+  first-contentful-paint: score=0.13 val=2.6 s
+  largest-contentful-paint: score=0.23 val=3.6 s
+  total-blocking-time: score=0.99 val=70 ms
+  cumulative-layout-shift: score=1 val=0
+  speed-index: score=0.4 val=2.6 s
+  server-response-time: score=1 val=Root document took 0 ms
+  uses-long-cache-ttl: MISSING
+  render-blocking-resources: MISSING
+  third-party-summary: MISSING
+  font-display: MISSING
+  LCP-el: 
+  net-reqs: 47
+    127.0.0.1:4173: n=34 bytes=617047
+    fonts.gstatic.com: n=5 bytes=227128
+    capitalknob.com: n=7 bytes=37060
+    fonts.googleapis.com: n=1 bytes=1400
+==================== prod-mobile ====================
+perf: 97
+  first-contentful-paint: score=0.86 val=1.9 s
+  largest-contentful-paint: score=0.95 val=2.1 s
+  total-blocking-time: score=1 val=50 ms
+  cumulative-layout-shift: score=1 val=0
+  speed-index: score=0.95 val=2.9 s
+  server-response-time: score=1 val=Root document took 160 ms
+  uses-long-cache-ttl: MISSING
+  render-blocking-resources: MISSING
+  third-party-summary: MISSING
+  font-display: MISSING
+  LCP-el: 
+  net-reqs: 45
+    capitalknob.com: n=39 bytes=412808
+    fonts.gstatic.com: n=5 bytes=226179
+    fonts.googleapis.com: n=1 bytes=1400
+==================== prod-desktop ====================
+perf: 72
+  first-contentful-paint: score=0.32 val=1.9 s
+  largest-contentful-paint: score=0.39 val=2.8 s
+  total-blocking-time: score=1 val=50 ms
+  cumulative-layout-shift: score=1 val=0
+  speed-index: score=0.41 val=2.5 s
+  server-response-time: score=1 val=Root document took 150 ms
+  uses-long-cache-ttl: MISSING
+  render-blocking-resources: MISSING
+  third-party-summary: MISSING
+  font-display: MISSING
+  LCP-el: 
+  net-reqs: 52
+    capitalknob.com: n=46 bytes=603044
+    fonts.gstatic.com: n=5 bytes=227128
+    fonts.googleapis.com: n=1 bytes=1400
