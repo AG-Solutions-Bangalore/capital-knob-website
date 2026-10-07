@@ -12,9 +12,8 @@ import { Container } from '@/shared/components/Container'
 const LAST_UPDATED = 'September 2026'
 const CONTACT_EMAIL = 'capitalknobil@gmail.com'
 const GRIEVANCE_OFFICER = 'R Ramashankar Gautam'
-// TODO: replace with the registered-office address if different.
 const REGISTERED_OFFICE_ADDRESS =
-  'Prestige Tech Park, 5th Floor, Outer Ring Road, Marathahalli, Bengaluru, Karnataka 560037'
+  'No. 8, 1st Floor, 24th Main, 5th Phase, JP Nagar, Bengaluru, Karnataka 560078'
 
 /** Smooth-scrolls to an in-page anchor (Lenis owns wheel scroll; anchors jump by default). */
 function scrollToAnchor(hash: string) {

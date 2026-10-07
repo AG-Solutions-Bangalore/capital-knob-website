@@ -312,3 +312,100 @@ button,
   }
 }
 
+/* -----------------------------------------------------------------------------
+   Blog Rich Content Tables
+   Styles both converted pseudo-tables and native WYSIWYG tables into
+   executive-grade, responsive financial matrices.
+   ----------------------------------------------------------------------------- */
+.blog-table-container {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 1rem;
+  border: 1px solid var(--color-line);
+  background-color: #ffffff;
+  box-shadow: var(--shadow-soft);
+  -webkit-overflow-scrolling: touch;
+}
+
+.blog-table {
+  width: 100%;
+  min-width: 580px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  .blog-table {
+    min-width: 100%;
+  }
+}
+
+.blog-table caption {
+  background-color: #f8fafc;
+  padding: 0.875rem 1.25rem;
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-navy);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.blog-table thead {
+  background-color: var(--color-navy);
+}
+
+.blog-table th {
+  padding: 0.875rem 1.25rem;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  border-bottom: 1px solid var(--color-navy-deep);
+  white-space: nowrap;
+}
+
+.blog-table tbody tr {
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  transition: background-color 150ms ease;
+}
+
+.blog-table tbody tr:nth-child(even) {
+  background-color: rgba(248, 250, 252, 0.7);
+}
+
+.blog-table tbody tr:hover {
+  background-color: rgba(244, 234, 210, 0.25);
+}
+
+.blog-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.blog-table td {
+  padding: 0.875rem 1.25rem;
+  color: #334155;
+  vertical-align: top;
+}
+
+.blog-table td:first-child,
+.blog-table .blog-table-lead {
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.blog-table td p,
+.blog-table th p {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+

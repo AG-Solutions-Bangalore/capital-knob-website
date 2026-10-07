@@ -6,8 +6,21 @@ export const SITE_NAME = 'CapitalKnob';
 /** The one public hostname used by canonicals, sitemap URLs, and JSON-LD IDs. */
 export const SITE_ORIGIN = 'https://www.capitalknob.com';
 export const SITE_LOGO = `${SITE_ORIGIN}/favicon.png`;
-export const SITE_PHONE = '+91-9876543210';
-export const SITE_EMAIL = 'hello@capitalknob.com';
+export const SITE_PHONE = '+91-9986900144';
+export const SITE_EMAIL = 'advisory@capitalknob.com';
+
+export const SITE_ADDRESS = {
+  streetAddress: 'No. 8, 1st Floor, 24th Main, 5th Phase, JP Nagar',
+  addressLocality: 'Bengaluru',
+  addressRegion: 'Karnataka',
+  postalCode: '560078',
+  addressCountry: 'IN',
+} as const;
+
+export const SITE_GEO = {
+  latitude: 12.9081,
+  longitude: 77.5838,
+} as const;
 
 /**
  * Deterministically formats any path into an absolute canonical URL without duplicate slashes.

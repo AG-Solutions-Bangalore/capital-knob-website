@@ -82,9 +82,7 @@ const TITLE_BY_HREF: Record<string, string> = {
   'mailto:advisory@capitalknob.com': 'Email CapitalKnob Advisory',
   'tel:+919986900144': 'Call CapitalKnob',
   'mailto:info@capitalknob.com': 'Email CapitalKnob',
-  'mailto:hello@capitalknob.com': 'Email CapitalKnob',
-  'tel:+919876543210': 'Call CapitalKnob',
-  'https://maps.google.com/?q=Prestige+Tech+Park,+Marathahalli,+Bengaluru':
+  'https://maps.google.com/?q=No.+8,+1st+Floor,+24th+Main,+5th+Phase,+JP+Nagar,+Bengaluru+560078':
     'View CapitalKnob Office Location on Google Maps',
 }
 
@@ -134,9 +132,6 @@ export function linkTitleForPage(
   const long = isLongTitlePage(pathname)
   if (long && LONG_TITLE_BY_HREF[target]) return LONG_TITLE_BY_HREF[target]
   if (TITLE_BY_HREF[target]) {
-    // On long pages the generic fallback-number tel: href (used while the
-    // company API loads) must still render the LONG title.
-    if (long && target === 'tel:+919876543210') return LONG_TEL_TITLE
     return TITLE_BY_HREF[target]
   }
   const lower = target.toLowerCase()

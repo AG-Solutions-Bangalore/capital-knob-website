@@ -6,9 +6,9 @@
 CapitalKnob is an Indian financial advisory firm providing tailored capital solutions across Business Finance, Home Loans, Real Estate Finance, and Private Credit.
 
 - Website: https://www.capitalknob.com/
-- Office: Prestige Tech Park, 5th Floor, Outer Ring Road, Marathahalli, Bengaluru, Karnataka 560037
-- Phone: +91 98765 43210
-- Email: hello@capitalknob.com
+- Office: No. 8, 1st Floor, 24th Main, 5th Phase, JP Nagar, Bengaluru, Karnataka 560078
+- Phone: +91 99869 00144
+- Email: advisory@capitalknob.com
 
 ## Financial Services
 - [Home Finance](https://www.capitalknob.com/home-finance): Home loans, balance transfer, renovation loans, loan against property, top-up loans.
