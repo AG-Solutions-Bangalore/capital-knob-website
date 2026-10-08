@@ -67,15 +67,7 @@ export function EmiCalculator() {
 
   return (
     <div className="box-border w-full max-w-[400px] mx-auto rounded-2xl bg-white px-3.5 py-3 shadow-2xl ring-1 ring-slate-900/5 sm:px-4 sm:py-3.5">
-      {/* Compact slider styling — thin track + navy thumb (matches reference) */}
-      <style>{`
-        .ck-range { -webkit-appearance: none; appearance: none; height: 6px; border-radius: 9999px; outline: none; }
-        .ck-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 9999px; background: #0b1d3a; border: 2px solid #0b1d3a; box-shadow: 0 1px 4px rgba(11,29,58,.35); cursor: pointer; margin-top: 0; }
-        .ck-range::-moz-range-thumb { width: 18px; height: 18px; border-radius: 9999px; background: #0b1d3a; border: 2px solid #0b1d3a; box-shadow: 0 1px 4px rgba(11,29,58,.35); cursor: pointer; }
-        .ck-range::-moz-range-track { height: 6px; border-radius: 9999px; background: transparent; }
-      `}</style>
-
-      {/* Title */}
+      {/* Title (slider styling lives in src/index.css as .ck-range) */}
       <h2 className="font-display text-base font-bold text-ink sm:text-lg leading-tight">
         EMI Calculator
       </h2>

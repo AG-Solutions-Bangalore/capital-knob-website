@@ -5,11 +5,12 @@
 export function LoadingFallback() {
   return (
     <div
+      role="status"
       aria-busy="true"
       aria-label="Loading page"
       className="flex min-h-[50vh] items-center justify-center bg-page"
     >
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-line border-t-navy" />
+      <div aria-hidden="true" className="h-8 w-8 animate-spin rounded-full border-2 border-line border-t-navy" />
     </div>
   )
 }

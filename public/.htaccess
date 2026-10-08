@@ -15,8 +15,12 @@ DirectoryIndex index.html
     AddType font/woff .woff
     AddType image/webp .webp
     # Pre-compressed variants emitted by vite-plugin-compression:
-    # AddEncoding keeps the underlying MIME (from .js/.css/…) while
-    # advertising the content coding — no manual Content-Encoding needed.
+    # RemoveType clears the server-global `AddType application/x-gzip .gz`
+    # (present in Apache's default mime.conf) which would otherwise make
+    # e.g. index.html.gz served as `application/x-gzip` instead of
+    # `text/html`. AddEncoding keeps the underlying MIME (from .js/.css/…)
+    # while advertising the content coding — no manual Content-Encoding needed.
+    RemoveType .br .gz
     AddEncoding br .br
     AddEncoding gzip .gz
 </IfModule>
@@ -80,7 +84,10 @@ DirectoryIndex index.html
 # | Prevent HTML Caching (Ensures new JS builds load immediately)       |
 # ----------------------------------------------------------------------
 <IfModule mod_headers.c>
-    <FilesMatch "\.(html|htm)$">
+    # Match .html and its pre-compressed twins (.html.br / .html.gz):
+    # after the gzip/brotli rewrite the filename ends in .br/.gz, so a
+    # plain "\.(html|htm)$" would miss it and leave HTML cacheable.
+    <FilesMatch "\.(html|htm)(\.(br|gz))?$">
         Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
         Header set Pragma "no-cache"
         Header set Expires "0"

@@ -304,6 +304,48 @@ button,
 }
 
 /* -----------------------------------------------------------------------------
+   EMI calculator range slider — thin track + navy thumb (matches reference).
+   Lives in global CSS (not a <style> tag in <body>) so the rendered HTML
+   stays W3C-valid. Scoped by the .ck-range class used only by EmiCalculator.
+   ----------------------------------------------------------------------------- */
+.ck-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  outline: none;
+}
+
+.ck-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: #0b1d3a;
+  border: 2px solid #0b1d3a;
+  box-shadow: 0 1px 4px rgba(11, 29, 58, 0.35);
+  cursor: pointer;
+  margin-top: 0;
+}
+
+.ck-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  background: #0b1d3a;
+  border: 2px solid #0b1d3a;
+  box-shadow: 0 1px 4px rgba(11, 29, 58, 0.35);
+  cursor: pointer;
+}
+
+.ck-range::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: transparent;
+}
+
+/* -----------------------------------------------------------------------------
    Hide scrollbar for horizontal swipeable tabs on mobile
    ----------------------------------------------------------------------------- */
 @utility no-scrollbar {
