@@ -34,7 +34,6 @@ export function TestimonialCard({
   return (
     <Tag
       {...(href ? { href, target: target || '_blank', rel: 'noopener noreferrer' } : {})}
-      aria-label={`${name} — customer review`}
       className={cn(
         'group relative flex shrink-0 flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/80 bg-white p-5 text-left shadow-soft transition-all duration-300 hover:border-gold/50 hover:shadow-card md:p-6',
         className,
