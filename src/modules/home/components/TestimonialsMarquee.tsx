@@ -59,10 +59,29 @@ export function TestimonialsMarquee({
   const marqueeRef = useRef<HTMLDivElement>(null)
   const [duration, setDuration] = useState(40)
 
+  // PERF: scrollWidth forces layout — defer past LCP via idle + rAF.
   useEffect(() => {
-    if (!marqueeRef.current) return
-    const width = marqueeRef.current.scrollWidth
-    if (width > 0 && speed > 0) setDuration(width / speed)
+    let cancelled = false
+    const measure = () => {
+      if (cancelled || !marqueeRef.current) return
+      window.requestAnimationFrame(() => {
+        if (cancelled || !marqueeRef.current) return
+        const width = marqueeRef.current.scrollWidth
+        if (width > 0 && speed > 0) setDuration(width / speed)
+      })
+    }
+    if (typeof window.requestIdleCallback === 'function') {
+      const id = window.requestIdleCallback(measure, { timeout: 3000 })
+      return () => {
+        cancelled = true
+        window.cancelIdleCallback(id)
+      }
+    }
+    const t = window.setTimeout(measure, 1500)
+    return () => {
+      cancelled = true
+      window.clearTimeout(t)
+    }
   }, [testimonials, speed])
 
   if (!testimonials || testimonials.length === 0) return null

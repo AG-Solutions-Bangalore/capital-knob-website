@@ -1,22 +1,52 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GND12F67H2"></script>
+    <!-- W3C: charset MUST be the first element (within the first 1024 bytes).
+      The GTM snippet below is ~700 bytes — placing it first pushed the
+      charset out of range and failed Nu Html validation on every page. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) — PERF: idle-delayed until after LCP.
+      The stock `async` snippet still competes for bandwidth/CPU in the
+      LCP window on Slow 4G (192KB, ~77KB unused on homepage, +TBT).
+      dataLayer queues events pre-load; gtag.js injects at idle/4s/interaction
+      with Low priority so FCP/LCP stay first. -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-GND12F67H2');
+      (function () {
+        var loaded = false;
+        function loadGtag() {
+          if (loaded) return;
+          loaded = true;
+          try {
+            window.removeEventListener('pointerdown', loadGtag);
+            window.removeEventListener('keydown', loadGtag);
+          } catch (e) {}
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=G-GND12F67H2';
+          try { s.fetchPriority = 'low'; } catch (e) {}
+          document.head.appendChild(s);
+        }
+        try {
+          window.addEventListener('pointerdown', loadGtag, { once: true, passive: true });
+          window.addEventListener('keydown', loadGtag, { once: true });
+        } catch (e) {}
+        if (typeof window.requestIdleCallback === 'function') {
+          window.requestIdleCallback(loadGtag, { timeout: 4000 });
+        } else {
+          window.setTimeout(loadGtag, 4000);
+        }
+      })();
     </script>
-    <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <!-- PERF: no separate PNG icon link — browsers fetched BOTH .png (7KB)
       and .ico (4KB) at High priority pre-LCP. The .ico covers tabs
       everywhere; apple-touch-icon + OG/JSON-LD PNGs stay untouched. -->
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/src/index.css">
 
     <!-- Trailing-slash normalizer (production): the prerendered build ships
@@ -46,8 +76,10 @@
 
     <!-- LCP image preload — AVIF is ~48% smaller than the existing WebP at
       the mobile 768w candidate. The `<picture>` in HomeHero retains WebP as
-      a fallback for browsers without AVIF support. -->
-    <link rel="preload" as="image" type="image/avif" imagesrcset="/images/home/hero_villa-480.avif 480w, /images/home/hero_villa-768.avif 768w, /images/home/hero_villa-1280.avif 1280w, /images/home/hero_villa-1440.avif 1440w, /images/home/hero_villa-1920.avif 1920w" imagesizes="(max-width: 768px) 100vw, 50vw" href="/images/home/hero_villa-480.avif" fetchpriority="high">
+      a fallback for browsers without AVIF support.
+      PERF: href targets 768w (Moto G ~360 CSS px × DPR 2 → 720w picks 768w),
+      not 480w, so the preloaded byte matches the actual LCP candidate. -->
+    <link rel="preload" as="image" type="image/avif" imagesrcset="/images/home/hero_villa-480.avif 480w, /images/home/hero_villa-768.avif 768w, /images/home/hero_villa-1280.avif 1280w, /images/home/hero_villa-1440.avif 1440w, /images/home/hero_villa-1920.avif 1920w" imagesizes="(max-width: 768px) 100vw, 50vw" href="/images/home/hero_villa-768.avif" fetchpriority="high">
 
 
   </head>

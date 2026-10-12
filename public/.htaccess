@@ -1,126 +1,53 @@
-Options -MultiViews
-DirectorySlash Off
-DirectoryIndex index.html
+# CapitalKnob — Apache perf headers (cPanel / shared hosting).
+# All blocks are <IfModule>-guarded: inert on Nginx/Netlify/Vercel and
+# never 500s when a module is missing. Netlify-style hosts use `_headers`.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
 
-# ----------------------------------------------------------------------
-# | MIME Types (Apache mod_mime)                                       |
-# ----------------------------------------------------------------------
+  # 1. Serve pre-compressed Brotli / Gzip (Vite emits .br + .gz at build).
+  #    Without this the server ships 260KB HTML + 99KB CSS raw — the main
+  #    reason production PageSpeed trails local runs on Slow 4G.
+  #    Internal rewrite only (URL stays clean), skip if already compressed.
+  RewriteCond %{REQUEST_URI} !\.(br|gz)$ [NC]
+  RewriteCond %{HTTP:Accept-Encoding} br [NC]
+  RewriteCond %{REQUEST_FILENAME}\.br -s
+  RewriteRule ^(.*)$ $1\.br [L,E=SERVED_BR:1]
+
+  RewriteCond %{REQUEST_URI} !\.(br|gz)$ [NC]
+  RewriteCond %{HTTP:Accept-Encoding} gzip [NC]
+  RewriteCond %{REQUEST_FILENAME}\.gz -s
+  RewriteRule ^(.*)$ $1\.gz [L,E=SERVED_GZ:1]
+
+  # 2. Cache buckets via env flags (LocationMatch is illegal in .htaccess).
+  RewriteRule ^assets/ - [E=IMMUTABLE:1]
+  RewriteRule ^(fonts|images)/ - [E=STATIC30:1]
+</IfModule>
+
 <IfModule mod_mime.c>
-    AddType application/javascript .js .mjs
-    AddType text/javascript .js .mjs
-    AddType text/css .css
-    AddType image/svg+xml .svg
-    AddType application/json .json .ld+json
-    AddType font/woff2 .woff2
-    AddType font/woff .woff
-    AddType image/webp .webp
-    # Pre-compressed variants emitted by vite-plugin-compression:
-    # RemoveType clears the server-global `AddType application/x-gzip .gz`
-    # (present in Apache's default mime.conf) which would otherwise make
-    # e.g. index.html.gz served as `application/x-gzip` instead of
-    # `text/html`. AddEncoding keeps the underlying MIME (from .js/.css/…)
-    # while advertising the content coding — no manual Content-Encoding needed.
-    RemoveType .br .gz
-    AddEncoding br .br
-    AddEncoding gzip .gz
+  # Compound-extension mapping so x.js.br -> JS + br (same for gzip).
+  AddEncoding br .br
+  AddEncoding gzip .gz
+  AddType application/javascript .js
+  AddType text/css .css
+  AddType application/json .json
+  AddType text/html .html
+  AddType image/svg+xml .svg
 </IfModule>
 
-# ----------------------------------------------------------------------
-# | Pre-compressed Assets (brotli preferred, gzip fallback)            |
-# ----------------------------------------------------------------------
-# MUST come before the SPA fallback below so `/assets/*.js` resolves to
-# its `.br`/`.gz` twin instead of falling through to index.html.
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-
-    # Brotli (smallest) — only for types the build actually compresses.
-    RewriteCond %{HTTP:Accept-Encoding} br
-    RewriteCond %{REQUEST_URI} !^/ckapi/ [NC]
-    RewriteCond %{REQUEST_URI} !^/crmapi/ [NC]
-    RewriteCond %{REQUEST_FILENAME} \.(js|mjs|css|html|json)$
-    RewriteCond %{REQUEST_FILENAME}\.br -f
-    RewriteRule ^(.+)$ $1.br [L]
-
-    # Gzip fallback for clients without brotli.
-    RewriteCond %{HTTP:Accept-Encoding} gzip
-    RewriteCond %{REQUEST_URI} !^/ckapi/ [NC]
-    RewriteCond %{REQUEST_URI} !^/crmapi/ [NC]
-    RewriteCond %{REQUEST_FILENAME} \.(js|mjs|css|html|json)$
-    RewriteCond %{REQUEST_FILENAME}\.gz -f
-    RewriteRule ^(.+)$ $1.gz [L]
-</IfModule>
-
-# Never double-compress an already-encoded response; tell caches the
-# bytes vary by Accept-Encoding.
 <IfModule mod_headers.c>
-    Header append Vary Accept-Encoding
-</IfModule>
-<IfModule mod_deflate.c>
-    SetEnvIfNoCase Request_URI \.br$ no-gzip
-    SetEnvIfNoCase Request_URI \.gz$ no-gzip
-    # Fallback for responses with no pre-compressed twin.
-    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
-</IfModule>
+  # Caches must key on encoding, or CDNs poison br/gzip variants.
+  Header append Vary Accept-Encoding env=SERVED_BR
+  Header append Vary Accept-Encoding env=SERVED_GZ
 
-# ----------------------------------------------------------------------
-# | Long Cache TTL for Static Assets (Lighthouse cache-TTL audit)      |
-# ----------------------------------------------------------------------
-<IfModule mod_headers.c>
-    # Vite content-hashed bundles: /assets/name-HASH.js — immutable 1 year.
-    # Optional `.br`/`.gz` suffix tolerated (post-rewrite basename).
-    # PERF: Vite separates name and hash with a DASH (index-CKEe9uSg.js),
-    # not a dot — `[-.]` matches both so hashed assets actually get cached.
-    <FilesMatch "[-.][A-Za-z0-9_-]{8}\.(js|mjs|css)(\.(br|gz))?$">
-        Header set Cache-Control "public, max-age=31536000, immutable"
-    </FilesMatch>
-    # Unhashed images/fonts (logo, hero variants incl. AVIF, favicons): 30 days.
-    # PERF: avif was missing so hero AVIFs re-downloaded every visit.
-    <FilesMatch "\.(avif|webp|png|jpe?g|gif|svg|ico|woff2?|ttf|eot)(\.(br|gz))?$">
-        Header set Cache-Control "public, max-age=2592000"
-    </FilesMatch>
-</IfModule>
-
-# ----------------------------------------------------------------------
-# | Prevent HTML Caching (Ensures new JS builds load immediately)       |
-# ----------------------------------------------------------------------
-<IfModule mod_headers.c>
-    # Match .html and its pre-compressed twins (.html.br / .html.gz):
-    # after the gzip/brotli rewrite the filename ends in .br/.gz, so a
-    # plain "\.(html|htm)$" would miss it and leave HTML cacheable.
-    <FilesMatch "\.(html|htm)(\.(br|gz))?$">
-        Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
-        Header set Pragma "no-cache"
-        Header set Expires "0"
-    </FilesMatch>
-</IfModule>
-
-# ----------------------------------------------------------------------
-# | Clean Production Server Routing & SSG Serving                      |
-# ----------------------------------------------------------------------
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-
-    # Canonical HTTPS & Host Enforcement
-    RewriteCond %{HTTPS} !=on
-    RewriteCond %{HTTP:X-Forwarded-Proto} !=https
-    RewriteRule ^ https://capitalknob.com%{REQUEST_URI} [R=301,L]
-
-    RewriteCond %{HTTP_HOST} ^www\.capitalknob\.com$ [NC]
-    RewriteRule ^ https://capitalknob.com%{REQUEST_URI} [R=301,L]
-
-    # Serve Pre-rendered Static HTML (0ms response time)
-    # Check if a pre-rendered index.html exists for route (e.g. /contact or /contact/ -> /contact/index.html)
-    # /ckapi/ (legacy) and /crmapi/ (current) are backend paths — never serve
-    # them the SPA shell, whether or not the API shares this server.
-    RewriteCond %{REQUEST_URI} !^/ckapi/ [NC]
-    RewriteCond %{REQUEST_URI} !^/crmapi/ [NC]
-    RewriteCond %{DOCUMENT_ROOT}/$1/index.html -f
-    RewriteRule ^(.+?)/?$ /$1/index.html [L]
-
-    # SPA Fallback for Unrendered Dynamic Routes
-    RewriteCond %{REQUEST_URI} !^/ckapi/ [NC]
-    RewriteCond %{REQUEST_URI} !^/crmapi/ [NC]
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /index.html [L]
+  # Hashed Vite assets: immutable 1 year (fixes "efficient cache lifetimes").
+  Header set Cache-Control "public, max-age=31536000, immutable" env=IMMUTABLE
+  # Un hashed static: fonts, images, logos — 30 days.
+  Header set Cache-Control "public, max-age=2592000, immutable" env=STATIC30
+  # Prerendered HTML: fresh each deploy, revalidate hourly.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "public, max-age=3600, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "^(logo-.*\.webp|favicon\.ico|apple-touch-icon\.png|robots\.txt)$">
+    Header set Cache-Control "public, max-age=2592000, immutable"
+  </FilesMatch>
 </IfModule>

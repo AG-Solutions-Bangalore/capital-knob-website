@@ -76,7 +76,8 @@ body {
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+  /* NOTE: no `text-rendering: optimizeLegibility` — it forces extra
+    glyph work on every paint (perf) and trips the W3C CSS validator. */
 }
 
 img,

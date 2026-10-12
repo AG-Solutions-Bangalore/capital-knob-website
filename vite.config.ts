@@ -116,6 +116,11 @@ function manualChunks(id: string) {
     nid.includes('node_modules/react-dom/') ||
     nid.includes('node_modules/scheduler/') ||
     nid.includes('react-jsx-runtime') ||
+    // PERF: Rolldown IDs the shared jsx factory as `react/jsx-runtime`
+    // (slash, no `react-` prefix) — without this it gets hoisted into the
+    // `lenis` chunk, forcing AppRoutes to fetch lenis (21KB) before it can
+    // execute on mobile where Lenis is bypassed entirely.
+    nid.includes('jsx-runtime') ||
     nid.includes('compiler-runtime')
   ) {
     return 'react'
@@ -129,7 +134,7 @@ function manualChunks(id: string) {
   ) {
     return 'motion'
   }
-  if (nid.includes('node_modules/lenis') || nid.includes('/lenis/')) return 'lenis'
+  if (nid.includes('node_modules/lenis')) return 'lenis'
   if (
     nid.includes('lucide-react') ||
     nid.includes('@radix-ui') ||
@@ -191,16 +196,21 @@ export default defineConfig({
     // PERF: demote non-critical preloads — lenis (loads post-idle via
     // DeferredSmoothScroll) and vite-prerender-plugin's parse helper
     // (SSR-worker-only) were fetched High-priority in the LCP window.
-    // PERF 90+: allowlist = LCP/hydration-critical chain only (entry,
-    // react, router, query, AppRoutes, Container, CSS). Below-fold/data
-    // chunks (BlogList, faq, useCategoryQuery, seoEngine, helmet,
-    // dynamic-data, axios, linkTitles, routes) load on demand during
-    // hydration instead of queuing ahead of the hero image on slow nets.
+    // PERF 95+: allowlist = LCP/hydration-critical chain: entry, react,
+    // router, query, AppRoutes, Container, CSS, PLUS AppRoutes' static
+    // deps (helmet/seoEngine/dynamic-data/axios/linkTitles/routes/images).
+    // These execute on mount (SEO meta, dynamic-data version, API client)
+    // so fetching them sequentially AFTER AppRoutes parses costs 2-3
+    // extra RTTs on slow nets; preloading parallelizes discovery with
+    // zero extra bytes (fetch != execute). Below-fold/data chunks
+    // (BlogList, faq, useCategoryQuery, HomeBelowFold, EnquiryModal,
+    // lenis, route pages) stay out and load on demand during hydration.
+    // lenis is deliberately excluded — mobile bypasses it entirely.
     modulePreload: {
       polyfill: true,
       resolveDependencies: (_filename, deps) =>
         deps.filter((dep) =>
-          /(^|\/)(index|react|router|query|AppRoutes|Container)-[^/]*\.js$|\.css$/i.test(
+          /(^|\/)(index|react|router|query|AppRoutes|Container|helmet|images|seoEngine|dynamic-data|axios|linkTitles|routes)-[^/]*\.js$|\.css$/i.test(
             dep,
           ),
         ),
