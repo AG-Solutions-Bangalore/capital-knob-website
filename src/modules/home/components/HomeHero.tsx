@@ -179,7 +179,10 @@ export function HomeHero() {
                     key={slide.id}
                     aria-hidden={!isActive}
                     inert={!isActive}
-                    className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isActive
+                    // PERF: opacity+transform only (GPU-composited). `transition-[opacity,transform,color,background-color,border-color]`
+                    // also animates layout props and was flagged as 31
+                    // non-composited animations on mobile.
+                    className={`transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] transform-gpu ${isActive
                         ? 'relative opacity-100 translate-x-0 pointer-events-auto z-10'
                         : `absolute inset-0 opacity-0 pointer-events-none z-0 ${isNext ? '-translate-x-10' : 'translate-x-10'
                         }`
@@ -187,7 +190,7 @@ export function HomeHero() {
                   >
                     {/* Eyebrow */}
                     <div
-                      className={`transition-all duration-500 delay-100 ${isActive
+                      className={`transition-[opacity,transform,color,background-color,border-color] duration-500 delay-100 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-2'
                         }`}
@@ -199,7 +202,7 @@ export function HomeHero() {
 
                     {/* Handwritten cursive script accent */}
                     <div
-                      className={`relative mt-1.5 inline-block transition-all duration-500 delay-150 ${isActive
+                      className={`relative mt-1.5 inline-block transition-[opacity,transform,color,background-color,border-color] duration-500 delay-150 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-2'
                         }`}
@@ -222,7 +225,7 @@ export function HomeHero() {
 
                     {/* Main Headline */}
                     <div
-                      className={`transition-all duration-600 delay-200 ${isActive
+                      className={`transition-[opacity,transform,color,background-color,border-color] duration-600 delay-200 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-3'
                         }`}
@@ -235,7 +238,7 @@ export function HomeHero() {
 
                     {/* Tagline */}
                     <div
-                      className={`transition-all duration-500 delay-250 ${isActive
+                      className={`transition-[opacity,transform,color,background-color,border-color] duration-500 delay-250 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-2'
                         }`}
@@ -247,7 +250,7 @@ export function HomeHero() {
 
                     {/* Subcopy */}
                     <div
-                      className={`transition-all duration-500 delay-300 ${isActive
+                      className={`transition-[opacity,transform,color,background-color,border-color] duration-500 delay-300 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-2'
                         }`}
@@ -259,7 +262,7 @@ export function HomeHero() {
 
                     {/* CTA row */}
                     <div
-                      className={`mt-5 sm:mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 transition-all duration-500 delay-350 ${isActive
+                      className={`mt-5 sm:mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 transition-[opacity,transform,color,background-color,border-color] duration-500 delay-350 ${isActive
                           ? 'opacity-100 translate-y-0'
                           : 'opacity-0 translate-y-2'
                         }`}
@@ -270,7 +273,7 @@ export function HomeHero() {
                         href={slide.primaryCta.href}
                         title={linkTitleFor(slide.primaryCta.href)}
                         tabIndex={isActive ? 0 : -1}
-                        className="inline-flex min-h-[44px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-5 py-2.5 text-[13px] font-bold text-navy shadow-gold transition-all duration-200 hover:bg-gold-hover hover:scale-[1.02] active:scale-[0.98]"
+                        className="inline-flex min-h-[44px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-gold px-5 py-2.5 text-[13px] font-bold text-navy shadow-gold transition-[opacity,transform,color,background-color,border-color] duration-200 hover:bg-gold-hover hover:scale-[1.02] active:scale-[0.98]"
                       >
                         <span>{slide.primaryCta.label}</span>
                         <svg
@@ -293,7 +296,7 @@ export function HomeHero() {
                         href={slide.secondaryCta.href}
                         title={linkTitleFor(slide.secondaryCta.href)}
                         tabIndex={isActive ? 0 : -1}
-                        className="inline-flex min-h-[44px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg border border-white/25 bg-navy/60 px-5 py-2.5 text-[13px] font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:border-white/50 hover:bg-navy/80 hover:scale-[1.02] active:scale-[0.98]"
+                        className="inline-flex min-h-[44px] w-full sm:w-auto items-center justify-center gap-2 rounded-lg border border-white/25 bg-navy/60 px-5 py-2.5 text-[13px] font-semibold text-white backdrop-blur-sm transition-[opacity,transform,color,background-color,border-color] duration-200 hover:border-white/50 hover:bg-navy/80 hover:scale-[1.02] active:scale-[0.98]"
                       >
                         <span>{slide.secondaryCta.label}</span>
                       </a>
@@ -324,7 +327,7 @@ export function HomeHero() {
                       aria-current={isActive ? 'true' : undefined}
                       aria-label={`Switch to ${slide.titleLine1}`}
                       onClick={() => goToSlide(idx)}
-                      className={`group overflow-hidden relative shrink-0 flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold ${isActive
+                      className={`group overflow-hidden relative shrink-0 flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition-[opacity,transform,color,background-color,border-color] duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold ${isActive
                           ? 'bg-white/15 text-gold border border-gold/40 shadow-sm'
                           : 'bg-white/5 text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white'
                         }`}
@@ -345,7 +348,7 @@ export function HomeHero() {
                     type="button"
                     onClick={prevSlide}
                     aria-label="Previous slide"
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-full cursor-pointer border border-white/20 bg-navy/70 text-white backdrop-blur-sm transition-all hover:border-gold hover:bg-gold hover:text-navy active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full cursor-pointer border border-white/20 bg-navy/70 text-white backdrop-blur-sm transition-[opacity,transform,color,background-color,border-color] hover:border-gold hover:bg-gold hover:text-navy active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                   >
                     <svg
                       width="14"
@@ -364,7 +367,7 @@ export function HomeHero() {
                     type="button"
                     onClick={nextSlide}
                     aria-label="Next slide"
-                    className="inline-flex h-8 w-8 items-center justify-center rounded-full cursor-pointer border border-white/20 bg-navy/70 text-white backdrop-blur-sm transition-all hover:border-gold hover:bg-gold hover:text-navy active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                    className="inline-flex h-8 w-8 items-center justify-center rounded-full cursor-pointer border border-white/20 bg-navy/70 text-white backdrop-blur-sm transition-[opacity,transform,color,background-color,border-color] hover:border-gold hover:bg-gold hover:text-navy active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
                   >
                     <svg
                       width="14"

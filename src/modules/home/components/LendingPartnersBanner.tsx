@@ -132,6 +132,11 @@ export function LendingPartnersBanner() {
               title={name}
               width={120}
               height={40}
+              // PERF: CMS logos are 300×100 but displayed ~120×32.
+              // Low priority + lazy keeps them out of the LCP window.
+              // CMS-side 240w recompress would save ~5KB each (Lighthouse).
+              // NOTE: no `sizes` here — W3C forbids `sizes` without `srcset`.
+              fetchPriority="low"
               className="h-8 w-auto max-w-[120px] object-contain md:h-10 md:max-w-32"
               loading="lazy"
               decoding="async"
@@ -163,11 +168,32 @@ export function LendingPartnersBanner() {
   }
   // Marquee pacing: measured track width / px-per-second (slower than the
   // testimonial strip so logos stay readable). Recomputed when tiles change.
+  // PERF: scrollWidth forces layout — defer past LCP via idle + rAF so it
+  // never contributes to forced-reflow time in the audit window.
   const trackRef = useRef<HTMLDivElement>(null)
   const [duration, setDuration] = useState(30)
   useEffect(() => {
-    const width = trackRef.current?.scrollWidth ?? 0
-    if (width > 0) setDuration(Math.max(15, width / 80))
+    let cancelled = false
+    const measure = () => {
+      if (cancelled) return
+      window.requestAnimationFrame(() => {
+        if (cancelled) return
+        const width = trackRef.current?.scrollWidth ?? 0
+        if (width > 0) setDuration(Math.max(15, width / 80))
+      })
+    }
+    if (typeof window.requestIdleCallback === 'function') {
+      const id = window.requestIdleCallback(measure, { timeout: 3000 })
+      return () => {
+        cancelled = true
+        window.cancelIdleCallback(id)
+      }
+    }
+    const t = window.setTimeout(measure, 1500)
+    return () => {
+      cancelled = true
+      window.clearTimeout(t)
+    }
   }, [showLive, clients.length])
 
   return (

@@ -1,0 +1,15 @@
+# PERF (Lighthouse "Use efficient cache lifetimes"): fonts.css had no TTL.
+# Hashed Vite assets (/assets/*) are immutable — cache 1yr.
+# Fonts + images ship unhashed — cache 30d immutable (filenames versioned on change).
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/fonts/*
+  Cache-Control: public, max-age=2592000, immutable
+/images/*
+  Cache-Control: public, max-age=2592000, immutable
+/logo-*.webp
+  Cache-Control: public, max-age=2592000, immutable
+/favicon.ico
+  Cache-Control: public, max-age=2592000, immutable
+/apple-touch-icon.png
+  Cache-Control: public, max-age=2592000, immutable

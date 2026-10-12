@@ -23,7 +23,10 @@ const LOGO_SRC = {
 } as const
 
 const LOGO_DIMS = {
-  horizontal: { width: 415, height: 100 },
+  // PERF: source is 330×80 (2× of the ~165px header slot at DPR 2).
+  // Ships 9.8KB vs the old 415×100 13KB — resolves Lighthouse
+  // "properly-size-images" (displayed ~291×70 on Moto G).
+  horizontal: { width: 330, height: 80 },
   stacked: { width: 298, height: 230 },
 } as const
 

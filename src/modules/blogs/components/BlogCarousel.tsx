@@ -34,6 +34,7 @@ export function BlogCarousel({
   const [canNext, setCanNext] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const rafPending = useRef(false)
 
   const updateState = useCallback(() => {
     const el = trackRef.current
@@ -46,17 +47,56 @@ export function BlogCarousel({
     setActiveIndex(Math.round(progress * Math.max(0, blogs.length - 1)))
   }, [blogs.length])
 
+  // PERF: scroll events fire at 60Hz — coalesce to one rAF to avoid
+  // repeated scrollWidth/clientWidth layout reads (forced reflow).
+  const onScroll = useCallback(() => {
+    if (rafPending.current) return
+    rafPending.current = true
+    window.requestAnimationFrame(() => {
+      rafPending.current = false
+      updateState()
+    })
+  }, [updateState])
+
   useEffect(() => {
     // Reset position whenever the underlying list changes (e.g. slug change).
     // The deferred `updateState` below re-derives the active index (0) from
     // the reset scroll position, so no direct setState is needed here.
     trackRef.current?.scrollTo({ left: 0 })
-    // Defer measurement until layout settles
-    const raf = requestAnimationFrame(updateState)
-    window.addEventListener('resize', updateState)
+    // PERF: defer initial measurement past LCP (idle + rAF) — this read
+    // was flagged as forced reflow in the mobile audit.
+    let cancelled = false
+    const measure = () => {
+      if (cancelled) return
+      window.requestAnimationFrame(() => {
+        if (!cancelled) updateState()
+      })
+    }
+    let cleanupResize: (() => void) | undefined
+    if (typeof window.requestIdleCallback === 'function') {
+      const id = window.requestIdleCallback(
+        () => {
+          measure()
+          window.addEventListener('resize', updateState)
+          cleanupResize = () => window.removeEventListener('resize', updateState)
+        },
+        { timeout: 3000 },
+      )
+      return () => {
+        cancelled = true
+        window.cancelIdleCallback(id)
+        cleanupResize?.()
+      }
+    }
+    const t = window.setTimeout(() => {
+      measure()
+      window.addEventListener('resize', updateState)
+      cleanupResize = () => window.removeEventListener('resize', updateState)
+    }, 1500)
     return () => {
-      cancelAnimationFrame(raf)
-      window.removeEventListener('resize', updateState)
+      cancelled = true
+      window.clearTimeout(t)
+      cleanupResize?.()
     }
   }, [blogs, updateState])
 
@@ -111,7 +151,7 @@ export function BlogCarousel({
     >
       <div
         ref={trackRef}
-        onScroll={updateState}
+        onScroll={onScroll}
         className="no-scrollbar -mx-1 flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-1 pb-2"
       >
         {blogs.map((blog, i) => (
@@ -145,7 +185,9 @@ export function BlogCarousel({
                 className="group flex min-h-[44px] min-w-[28px] items-center justify-center py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold cursor-pointer"
               >
                 <span
-                  className={`h-2 rounded-full transition-all duration-300 ${
+                  // PERF: width snap (no layout animation) + color fade only.
+                  // Animating `width` is non-composited and was flagged.
+                  className={`h-2 rounded-full transition-colors duration-300 ${
                     i === activeIndex
                       ? 'w-8 bg-gold'
                       : 'w-2 bg-line group-hover:bg-gold/60'
@@ -173,7 +215,7 @@ export function BlogCarousel({
                 onClick={() => scrollByPage(-1)}
                 disabled={!canPrev}
                 aria-label="Previous articles"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white text-navy shadow-soft transition-all hover:border-gold hover:bg-gold hover:text-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-line disabled:hover:bg-white disabled:hover:text-navy"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white text-navy shadow-soft transition-[color,background-color,border-color,transform] hover:border-gold hover:bg-gold hover:text-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-line disabled:hover:bg-white disabled:hover:text-navy"
               >
                 <svg
                   width="15"
@@ -194,7 +236,7 @@ export function BlogCarousel({
                 onClick={() => scrollByPage(1)}
                 disabled={!canNext}
                 aria-label="Next articles"
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white text-navy shadow-soft transition-all hover:border-gold hover:bg-gold hover:text-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-line disabled:hover:bg-white disabled:hover:text-navy"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line bg-white text-navy shadow-soft transition-[color,background-color,border-color,transform] hover:border-gold hover:bg-gold hover:text-white active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-line disabled:hover:bg-white disabled:hover:text-navy"
               >
                 <svg
                   width="15"
